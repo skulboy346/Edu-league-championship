@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - EDU-LEAGUE CHAMPIONSHIP</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fd;
+        }
+        /* Custom color classes */
+        .bg-edu-purple { background-color: #6d28d9; }
+        .text-edu-purple { color: #6d28d9; }
+        .bg-edu-yellow { background-color: #fbbf24; }
+        .hover-edu-yellow:hover { background-color: #f59e0b; }
+        /* Loading spinner */
+        .loader {
+            border-top-color: #6d28d9;
+            -webkit-animation: spinner 1.5s linear infinite;
+            animation: spinner 1.5s linear infinite;
+        }
+        @-webkit-keyframes spinner {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+
+    <div class="max-w-md w-full bg-white shadow-2xl rounded-xl overflow-hidden">
+        
+        <!-- Header -->
+        <div class="bg-edu-purple text-white p-8">
+            <h1 class="text-3xl font-extrabold tracking-tight text-center">Payment Confirmation</h1>
+            <p class="mt-1 text-purple-200 text-lg text-center">EDU-LEAGUE CHAMPIONSHIP</p>
+        </div>
+
+        <!-- Payment Details -->
+        <div class="p-8 md:p-10 space-y-6">
+            
+            <div id="payment-details">
+                <p class="text-sm text-gray-600 font-medium">You are about to pay for:</p>
+                <h2 id="teamNameDisplay" class="text-2xl font-bold text-edu-purple mt-1">Loading Team...</h2>
+                <p id="levelDisplay" class="text-lg font-semibold text-gray-700">Loading Level...</p>
+
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <p class="text-sm text-gray-600 font-medium">Entry Fee:</p>
+                    <p id="feeDisplay" class="text-5xl font-extrabold text-gray-900">#70,000</p>
+                </div>
+
+                <!-- NEW: Account Details Section -->
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <p class="text-sm text-gray-600 font-medium mb-3">Please transfer the entry fee to:</p>
+                    <div class="bg-gray-100 p-4 rounded-lg border border-gray-200 space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-gray-700 font-semibold">Bank Name:</span>
+                            <span class="text-gray-900 font-bold">First Bank</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-700 font-semibold">Account Name:</span>
+                            <span class="text-gray-900 font-bold">AWONIYI SODIQ OPEYEMI</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-700 font-semibold">Account Number:</span>
+                            <span class="text-gray-900 font-bold">3078844790</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Button -->
+                <button id="payButton" onclick="processPayment()" class="w-full mt-8 py-3 bg-edu-yellow text-gray-900 font-bold rounded-md shadow-lg hover-edu-yellow focus:outline-none focus:ring-2 focus:ring-edu-yellow focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
+                    <span id="payButtonText">Confirm & Pay Now</span>
+                    <div id="payLoader" class="loader w-6 h-6 border-4 border-t-4 border-gray-800 rounded-full hidden"></div>
+                </button>
+                <p class="text-xs text-gray-500 text-center mt-2">Click 'Confirm & Pay Now' *after* you have made the bank transfer to finalize your registration.</p>
+            </div>
+
+            <!-- NEW: Verification Section (Hidden by default) -->
+            <div id="verification-section" class="hidden space-y-4 py-8">
+                <svg class="w-16 h-16 text-edu-purple mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                <h2 class="text-2xl font-bold text-gray-800 text-center">Payment Verification</h2>
+                <p class="text-gray-600 text-center">Please contact the organizer to receive your payment confirmation code.</p>
+                
+                <div>
+                    <label for="verificationCode" class="block text-sm font-medium text-gray-700">Organizer's Code</label>
+                    <input type="text" id="verificationCode" name="verificationCode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border text-center font-bold tracking-widest">
+                </div>
+
+                <p id="errorMessage" class="text-sm text-red-600 font-semibold text-center hidden">Invalid code. Please try again.</p>
+
+                <button id="verifyButton" onclick="verifyCode()" class="w-full mt-4 py-3 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                    Verify Code & Complete Registration
+                </button>
+            </div>
+
+            <!-- Payment Success Message -->
+            <div id="success-message" class="hidden text-center space-y-4 py-8">
+                <svg class="w-16 h-16 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <h2 class="text-2xl font-bold text-gray-800">Payment Verified!</h2>
+                <p class="text-gray-600">Redirecting to the Team Roster page to add your players and coaches...</p>
+                <a id="redirectLink" href="./team_roster.html" class="text-sm text-edu-purple hover:underline font-semibold">Click here if you are not redirected.</a>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- Firebase & Logic Script -->
+    <script type="module">
+        // --- Firebase SDK Imports ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Firebase & App State ---
+        let db;
+        let auth;
+        let userId;
+        let teamDocRef; // This will be the reference to the team's document
+        let teamDocId; // The string ID
+        let teamName, level; // Store these for the redirect
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        // --- DOM Elements ---
+        const teamNameDisplay = document.getElementById('teamNameDisplay');
+        const levelDisplay = document.getElementById('levelDisplay');
+        const feeDisplay = document.getElementById('feeDisplay');
+        const payButton = document.getElementById('payButton');
+        const payButtonText = document.getElementById('payButtonText');
+        const payLoader = document.getElementById('payLoader');
+        const paymentDetails = document.getElementById('payment-details');
+        const successMessage = document.getElementById('success-message');
+        const verificationSection = document.getElementById('verification-section');
+        const verificationCodeInput = document.getElementById('verificationCode');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // On page load, read data from URL
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            teamName = urlParams.get('team') || 'Unknown Team';
+            level = urlParams.get('level') || 'Unknown Level';
+            teamDocId = urlParams.get('teamId'); // Get the new teamId
+            const fee = urlParams.get('fee') || '70,000';
+
+            teamNameDisplay.textContent = teamName;
+            levelDisplay.textContent = `${level} Level`;
+            feeDisplay.textContent = `#${fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+
+            if (!teamDocId) {
+                console.error("CRITICAL: Team ID (teamId) is missing from URL.");
+                payButton.disabled = true;
+                payButtonText.textContent = "Error: Team ID missing";
+            }
+            
+            // Call initializeFirebase *after* getting URL params
+            initializeFirebase();
+        };
+
+        // Simulate payment processing
+        window.processPayment = function() {
+            // Show loading state
+            payButton.disabled = true;
+            payButtonText.textContent = 'Confirming Transfer...';
+            payLoader.classList.remove('hidden');
+
+            // Simulate a 2-second "processing" delay
+            setTimeout(() => {
+                paymentDetails.classList.add('hidden');
+                verificationSection.classList.remove('hidden');
+            }, 2000);
+        }
+
+        // --- Verification Function ---
+        window.verifyCode = async function() {
+            const MASTER_CODE = "EDU2025"; // This is the hardcoded code from the organizer
+            const inputCode = verificationCodeInput.value.trim().toUpperCase();
+
+            if (inputCode === MASTER_CODE) {
+                // Correct code
+                errorMessage.classList.add('hidden');
+                
+                // --- NEW: Update Firestore Document ---
+                if (teamDocRef) {
+                    try {
+                        await updateDoc(teamDocRef, {
+                            paymentStatus: "Verified",
+                            registrationStatus: "Pending Roster"
+                        });
+                        console.log("Document updated to 'Verified'");
+                        
+                        // Show success and redirect
+                        verificationSection.classList.add('hidden');
+                        successMessage.classList.remove('hidden');
+                        
+                        // Construct the new URL
+                        const params = new URLSearchParams({
+                            teamId: teamDocId,
+                            team: teamName,
+                            level: level
+                        });
+                        const rosterUrl = `./team_roster.html?${params.toString()}`;
+
+                        // Update the fallback link
+                        document.getElementById('redirectLink').href = rosterUrl;
+                        
+                        // Redirect after 3 seconds
+                        setTimeout(() => {
+                            window.location.assign(rosterUrl);
+                        }, 3000);
+                        
+                    } catch (error) {
+                        console.error("Error updating document: ", error);
+                        errorMessage.textContent = "Error saving payment status. Please try again.";
+                        errorMessage.classList.remove('hidden');
+                    }
+                } else {
+                    console.error("teamDocRef is not defined. Cannot update payment status.");
+                    errorMessage.textContent = "A database error occurred. Please refresh and try again.";
+                    errorMessage.classList.remove('hidden');
+                }
+                // --- END NEW ---
+                
+            } else {
+                // Incorrect code
+                errorMessage.classList.remove('hidden');
+                verificationCodeInput.value = '';
+                verificationCodeInput.focus();
+            }
+        }
+        
+        // --- Initialize Firebase ---
+        async function initializeFirebase() {
+            if (!teamDocId) {
+                console.warn("Skipping Firebase init, teamDocId is missing.");
+                return; // Don't init if the teamId isn't present
+            }
+            
+            try {
+                // Get config from global variable
+                const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+                if (!firebaseConfig.apiKey) {
+                    console.error("Firebase config is missing.");
+                    payButton.disabled = true;
+                    payButtonText.textContent = "Error: Config Missing";
+                    return;
+                }
+                
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                setLogLevel('Debug'); // Enable detailed Firestore logs
+
+                // Sign in the user
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                // Setup listener for auth changes
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("User signed in:", userId);
+                        
+                        // Define the document reference
+                        teamDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'registrations', teamDocId);
+                        console.log("Targeting document:", teamDocRef.path);
+                        
+                    } else {
+                        console.log("User signed out.");
+                        userId = null;
+                        teamDocRef = null;
+                    }
+                });
+
+            } catch (error) {
+                console.error("Firebase Initialization Error:", error);
+                payButton.disabled = true;
+                payButtonText.textContent = "Error: DB Init Failed";
+            }
+        }
+        
+    </script>
+</body>
+</html>
