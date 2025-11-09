@@ -4,111 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment - EDU-LEAGUE</title>
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- ** NEW: jsPDF Library for Receipt Generation ** -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
-    <!-- *** LIVE FIREBASE SCRIPTS *** -->
-    <script src="/__/firebase/11.6.1/firebase-app-compat.js"></script>
-    <script src="/__/firebase/11.6.1/firebase-auth-compat.js"></script>
-    <script src="/__/firebase/11.6.1/firebase-firestore-compat.js"></script>
-    <script src="/__/firebase/init.js"></script>
-    <!-- *** END LIVE FIREBASE SCRIPTS *** -->
-    
     <style>
-        /* Custom Font */
+        /* ... all of your existing styles (fonts, colors, ticker) ... */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7f9fd;
-        }
-        /* Custom color classes */
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fd; }
         .bg-edu-purple { background-color: #6d28d9; }
         .text-edu-purple { color: #6d28d9; }
         .border-edu-purple { border-color: #6d28d9; }
         .ring-edu-purple:focus { ring-color: #6d28d9; }
         .bg-edu-yellow { background-color: #fbbf24; }
         .hover-edu-yellow:hover { background-color: #f59e0b; }
-        
-        .loader {
-            border-top-color: #6d28d9;
-            -webkit-animation: spinner 1.5s linear infinite;
-            animation: spinner 1.5s linear infinite;
-        }
-        @-webkit-keyframes spinner {
-            0% { -webkit-transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); }
-        }
-        @keyframes spinner {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        /* Styles for the printable receipt */
-        #receipt {
-            font-family: 'Courier New', Courier, monospace;
-        }
-        /* Specific Level Colors for receipt */
-        .slide-finalist { background-color: #22c55e; } /* Green */
-        .slide-penultimate { background-color: #3b82f6; } /* Blue */
-        .slide-sophomore { background-color: #ef4444; } /* Red */
-        
-        /* --- News Ticker Styles --- */
-        .news-ticker {
-            width: 100%;
-            background-color: #1f2937; /* Dark gray */
-            color: white;
-            padding: 0.75rem 0;
-            overflow: hidden;
-            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        .ticker-wrapper {
-            display: flex;
-            white-space: nowrap;
-            animation: ticker 60s linear infinite;
-        }
-        .ticker-item {
-            padding: 0 1.5rem;
-            color: #d1d5db; /* Lighter gray for text */
-        }
-        .ticker-item strong {
-            color: #fbbf24; /* Yellow for highlights */
-        }
-        @keyframes ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Loops at 50% since we duplicate the content */
-        }
+        .loader { border-top-color: #6d28d9; animation: spinner 1.5s linear infinite; }
+        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #receipt { font-family: 'Courier New', Courier, monospace; }
+        .slide-finalist { background-color: #22c55e; }
+        .slide-penultimate { background-color: #3b82f6; }
+        .slide-sophomore { background-color: #ef4444; }
+        .news-ticker { width: 100%; background-color: #1f2937; color: white; padding: 0.75rem 0; overflow: hidden; box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .ticker-wrapper { display: flex; white-space: nowrap; animation: ticker 60s linear infinite; }
+        .ticker-item { padding: 0 1.5rem; color: #d1d5db; }
+        .ticker-item strong { color: #fbbf24; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     </style>
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen">
 
     <main class="flex-grow flex items-center justify-center p-4">
         <div class="max-w-md w-full bg-white shadow-2xl rounded-xl overflow-hidden">
-            
             <!-- Header -->
             <div class="bg-edu-purple text-white p-8 text-center">
                 <h1 class="text-3xl font-extrabold tracking-tight">Payment Verification</h1>
                 <p class="mt-1 text-purple-200 text-lg">EDU-LEAGUE CHAMPIONSHIP</p>
             </div>
-
             <!-- Payment Details -->
             <div class="p-8 md:p-10 space-y-6">
-
                 <!-- Step 1: Payment Instructions -->
                 <div id="step-1-payment">
-                    <!-- Summary -->
                     <div class="bg-gray-100 p-4 rounded-lg border border-gray-200 text-center mb-6">
                         <p class="text-sm text-gray-600">You are registering:</p>
                         <h2 id="teamNameDisplay" class="text-xl font-bold text-edu-purple">Loading Team...</h2>
                         <p id="levelDisplay" class="text-lg font-semibold text-gray-700">Loading Level...</p>
                         <p class="text-2xl font-extrabold text-gray-900 mt-2">Total Fee: #<span id="feeDisplay">70,000</span></p>
                     </div>
-
-                    <!-- Account Details -->
                     <div class="space-y-3">
                         <h3 class="text-lg font-semibold text-gray-800">Step 1: Make Bank Transfer</h3>
                         <p class="text-sm text-gray-600">Please transfer the total fee to the account below. Use your <strong class="text-edu-purple">Department Name</strong> as the payment reference.</p>
-                        
                         <div class="bg-purple-50 border border-edu-purple rounded-lg p-4 space-y-2">
                             <div>
                                 <span class="text-sm text-gray-500">Bank Name:</span>
@@ -124,59 +67,43 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Confirmation Button -->
                     <button id="confirmButton" onclick="showVerificationStep()" class="w-full mt-6 py-3 bg-edu-yellow text-gray-900 font-bold rounded-md shadow-lg hover-edu-yellow focus:outline-none focus:ring-2 focus:ring-edu-yellow focus:ring-offset-2 transition duration-150 ease-in-out">
                         Confirm Transfer & Proceed
                     </button>
                 </div>
-
                 <!-- Step 2: Code Verification -->
                 <div id="step-2-verification" class="hidden space-y-4">
                     <h3 class="text-lg font-semibold text-gray-800">Step 2: Verify Payment</h3>
                     <p class="text-sm text-gray-600">After your transfer, contact an organizer to receive your unique payment verification code. Enter it below to complete registration.</p>
-                    
                     <div>
                         <label for="verificationCode" class="block text-sm font-medium text-gray-700">Organizer's Code</label>
                         <input type="text" id="verificationCode" name="verificationCode" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border" placeholder="Enter code...">
                     </div>
-                    
                     <p id="codeError" class="text-sm text-red-600 text-center hidden">Invalid code. Please try again.</p>
-
                     <button id="verifyButton" onclick="verifyCode()" class="w-full mt-4 py-3 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out">
                         Verify Code & Submit
                     </button>
                 </div>
-                
                 <!-- Step 3: Receipt Generation -->
                 <div id="step-3-success" class="hidden text-center space-y-4">
                     <svg class="w-20 h-20 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <h2 class="text-2xl font-bold text-gray-800">Payment Verified!</h2>
                     <p class="text-gray-600 mb-4">Please download your receipt before proceeding.</p>
-
-                    <!-- ** MODIFIED: Receipt Area ** -->
                     <div id="receipt" class="border-4 border-dashed border-gray-300 bg-gray-50 p-6 rounded-lg text-left relative">
-                        <!-- PAID Stamp -->
                         <div class="absolute top-4 right-4 transform rotate-12">
                             <span class="text-5xl font-extrabold text-green-500 opacity-30 border-4 border-green-500 p-2 rounded-lg">PAID</span>
                         </div>
-                        
-                        <!-- Receipt Header with Logos -->
                         <div class="flex items-center justify-between mb-6 border-b pb-4">
                             <img src="edulogo.png" alt="Edu-League Logo" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-edu-purple" onerror="this.onerror=null; this.src='https://placehold.co/80x80/6d28d9/fbbf24?text=EDU';">
-                            
                             <div class="text-center">
                                 <h3 class="text-lg md:text-xl font-bold text-edu-purple">OFFICIAL RECEIPT</h3>
                                 <p class="text-xs md:text-sm text-gray-700">EDU-LEAGUE</p>
                                 <p class="text-xs text-gray-500">NUESA x FESSC</p>
                             </div>
-                            
-                            <!-- Level-Specific Logo -->
                             <div id="receiptLevelLogo" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-center p-1">
                                 <!-- Content will be added by JS -->
                             </div>
                         </div>
-                        
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Date:</span>
@@ -195,7 +122,6 @@
                                 <strong id="receiptLevel" class="text-gray-800">...</strong>
                             </div>
                         </div>
-                        
                         <div class="mt-6 border-t-2 border-dashed pt-4">
                             <div class="flex justify-between text-2xl font-extrabold">
                                 <span class="text-gray-900">TOTAL PAID:</span>
@@ -203,9 +129,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- ** END: Receipt Area ** -->
-
-                    <!-- Action Buttons -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                         <button onclick="downloadReceipt()" class="w-full py-3 bg-blue-600 text-white font-bold rounded-md shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out">
                             Download Receipt (PDF)
@@ -215,12 +138,11 @@
                         </button>
                     </div>
                 </div>
-
             </div>
         </div>
     </main>
     
-    <!-- Custom Alert Modal -->
+    <!-- Modals -->
     <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300">
             <h3 id="custom-alert-title" class="text-xl font-bold text-gray-800 mb-2">Alert</h3>
@@ -231,29 +153,54 @@
         </div>
     </div>
     
-    <!-- *** NEW: News Ticker Footer *** -->
+    <!-- Footer -->
     <footer class="news-ticker sticky bottom-0 z-10">
         <div class="ticker-wrapper" id="tickerWrapper">
-            <!-- Content will be injected by JS -->
-            <div class="ticker-item"><strong>LOADING LATEST NEWS...</strong> Please wait...</div>
+            <!-- Static Content -->
+            <div class="ticker-item"><strong>EDU-LEAGUE:</strong> Battle within Educators</div>
+            <div class="ticker-item"><strong>REGISTRATION:</strong> November 10th - November 25th</div>
+            <div class="ticker-item"><strong>CONTACT:</strong> Opeyemi 08140712347, Rotimi 09021070738</div>
+            <div class="ticker-item"><strong>LEVELS:</strong> Finalist (400Lvl), Penultimate (300Lvl), Sophomore (200Lvl)</div>
+            <!-- Duplicate for loop -->
+            <div class="ticker-item"><strong>EDU-LEAGUE:</strong> Battle within Educators</div>
+            <div class="ticker-item"><strong>REGISTRATION:</strong> November 10th - November 25th</div>
+            <div class="ticker-item"><strong>CONTACT:</strong> Opeyemi 08140712347, Rotimi 09021070738</div>
+            <div class="ticker-item"><strong>LEVELS:</strong> Finalist (400Lvl), Penultimate (300Lvl), Sophomore (200Lvl)</div>
         </div>
     </footer>
 
-    <!-- Firebase & Logic Script -->
-    <script>
+    <script type="module">
+        // --- *** NEW: Firebase SDK Imports (CDN Modules) *** ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
         // --- jsPDF ---
-        // Ensure jsPDF is loaded from the script tag
         const { jsPDF } = window.jspdf;
+
+        // --- *** STEP 1: YOUR FIREBASE CONFIG IS PASTED HERE *** ---
+        const firebaseConfig = {
+           apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
+           authDomain: "sonic-verbena-239117.firebaseapp.com",
+           databaseURL: "https://sonic-verbena-239117.firebaseio.com",
+           projectId: "sonic-verbena-239117",
+           storageBucket: "sonic-verbena-239117.firebasestorage.app",
+           messagingSenderId: "652544574249",
+           appId: "1:652544574249:web:6ff33771307e892e7f6d38",
+           measurementId: "G-TD780JGNED"
+         };
+        // --- *** END OF CONFIG *** ---
 
         // --- Firebase & App State ---
         let db;
         let auth;
         let userId;
         let teamDocRef;
-        let teamDocId; // The ID string from the URL
-        let teamName, level, fee; // Variables to store team data for receipt
+        let teamDocId;
+        let teamName, level, fee;
         
-        // --- DOM Elements ---
+        // --- DOM Elements (unchanged) ---
         const teamNameDisplay = document.getElementById('teamNameDisplay');
         const levelDisplay = document.getElementById('levelDisplay');
         const feeDisplay = document.getElementById('feeDisplay');
@@ -267,27 +214,23 @@
         const customAlertTitle = document.getElementById('custom-alert-title');
         const customAlertMessage = document.getElementById('custom-alert-message');
         const tickerWrapper = document.getElementById('tickerWrapper');
-        
-        // Receipt Elements
         const receiptDate = document.getElementById('receiptDate');
         const receiptId = document.getElementById('receiptId');
         const receiptTeam = document.getElementById('receiptTeam');
         const receiptLevel = document.getElementById('receiptLevel');
         const receiptFee = document.getElementById('receiptFee');
-        const receiptLevelLogo = document.getElementById('receiptLevelLogo'); // ** NEW
-
+        const receiptLevelLogo = document.getElementById('receiptLevelLogo');
 
         // --- Config ---
-        const ORGANIZER_CODE = "EDU2025"; // The code to verify payment
+        const ORGANIZER_CODE = "EDU2025";
 
-        // --- Page Load Logic ---
+        // --- Page Load Logic (unchanged) ---
         function loadPageData() {
             const params = new URLSearchParams(window.location.search);
             teamName = params.get('team');
             level = params.get('level');
             fee = params.get('fee');
-            teamDocId = params.get('teamId'); // Get the Firestore ID
-
+            teamDocId = params.get('teamId'); 
             if (teamName && level && fee && teamDocId) {
                 teamNameDisplay.textContent = teamName;
                 levelDisplay.textContent = level;
@@ -301,6 +244,8 @@
             }
         }
 
+        // --- All window functions (unchanged) ---
+        
         window.showVerificationStep = function() {
             step1.classList.add('hidden');
             step2.classList.remove('hidden');
@@ -314,12 +259,9 @@
                 codeError.classList.remove('hidden');
                 return;
             }
-
-            // Code is correct, proceed
             codeError.classList.add('hidden');
             verifyButton.disabled = true;
             verifyButton.textContent = "Verifying...";
-
             if (!teamDocRef) {
                 console.error("Firestore document reference is not set.");
                 showCustomAlert("Error", "Database connection lost. Please refresh and try again.");
@@ -327,20 +269,15 @@
                 verifyButton.textContent = "Verify Code & Submit";
                 return;
             }
-            
-            // --- Update Firestore Document ---
             try {
-                await teamDocRef.update({
+                await updateDoc(teamDocRef, {
                     paymentStatus: "Verified",
                     registrationStatus: "Pending Roster"
                 });
                 console.log("Document updated to 'Verified'");
-                
-                // Show success message and receipt
                 step2.classList.add('hidden');
                 step3.classList.remove('hidden');
-                populateReceipt(); // ** MODIFIED: Populate receipt data **
-
+                populateReceipt();
             } catch (error) {
                 console.error("Error updating document: ", error);
                 showCustomAlert("Error", "Could not verify payment. Please try again.");
@@ -349,7 +286,6 @@
             }
         }
 
-        // --- ** MODIFIED: Receipt Functions ** ---
         function populateReceipt() {
             const today = new Date();
             receiptDate.textContent = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -357,8 +293,6 @@
             receiptTeam.textContent = teamName;
             receiptLevel.textContent = level;
             receiptFee.textContent = `#${Number(fee).toLocaleString()}`;
-            
-            // ** NEW: Add Level-Specific Logo **
             if (level.includes("Finalist")) {
                 receiptLevelLogo.className = "w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-center p-1 slide-finalist text-white";
                 receiptLevelLogo.innerHTML = `<div class="text-white"><span class="text-2xl md:text-3xl">🏆</span><p class="text-xs font-bold">FINALIST</p></div>`;
@@ -376,43 +310,30 @@
 
         window.downloadReceipt = async function() {
             const doc = new jsPDF();
-            
-            // Simplified text-based receipt
             doc.setFont('Courier', 'bold');
             doc.setFontSize(18);
             doc.text("OFFICIAL RECEIPT", doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
-            
             doc.setFont('Courier', 'normal');
             doc.setFontSize(12);
             doc.text("EDU-LEAGUE CHAMPIONSHIP (NUESA x FESSC)", doc.internal.pageSize.getWidth() / 2, 30, { align: 'center' });
-
-            doc.line(20, 35, 190, 35); // Horizontal line
-
+            doc.line(20, 35, 190, 35);
             doc.text(`Date:         ${receiptDate.textContent}`, 20, 45);
             doc.text(`Receipt No:   ${receiptId.textContent}`, 20, 55);
             doc.text(`Department:   ${receiptTeam.textContent}`, 20, 65);
             doc.text(`Level:        ${receiptLevel.textContent}`, 20, 75);
-
-            doc.line(20, 85, 190, 85); // Horizontal line
-
+            doc.line(20, 85, 190, 85);
             doc.setFont('Courier', 'bold');
             doc.setFontSize(16);
             doc.text(`TOTAL PAID:   ${receiptFee.textContent}`, 20, 95);
-
             doc.setFont('Courier', 'bold');
             doc.setFontSize(48);
-            doc.setTextColor(0, 128, 0); // Green
+            doc.setTextColor(0, 128, 0);
             doc.text("PAID", doc.internal.pageSize.getWidth() / 2, 120, { align: 'center', angle: -15 });
-
             doc.save(`EDU-LEAGUE-Receipt-${receiptId.textContent}.pdf`);
         }
-        // --- END: Receipt Functions ---
 
         window.goToRoster = function() {
-            // Redirect to roster page with team ID
-            const params = new URLSearchParams({
-                teamId: teamDocId
-            });
+            const params = new URLSearchParams({ teamId: teamDocId });
             window.location.assign(`./team_roster.html?${params.toString()}`);
         }
         
@@ -432,65 +353,75 @@
             customAlertModal.querySelector('div').classList.remove('scale-100');
         }
 
-        // --- *** NEW: News Ticker Function *** ---
         async function fetchNews() {
+            // Static content as a fallback
+            const staticNews = [
+                "<strong>EDU-LEAGUE:</strong> Battle within Educators",
+                "<strong>REGISTRATION:</strong> November 10th - November 25th",
+                "<strong>CONTACT:</strong> Opeyemi 08140712347, Rotimi 09021070738",
+                "<strong>LEVELS:</strong> Finalist (400Lvl), Penultimate (300Lvl), Sophomore (200Lvl)"
+            ];
+            
+            let newsHtml = "";
+            staticNews.forEach(item => {
+                newsHtml += `<div class="ticker-item">${item}</div>`;
+            });
+            // Duplicate for a smooth loop
+            staticNews.forEach(item => {
+                newsHtml += `<div class="ticker-item">${item}</div>`;
+            });
+            tickerWrapper.innerHTML = newsHtml;
+
+            // Try to fetch live news and replace if successful
             const proxyUrl = 'https://api.allorigins.win/raw?url=';
             const rssFeedUrl = 'https://feeds.skysports.com/data/football.xml';
-            
             try {
                 const response = await fetch(proxyUrl + encodeURIComponent(rssFeedUrl));
-                if (!response.ok) throw new Error('Network response was not ok.');
-                
+                if (!response.ok) throw new Error('Network response was not ok for live news.');
                 const str = await response.text();
                 const data = new window.DOMParser().parseFromString(str, "text/xml");
                 const items = data.querySelectorAll("item");
-                
-                let newsHtml = "";
+                let liveNewsHtml = "";
                 items.forEach((el, index) => {
-                    if (index < 15) { // Get first 15 items
+                    if (index < 15) {
                         const title = el.querySelector("title").innerHTML;
-                        newsHtml += `<div class="ticker-item"><strong>LATEST:</strong> ${title}</div>`;
+                        liveNewsHtml += `<div class="ticker-item"><strong>LATEST:</strong> ${title}</div>`;
                     }
                 });
-                
-                // Duplicate the news content for a seamless loop
-                tickerWrapper.innerHTML = newsHtml + newsHtml; 
-                
+                if(liveNewsHtml) {
+                    tickerWrapper.innerHTML = liveNewsHtml + liveNewsHtml; // Duplicate for loop
+                }
             } catch (error) {
-                console.error('Error fetching news:', error);
-                tickerWrapper.innerHTML = `<div class="ticker-item"><strong>ERROR:</strong> Could not load live news feed.</div>`;
+                console.error('Error fetching live news:', error);
+                // The static content is already there, so no need to do anything else.
             }
         }
 
         // --- Initialize Firebase ---
         async function initializeFirebase() {
              try {
-                // *** UPDATED: Use firebase.auto initialization ***
-                if (typeof firebase === 'undefined') {
+                // *** UPDATED: Manually initialize app ***
+                if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("PASTE_YOUR_CONFIG_HERE")) {
                     showCustomAlert("Error", "Firebase configuration is missing. Database features will not work.");
+                    console.error("Firebase config is missing. Please paste it into payment_page.html.");
                     return;
                 }
-                
-                // Firebase is initialized automatically by /__/firebase/init.js
-                db = firebase.firestore();
-                auth = firebase.auth();
-                // firebase.firestore().setLogLevel('Debug');
 
-                try {
-                    await auth.signInAnonymously();
-                } catch (authError) {
-                    console.error("Anonymous auth failed:", authError);
-                    showCustomAlert("Auth Error", "Could not connect to user services. " + authError.message);
-                }
+                const app = initializeApp(firebaseConfig);
+                const analytics = getAnalytics(app); // Initialize analytics
+                db = getFirestore(app);
+                auth = getAuth(app);
+                // setLogLevel('Debug');
 
-                auth.onAuthStateChanged((user) => {
+                await signInAnonymously(auth);
+
+                onAuthStateChanged(auth, (user) => {
                     if (user) {
                         userId = user.uid;
                         console.log("User signed in:", userId);
-                        
                         if (teamDocId) {
                             // *** UPDATED: Simplified collection path ***
-                            teamDocRef = db.collection("registrations").doc(teamDocId);
+                            teamDocRef = doc(db, "registrations", teamDocId);
                         } else {
                             console.error("teamDocId is not set, cannot create doc ref.");
                         }
@@ -508,11 +439,9 @@
         }
         
         // --- Start the App ---
-        document.addEventListener('DOMContentLoaded', function() {
-            loadPageData();
-            initializeFirebase();
-            fetchNews(); // ** NEW: Fetch news on load **
-        });
+        loadPageData();
+        initializeFirebase();
+        fetchNews();
 
     </script>
 </body>
