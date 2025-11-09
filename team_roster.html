@@ -6,22 +6,27 @@
     <title>Team Roster - EDU-LEAGUE</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- *** NEW FIREBASE HOSTING SCRIPTS *** -->
+    <script src="/__/firebase/11.6.1/firebase-app.js"></script>
+    <script src="/__/firebase/11.6.1/firebase-auth.js"></script>
+    <script src="/__/firebase/11.6.1/firebase-firestore.js"></script>
+    <script src="/__/firebase/init.js"></script>
+    <!-- *** END NEW SCRIPTS *** -->
+    
     <style>
-        /* Custom Font */
+        /* ... existing style code ... */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f7f9fd;
         }
-        /* Custom color classes */
         .bg-edu-purple { background-color: #6d28d9; }
         .text-edu-purple { color: #6d28d9; }
         .border-edu-purple { border-color: #6d28d9; }
         .ring-edu-purple:focus { ring-color: #6d28d9; }
         .bg-edu-yellow { background-color: #fbbf24; }
         .hover-edu-yellow:hover { background-color: #f59e0b; }
-        
-        /* Added styles for player list */
         .player-entry {
             display: flex;
             align-items: center;
@@ -36,6 +41,7 @@
 </head>
 <body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
 
+    <!-- ... existing HTML code ... -->
     <div class="max-w-4xl w-full bg-white shadow-2xl rounded-xl overflow-hidden">
         
         <!-- Header -->
@@ -140,9 +146,15 @@
     <!-- Firebase & Logic Script -->
     <script type="module">
         // --- Firebase SDK Imports ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, updateDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        // import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // import { getFirestore, doc, updateDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // *** Use the global firebase object provided by the new scripts ***
+        const { initializeApp } = firebase;
+        const { getAuth, signInAnonymously, onAuthStateChanged } = firebase.auth;
+        const { getFirestore, doc, updateDoc, setLogLevel } = firebase.firestore;
+
 
         // --- Firebase & App State ---
         let db;
@@ -150,9 +162,10 @@
         let userId;
         let teamDocRef; // This will be the reference to the team's document in Firestore
         let teamDocId; // The string ID of the document
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        // const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // No longer needed
         
         // --- DOM Elements ---
+        // ... all other DOM element consts are correct ...
         const teamNameDisplay = document.getElementById('teamNameDisplay');
         const levelDisplay = document.getElementById('levelDisplay');
         const newPlayerNameInput = document.getElementById('newPlayerName');
@@ -163,12 +176,12 @@
         const playerCountInput = document.getElementById('playerCount');
         const successModal = document.getElementById('success-modal');
         const rosterForm = document.getElementById('rosterForm');
-        // Custom Alert Elements
         const customAlertModal = document.getElementById('custom-alert-modal');
         const customAlertTitle = document.getElementById('custom-alert-title');
         const customAlertMessage = document.getElementById('custom-alert-message');
 
         // --- Player List Management ---
+        // ... existing addPlayer and removePlayer functions ...
         const MAX_PLAYERS = 18;
         let players = []; // Array to store player names
 
@@ -250,8 +263,10 @@
             });
         }
 
+
         // --- Form & Modal Logic ---
         
+        // ... existing saveRoster function ...
         window.saveRoster = async function(event) {
             event.preventDefault();
             
@@ -300,6 +315,7 @@
             }
         }
         
+        // ... existing showSuccessModal ...
         function showSuccessModal() {
             successModal.classList.remove('opacity-0', 'pointer-events-none');
             successModal.classList.add('opacity-100', 'pointer-events-auto');
@@ -307,13 +323,13 @@
             successModal.querySelector('div').classList.add('scale-100');
         }
 
+        // ... existing goToHome (no change needed from last fix) ...
         window.goToHome = function() {
-            // *** UPDATED LINK ***
             // Redirect back to the main registration page (index.html) with a final success status
             window.location.assign('./index.html?status=complete');
         }
         
-        // --- Custom Alert Function (Replaces native alert()) ---
+        // ... existing showCustomAlert and closeCustomAlert ...
         window.showCustomAlert = function(title, message) {
             customAlertTitle.textContent = title;
             customAlertMessage.textContent = message;
@@ -330,30 +346,27 @@
             customAlertModal.querySelector('div').classList.remove('scale-100');
         }
 
-        // --- Initialize Firebase ---
+        // --- *** UPDATED Initialize Firebase Function *** ---
         async function initializeFirebase() {
             try {
-                // Get config from global variable
-                const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-                if (!firebaseConfig.apiKey) {
-                    console.error("Firebase config is missing.");
+                // Check if Firebase Hosting auto-injected the config
+                if (typeof firebase === 'undefined' || typeof firebase.app === 'undefined') {
+                    console.error("Firebase object is not defined. Make sure init scripts are loaded.");
                     teamNameDisplay.textContent = "Error: Firebase Config Missing";
                     levelDisplay.textContent = "The application cannot be initialized.";
                     rosterForm.classList.add('hidden');
                     return;
                 }
+
+                // *** NEW: Check if firebase.apps is available before getting config ***
+                const app = firebase.apps.length ? firebase.app() : initializeApp(firebaseConfig);
                 
-                const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
                 setLogLevel('Debug'); // Enable detailed Firestore logs
 
-                // Sign in the user
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
+                // Sign in the user anonymously
+                await signInAnonymously(auth);
 
                 // Setup listener for auth changes
                 onAuthStateChanged(auth, (user) => {
@@ -362,7 +375,7 @@
                         console.log("User signed in:", userId);
                         
                         // --- Get Team Info from URL ---
-                        const urlParams = new URLSearchParams(window.location.search);
+                        const urlParams = new URLSearchParams(window..search);
                         teamDocId = urlParams.get('teamId');
                         const teamName = urlParams.get('team') || 'Unknown Team';
                         const level = urlParams.get('level') || 'Unknown Level';
@@ -380,8 +393,9 @@
                         teamNameDisplay.textContent = teamName;
                         levelDisplay.textContent = `${level} Level`;
                         
-                        // Define the document reference
-                        teamDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'registrations', teamDocId);
+                        // *** UPDATED FIRESTORE PATH ***
+                        // Use a simple top-level collection path
+                        teamDocRef = doc(db, 'registrations', teamDocId);
                         console.log("Targeting document:", teamDocRef.path);
                         
                     } else {
@@ -393,11 +407,18 @@
 
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
-                teamNameDisplay.textContent = "Application Error";
-                levelDisplay.textContent = "Could not initialize Firebase. Check console.";
+                 // Check if firebaseConfig is defined, which is the root cause
+                if (typeof firebaseConfig === 'undefined') {
+                    teamNameDisplay.textContent = "Error: Config Missing";
+                    levelDisplay.textContent = "The /__/firebase/init.js script failed.";
+                } else {
+                    teamNameDisplay.textContent = "Application Error";
+                    levelDisplay.textContent = "Could not initialize Firebase. Check console.";
+                }
                 rosterForm.classList.add('hidden');
             }
         }
+        // --- *** END UPDATED FUNCTION *** ---
 
         // --- Start the App ---
         initializeFirebase();

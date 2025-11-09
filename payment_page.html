@@ -6,19 +6,25 @@
     <title>Payment - EDU-LEAGUE CHAMPIONSHIP</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- *** NEW FIREBASE HOSTING SCRIPTS *** -->
+    <script src="/__/firebase/11.6.1/firebase-app.js"></script>
+    <script src="/__/firebase/11.6.1/firebase-auth.js"></script>
+    <script src="/__/firebase/11.6.1/firebase-firestore.js"></script>
+    <script src="/__/firebase/init.js"></script>
+    <!-- *** END NEW SCRIPTS *** -->
+
     <style>
-        /* Custom Font */
+        /* ... existing style code ... */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f7f9fd;
         }
-        /* Custom color classes */
         .bg-edu-purple { background-color: #6d28d9; }
         .text-edu-purple { color: #6d28d9; }
         .bg-edu-yellow { background-color: #fbbf24; }
         .hover-edu-yellow:hover { background-color: #f59e0b; }
-        /* Loading spinner */
         .loader {
             border-top-color: #6d28d9;
             -webkit-animation: spinner 1.5s linear infinite;
@@ -36,6 +42,7 @@
 </head>
 <body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
 
+    <!-- ... existing HTML code ... -->
     <div class="max-w-md w-full bg-white shadow-2xl rounded-xl overflow-hidden">
         
         <!-- Header -->
@@ -116,9 +123,15 @@
     <!-- Firebase & Logic Script -->
     <script type="module">
         // --- Firebase SDK Imports ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, updateDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        // import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // import { getFirestore, doc, updateDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // *** Use the global firebase object provided by the new scripts ***
+        const { initializeApp } = firebase;
+        const { getAuth, signInAnonymously, onAuthStateChanged } = firebase.auth;
+        const { getFirestore, doc, updateDoc, setLogLevel } = firebase.firestore;
+
 
         // --- Firebase & App State ---
         let db;
@@ -127,9 +140,10 @@
         let teamDocRef; // This will be the reference to the team's document
         let teamDocId; // The string ID
         let teamName, level; // Store these for the redirect
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        // const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // No longer needed
 
         // --- DOM Elements ---
+        // ... all other DOM element consts are correct ...
         const teamNameDisplay = document.getElementById('teamNameDisplay');
         const levelDisplay = document.getElementById('levelDisplay');
         const feeDisplay = document.getElementById('feeDisplay');
@@ -144,6 +158,7 @@
 
         // On page load, read data from URL
         window.onload = function() {
+            // ... existing onload code is correct ...
             const urlParams = new URLSearchParams(window.location.search);
             teamName = urlParams.get('team') || 'Unknown Team';
             level = urlParams.get('level') || 'Unknown Level';
@@ -164,7 +179,7 @@
             initializeFirebase();
         };
 
-        // Simulate payment processing
+        // ... existing processPayment function ...
         window.processPayment = function() {
             // Show loading state
             payButton.disabled = true;
@@ -178,7 +193,7 @@
             }, 2000);
         }
 
-        // --- Verification Function ---
+        // ... existing verifyCode function (no change needed here) ...
         window.verifyCode = async function() {
             const MASTER_CODE = "EDU2025"; // This is the hardcoded code from the organizer
             const inputCode = verificationCodeInput.value.trim().toUpperCase();
@@ -236,7 +251,7 @@
             }
         }
         
-        // --- Initialize Firebase ---
+        // --- *** UPDATED Initialize Firebase Function *** ---
         async function initializeFirebase() {
             if (!teamDocId) {
                 console.warn("Skipping Firebase init, teamDocId is missing.");
@@ -244,26 +259,23 @@
             }
             
             try {
-                // Get config from global variable
-                const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-                if (!firebaseConfig.apiKey) {
-                    console.error("Firebase config is missing.");
+                // Check if Firebase Hosting auto-injected the config
+                if (typeof firebase === 'undefined' || typeof firebase.app === 'undefined') {
+                    console.error("Firebase object is not defined. Make sure init scripts are loaded.");
                     payButton.disabled = true;
                     payButtonText.textContent = "Error: Config Missing";
                     return;
                 }
+
+                // *** NEW: Check if firebase.apps is available before getting config ***
+                const app = firebase.apps.length ? firebase.app() : initializeApp(firebaseConfig);
                 
-                const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
                 setLogLevel('Debug'); // Enable detailed Firestore logs
 
-                // Sign in the user
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
+                // Sign in the user anonymously
+                await signInAnonymously(auth);
 
                 // Setup listener for auth changes
                 onAuthStateChanged(auth, (user) => {
@@ -271,8 +283,9 @@
                         userId = user.uid;
                         console.log("User signed in:", userId);
                         
-                        // Define the document reference
-                        teamDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'registrations', teamDocId);
+                        // *** UPDATED FIRESTORE PATH ***
+                        // Use a simple top-level collection path
+                        teamDocRef = doc(db, 'registrations', teamDocId);
                         console.log("Targeting document:", teamDocRef.path);
                         
                     } else {
@@ -284,10 +297,17 @@
 
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
-                payButton.disabled = true;
-                payButtonText.textContent = "Error: DB Init Failed";
+                 // Check if firebaseConfig is defined, which is the root cause
+                if (typeof firebaseConfig === 'undefined') {
+                     payButton.disabled = true;
+                     payButtonText.textContent = "Error: Config Missing";
+                } else {
+                    payButton.disabled = true;
+                    payButtonText.textContent = "Error: DB Init Failed";
+                }
             }
         }
+        // --- *** END UPDATED FUNCTION *** ---
         
     </script>
 </body>

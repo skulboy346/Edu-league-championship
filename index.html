@@ -6,6 +6,15 @@
     <title>EDU-LEAGUE CHAMPIONSHIP Registration</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- *** NEW FIREBASE HOSTING SCRIPTS *** -->
+    <!-- These scripts auto-load your project's Firebase config -->
+    <script src="/__/firebase/11.6.1/firebase-app.js"></script>
+    <script src="/__/firebase/11.6.1/firebase-auth.js"></script>
+    <script src="/__/firebase/11.6.1/firebase-firestore.js"></script>
+    <script src="/__/firebase/init.js"></script>
+    <!-- *** END NEW SCRIPTS *** -->
+
     <style>
         /* Custom Font */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
@@ -13,16 +22,14 @@
             font-family: 'Inter', sans-serif;
             background-color: #f7f9fd;
         }
-        /* Custom color classes matching the purple/yellow theme */
+        /* ... existing style code ... */
         .bg-edu-purple { background-color: #6d28d9; /* Deep Purple */ }
         .text-edu-purple { color: #6d28d9; }
         .bg-edu-yellow { background-color: #fbbf24; /* Amber/Yellow */ }
         .hover-edu-yellow:hover { background-color: #f59e0b; }
-        /* Style for the message boxes (modal replacement) */
         #confirmation-box, #registrations-modal, #custom-alert-modal {
             transition: opacity 0.3s ease-in-out;
         }
-        /* Loading spinner */
         .loader {
             border-top-color: #6d28d9;
             -webkit-animation: spinner 1.5s linear infinite;
@@ -40,6 +47,7 @@
 </head>
 <body>
 
+    <!-- ... existing HTML code ... -->
     <div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div class="max-w-4xl w-full bg-white shadow-2xl rounded-xl overflow-hidden md:flex">
 
@@ -238,19 +246,26 @@
     <!-- Main Application Script (Firebase & Logic) -->
     <script type="module">
         // --- Firebase SDK Imports ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // *** Imports now come from the scripts added to the <head> ***
+        // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        // import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // import { getFirestore, collection, addDoc, onSnapshot, query, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // *** Use the global firebase object provided by the new scripts ***
+        const { initializeApp } = firebase;
+        const { getAuth, signInAnonymously, onAuthStateChanged } = firebase.auth;
+        const { getFirestore, collection, addDoc, onSnapshot, query, setLogLevel } = firebase.firestore;
 
         // --- Firebase & App State ---
         let db;
         let auth;
         let userId;
         let registrationsCollection;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        // const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // No longer needed
         
         // --- DOM Elements ---
         const form = document.getElementById('registrationForm');
+        // ... all other DOM element consts are correct ...
         const submitButton = document.getElementById('submitButton');
         const confirmationBox = document.getElementById('confirmation-box');
         const draftButton = document.getElementById('draftButton');
@@ -271,7 +286,7 @@
         const apiKey = ""; 
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
-        // Utility function for exponential backoff
+        // ... existing fetchWithExponentialBackoff function ...
         async function fetchWithExponentialBackoff(url, options, maxRetries = 5) {
             for (let attempt = 0; attempt < maxRetries; attempt++) {
                 try {
@@ -291,6 +306,7 @@
             throw new Error('API request failed after maximum retries.');
         }
 
+        // ... existing draftSponsorshipEmail function ...
         window.draftSponsorshipEmail = async function() {
             draftButton.disabled = true;
             draftText.textContent = 'Generating Draft...';
@@ -355,6 +371,7 @@
 
         // --- Form & Modal Logic ---
 
+        // ... existing handleSubmit function (no change needed here) ...
         window.handleSubmit = async function(event) {
             event.preventDefault(); 
             if (!form.checkValidity()) {
@@ -417,6 +434,7 @@
             return false;
         }
 
+        // ... existing showConfirmation, closeConfirmation, showCustomAlert, closeCustomAlert, copyToClipboard ...
         window.showConfirmation = function() {
             confirmationBox.classList.remove('opacity-0', 'pointer-events-none');
             confirmationBox.classList.add('opacity-100', 'pointer-events-auto');
@@ -431,7 +449,6 @@
             confirmationBox.querySelector('div').classList.remove('scale-100');
         }
         
-        // Custom Alert function to replace window.alert()
         window.showCustomAlert = function(title, message) {
             customAlertTitle.textContent = title;
             customAlertMessage.textContent = message;
@@ -447,7 +464,6 @@
             customAlertModal.querySelector('div').classList.add('scale-95');
             customAlertModal.querySelector('div').classList.remove('scale-100');
         }
-
 
         window.copyToClipboard = function(elementId) {
             const element = document.getElementById(elementId);
@@ -469,7 +485,7 @@
             }
         }
         
-        // --- New Registration Modal Logic ---
+        // ... existing showRegistrations, closeRegistrations ...
         window.showRegistrations = function() {
             registrationsModal.classList.remove('opacity-0', 'pointer-events-none');
             registrationsModal.classList.add('opacity-100', 'pointer-events-auto');
@@ -484,6 +500,7 @@
             registrationsModal.querySelector('div').classList.remove('scale-100');
         }
         
+        // ... existing setupRegistrationListener (no change needed here) ...
         function setupRegistrationListener() {
             if (!registrationsCollection) return;
             
@@ -533,28 +550,26 @@
             });
         }
 
-        // --- Initialize Firebase ---
+
+        // --- *** UPDATED Initialize Firebase Function *** ---
         async function initializeFirebase() {
             try {
-                // Get config from global variable
-                const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-                if (!firebaseConfig.apiKey) {
-                    console.error("Firebase config is missing.");
-                    showCustomAlert("Error", "Firebase configuration is missing. Database features will not work.");
+                // Check if Firebase Hosting auto-injected the config
+                if (typeof firebase === 'undefined' || typeof firebase.app === 'undefined') {
+                    console.error("Firebase object is not defined. Make sure init scripts are loaded.");
+                    showCustomAlert("Error", "Firebase configuration is missing. This usually means the app is not running on Firebase Hosting or the init scripts are missing.");
                     return;
                 }
+
+                // *** NEW: Check if firebase.apps is available before getting config ***
+                const app = firebase.apps.length ? firebase.app() : initializeApp(firebaseConfig);
                 
-                const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
                 setLogLevel('Debug'); // Enable detailed Firestore logs
 
-                // Sign in the user
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
+                // Sign in the user anonymously (no custom token needed on live site)
+                await signInAnonymously(auth);
 
                 // Setup listener for auth changes
                 onAuthStateChanged(auth, (user) => {
@@ -562,8 +577,9 @@
                         userId = user.uid;
                         console.log("User signed in:", userId);
                         
-                        // Define the collection path using the public path
-                        registrationsCollection = collection(db, 'artifacts', appId, 'public', 'data', 'registrations');
+                        // *** UPDATED FIRESTORE PATH ***
+                        // Use a simple top-level collection name
+                        registrationsCollection = collection(db, 'registrations');
                         
                         // Start the real-time listener for registrations
                         setupRegistrationListener();
@@ -572,7 +588,6 @@
                         const urlParams = new URLSearchParams(window.location.search);
                         if (urlParams.get('status') === 'complete') {
                              showConfirmation(); // Show the "Registration 100% Complete" modal
-                             // Clean the URL to prevent modal from showing on refresh
                             window.history.replaceState(null, '', window.location.pathname);
                         }
                         
@@ -585,9 +600,15 @@
 
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
-                showCustomAlert("Error", "Could not connect to the database. " + error.message);
+                // Check if firebaseConfig is defined, which is the root cause
+                if (typeof firebaseConfig === 'undefined') {
+                     showCustomAlert("Error", "Firebase configuration object is missing. The /__/firebase/init.js script failed to load or is being blocked.");
+                } else {
+                    showCustomAlert("Error", "Could not connect to the database. " + error.message);
+                }
             }
         }
+        // --- *** END UPDATED FUNCTION *** ---
 
         // --- Start the App ---
         initializeFirebase();
