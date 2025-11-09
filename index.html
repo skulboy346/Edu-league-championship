@@ -7,14 +7,14 @@
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- *** NEW FIREBASE HOSTING SCRIPTS *** -->
-    <!-- These scripts auto-load your project's Firebase config -->
-    <script src="/__/firebase/11.6.1/firebase-app.js"></script>
-    <script src="/__/firebase/11.6.1/firebase-auth.js"></script>
-    <script src="/__/firebase/11.6.1/firebase-firestore.js"></script>
+    <!-- *** LIVE FIREBASE SCRIPTS *** -->
+    <!-- These scripts are served automatically by Firebase Hosting -->
+    <script src="/__/firebase/11.6.1/firebase-app-compat.js"></script>
+    <script src="/__/firebase/11.6.1/firebase-auth-compat.js"></script>
+    <script src="/__/firebase/11.6.1/firebase-firestore-compat.js"></script>
     <script src="/__/firebase/init.js"></script>
-    <!-- *** END NEW SCRIPTS *** -->
-
+    <!-- *** END LIVE FIREBASE SCRIPTS *** -->
+    
     <style>
         /* Custom Font */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
@@ -22,10 +22,9 @@
             font-family: 'Inter', sans-serif;
             background-color: #f7f9fd;
         }
-        /* ... existing style code ... */
-        .bg-edu-purple { background-color: #6d28d9; /* Deep Purple */ }
+        .bg-edu-purple { background-color: #6d28d9; }
         .text-edu-purple { color: #6d28d9; }
-        .bg-edu-yellow { background-color: #fbbf24; /* Amber/Yellow */ }
+        .bg-edu-yellow { background-color: #fbbf24; }
         .hover-edu-yellow:hover { background-color: #f59e0b; }
         #confirmation-box, #registrations-modal, #custom-alert-modal {
             transition: opacity 0.3s ease-in-out;
@@ -43,160 +42,248 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* --- Slider Styles --- */
+        .slider-container {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            border: 3px solid #fbbf24; /* Yellow border */
+        }
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slider-item {
+            min-width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            padding: 1rem;
+            color: white;
+            font-weight: bold;
+        }
+        /* Specific Level Colors */
+        .slide-finalist { background-color: #22c55e; } /* Green */
+        .slide-penultimate { background-color: #3b82f6; } /* Blue */
+        .slide-sophomore { background-color: #ef4444; } /* Red */
+
+        /* --- News Ticker Styles --- */
+        .news-ticker {
+            width: 100%;
+            background-color: #1f2937; /* Dark gray */
+            color: white;
+            padding: 0.75rem 0;
+            overflow: hidden;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .ticker-wrapper {
+            display: flex;
+            white-space: nowrap;
+            animation: ticker 60s linear infinite;
+        }
+        .ticker-item {
+            padding: 0 1.5rem;
+            color: #d1d5db; /* Lighter gray for text */
+        }
+        .ticker-item strong {
+            color: #fbbf24; /* Yellow for highlights */
+        }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Loops at 50% since we duplicate the content */
+        }
     </style>
 </head>
-<body>
+<body class="flex flex-col min-h-screen">
 
-    <!-- ... existing HTML code ... -->
-    <div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div class="max-w-4xl w-full bg-white shadow-2xl rounded-xl overflow-hidden md:flex">
+    <main class="flex-grow">
+        <div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+            <div class="max-w-4xl w-full bg-white shadow-2xl rounded-xl overflow-hidden md:flex">
 
-            <!-- Left Panel: Event Details & Branding (Vibrant Purple) -->
-            <div class="md:w-1/3 bg-edu-purple text-white p-8 space-y-6 flex flex-col justify-center rounded-t-xl md:rounded-l-xl md:rounded-t-none">
-                <div class="text-center md:text-left">
-                    <h1 class="text-3xl font-extrabold tracking-tight">EDU-LEAGUE CHAMPIONSHIP</h1>
-                    <p class="mt-1 text-purple-200 text-lg">Battle within Educators</p>
-                </div>
-
-                <div class="space-y-4">
-                    <h2 class="text-xl font-bold border-b border-purple-400 pb-2">Event Structure</h2>
-                    <ul class="space-y-2 text-purple-100 font-semibold">
-                        <li class="flex items-center space-x-2">
-                            <svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8V7a1 1 0 012 0v3h2a1 1 0 110 2h-2v2a1 1 0 11-2 0v-2H7a1 1 0 110-2h2z"/></svg>
-                            <span>Competing Departments: 8</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-4 7a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/></svg>
-                            <span>Championship Levels: 3</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/></svg>
-                            <span>Available Trophies: 3 Cups</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="pt-4 border-t border-purple-400">
-                    <p class="text-sm font-light">Presented by:</p>
-                    <p class="text-lg font-bold">NUESA x FESSC</p>
-                </div>
-            </div>
-
-            <!-- Right Panel: Registration Form -->
-            <div class="md:w-2/3 p-8 md:p-12">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Team Registration Form</h2>
-
-                <!-- Key Dates & Fee Bar (Yellow Accent) -->
-                <div class="bg-edu-yellow text-gray-800 p-4 rounded-lg shadow-md mb-6 font-semibold md:flex justify-between items-center text-center md:text-left">
-                    <p>REGISTRATION: Nov 10th - Nov 25th</p>
-                    <p class="mt-2 md:mt-0 md:border-l md:pl-4 border-gray-600">ENTRY FEE PER LEVEL: #70,000</p>
-                </div>
-
-                <form id="registrationForm" onsubmit="handleSubmit(event); return false;" class="space-y-4">
+                <!-- Left Panel: Event Details & Branding (Vibrant Purple) -->
+                <div class="md:w-1/3 bg-edu-purple text-white p-8 space-y-6 flex flex-col justify-center rounded-t-xl md:rounded-l-xl md:rounded-t-none">
                     
-                    <!-- Team Name -->
-                    <div>
-                        <label for="teamName" class="block text-sm font-medium text-gray-700">Team/Department Name</label>
-                        <input type="text" id="teamName" name="teamName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
+                    <!-- Logo Section -->
+                    <div class="flex justify-center pt-4 md:pt-0">
+                        <img src="edulogo.png" alt="Edu-League Logo" class="rounded-full border-4 border-purple-300 shadow-lg w-32 h-32 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/128x128/6d28d9/fbbf24?text=EDU-LEAGUE';">
                     </div>
 
-                    <!-- Captain/Contact Name -->
-                    <div>
-                        <label for="captainName" class="block text-sm font-medium text-gray-700">Captain/Contact Person Name</label>
-                        <input type="text" id="captainName" name="captainName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
+                    <div class="text-center md:text-left">
+                        <h1 class="text-3xl font-extrabold tracking-tight">EDU-LEAGUE CHAMPIONSHIP</h1>
+                        <p class="mt-1 text-purple-200 text-lg">Battle within Educators</p>
                     </div>
 
-                    <!-- Contact Details (Email & Phone) -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- *** NEW: Logo Slider *** -->
+                    <div class="space-y-2">
+                        <h2 class="text-xl font-bold border-b border-purple-400 pb-2">League Levels</h2>
+                        <div class="slider-container shadow-lg">
+                            <div class="slider-wrapper" id="logoSlider">
+                                <div class="slider-item slide-finalist">
+                                    <span class="text-2xl font-extrabold">🏆</span>
+                                    <p class="text-lg">FINALIST LEAGUE</p>
+                                    <p class="text-xs">(The Last Dance for Victory)</p>
+                                </div>
+                                <div class="slider-item slide-penultimate">
+                                    <span class="text-2xl font-extrabold">🔥</span>
+                                    <p class="text-lg">PENULTIMATE LEAGUE</p>
+                                    <p class="text-xs">(The Season Rave)</p>
+                                </div>
+                                <div class="slider-item slide-sophomore">
+                                    <span class="text-2xl font-extrabold">👟</span>
+                                    <p class="text-lg">SOPHOMORE LEAGUE</p>
+                                    <p class="text-xs">(Sizing The Shoe For Bants)</p>
+                                </div>
+                                <!-- Duplicate for smooth loop -->
+                                <div class="slider-item slide-finalist">
+                                    <span class="text-2xl font-extrabold">🏆</span>
+                                    <p class="text-lg">FINALIST LEAGUE</p>
+                                    <p class="text-xs">(The Last Dance for Victory)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- *** END: Logo Slider *** -->
+
+                    <div class="space-y-4">
+                        <h2 class="text-xl font-bold border-b border-purple-400 pb-2">Event Structure</h2>
+                        <ul class="space-y-2 text-purple-100 font-semibold">
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8V7a1 1 0 012 0v3h2a1 1 0 110 2h-2v2a1 1 0 11-2 0v-2H7a1 1 0 110-2h2z"/></svg>
+                                <span>Competing Departments: 8</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-4 7a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/></svg>
+                                <span>Championship Levels: 3</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/></svg>
+                                <span>Available Trophies: 3 Cups</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4 border-t border-purple-400">
+                        <p class="text-sm font-light">Presented by:</p>
+                        <p class="text-lg font-bold">NUESA x FESSC</p>
+                        <!-- NUESA & FESSC Icons - Aligned under the text -->
+                        <div class="flex justify-center md:justify-start space-x-4 mt-2">
+                            <img src="https://placehold.co/48x48/f7f9fd/6d28d9?text=NUESA" alt="NUESA Logo" class="w-12 h-12 rounded-full border-2 border-purple-300">
+                            <img src="https://placehold.co/48x48/f7f9fd/fbbf24?text=FESSC" alt="FESSC Logo" class="w-12 h-12 rounded-full border-2 border-purple-300">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Registration Form -->
+                <div class="md:w-2/3 p-8 md:p-12">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Team Registration Form</h2>
+
+                    <!-- Key Dates & Fee Bar (Yellow Accent) -->
+                    <div class="bg-edu-yellow text-gray-800 p-4 rounded-lg shadow-md mb-6 font-semibold md:flex justify-between items-center text-center md:text-left">
+                        <p>REGISTRATION: Nov 10th - Nov 25th</p>
+                        <p class="mt-2 md:mt-0 md:border-l md:pl-4 border-gray-600">ENTRY FEE PER LEVEL: #70,000</p>
+                    </div>
+
+                    <form id="registrationForm" onsubmit="handleSubmit(event); return false;" class="space-y-4">
+                        
+                        <!-- Department Selection (8 Departments) -->
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                            <input type="email" id="email" name="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
+                            <label for="department" class="block text-sm font-medium text-gray-700">Department Affiliation</label>
+                            <select id="department" name="department" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border bg-white">
+                                <option value="" disabled selected>Select one of the 8 Departments</option>
+                                <option value="Adult Education (NAAES)">Adult Education (NAAES)</option>
+                                <option value="Art Education (AESA)">Art Education (AESA)</option>
+                                <option value="Education Foundation (EFSA)">Education Foundation (EFSA)</option>
+                                <option value="Education Management (EMSA)">Education Management (EMSA)</option>
+                                <option value="Human Kinetic and Health Education (HKHE)">Human Kinetic and Health Education (HKHE)</option>
+                                <option value="Science Education (ULSESA)">Science Education (ULSESA)</option>
+                                <option value="Social Science Education (SSESA)">Social Science Education (SSESA)</option>
+                                <option value="Technology and Vocational Education (TVESA)">Technology and Vocational Education (TVESA)</option>
+                            </select>
                         </div>
+
+                        <!-- Coach Name -->
                         <div>
-                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number (0814...)</label>
-                            <input type="tel" id="phone" name="phone" pattern="[0-9]{11}" placeholder="e.g., 08140712347" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
+                            <label for="coachName" class="block text-sm font-medium text-gray-700">Coach Name</label>
+                            <input type="text" id="coachName" name="coachName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
                         </div>
+
+                        <!-- Contact Details (Email & Phone) -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                                <input type="email" id="email" name="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number (0814...)</label>
+                                <input type="tel" id="phone" name="phone" pattern="[0-9]{11}" placeholder="e.g., 08140712347" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
+                            </div>
+                        </div>
+
+                        <!-- Level Selection (3 Levels) -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Select Competition Level (3 Levels)</label>
+                            <div class="flex flex-wrap gap-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="level" value="Finalist (400Lvl)" required class="form-radio text-edu-purple focus:ring-edu-purple">
+                                    <span class="ml-2">Finalist (400Lvl)</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="level" value="Penultimate (300Lvl)" class="form-radio text-edu-purple focus:ring-edu-purple">
+                                    <span class="ml-2">Penultimate (300Lvl)</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="level" value="Sophomore (200Lvl)" class="form-radio text-edu-purple focus:ring-edu-purple">
+                                    <span class="ml-2">Sophomore (200Lvl)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" id="submitButton" class="w-full mt-6 py-3 bg-edu-yellow text-gray-900 font-bold rounded-md shadow-lg hover-edu-yellow focus:outline-none focus:ring-2 focus:ring-edu-yellow focus:ring-offset-2 transition duration-150 ease-in-out">
+                            Register Team Now
+                        </button>
+                    </form>
+                    
+                    <!-- Contact Information -->
+                    <div class="mt-8 pt-4 border-t border-gray-200 text-center">
+                        <p class="text-sm text-gray-600 font-semibold">For Enquiries & Sponsorship:</p>
+                        <p class="text-lg font-bold text-edu-purple mt-1">Opeyemi 08140712347, Rotimi 09021070738</p>
                     </div>
                     
-                    <!-- Department Selection (8 Departments) -->
-                    <div>
-                        <label for="department" class="block text-sm font-medium text-gray-700">Department Affiliation</label>
-                        <select id="department" name="department" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border bg-white">
-                            <option value="" disabled selected>Select one of the 8 Departments</option>
-                            <option value="Adult Education (NAAES)">Adult Education (NAAES)</option>
-                            <option value="Art Education (AESA)">Art Education (AESA)</option>
-                            <option value="Education Foundation (EFSA)">Education Foundation (EFSA)</option>
-                            <option value="Education Management (EMSA)">Education Management (EMSA)</option>
-                            <option value="Human Kinetic and Health Education (HKHE)">Human Kinetic and Health Education (HKHE)</option>
-                            <option value="Science Education (ULSESA)">Science Education (ULSESA)</option>
-                            <option value="Social Science Education (SSESA)">Social Science Education (SSESA)</option>
-                            <option value="Technology and Vocational Education (TVESA)">Technology and Vocational Education (TVESA)</option>
-                        </select>
-                    </div>
-
-                    <!-- Level Selection (3 Levels) -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Select Competition Level (3 Levels)</label>
-                        <div class="flex flex-wrap gap-4">
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="level" value="Finalist (400Lvl)" required class="form-radio text-edu-purple focus:ring-edu-purple">
-                                <span class="ml-2">Finalist (400Lvl)</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="level" value="Penultimate (300Lvl)" class="form-radio text-edu-purple focus:ring-edu-purple">
-                                <span class="ml-2">Penultimate (300Lvl)</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="level" value="Sophomore (200Lvl)" class="form-radio text-edu-purple focus:ring-edu-purple">
-                                <span class="ml-2">Sophomore (200Lvl)</span>
-                            </label>
+                    <!-- LLM & Admin FEATURES -->
+                    <div class="mt-8 pt-6 border-t border-gray-200">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Admin & Sponsorship Tools ✨</h3>
+                        <!-- Button Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Draft Email Button -->
+                            <button onclick="draftSponsorshipEmail()" id="draftButton" class="w-full py-3 bg-edu-purple text-white font-bold rounded-md shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-edu-purple focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
+                                <svg id="draftIcon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                <span id="draftText">Draft Sponsorship Email</span>
+                                <div id="draftLoader" class="loader w-6 h-6 border-4 border-t-4 border-white rounded-full hidden"></div>
+                            </button>
+                            <!-- View Registrations Button -->
+                            <button onclick="showRegistrations()" id="viewRegButton" class="w-full py-3 bg-gray-600 text-white font-bold rounded-md shadow-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                <span>View Registered Teams (<span id="regCount">0</span>)</span>
+                            </button>
+                        </div>
+                        
+                        <!-- LLM Draft Result Area -->
+                        <div id="draftResult" class="mt-4 hidden p-4 bg-gray-100 rounded-lg shadow-inner">
+                            <h4 class="font-bold text-gray-800 mb-2">Generated Draft:</h4>
+                            <pre id="draftContent" class="whitespace-pre-wrap text-sm text-gray-700 bg-white p-3 rounded-md border"></pre>
+                            <button onclick="copyToClipboard('draftContent')" class="mt-3 text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-1 px-3 rounded-full transition">
+                                Copy to Clipboard
+                            </button>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Submit Button -->
-                    <button type="submit" id="submitButton" class="w-full mt-6 py-3 bg-edu-yellow text-gray-900 font-bold rounded-md shadow-lg hover-edu-yellow focus:outline-none focus:ring-2 focus:ring-edu-yellow focus:ring-offset-2 transition duration-150 ease-in-out">
-                        Register Team Now
-                    </button>
-                </form>
-                
-                <!-- Contact Information -->
-                <div class="mt-8 pt-4 border-t border-gray-200 text-center">
-                    <p class="text-sm text-gray-600 font-semibold">For Enquiries & Sponsorship:</p>
-                    <p class="text-lg font-bold text-edu-purple mt-1">Contact: 08140712347</p>
-                </div>
-                
-                <!-- LLM & Admin FEATURES -->
-                <div class="mt-8 pt-6 border-t border-gray-200">
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">Admin & Sponsorship Tools ✨</h3>
-                    <!-- Button Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Draft Email Button -->
-                        <button onclick="draftSponsorshipEmail()" id="draftButton" class="w-full py-3 bg-edu-purple text-white font-bold rounded-md shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-edu-purple focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
-                            <svg id="draftIcon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                            <span id="draftText">Draft Sponsorship Email</span>
-                            <div id="draftLoader" class="loader w-6 h-6 border-4 border-t-4 border-white rounded-full hidden"></div>
-                        </button>
-                        <!-- View Registrations Button -->
-                        <button onclick="showRegistrations()" id="viewRegButton" class="w-full py-3 bg-gray-600 text-white font-bold rounded-md shadow-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            <span>View Registered Teams (<span id="regCount">0</span>)</span>
-                        </button>
-                    </div>
-                    
-                    <!-- LLM Draft Result Area -->
-                    <div id="draftResult" class="mt-4 hidden p-4 bg-gray-100 rounded-lg shadow-inner">
-                        <h4 class="font-bold text-gray-800 mb-2">Generated Draft:</h4>
-                        <pre id="draftContent" class="whitespace-pre-wrap text-sm text-gray-700 bg-white p-3 rounded-md border"></pre>
-                        <button onclick="copyToClipboard('draftContent')" class="mt-3 text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-1 px-3 rounded-full transition">
-                            Copy to Clipboard
-                        </button>
-                    </div>
-                </div>
             </div>
-
         </div>
-    </div>
+    </main>
 
+    <!-- Modals (Confirmation, Registrations, Custom Alert) -->
     <!-- Registration Confirmation Box (Modal Replacement) -->
     <div id="confirmation-box" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
         <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300">
@@ -242,30 +329,25 @@
         </div>
     </div>
 
+    <!-- *** NEW: News Ticker Footer *** -->
+    <footer class="news-ticker sticky bottom-0 z-10">
+        <div class="ticker-wrapper" id="tickerWrapper">
+            <!-- Content will be injected by JS -->
+            <div class="ticker-item"><strong>LOADING LATEST NEWS...</strong> Please wait...</div>
+        </div>
+    </footer>
+
 
     <!-- Main Application Script (Firebase & Logic) -->
-    <script type="module">
-        // --- Firebase SDK Imports ---
-        // *** Imports now come from the scripts added to the <head> ***
-        // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        // import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        // import { getFirestore, collection, addDoc, onSnapshot, query, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // *** Use the global firebase object provided by the new scripts ***
-        const { initializeApp } = firebase;
-        const { getAuth, signInAnonymously, onAuthStateChanged } = firebase.auth;
-        const { getFirestore, collection, addDoc, onSnapshot, query, setLogLevel } = firebase.firestore;
-
+    <script>
         // --- Firebase & App State ---
         let db;
         let auth;
         let userId;
         let registrationsCollection;
-        // const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // No longer needed
         
         // --- DOM Elements ---
         const form = document.getElementById('registrationForm');
-        // ... all other DOM element consts are correct ...
         const submitButton = document.getElementById('submitButton');
         const confirmationBox = document.getElementById('confirmation-box');
         const draftButton = document.getElementById('draftButton');
@@ -281,32 +363,29 @@
         const customAlertModal = document.getElementById('custom-alert-modal');
         const customAlertTitle = document.getElementById('custom-alert-title');
         const customAlertMessage = document.getElementById('custom-alert-message');
+        const tickerWrapper = document.getElementById('tickerWrapper');
 
         // --- LLM API Setup ---
         const apiKey = ""; 
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
-        // ... existing fetchWithExponentialBackoff function ...
+        // Utility function for exponential backoff
         async function fetchWithExponentialBackoff(url, options, maxRetries = 5) {
             for (let attempt = 0; attempt < maxRetries; attempt++) {
                 try {
                     const response = await fetch(url, options);
-                    if (response.status !== 429) { // 429 is "Too Many Requests" (retryable)
+                    if (response.status !== 429) { 
                         return response;
                     }
                 } catch (error) {
-                    // Log connection errors but don't stop retrying unless max attempts reached
                     if (attempt === maxRetries - 1) throw error;
                 }
-
-                // Exponential delay: 1s, 2s, 4s, 8s, ...
                 const delay = Math.pow(2, attempt) * 1000;
                 await new Promise(resolve => setTimeout(resolve, delay));
             }
             throw new Error('API request failed after maximum retries.');
         }
 
-        // ... existing draftSponsorshipEmail function ...
         window.draftSponsorshipEmail = async function() {
             draftButton.disabled = true;
             draftText.textContent = 'Generating Draft...';
@@ -321,13 +400,12 @@
                 structure: "8 Departments, 3 Levels (Finalist, Penultimate, Sophomore), 3 Cups",
                 dates: "Registration Nov 10th - Nov 25th",
                 fee: "#70,000 per level",
-                contact: "08140712347",
+                contact: "Opeyemi 08140712347, Rotimi 09021070738",
             };
 
             const systemPrompt = "You are an expert sports league manager and persuasive copywriter. Your goal is to draft a professional, concise email aimed at securing event sponsorship. The tone should be formal yet exciting. Include a placeholder for the sponsor's name, and clearly highlight the potential audience size and the structure of the league.";
             
-            // Updated query to include the named levels
-            const userQuery = `Draft a sponsorship inquiry email for the event named: ${eventDetails.name}. It is presented by ${eventDetails.organizer}. The event involves ${eventDetails.structure} and has an Entry Fee of ${eventDetails.fee}. The registration window is ${eventDetails.dates}. Contact for details is ${eventDetails.contact}. The email should be concise (under 200 words) and highlight exposure to the entire faculty community.`;
+            const userQuery = `Draft a sponsorship inquiry email for the event named: ${eventDetails.name}. It is presented by ${eventDetails.organizer}. The event involves ${eventDetails.structure} and has an Entry Fee of ${eventDetails.fee}. The registration window is ${eventDetails.dates}. Contact for details: ${eventDetails.contact}. The email should be concise (under 200 words) and highlight exposure to the entire faculty community.`;
 
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
@@ -371,7 +449,6 @@
 
         // --- Form & Modal Logic ---
 
-        // ... existing handleSubmit function (no change needed here) ...
         window.handleSubmit = async function(event) {
             event.preventDefault(); 
             if (!form.checkValidity()) {
@@ -388,17 +465,16 @@
             submitButton.textContent = "Processing...";
 
             // Get form data
-            const teamName = document.getElementById('teamName').value;
-            const captainName = document.getElementById('captainName').value;
+            const department = document.getElementById('department').value;
+            const coachName = document.getElementById('coachName').value;
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
-            const department = document.getElementById('department').value;
             const level = document.querySelector('input[name="level"]:checked').value;
-            const fee = "70000"; // Hardcoded fee for the redirect
+            const fee = "70000"; 
 
             const registrationData = {
-                teamName,
-                captainName,
+                teamName: department, // Use department as the main identifier
+                coachName: coachName,
                 email,
                 phone,
                 department,
@@ -410,19 +486,18 @@
 
             try {
                 // Save data to Firestore
-                const docRef = await addDoc(registrationsCollection, registrationData);
+                const docRef = await db.collection("registrations").add(registrationData);
                 console.log("Document written with ID: ", docRef.id);
                 
                 form.reset();
                 
                 // Redirect to payment page with team info AND the new docRef.id
                 const params = new URLSearchParams({
-                    team: teamName,
+                    team: department, // Pass department name as team
                     level: level,
                     fee: fee,
                     teamId: docRef.id // Pass the Firestore Document ID
                 });
-                // Use location.assign for a cleaner redirect that works in all envs
                 window.location.assign(`./payment_page.html?${params.toString()}`);
                 
             } catch (e) {
@@ -434,7 +509,6 @@
             return false;
         }
 
-        // ... existing showConfirmation, closeConfirmation, showCustomAlert, closeCustomAlert, copyToClipboard ...
         window.showConfirmation = function() {
             confirmationBox.classList.remove('opacity-0', 'pointer-events-none');
             confirmationBox.classList.add('opacity-100', 'pointer-events-auto');
@@ -485,7 +559,6 @@
             }
         }
         
-        // ... existing showRegistrations, closeRegistrations ...
         window.showRegistrations = function() {
             registrationsModal.classList.remove('opacity-0', 'pointer-events-none');
             registrationsModal.classList.add('opacity-100', 'pointer-events-auto');
@@ -500,16 +573,20 @@
             registrationsModal.querySelector('div').classList.remove('scale-100');
         }
         
-        // ... existing setupRegistrationListener (no change needed here) ...
         function setupRegistrationListener() {
-            if (!registrationsCollection) return;
+            if (!registrationsCollection) {
+                console.warn("Firestore collection not available (Preview Mode).");
+                noRegistrationsMessage.style.display = 'block';
+                registrationsListContainer.innerHTML = ''; 
+                registrationsListContainer.appendChild(noRegistrationsMessage);
+                regCount.textContent = '0';
+                return;
+            }
             
-            const q = query(registrationsCollection);
-            
-            onSnapshot(q, (querySnapshot) => {
+            registrationsCollection.onSnapshot((querySnapshot) => {
                 if (querySnapshot.empty) {
                     noRegistrationsMessage.style.display = 'block';
-                    registrationsListContainer.innerHTML = ''; // Clear old list if any
+                    registrationsListContainer.innerHTML = '';
                     registrationsListContainer.appendChild(noRegistrationsMessage);
                     regCount.textContent = '0';
                     return;
@@ -525,8 +602,7 @@
                     const regElement = document.createElement('div');
                     regElement.className = 'p-3 bg-white border border-gray-200 rounded-lg shadow-sm';
                     
-                    // Determine payment status color
-                    let statusColor = 'text-yellow-600'; // Pending
+                    let statusColor = 'text-yellow-600'; 
                     if (data.registrationStatus === 'Complete') {
                         statusColor = 'text-green-600';
                     } else if (data.paymentStatus === 'Verified') {
@@ -535,10 +611,10 @@
 
                     regElement.innerHTML = `
                         <div class="flex justify-between items-start">
-                            <h4 class="text-lg font-bold text-edu-purple">${data.teamName} (${data.department})</h4>
+                            <h4 class="text-lg font-bold text-edu-purple">${data.department}</h4>
                             <span class="text-sm font-semibold ${statusColor}">${data.registrationStatus || data.paymentStatus}</span>
                         </div>
-                        <p class="text-sm text-gray-600">Captain: ${data.captainName}</p>
+                        <p class="text-sm text-gray-600">Coach: ${data.coachName}</p>
                         <p class="text-sm text-gray-600">Contact: ${data.phone} | ${data.email}</p>
                         <p class="text-sm text-gray-700 font-semibold mt-1">Level: ${data.level}</p>
                     `;
@@ -550,68 +626,117 @@
             });
         }
 
-
-        // --- *** UPDATED Initialize Firebase Function *** ---
+        // --- *** NEW: News Ticker Function *** ---
+        async function fetchNews() {
+            // Using a CORS proxy to access the RSS feed from the browser.
+            // This feed is for general world football news.
+            const proxyUrl = 'https://api.allorigins.win/raw?url=';
+            const rssFeedUrl = 'https://feeds.skysports.com/data/football.xml';
+            
+            try {
+                const response = await fetch(proxyUrl + encodeURIComponent(rssFeedUrl));
+                if (!response.ok) throw new Error('Network response was not ok.');
+                
+                const str = await response.text();
+                const data = new window.DOMParser().parseFromString(str, "text/xml");
+                const items = data.querySelectorAll("item");
+                
+                let newsHtml = "";
+                items.forEach((el, index) => {
+                    if (index < 15) { // Get first 15 items
+                        const title = el.querySelector("title").innerHTML;
+                        newsHtml += `<div class="ticker-item"><strong>LATEST:</strong> ${title}</div>`;
+                    }
+                });
+                
+                // Duplicate the news content for a seamless loop
+                tickerWrapper.innerHTML = newsHtml + newsHtml; 
+                
+            } catch (error) {
+                console.error('Error fetching news:', error);
+                tickerWrapper.innerHTML = `<div class="ticker-item"><strong>ERROR:</strong> Could not load live news feed.</div>`;
+            }
+        }
+        
+        // --- Initialize Firebase ---
         async function initializeFirebase() {
             try {
-                // Check if Firebase Hosting auto-injected the config
-                if (typeof firebase === 'undefined' || typeof firebase.app === 'undefined') {
-                    console.error("Firebase object is not defined. Make sure init scripts are loaded.");
-                    showCustomAlert("Error", "Firebase configuration is missing. This usually means the app is not running on Firebase Hosting or the init scripts are missing.");
+                // *** UPDATED: Use firebase.auto initialization ***
+                if (typeof firebase === 'undefined') {
+                    showCustomAlert("Error", "Firebase configuration is missing. Database features will not work.");
                     return;
                 }
-
-                // *** NEW: Check if firebase.apps is available before getting config ***
-                const app = firebase.apps.length ? firebase.app() : initializeApp(firebaseConfig);
                 
-                db = getFirestore(app);
-                auth = getAuth(app);
-                setLogLevel('Debug'); // Enable detailed Firestore logs
+                // Firebase is initialized automatically by /__/firebase/init.js
+                db = firebase.firestore();
+                auth = firebase.auth();
+                // firebase.firestore().setLogLevel('Debug');
 
-                // Sign in the user anonymously (no custom token needed on live site)
-                await signInAnonymously(auth);
+                // Sign in the user
+                auth.signInAnonymously().catch((error) => {
+                    console.error("Anonymous auth failed:", error);
+                    showCustomAlert("Auth Error", "Could not connect to user services. " + error.message);
+                });
 
                 // Setup listener for auth changes
-                onAuthStateChanged(auth, (user) => {
+                auth.onAuthStateChanged((user) => {
                     if (user) {
                         userId = user.uid;
                         console.log("User signed in:", userId);
                         
-                        // *** UPDATED FIRESTORE PATH ***
-                        // Use a simple top-level collection name
-                        registrationsCollection = collection(db, 'registrations');
+                        // *** UPDATED: Simplified collection path for live site ***
+                        registrationsCollection = db.collection("registrations");
                         
                         // Start the real-time listener for registrations
                         setupRegistrationListener();
                         
-                        // Check for final completion status
                         const urlParams = new URLSearchParams(window.location.search);
                         if (urlParams.get('status') === 'complete') {
-                             showConfirmation(); // Show the "Registration 100% Complete" modal
+                             showConfirmation();
                             window.history.replaceState(null, '', window.location.pathname);
                         }
                         
                     } else {
                         console.log("User signed out.");
                         userId = null;
-                        registrationsCollection = null; // Clear collection reference
+                        registrationsCollection = null; 
                     }
                 });
 
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
-                // Check if firebaseConfig is defined, which is the root cause
-                if (typeof firebaseConfig === 'undefined') {
-                     showCustomAlert("Error", "Firebase configuration object is missing. The /__/firebase/init.js script failed to load or is being blocked.");
-                } else {
-                    showCustomAlert("Error", "Could not connect to the database. " + error.message);
-                }
+                showCustomAlert("Error", "Could not connect to the database. " + error.message);
             }
         }
-        // --- *** END UPDATED FUNCTION *** ---
 
         // --- Start the App ---
-        initializeFirebase();
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFirebase();
+            fetchNews(); // ** NEW: Fetch news on load **
+        });
+        
+        // --- Slider Logic ---
+        let currentSlide = 0;
+        const slider = document.getElementById('logoSlider');
+        const slides = document.querySelectorAll('.slider-item');
+        const totalSlides = slides.length / 2; // Since we duplicated them
+
+        function nextSlide() {
+            currentSlide++;
+            slider.style.transition = 'transform 0.5s ease-in-out';
+            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+            if (currentSlide >= totalSlides) {
+                // After reaching the "duplicate" slide, reset to the start without animation
+                setTimeout(() => {
+                    currentSlide = 0;
+                    slider.style.transition = 'none';
+                    slider.style.transform = `translateX(0)`;
+                }, 500); // Wait for the transition to finish
+            }
+        }
+        
+        setInterval(nextSlide, 3000); // Change slide every 3 seconds
 
     </script>
 </body>

@@ -3,28 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment - EDU-LEAGUE CHAMPIONSHIP</title>
+    <title>Payment - EDU-LEAGUE</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- ** NEW: jsPDF Library for Receipt Generation ** -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
-    <!-- *** NEW FIREBASE HOSTING SCRIPTS *** -->
-    <script src="/__/firebase/11.6.1/firebase-app.js"></script>
-    <script src="/__/firebase/11.6.1/firebase-auth.js"></script>
-    <script src="/__/firebase/11.6.1/firebase-firestore.js"></script>
+    <!-- *** LIVE FIREBASE SCRIPTS *** -->
+    <script src="/__/firebase/11.6.1/firebase-app-compat.js"></script>
+    <script src="/__/firebase/11.6.1/firebase-auth-compat.js"></script>
+    <script src="/__/firebase/11.6.1/firebase-firestore-compat.js"></script>
     <script src="/__/firebase/init.js"></script>
-    <!-- *** END NEW SCRIPTS *** -->
-
+    <!-- *** END LIVE FIREBASE SCRIPTS *** -->
+    
     <style>
-        /* ... existing style code ... */
+        /* Custom Font */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f7f9fd;
         }
+        /* Custom color classes */
         .bg-edu-purple { background-color: #6d28d9; }
         .text-edu-purple { color: #6d28d9; }
+        .border-edu-purple { border-color: #6d28d9; }
+        .ring-edu-purple:focus { ring-color: #6d28d9; }
         .bg-edu-yellow { background-color: #fbbf24; }
         .hover-edu-yellow:hover { background-color: #f59e0b; }
+        
         .loader {
             border-top-color: #6d28d9;
             -webkit-animation: spinner 1.5s linear infinite;
@@ -38,256 +44,456 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        /* Styles for the printable receipt */
+        #receipt {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        /* Specific Level Colors for receipt */
+        .slide-finalist { background-color: #22c55e; } /* Green */
+        .slide-penultimate { background-color: #3b82f6; } /* Blue */
+        .slide-sophomore { background-color: #ef4444; } /* Red */
+        
+        /* --- News Ticker Styles --- */
+        .news-ticker {
+            width: 100%;
+            background-color: #1f2937; /* Dark gray */
+            color: white;
+            padding: 0.75rem 0;
+            overflow: hidden;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .ticker-wrapper {
+            display: flex;
+            white-space: nowrap;
+            animation: ticker 60s linear infinite;
+        }
+        .ticker-item {
+            padding: 0 1.5rem;
+            color: #d1d5db; /* Lighter gray for text */
+        }
+        .ticker-item strong {
+            color: #fbbf24; /* Yellow for highlights */
+        }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Loops at 50% since we duplicate the content */
+        }
     </style>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-50 flex flex-col min-h-screen">
 
-    <!-- ... existing HTML code ... -->
-    <div class="max-w-md w-full bg-white shadow-2xl rounded-xl overflow-hidden">
-        
-        <!-- Header -->
-        <div class="bg-edu-purple text-white p-8">
-            <h1 class="text-3xl font-extrabold tracking-tight text-center">Payment Confirmation</h1>
-            <p class="mt-1 text-purple-200 text-lg text-center">EDU-LEAGUE CHAMPIONSHIP</p>
-        </div>
-
-        <!-- Payment Details -->
-        <div class="p-8 md:p-10 space-y-6">
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white shadow-2xl rounded-xl overflow-hidden">
             
-            <div id="payment-details">
-                <p class="text-sm text-gray-600 font-medium">You are about to pay for:</p>
-                <h2 id="teamNameDisplay" class="text-2xl font-bold text-edu-purple mt-1">Loading Team...</h2>
-                <p id="levelDisplay" class="text-lg font-semibold text-gray-700">Loading Level...</p>
+            <!-- Header -->
+            <div class="bg-edu-purple text-white p-8 text-center">
+                <h1 class="text-3xl font-extrabold tracking-tight">Payment Verification</h1>
+                <p class="mt-1 text-purple-200 text-lg">EDU-LEAGUE CHAMPIONSHIP</p>
+            </div>
 
-                <div class="mt-6 pt-6 border-t border-gray-200">
-                    <p class="text-sm text-gray-600 font-medium">Entry Fee:</p>
-                    <p id="feeDisplay" class="text-5xl font-extrabold text-gray-900">#70,000</p>
+            <!-- Payment Details -->
+            <div class="p-8 md:p-10 space-y-6">
+
+                <!-- Step 1: Payment Instructions -->
+                <div id="step-1-payment">
+                    <!-- Summary -->
+                    <div class="bg-gray-100 p-4 rounded-lg border border-gray-200 text-center mb-6">
+                        <p class="text-sm text-gray-600">You are registering:</p>
+                        <h2 id="teamNameDisplay" class="text-xl font-bold text-edu-purple">Loading Team...</h2>
+                        <p id="levelDisplay" class="text-lg font-semibold text-gray-700">Loading Level...</p>
+                        <p class="text-2xl font-extrabold text-gray-900 mt-2">Total Fee: #<span id="feeDisplay">70,000</span></p>
+                    </div>
+
+                    <!-- Account Details -->
+                    <div class="space-y-3">
+                        <h3 class="text-lg font-semibold text-gray-800">Step 1: Make Bank Transfer</h3>
+                        <p class="text-sm text-gray-600">Please transfer the total fee to the account below. Use your <strong class="text-edu-purple">Department Name</strong> as the payment reference.</p>
+                        
+                        <div class="bg-purple-50 border border-edu-purple rounded-lg p-4 space-y-2">
+                            <div>
+                                <span class="text-sm text-gray-500">Bank Name:</span>
+                                <strong class="block text-lg text-gray-900">First Bank</strong>
+                            </div>
+                            <div>
+                                <span class="text-sm text-gray-500">Account Name:</span>
+                                <strong class="block text-lg text-gray-900">AWONIYI SODIQ OPEYEMI</strong>
+                            </div>
+                            <div>
+                                <span class="text-sm text-gray-500">Account Number:</span>
+                                <strong class="block text-2xl font-mono text-edu-purple tracking-wider">3078844790</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirmation Button -->
+                    <button id="confirmButton" onclick="showVerificationStep()" class="w-full mt-6 py-3 bg-edu-yellow text-gray-900 font-bold rounded-md shadow-lg hover-edu-yellow focus:outline-none focus:ring-2 focus:ring-edu-yellow focus:ring-offset-2 transition duration-150 ease-in-out">
+                        Confirm Transfer & Proceed
+                    </button>
                 </div>
 
-                <!-- NEW: Account Details Section -->
-                <div class="mt-6 pt-6 border-t border-gray-200">
-                    <p class="text-sm text-gray-600 font-medium mb-3">Please transfer the entry fee to:</p>
-                    <div class="bg-gray-100 p-4 rounded-lg border border-gray-200 space-y-2">
-                        <div class="flex justify-between">
-                            <span class="text-gray-700 font-semibold">Bank Name:</span>
-                            <span class="text-gray-900 font-bold">First Bank</span>
+                <!-- Step 2: Code Verification -->
+                <div id="step-2-verification" class="hidden space-y-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Step 2: Verify Payment</h3>
+                    <p class="text-sm text-gray-600">After your transfer, contact an organizer to receive your unique payment verification code. Enter it below to complete registration.</p>
+                    
+                    <div>
+                        <label for="verificationCode" class="block text-sm font-medium text-gray-700">Organizer's Code</label>
+                        <input type="text" id="verificationCode" name="verificationCode" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border" placeholder="Enter code...">
+                    </div>
+                    
+                    <p id="codeError" class="text-sm text-red-600 text-center hidden">Invalid code. Please try again.</p>
+
+                    <button id="verifyButton" onclick="verifyCode()" class="w-full mt-4 py-3 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                        Verify Code & Submit
+                    </button>
+                </div>
+                
+                <!-- Step 3: Receipt Generation -->
+                <div id="step-3-success" class="hidden text-center space-y-4">
+                    <svg class="w-20 h-20 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <h2 class="text-2xl font-bold text-gray-800">Payment Verified!</h2>
+                    <p class="text-gray-600 mb-4">Please download your receipt before proceeding.</p>
+
+                    <!-- ** MODIFIED: Receipt Area ** -->
+                    <div id="receipt" class="border-4 border-dashed border-gray-300 bg-gray-50 p-6 rounded-lg text-left relative">
+                        <!-- PAID Stamp -->
+                        <div class="absolute top-4 right-4 transform rotate-12">
+                            <span class="text-5xl font-extrabold text-green-500 opacity-30 border-4 border-green-500 p-2 rounded-lg">PAID</span>
                         </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-700 font-semibold">Account Name:</span>
-                            <span class="text-gray-900 font-bold">AWONIYI SODIQ OPEYEMI</span>
+                        
+                        <!-- Receipt Header with Logos -->
+                        <div class="flex items-center justify-between mb-6 border-b pb-4">
+                            <img src="edulogo.png" alt="Edu-League Logo" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-edu-purple" onerror="this.onerror=null; this.src='https://placehold.co/80x80/6d28d9/fbbf24?text=EDU';">
+                            
+                            <div class="text-center">
+                                <h3 class="text-lg md:text-xl font-bold text-edu-purple">OFFICIAL RECEIPT</h3>
+                                <p class="text-xs md:text-sm text-gray-700">EDU-LEAGUE</p>
+                                <p class="text-xs text-gray-500">NUESA x FESSC</p>
+                            </div>
+                            
+                            <!-- Level-Specific Logo -->
+                            <div id="receiptLevelLogo" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-center p-1">
+                                <!-- Content will be added by JS -->
+                            </div>
                         </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-700 font-semibold">Account Number:</span>
-                            <span class="text-gray-900 font-bold">3078844790</span>
+                        
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Date:</span>
+                                <strong id="receiptDate" class="text-gray-800">...</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Receipt No:</span>
+                                <strong id="receiptId" class="text-gray-800">...</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Department:</span>
+                                <strong id="receiptTeam" class="text-gray-800">...</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Level:</span>
+                                <strong id="receiptLevel" class="text-gray-800">...</strong>
+                            </div>
                         </div>
+                        
+                        <div class="mt-6 border-t-2 border-dashed pt-4">
+                            <div class="flex justify-between text-2xl font-extrabold">
+                                <span class="text-gray-900">TOTAL PAID:</span>
+                                <span id="receiptFee" class="text-edu-purple">...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ** END: Receipt Area ** -->
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                        <button onclick="downloadReceipt()" class="w-full py-3 bg-blue-600 text-white font-bold rounded-md shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                            Download Receipt (PDF)
+                        </button>
+                        <button onclick="goToRoster()" class="w-full py-3 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                            Proceed to Roster
+                        </button>
                     </div>
                 </div>
 
-                <!-- Payment Button -->
-                <button id="payButton" onclick="processPayment()" class="w-full mt-8 py-3 bg-edu-yellow text-gray-900 font-bold rounded-md shadow-lg hover-edu-yellow focus:outline-none focus:ring-2 focus:ring-edu-yellow focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
-                    <span id="payButtonText">Confirm & Pay Now</span>
-                    <div id="payLoader" class="loader w-6 h-6 border-4 border-t-4 border-gray-800 rounded-full hidden"></div>
-                </button>
-                <p class="text-xs text-gray-500 text-center mt-2">Click 'Confirm & Pay Now' *after* you have made the bank transfer to finalize your registration.</p>
             </div>
-
-            <!-- NEW: Verification Section (Hidden by default) -->
-            <div id="verification-section" class="hidden space-y-4 py-8">
-                <svg class="w-16 h-16 text-edu-purple mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                <h2 class="text-2xl font-bold text-gray-800 text-center">Payment Verification</h2>
-                <p class="text-gray-600 text-center">Please contact the organizer to receive your payment confirmation code.</p>
-                
-                <div>
-                    <label for="verificationCode" class="block text-sm font-medium text-gray-700">Organizer's Code</label>
-                    <input type="text" id="verificationCode" name="verificationCode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border text-center font-bold tracking-widest">
-                </div>
-
-                <p id="errorMessage" class="text-sm text-red-600 font-semibold text-center hidden">Invalid code. Please try again.</p>
-
-                <button id="verifyButton" onclick="verifyCode()" class="w-full mt-4 py-3 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out">
-                    Verify Code & Complete Registration
-                </button>
-            </div>
-
-            <!-- Payment Success Message -->
-            <div id="success-message" class="hidden text-center space-y-4 py-8">
-                <svg class="w-16 h-16 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <h2 class="text-2xl font-bold text-gray-800">Payment Verified!</h2>
-                <p class="text-gray-600">Redirecting to the Team Roster page to add your players and coaches...</p>
-                <a id="redirectLink" href="./team_roster.html" class="text-sm text-edu-purple hover:underline font-semibold">Click here if you are not redirected.</a>
-            </div>
-
+        </div>
+    </main>
+    
+    <!-- Custom Alert Modal -->
+    <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300">
+            <h3 id="custom-alert-title" class="text-xl font-bold text-gray-800 mb-2">Alert</h3>
+            <p id="custom-alert-message" class="text-gray-600 mb-6">This is an alert message.</p>
+            <button onclick="closeCustomAlert()" class="py-2 px-6 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">
+                OK
+            </button>
         </div>
     </div>
     
-    <!-- Firebase & Logic Script -->
-    <script type="module">
-        // --- Firebase SDK Imports ---
-        // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        // import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        // import { getFirestore, doc, updateDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
-        // *** Use the global firebase object provided by the new scripts ***
-        const { initializeApp } = firebase;
-        const { getAuth, signInAnonymously, onAuthStateChanged } = firebase.auth;
-        const { getFirestore, doc, updateDoc, setLogLevel } = firebase.firestore;
+    <!-- *** NEW: News Ticker Footer *** -->
+    <footer class="news-ticker sticky bottom-0 z-10">
+        <div class="ticker-wrapper" id="tickerWrapper">
+            <!-- Content will be injected by JS -->
+            <div class="ticker-item"><strong>LOADING LATEST NEWS...</strong> Please wait...</div>
+        </div>
+    </footer>
 
+    <!-- Firebase & Logic Script -->
+    <script>
+        // --- jsPDF ---
+        // Ensure jsPDF is loaded from the script tag
+        const { jsPDF } = window.jspdf;
 
         // --- Firebase & App State ---
         let db;
         let auth;
         let userId;
-        let teamDocRef; // This will be the reference to the team's document
-        let teamDocId; // The string ID
-        let teamName, level; // Store these for the redirect
-        // const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // No longer needed
-
+        let teamDocRef;
+        let teamDocId; // The ID string from the URL
+        let teamName, level, fee; // Variables to store team data for receipt
+        
         // --- DOM Elements ---
-        // ... all other DOM element consts are correct ...
         const teamNameDisplay = document.getElementById('teamNameDisplay');
         const levelDisplay = document.getElementById('levelDisplay');
         const feeDisplay = document.getElementById('feeDisplay');
-        const payButton = document.getElementById('payButton');
-        const payButtonText = document.getElementById('payButtonText');
-        const payLoader = document.getElementById('payLoader');
-        const paymentDetails = document.getElementById('payment-details');
-        const successMessage = document.getElementById('success-message');
-        const verificationSection = document.getElementById('verification-section');
-        const verificationCodeInput = document.getElementById('verificationCode');
-        const errorMessage = document.getElementById('errorMessage');
+        const step1 = document.getElementById('step-1-payment');
+        const step2 = document.getElementById('step-2-verification');
+        const step3 = document.getElementById('step-3-success');
+        const codeInput = document.getElementById('verificationCode');
+        const codeError = document.getElementById('codeError');
+        const verifyButton = document.getElementById('verifyButton');
+        const customAlertModal = document.getElementById('custom-alert-modal');
+        const customAlertTitle = document.getElementById('custom-alert-title');
+        const customAlertMessage = document.getElementById('custom-alert-message');
+        const tickerWrapper = document.getElementById('tickerWrapper');
+        
+        // Receipt Elements
+        const receiptDate = document.getElementById('receiptDate');
+        const receiptId = document.getElementById('receiptId');
+        const receiptTeam = document.getElementById('receiptTeam');
+        const receiptLevel = document.getElementById('receiptLevel');
+        const receiptFee = document.getElementById('receiptFee');
+        const receiptLevelLogo = document.getElementById('receiptLevelLogo'); // ** NEW
 
-        // On page load, read data from URL
-        window.onload = function() {
-            // ... existing onload code is correct ...
-            const urlParams = new URLSearchParams(window.location.search);
-            teamName = urlParams.get('team') || 'Unknown Team';
-            level = urlParams.get('level') || 'Unknown Level';
-            teamDocId = urlParams.get('teamId'); // Get the new teamId
-            const fee = urlParams.get('fee') || '70,000';
 
-            teamNameDisplay.textContent = teamName;
-            levelDisplay.textContent = `${level} Level`;
-            feeDisplay.textContent = `#${fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+        // --- Config ---
+        const ORGANIZER_CODE = "EDU2025"; // The code to verify payment
 
-            if (!teamDocId) {
-                console.error("CRITICAL: Team ID (teamId) is missing from URL.");
-                payButton.disabled = true;
-                payButtonText.textContent = "Error: Team ID missing";
+        // --- Page Load Logic ---
+        function loadPageData() {
+            const params = new URLSearchParams(window.location.search);
+            teamName = params.get('team');
+            level = params.get('level');
+            fee = params.get('fee');
+            teamDocId = params.get('teamId'); // Get the Firestore ID
+
+            if (teamName && level && fee && teamDocId) {
+                teamNameDisplay.textContent = teamName;
+                levelDisplay.textContent = level;
+                feeDisplay.textContent = Number(fee).toLocaleString();
+            } else {
+                console.error("Missing URL parameters.");
+                teamNameDisplay.textContent = "Error: Missing Info";
+                levelDisplay.textContent = "Please go back and register again.";
+                document.getElementById('confirmButton').disabled = true;
+                document.getElementById('confirmButton').textContent = "Error: Please Go Back";
             }
-            
-            // Call initializeFirebase *after* getting URL params
-            initializeFirebase();
-        };
-
-        // ... existing processPayment function ...
-        window.processPayment = function() {
-            // Show loading state
-            payButton.disabled = true;
-            payButtonText.textContent = 'Confirming Transfer...';
-            payLoader.classList.remove('hidden');
-
-            // Simulate a 2-second "processing" delay
-            setTimeout(() => {
-                paymentDetails.classList.add('hidden');
-                verificationSection.classList.remove('hidden');
-            }, 2000);
         }
 
-        // ... existing verifyCode function (no change needed here) ...
+        window.showVerificationStep = function() {
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+            codeInput.focus();
+        }
+
         window.verifyCode = async function() {
-            const MASTER_CODE = "EDU2025"; // This is the hardcoded code from the organizer
-            const inputCode = verificationCodeInput.value.trim().toUpperCase();
-
-            if (inputCode === MASTER_CODE) {
-                // Correct code
-                errorMessage.classList.add('hidden');
-                
-                // --- NEW: Update Firestore Document ---
-                if (teamDocRef) {
-                    try {
-                        await updateDoc(teamDocRef, {
-                            paymentStatus: "Verified",
-                            registrationStatus: "Pending Roster"
-                        });
-                        console.log("Document updated to 'Verified'");
-                        
-                        // Show success and redirect
-                        verificationSection.classList.add('hidden');
-                        successMessage.classList.remove('hidden');
-                        
-                        // Construct the new URL
-                        const params = new URLSearchParams({
-                            teamId: teamDocId,
-                            team: teamName,
-                            level: level
-                        });
-                        const rosterUrl = `./team_roster.html?${params.toString()}`;
-
-                        // Update the fallback link
-                        document.getElementById('redirectLink').href = rosterUrl;
-                        
-                        // Redirect after 3 seconds
-                        setTimeout(() => {
-                            window.location.assign(rosterUrl);
-                        }, 3000);
-                        
-                    } catch (error) {
-                        console.error("Error updating document: ", error);
-                        errorMessage.textContent = "Error saving payment status. Please try again.";
-                        errorMessage.classList.remove('hidden');
-                    }
-                } else {
-                    console.error("teamDocRef is not defined. Cannot update payment status.");
-                    errorMessage.textContent = "A database error occurred. Please refresh and try again.";
-                    errorMessage.classList.remove('hidden');
-                }
-                // --- END NEW ---
-                
-            } else {
-                // Incorrect code
-                errorMessage.classList.remove('hidden');
-                verificationCodeInput.value = '';
-                verificationCodeInput.focus();
+            const enteredCode = codeInput.value.trim();
+            if (enteredCode !== ORGANIZER_CODE) {
+                codeError.textContent = "Invalid code. Please contact the organizer and try again.";
+                codeError.classList.remove('hidden');
+                return;
             }
+
+            // Code is correct, proceed
+            codeError.classList.add('hidden');
+            verifyButton.disabled = true;
+            verifyButton.textContent = "Verifying...";
+
+            if (!teamDocRef) {
+                console.error("Firestore document reference is not set.");
+                showCustomAlert("Error", "Database connection lost. Please refresh and try again.");
+                verifyButton.disabled = false;
+                verifyButton.textContent = "Verify Code & Submit";
+                return;
+            }
+            
+            // --- Update Firestore Document ---
+            try {
+                await teamDocRef.update({
+                    paymentStatus: "Verified",
+                    registrationStatus: "Pending Roster"
+                });
+                console.log("Document updated to 'Verified'");
+                
+                // Show success message and receipt
+                step2.classList.add('hidden');
+                step3.classList.remove('hidden');
+                populateReceipt(); // ** MODIFIED: Populate receipt data **
+
+            } catch (error) {
+                console.error("Error updating document: ", error);
+                showCustomAlert("Error", "Could not verify payment. Please try again.");
+                verifyButton.disabled = false;
+                verifyButton.textContent = "Verify Code & Submit";
+            }
+        }
+
+        // --- ** MODIFIED: Receipt Functions ** ---
+        function populateReceipt() {
+            const today = new Date();
+            receiptDate.textContent = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            receiptId.textContent = `EDU-${teamDocId.slice(0, 6).toUpperCase()}`;
+            receiptTeam.textContent = teamName;
+            receiptLevel.textContent = level;
+            receiptFee.textContent = `#${Number(fee).toLocaleString()}`;
+            
+            // ** NEW: Add Level-Specific Logo **
+            if (level.includes("Finalist")) {
+                receiptLevelLogo.className = "w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-center p-1 slide-finalist text-white";
+                receiptLevelLogo.innerHTML = `<div class="text-white"><span class="text-2xl md:text-3xl">🏆</span><p class="text-xs font-bold">FINALIST</p></div>`;
+            } else if (level.includes("Penultimate")) {
+                receiptLevelLogo.className = "w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-center p-1 slide-penultimate text-white";
+                receiptLevelLogo.innerHTML = `<div class="text-white"><span class="text-2xl md:text-3xl">🔥</span><p class="text-xs font-bold">PENULTIMATE</p></div>`;
+            } else if (level.includes("Sophomore")) {
+                receiptLevelLogo.className = "w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-center p-1 slide-sophomore text-white";
+                receiptLevelLogo.innerHTML = `<div class="text-white"><span class="text-2xl md:text-3xl">👟</span><p class="text-xs font-bold">SOPHOMORE</p></div>`;
+            } else {
+                receiptLevelLogo.className = "w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-center p-1 bg-gray-200";
+                receiptLevelLogo.innerHTML = `<div class="text-gray-500"><span class="text-3xl">?</span><p class="text-xs font-bold">LEVEL</p></div>`;
+            }
+        }
+
+        window.downloadReceipt = async function() {
+            const doc = new jsPDF();
+            
+            // Simplified text-based receipt
+            doc.setFont('Courier', 'bold');
+            doc.setFontSize(18);
+            doc.text("OFFICIAL RECEIPT", doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+            
+            doc.setFont('Courier', 'normal');
+            doc.setFontSize(12);
+            doc.text("EDU-LEAGUE CHAMPIONSHIP (NUESA x FESSC)", doc.internal.pageSize.getWidth() / 2, 30, { align: 'center' });
+
+            doc.line(20, 35, 190, 35); // Horizontal line
+
+            doc.text(`Date:         ${receiptDate.textContent}`, 20, 45);
+            doc.text(`Receipt No:   ${receiptId.textContent}`, 20, 55);
+            doc.text(`Department:   ${receiptTeam.textContent}`, 20, 65);
+            doc.text(`Level:        ${receiptLevel.textContent}`, 20, 75);
+
+            doc.line(20, 85, 190, 85); // Horizontal line
+
+            doc.setFont('Courier', 'bold');
+            doc.setFontSize(16);
+            doc.text(`TOTAL PAID:   ${receiptFee.textContent}`, 20, 95);
+
+            doc.setFont('Courier', 'bold');
+            doc.setFontSize(48);
+            doc.setTextColor(0, 128, 0); // Green
+            doc.text("PAID", doc.internal.pageSize.getWidth() / 2, 120, { align: 'center', angle: -15 });
+
+            doc.save(`EDU-LEAGUE-Receipt-${receiptId.textContent}.pdf`);
+        }
+        // --- END: Receipt Functions ---
+
+        window.goToRoster = function() {
+            // Redirect to roster page with team ID
+            const params = new URLSearchParams({
+                teamId: teamDocId
+            });
+            window.location.assign(`./team_roster.html?${params.toString()}`);
         }
         
-        // --- *** UPDATED Initialize Firebase Function *** ---
-        async function initializeFirebase() {
-            if (!teamDocId) {
-                console.warn("Skipping Firebase init, teamDocId is missing.");
-                return; // Don't init if the teamId isn't present
-            }
+        window.showCustomAlert = function(title, message) {
+            customAlertTitle.textContent = title;
+            customAlertMessage.textContent = message;
+            customAlertModal.classList.remove('opacity-0', 'pointer-events-none');
+            customAlertModal.classList.add('opacity-100');
+            customAlertModal.querySelector('div').classList.remove('scale-95');
+            customAlertModal.querySelector('div').classList.add('scale-100');
+        }
+        
+        window.closeCustomAlert = function() {
+            customAlertModal.classList.add('opacity-0', 'pointer-events-none');
+            customAlertModal.classList.remove('opacity-100');
+            customAlertModal.querySelector('div').classList.add('scale-95');
+            customAlertModal.querySelector('div').classList.remove('scale-100');
+        }
+
+        // --- *** NEW: News Ticker Function *** ---
+        async function fetchNews() {
+            const proxyUrl = 'https://api.allorigins.win/raw?url=';
+            const rssFeedUrl = 'https://feeds.skysports.com/data/football.xml';
             
             try {
-                // Check if Firebase Hosting auto-injected the config
-                if (typeof firebase === 'undefined' || typeof firebase.app === 'undefined') {
-                    console.error("Firebase object is not defined. Make sure init scripts are loaded.");
-                    payButton.disabled = true;
-                    payButtonText.textContent = "Error: Config Missing";
+                const response = await fetch(proxyUrl + encodeURIComponent(rssFeedUrl));
+                if (!response.ok) throw new Error('Network response was not ok.');
+                
+                const str = await response.text();
+                const data = new window.DOMParser().parseFromString(str, "text/xml");
+                const items = data.querySelectorAll("item");
+                
+                let newsHtml = "";
+                items.forEach((el, index) => {
+                    if (index < 15) { // Get first 15 items
+                        const title = el.querySelector("title").innerHTML;
+                        newsHtml += `<div class="ticker-item"><strong>LATEST:</strong> ${title}</div>`;
+                    }
+                });
+                
+                // Duplicate the news content for a seamless loop
+                tickerWrapper.innerHTML = newsHtml + newsHtml; 
+                
+            } catch (error) {
+                console.error('Error fetching news:', error);
+                tickerWrapper.innerHTML = `<div class="ticker-item"><strong>ERROR:</strong> Could not load live news feed.</div>`;
+            }
+        }
+
+        // --- Initialize Firebase ---
+        async function initializeFirebase() {
+             try {
+                // *** UPDATED: Use firebase.auto initialization ***
+                if (typeof firebase === 'undefined') {
+                    showCustomAlert("Error", "Firebase configuration is missing. Database features will not work.");
                     return;
                 }
-
-                // *** NEW: Check if firebase.apps is available before getting config ***
-                const app = firebase.apps.length ? firebase.app() : initializeApp(firebaseConfig);
                 
-                db = getFirestore(app);
-                auth = getAuth(app);
-                setLogLevel('Debug'); // Enable detailed Firestore logs
+                // Firebase is initialized automatically by /__/firebase/init.js
+                db = firebase.firestore();
+                auth = firebase.auth();
+                // firebase.firestore().setLogLevel('Debug');
 
-                // Sign in the user anonymously
-                await signInAnonymously(auth);
+                try {
+                    await auth.signInAnonymously();
+                } catch (authError) {
+                    console.error("Anonymous auth failed:", authError);
+                    showCustomAlert("Auth Error", "Could not connect to user services. " + authError.message);
+                }
 
-                // Setup listener for auth changes
-                onAuthStateChanged(auth, (user) => {
+                auth.onAuthStateChanged((user) => {
                     if (user) {
                         userId = user.uid;
                         console.log("User signed in:", userId);
                         
-                        // *** UPDATED FIRESTORE PATH ***
-                        // Use a simple top-level collection path
-                        teamDocRef = doc(db, 'registrations', teamDocId);
-                        console.log("Targeting document:", teamDocRef.path);
-                        
+                        if (teamDocId) {
+                            // *** UPDATED: Simplified collection path ***
+                            teamDocRef = db.collection("registrations").doc(teamDocId);
+                        } else {
+                            console.error("teamDocId is not set, cannot create doc ref.");
+                        }
                     } else {
                         console.log("User signed out.");
                         userId = null;
@@ -297,18 +503,17 @@
 
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
-                 // Check if firebaseConfig is defined, which is the root cause
-                if (typeof firebaseConfig === 'undefined') {
-                     payButton.disabled = true;
-                     payButtonText.textContent = "Error: Config Missing";
-                } else {
-                    payButton.disabled = true;
-                    payButtonText.textContent = "Error: DB Init Failed";
-                }
+                showCustomAlert("Error", "Could not connect to the database. " + error.message);
             }
         }
-        // --- *** END UPDATED FUNCTION *** ---
         
+        // --- Start the App ---
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPageData();
+            initializeFirebase();
+            fetchNews(); // ** NEW: Fetch news on load **
+        });
+
     </script>
 </body>
 </html>

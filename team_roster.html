@@ -7,15 +7,15 @@
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- *** NEW FIREBASE HOSTING SCRIPTS *** -->
-    <script src="/__/firebase/11.6.1/firebase-app.js"></script>
-    <script src="/__/firebase/11.6.1/firebase-auth.js"></script>
-    <script src="/__/firebase/11.6.1/firebase-firestore.js"></script>
+    <!-- *** LIVE FIREBASE SCRIPTS *** -->
+    <script src="/__/firebase/11.6.1/firebase-app-compat.js"></script>
+    <script src="/__/firebase/11.6.1/firebase-auth-compat.js"></script>
+    <script src="/__/firebase/11.6.1/firebase-firestore-compat.js"></script>
     <script src="/__/firebase/init.js"></script>
-    <!-- *** END NEW SCRIPTS *** -->
+    <!-- *** END LIVE FIREBASE SCRIPTS *** -->
     
     <style>
-        /* ... existing style code ... */
+        /* Custom Font */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         body {
             font-family: 'Inter', sans-serif;
@@ -27,6 +27,7 @@
         .ring-edu-purple:focus { ring-color: #6d28d9; }
         .bg-edu-yellow { background-color: #fbbf24; }
         .hover-edu-yellow:hover { background-color: #f59e0b; }
+        
         .player-entry {
             display: flex;
             align-items: center;
@@ -37,87 +38,108 @@
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        /* --- News Ticker Styles --- */
+        .news-ticker {
+            width: 100%;
+            background-color: #1f2937; /* Dark gray */
+            color: white;
+            padding: 0.75rem 0;
+            overflow: hidden;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .ticker-wrapper {
+            display: flex;
+            white-space: nowrap;
+            animation: ticker 60s linear infinite;
+        }
+        .ticker-item {
+            padding: 0 1.5rem;
+            color: #d1d5db; /* Lighter gray for text */
+        }
+        .ticker-item strong {
+            color: #fbbf24; /* Yellow for highlights */
+        }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Loops at 50% since we duplicate the content */
+        }
     </style>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-50 flex flex-col min-h-screen">
 
-    <!-- ... existing HTML code ... -->
-    <div class="max-w-4xl w-full bg-white shadow-2xl rounded-xl overflow-hidden">
-        
-        <!-- Header -->
-        <div class="bg-edu-purple text-white p-8">
-            <h1 class="text-3xl font-extrabold tracking-tight text-center">Team Roster Submission</h1>
-            <p class="mt-1 text-purple-200 text-lg text-center">EDU-LEAGUE CHAMPIONSHIP</p>
-        </div>
-
-        <!-- Roster Form -->
-        <div class="p-8 md:p-10 space-y-6">
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-3xl w-full bg-white shadow-2xl rounded-xl overflow-hidden">
             
-            <!-- Team Info Display -->
-            <div class="bg-gray-100 p-4 rounded-lg border border-gray-200 text-center">
-                <h2 id="teamNameDisplay" class="text-2xl font-bold text-edu-purple">Loading Team...</h2>
-                <p id="levelDisplay" class="text-lg font-semibold text-gray-700">Loading Level...</p>
+            <!-- Header -->
+            <div class="bg-edu-purple text-white p-8">
+                <h1 class="text-3xl font-extrabold tracking-tight text-center">Team Roster Submission</h1>
+                <p class="mt-1 text-purple-200 text-lg text-center">EDU-LEAGUE CHAMPIONSHIP</p>
             </div>
 
-            <form id="rosterForm" onsubmit="saveRoster(event); return false;" class="space-y-6">
+            <!-- Roster Form -->
+            <div class="p-8 md:p-10 space-y-6">
+                
+                <!-- Team Info Display -->
+                <div class="bg-gray-100 p-4 rounded-lg border border-gray-200 text-center">
+                    <h2 id="teamNameDisplay" class="text-2xl font-bold text-edu-purple">Loading Team...</h2>
+                    <p id="levelDisplay" class="text-lg font-semibold text-gray-700">Loading Level...</p>
+                </div>
 
-                <!-- Coach Details -->
-                <fieldset class="space-y-4">
-                    <legend class="text-xl font-bold text-gray-800 border-b pb-2 mb-3">Team Officials (2 Total)</legend>
-                    <!-- Head Coach -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label for="coachName" class="block text-sm font-medium text-gray-700">1. Head Coach Name</label>
-                            <input type="text" id="coachName" name="coachName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border">
-                        </div>
-                        <div>
-                            <label for="coachPhone" class="block text-sm font-medium text-gray-700">Head Coach Phone</label>
-                            <input type="tel" id="coachPhone" name="coachPhone" pattern="[0-9]{11}" placeholder="e.g., 08140712347" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border">
-                        </div>
-                    </div>
-                    <!-- Assistant Coach -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div>
-                            <label for="asstCoachName" class="block text-sm font-medium text-gray-700">2. Assistant Coach Name</label>
-                            <input type="text" id="asstCoachName" name="asstCoachName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border">
-                        </div>
-                        <div>
-                            <label for="asstCoachPhone" class="block text-sm font-medium text-gray-700">Assistant Coach Phone</label>
-                            <input type="tel" id="asstCoachPhone" name="asstCoachPhone" pattern="[0-9]{11}" placeholder="e.g., 08140712347" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border">
-                        </div>
-                    </div>
-                </fieldset>
+                <form id="rosterForm" onsubmit="saveRoster(event); return false;" class="space-y-6">
 
-                <!-- Player Details -->
-                <fieldset>
-                    <legend class="text-xl font-bold text-gray-800 border-b pb-2 mb-3">Players (Max 18)</legend>
-                    
-                    <!-- Player Add Input -->
-                    <div class="flex gap-3 mb-4">
-                        <div class="flex-grow">
-                            <label for="newPlayerName" class="block text-sm font-medium text-gray-700">New Player Full Name</label>
-                            <input type="text" id="newPlayerName" name="newPlayerName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border" placeholder="e.g., John Doe">
+                    <!-- Coach Details -->
+                    <fieldset class="space-y-4">
+                        <legend class="text-xl font-bold text-gray-800 border-b pb-2 mb-3">Team Officials (2 Total)</legend>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Head Coach -->
+                            <div class="space-y-2">
+                                <label for="coachName" class="block text-sm font-medium text-gray-700">1. Head Coach Name</label>
+                                <input type="text" id="coachName" name="coachName" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border">
+                                <label for="coachPhone" class="block text-sm font-medium text-gray-700">Head Coach Phone</label>
+                                <input type="tel" id="coachPhone" name="coachPhone" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border" placeholder="080...">
+                            </div>
+                            <!-- Asst Coach -->
+                            <div class="space-y-2">
+                                <label for="asstCoachName" class="block text-sm font-medium text-gray-700">2. Assistant Coach Name</label>
+                                <input type="text" id="asstCoachName" name="asstCoachName" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border">
+                                <label for="asstCoachPhone" class="block text-sm font-medium text-gray-700">Assistant Coach Phone</label>
+                                <input type="tel" id="asstCoachPhone" name="asstCoachPhone" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border" placeholder="090...">
+                            </div>
                         </div>
-                        <button type="button" id="addPlayerButton" onclick="addPlayer()" class="mt-6 px-4 py-2 bg-edu-purple text-white font-semibold rounded-md shadow hover:bg-purple-700 h-10">Add</button>
-                    </div>
-                    
-                    <p id="playerLimitMessage" class="text-sm text-red-600 font-semibold text-center hidden mb-3">Maximum of 18 players reached.</p>
+                    </fieldset>
 
-                    <!-- Player List Container -->
-                    <div id="playerListContainer" class="max-h-64 overflow-y-auto space-y-2 bg-gray-50 p-4 rounded-lg border">
-                        <p id="noPlayersMessage" class="text-gray-500 text-center">No players added yet.</p>
-                        <!-- Players will be added here -->
-                    </div>
-                    <input type="hidden" id="playerCount" value="0">
-                </fieldset>
+                    <!-- Player Details -->
+                    <fieldset>
+                        <legend class="text-xl font-bold text-gray-800 border-b pb-2 mb-3">Players (Max 18)</legend>
+                        
+                        <!-- Player Add Input -->
+                        <div class="flex gap-3 mb-4">
+                            <div class="flex-grow">
+                                <label for="newPlayerName" class="block text-sm font-medium text-gray-700">New Player Full Name</label>
+                                <input type="text" id="newPlayerName" name="newPlayerName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border" placeholder="e.g., John Doe">
+                            </div>
+                            <button type="button" id="addPlayerButton" onclick="addPlayer()" class="mt-6 px-4 py-2 bg-edu-purple text-white font-semibold rounded-md shadow hover:bg-purple-700 h-10">Add</button>
+                        </div>
+                        
+                        <p id="playerLimitMessage" class="text-sm text-red-600 font-semibold text-center hidden mb-3">Maximum of 18 players reached.</p>
 
-                <!-- Submit Button -->
-                <button type="submit" id="submitRosterButton" class="w-full mt-8 py-3 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out">
-                    Submit Roster & Complete Registration
-                </button>
-            </form>
+                        <!-- Player List Container -->
+                        <div id="playerListContainer" class="max-h-64 overflow-y-auto space-y-2 bg-gray-50 p-4 rounded-lg border">
+                            <p id="noPlayersMessage" class="text-gray-500 text-center">No players added yet.</p>
+                            <!-- Players will be added here -->
+                        </div>
+                        <input type="hidden" id="playerCount" value="0">
+                    </fieldset>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submitRosterButton" class="w-full mt-8 py-3 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                        Submit Roster & Complete Registration
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
+    </main>
 
     <!-- Roster Success Box (Modal) -->
     <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
@@ -130,7 +152,7 @@
             </button>
         </div>
     </div>
-    
+
     <!-- Custom Alert Modal -->
     <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300">
@@ -141,195 +163,43 @@
             </button>
         </div>
     </div>
-
+    
+    <!-- *** NEW: News Ticker Footer *** -->
+    <footer class="news-ticker sticky bottom-0 z-10">
+        <div class="ticker-wrapper" id="tickerWrapper">
+            <!-- Content will be injected by JS -->
+            <div class="ticker-item"><strong>LOADING LATEST NEWS...</strong> Please wait...</div>
+        </div>
+    </footer>
 
     <!-- Firebase & Logic Script -->
-    <script type="module">
-        // --- Firebase SDK Imports ---
-        // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        // import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        // import { getFirestore, doc, updateDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
-        // *** Use the global firebase object provided by the new scripts ***
-        const { initializeApp } = firebase;
-        const { getAuth, signInAnonymously, onAuthStateChanged } = firebase.auth;
-        const { getFirestore, doc, updateDoc, setLogLevel } = firebase.firestore;
-
-
+    <script>
         // --- Firebase & App State ---
         let db;
         let auth;
         let userId;
-        let teamDocRef; // This will be the reference to the team's document in Firestore
-        let teamDocId; // The string ID of the document
-        // const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // No longer needed
-        
+        let teamDocRef;
+        let teamDocId;
+        const MAX_PLAYERS = 18;
+        let players = []; // Array to store player names
+
         // --- DOM Elements ---
-        // ... all other DOM element consts are correct ...
         const teamNameDisplay = document.getElementById('teamNameDisplay');
         const levelDisplay = document.getElementById('levelDisplay');
-        const newPlayerNameInput = document.getElementById('newPlayerName');
+        const newPlayerInput = document.getElementById('newPlayerName');
         const addPlayerButton = document.getElementById('addPlayerButton');
         const playerListContainer = document.getElementById('playerListContainer');
         const noPlayersMessage = document.getElementById('noPlayersMessage');
         const playerLimitMessage = document.getElementById('playerLimitMessage');
         const playerCountInput = document.getElementById('playerCount');
         const successModal = document.getElementById('success-modal');
-        const rosterForm = document.getElementById('rosterForm');
+        const submitRosterButton = document.getElementById('submitRosterButton');
         const customAlertModal = document.getElementById('custom-alert-modal');
         const customAlertTitle = document.getElementById('custom-alert-title');
         const customAlertMessage = document.getElementById('custom-alert-message');
-
-        // --- Player List Management ---
-        // ... existing addPlayer and removePlayer functions ...
-        const MAX_PLAYERS = 18;
-        let players = []; // Array to store player names
-
-        window.addPlayer = function() {
-            const playerName = newPlayerNameInput.value.trim();
-            if (playerName === "") {
-                newPlayerNameInput.focus();
-                return; // Don't add empty names
-            }
-            
-            let currentCount = parseInt(playerCountInput.value);
-            if (currentCount >= MAX_PLAYERS) {
-                return; // Should be impossible if button is disabled, but good to check
-            }
-
-            // Add to array and update UI
-            players.push(playerName);
-            currentCount++;
-            playerCountInput.value = currentCount;
-
-            // Hide "no players" message
-            if (noPlayersMessage) {
-                noPlayersMessage.style.display = 'none';
-            }
-
-            // Create new player entry element
-            const playerEntry = document.createElement('div');
-            playerEntry.className = 'player-entry bg-white p-2 border rounded-md shadow-sm';
-            playerEntry.innerHTML = `
-                <span class="font-semibold text-gray-800 flex-grow">${currentCount}. ${playerName}</span>
-                <button type="button" onclick="removePlayer(this, '${playerName}')" class="text-red-500 hover:text-red-700 font-bold text-sm p-1">
-                    &times; Remove
-                </button>
-            `;
-            playerListContainer.appendChild(playerEntry);
-            
-            // Check limit
-            if (currentCount >= MAX_PLAYERS) {
-                addPlayerButton.disabled = true;
-                newPlayerNameInput.disabled = true;
-                playerLimitMessage.classList.remove('hidden');
-            }
-
-            // Clear input
-            newPlayerNameInput.value = '';
-            newPlayerNameInput.focus();
-        }
+        const tickerWrapper = document.getElementById('tickerWrapper');
         
-        window.removePlayer = function(buttonElement, playerName) {
-            // Remove from array
-            players = players.filter(p => p !== playerName);
-            
-            // Remove from UI
-            buttonElement.parentElement.remove();
-            
-            // Update count
-            let currentCount = players.length;
-            playerCountInput.value = currentCount;
-
-            // Re-enable add button if below limit
-            if (currentCount < MAX_PLAYERS) {
-                addPlayerButton.disabled = false;
-                newPlayerNameInput.disabled = false;
-                playerLimitMessage.classList.add('hidden');
-            }
-            
-            // Show "no players" message if empty
-            if (currentCount === 0 && noPlayersMessage) {
-                noPlayersMessage.style.display = 'block';
-            }
-
-            // Re-number remaining players
-            const playerEntries = playerListContainer.querySelectorAll('.player-entry');
-            playerEntries.forEach((entry, index) => {
-                const span = entry.querySelector('span');
-                if (span) {
-                    span.textContent = `${index + 1}. ${players[index]}`;
-                }
-            });
-        }
-
-
-        // --- Form & Modal Logic ---
-        
-        // ... existing saveRoster function ...
-        window.saveRoster = async function(event) {
-            event.preventDefault();
-            
-            const coachName = document.getElementById('coachName').value;
-            const coachPhone = document.getElementById('coachPhone').value;
-            const asstCoachName = document.getElementById('asstCoachName').value;
-            const asstCoachPhone = document.getElementById('asstCoachPhone').value;
-            
-            if (!coachName || !asstCoachName || !coachPhone || !asstCoachPhone) {
-                showCustomAlert("Alert", "Please fill in all four Team Official fields (Name and Phone).");
-                return;
-            }
-            
-            if (players.length === 0) {
-                showCustomAlert("Alert", "Please add at least one player to the roster.");
-                return;
-            }
-            
-            if (!teamDocRef) {
-                showCustomAlert("Error", "Team document reference not found. Cannot save roster.");
-                return;
-            }
-
-            const rosterData = {
-                roster: {
-                    coach: { name: coachName, phone: coachPhone },
-                    asstCoach: { name: asstCoachName, phone: asstCoachPhone },
-                    players: players,
-                    playerCount: players.length
-                },
-                paymentStatus: "Completed", // Mark payment as fully completed
-                registrationStatus: "Complete" // Final status
-            };
-            
-            try {
-                // Update the existing document with the new roster data
-                await updateDoc(teamDocRef, rosterData);
-                console.log("Roster successfully added to document!");
-                
-                // Show final success modal
-                showSuccessModal();
-
-            } catch (error) {
-                console.error("Error updating document with roster: ", error);
-                showCustomAlert("Error", "An error occurred while saving the roster. Please try again.");
-            }
-        }
-        
-        // ... existing showSuccessModal ...
-        function showSuccessModal() {
-            successModal.classList.remove('opacity-0', 'pointer-events-none');
-            successModal.classList.add('opacity-100', 'pointer-events-auto');
-            successModal.querySelector('div').classList.remove('scale-95');
-            successModal.querySelector('div').classList.add('scale-100');
-        }
-
-        // ... existing goToHome (no change needed from last fix) ...
-        window.goToHome = function() {
-            // Redirect back to the main registration page (index.html) with a final success status
-            window.location.assign('./index.html?status=complete');
-        }
-        
-        // ... existing showCustomAlert and closeCustomAlert ...
+        // --- Custom Alert ---
         window.showCustomAlert = function(title, message) {
             customAlertTitle.textContent = title;
             customAlertMessage.textContent = message;
@@ -338,7 +208,7 @@
             customAlertModal.querySelector('div').classList.remove('scale-95');
             customAlertModal.querySelector('div').classList.add('scale-100');
         }
-
+        
         window.closeCustomAlert = function() {
             customAlertModal.classList.add('opacity-0', 'pointer-events-none');
             customAlertModal.classList.remove('opacity-100');
@@ -346,58 +216,224 @@
             customAlertModal.querySelector('div').classList.remove('scale-100');
         }
 
-        // --- *** UPDATED Initialize Firebase Function *** ---
+        // --- Player & Roster Logic ---
+        window.addPlayer = function() {
+            const playerName = newPlayerInput.value.trim();
+            if (playerName === "") {
+                showCustomAlert("Error", "Please enter a player name.");
+                return;
+            }
+            
+            if (players.length >= MAX_PLAYERS) {
+                showCustomAlert("Limit Reached", "You have reached the maximum of 18 players.");
+                return;
+            }
+
+            players.push(playerName);
+            newPlayerInput.value = "";
+            renderPlayerList();
+        }
+
+        function renderPlayerList() {
+            if (players.length === 0) {
+                noPlayersMessage.style.display = 'block';
+                playerListContainer.innerHTML = '';
+                playerListContainer.appendChild(noPlayersMessage);
+            } else {
+                noPlayersMessage.style.display = 'none';
+                playerListContainer.innerHTML = ''; // Clear list
+            }
+            
+            players.forEach((name, index) => {
+                const playerElement = document.createElement('div');
+                playerElement.className = 'player-entry bg-white p-2 border rounded-md shadow-sm';
+                playerElement.innerHTML = `
+                    <span class="font-semibold text-gray-800 flex-grow">${index + 1}. ${name}</span>
+                    <button type="button" onclick="removePlayer(${index})" class="text-red-500 hover:text-red-700 font-bold text-lg">&times;</button>
+                `;
+                playerListContainer.appendChild(playerElement);
+            });
+
+            playerCountInput.value = players.length;
+
+            // Handle max player limit UI
+            if (players.length >= MAX_PLAYERS) {
+                playerLimitMessage.classList.remove('hidden');
+                newPlayerInput.disabled = true;
+                addPlayerButton.disabled = true;
+            } else {
+                playerLimitMessage.classList.add('hidden');
+                newPlayerInput.disabled = false;
+                addPlayerButton.disabled = false;
+            }
+        }
+
+        window.removePlayer = function(index) {
+            players.splice(index, 1);
+            renderPlayerList();
+        }
+
+        window.saveRoster = async function(event) {
+            event.preventDefault();
+            
+            if (players.length === 0) {
+                showCustomAlert("Error", "Please add at least one player to the roster.");
+                return;
+            }
+            
+            submitRosterButton.disabled = true;
+            submitRosterButton.textContent = "Saving Roster...";
+
+            const rosterData = {
+                coachName: document.getElementById('coachName').value,
+                coachPhone: document.getElementById('coachPhone').value,
+                asstCoachName: document.getElementById('asstCoachName').value,
+                asstCoachPhone: document.getElementById('asstCoachPhone').value,
+                players: players, // Array of player names
+                rosterSubmittedAt: new Date().toISOString(),
+                registrationStatus: "Complete" // Final step!
+            };
+
+            if (!teamDocRef) {
+                 console.error("Firestore document reference is not set.");
+                 showCustomAlert("Error", "Database connection lost. Please refresh and try again.");
+                 submitRosterButton.disabled = false;
+                 submitRosterButton.textContent = "Submit Roster & Complete Registration";
+                 return;
+            }
+
+            try {
+                await teamDocRef.update(rosterData);
+                console.log("Roster saved and registration marked as Complete.");
+                showSuccessModal();
+
+            } catch (error) {
+                console.error("Error saving roster: ", error);
+                showCustomAlert("Error", "Could not save roster. Please try again.");
+                submitRosterButton.disabled = false;
+                submitRosterButton.textContent = "Submit Roster & Complete Registration";
+            }
+        }
+        
+        function showSuccessModal() {
+            successModal.classList.remove('opacity-0', 'pointer-events-none');
+            successModal.classList.add('opacity-100', 'pointer-events-auto');
+            successModal.querySelector('div').classList.remove('scale-95');
+            successModal.querySelector('div').classList.add('scale-100');
+        }
+
+        window.goToHome = function() {
+            // Redirect to index.html and add status=complete
+            // This will trigger the "Registration Complete" modal on the homepage
+            window.location.assign(`./index.html?status=complete`);
+        }
+        
+        // --- *** NEW: News Ticker Function *** ---
+        async function fetchNews() {
+            const proxyUrl = 'https://api.allorigins.win/raw?url=';
+            const rssFeedUrl = 'https://feeds.skysports.com/data/football.xml';
+            
+            try {
+                const response = await fetch(proxyUrl + encodeURIComponent(rssFeedUrl));
+                if (!response.ok) throw new Error('Network response was not ok.');
+                
+                const str = await response.text();
+                const data = new window.DOMParser().parseFromString(str, "text/xml");
+                const items = data.querySelectorAll("item");
+                
+                let newsHtml = "";
+                items.forEach((el, index) => {
+                    if (index < 15) { // Get first 15 items
+                        const title = el.querySelector("title").innerHTML;
+                        newsHtml += `<div class="ticker-item"><strong>LATEST:</strong> ${title}</div>`;
+                    }
+                });
+                
+                // Duplicate the news content for a seamless loop
+                tickerWrapper.innerHTML = newsHtml + newsHtml; 
+                
+            } catch (error) {
+                console.error('Error fetching news:', error);
+                tickerWrapper.innerHTML = `<div class="ticker-item"><strong>ERROR:</strong> Could not load live news feed.</div>`;
+            }
+        }
+        
+        // --- Page Load & Firebase Init ---
+        async function loadTeamData() {
+            const params = new URLSearchParams(window.location.search);
+            teamDocId = params.get('teamId');
+
+            if (!teamDocId) {
+                console.error("Team ID is missing from URL!");
+                showCustomAlert("Error", "Team ID is missing. Please go back to the payment page.");
+                teamNameDisplay.textContent = "Error: Invalid Team ID";
+                levelDisplay.textContent = "Please return to the previous page.";
+                document.getElementById('rosterForm').classList.add('hidden');
+                return;
+            }
+
+            // If not dummy, proceed with real firebase
+            await initializeFirebase();
+            
+            if (!teamDocRef) {
+                 console.error("Team Doc Ref not set after init.");
+                 return;
+            }
+
+            // Fetch the team's data to display
+            try {
+                const docSnap = await teamDocRef.get();
+                if (docSnap.exists) {
+                    const data = docSnap.data();
+                    teamNameDisplay.textContent = data.department; // Using department as team name
+                    levelDisplay.textContent = data.level;
+                    
+                    // Pre-fill coach name if it was entered on the first page
+                    if (data.coachName) {
+                        document.getElementById('coachName').value = data.coachName;
+                    }
+                    
+                } else {
+                    console.error("No such document!");
+                    showCustomAlert("Error", "Could not find your team's registration data.");
+                }
+            } catch (error) {
+                console.error("Error fetching team data: ", error);
+                showCustomAlert("Error", "Could not load team data. " + error.message);
+            }
+        }
+
         async function initializeFirebase() {
             try {
-                // Check if Firebase Hosting auto-injected the config
-                if (typeof firebase === 'undefined' || typeof firebase.app === 'undefined') {
-                    console.error("Firebase object is not defined. Make sure init scripts are loaded.");
-                    teamNameDisplay.textContent = "Error: Firebase Config Missing";
-                    levelDisplay.textContent = "The application cannot be initialized.";
-                    rosterForm.classList.add('hidden');
+                // *** UPDATED: Use firebase.auto initialization ***
+                if (typeof firebase === 'undefined') {
+                    showCustomAlert("Error", "Firebase configuration is missing. Database features will not work.");
                     return;
                 }
-
-                // *** NEW: Check if firebase.apps is available before getting config ***
-                const app = firebase.apps.length ? firebase.app() : initializeApp(firebaseConfig);
                 
-                db = getFirestore(app);
-                auth = getAuth(app);
-                setLogLevel('Debug'); // Enable detailed Firestore logs
+                // Firebase is initialized automatically by /__/firebase/init.js
+                db = firebase.firestore();
+                auth = firebase.auth();
+                // firebase.firestore().setLogLevel('Debug');
 
-                // Sign in the user anonymously
-                await signInAnonymously(auth);
+                try {
+                    await auth.signInAnonymously();
+                } catch (authError) {
+                    console.error("Anonymous auth failed:", authError);
+                    showCustomAlert("Auth Error", "Could not connect to user services. " + authError.message);
+                }
 
-                // Setup listener for auth changes
-                onAuthStateChanged(auth, (user) => {
+                auth.onAuthStateChanged((user) => {
                     if (user) {
                         userId = user.uid;
                         console.log("User signed in:", userId);
                         
-                        // --- Get Team Info from URL ---
-                        const urlParams = new URLSearchParams(window..search);
-                        teamDocId = urlParams.get('teamId');
-                        const teamName = urlParams.get('team') || 'Unknown Team';
-                        const level = urlParams.get('level') || 'Unknown Level';
-
-                        if (!teamDocId) {
-                            console.error("Team ID is missing from URL!");
-                            teamNameDisplay.textContent = "Error: Team ID Not Found";
-                            teamNameDisplay.classList.add('text-red-600');
-                            levelDisplay.textContent = "Please go back to the registration page and complete payment first.";
-                            rosterForm.classList.add('hidden');
-                            return;
+                        if (teamDocId) {
+                            // *** UPDATED: Simplified collection path ***
+                            teamDocRef = db.collection("registrations").doc(teamDocId);
+                        } else {
+                            console.error("teamDocId is not set, cannot create doc ref.");
                         }
-
-                        // Update display
-                        teamNameDisplay.textContent = teamName;
-                        levelDisplay.textContent = `${level} Level`;
-                        
-                        // *** UPDATED FIRESTORE PATH ***
-                        // Use a simple top-level collection path
-                        teamDocRef = doc(db, 'registrations', teamDocId);
-                        console.log("Targeting document:", teamDocRef.path);
-                        
                     } else {
                         console.log("User signed out.");
                         userId = null;
@@ -407,21 +443,15 @@
 
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
-                 // Check if firebaseConfig is defined, which is the root cause
-                if (typeof firebaseConfig === 'undefined') {
-                    teamNameDisplay.textContent = "Error: Config Missing";
-                    levelDisplay.textContent = "The /__/firebase/init.js script failed.";
-                } else {
-                    teamNameDisplay.textContent = "Application Error";
-                    levelDisplay.textContent = "Could not initialize Firebase. Check console.";
-                }
-                rosterForm.classList.add('hidden');
+                showCustomAlert("Error", "Could not connect to the database. " + error.message);
             }
         }
-        // --- *** END UPDATED FUNCTION *** ---
 
         // --- Start the App ---
-        initializeFirebase();
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTeamData();
+            fetchNews(); // ** NEW: Fetch news on load **
+        });
 
     </script>
 </body>
