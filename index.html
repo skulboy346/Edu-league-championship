@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDU-LEAGUE CHAMPIONSHIP Registration</title>
+    
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -39,7 +40,9 @@
         }
         /* --- Slider Styles --- */
         .slider-container {
-            width: 100%;
+            width: 150px; /* Square size - new width */
+            height: 150px; /* Square size - new height */
+            margin: 0 auto; /* Center the slider */
             overflow: hidden;
             border-radius: 0.5rem;
             border: 3px solid #fbbf24; /* Yellow border */
@@ -47,21 +50,24 @@
         .slider-wrapper {
             display: flex;
             transition: transform 0.5s ease-in-out;
+            height: 100%; /* Ensure wrapper takes full height */
         }
         .slider-item {
             min-width: 100%;
+            height: 100%; /* Ensure item takes full height */
             box-sizing: border-box;
             text-align: center;
-            /* padding: 1rem; */ /* Removed padding to fit image */
             color: white;
             font-weight: bold;
             background-color: #4c1d95; /* Darker purple bg for slides */
+            display: flex; /* Use flex to center image vertically */
+            align-items: center; /* Center image vertically */
+            justify-content: center; /* Center image horizontally */
         }
         .slider-item img {
-            width: 100%;
-            height: 120px; /* Fixed height for logos */
-            object-fit: contain; /* Show the whole logo */
-            /* margin-bottom: 0.5rem; */ /* Removed margin */
+            width: 100%; /* Fill the width */
+            height: 100%; /* Fill the height */
+            object-fit: cover; /* Fill the square, may crop */
         }
         
         /* News Ticker Footer */
@@ -115,27 +121,26 @@
                     <p class="mt-1 text-purple-200 text-lg">Battle within Educators</p>
                 </div>
 
-                <!-- League Level Slider -->
+                <!-- Slider -->
                 <div class="space-y-2">
                     <h2 class="text-xl font-bold border-b border-purple-400 pb-2">League Levels</h2>
                     <div class="slider-container shadow-lg">
                         <div class="slider-wrapper" id="logoSlider">
-                            <!-- Slide 1: Finalist -->
+                            <!-- Slide 1 -->
                             <div class="slider-item">
-                                <img src="Finalist.png" alt="Finalist League Logo" onerror="this.onerror=null; this.src='https://placehold.co/200x120/4c1d95/22c55e?text=Finalist.png';">
+                                <img src="Finalist.png" alt="Finalist League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/22c55e?text=Finalist.png';">
                             </div>
-                            <!-- Slide 2: Penultimate -->
+                            <!-- Slide 2 -->
                             <div class="slider-item">
-                                <img src="Penultimate.png" alt="Penultimate League Logo" onerror="this.onerror=null; this.src='https://placehold.co/200x120/4c1d95/3b82f6?text=Penultimate.png';">
+                                <img src="Penultimate.png" alt="Penultimate League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/3b82f6?text=Penultimate.png';">
                             </div>
-                            <!-- Slide 3: Sophomore -->
+                            <!-- Slide 3 -->
                             <div class="slider-item">
-                                <img src="Sophomore.png" alt="Sophomore League Logo" onerror="this.onerror=null; this.src='https://placehold.co/200x120/4c1d95/ef4444?text=Sophomore.png';">
+                                <img src="Sophomore.png" alt="Sophomore League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/ef4444?text=Sophomore.png';">
                             </div>
-                            
-                            <!-- Duplicate Slides for smooth loop -->
+                            <!-- Slide 4 (Duplicate of 1 for loop) -->
                             <div class="slider-item">
-                                <img src="Finalist.png" alt="Finalist League Logo" onerror="this.onerror=null; this.src='https://placehold.co/200x120/4c1d95/22c55e?text=Finalist.png';">
+                                <img src="Finalist.png" alt="Finalist League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/22c55e?text=Finalist.png';">
                             </div>
                         </div>
                     </div>
@@ -160,7 +165,7 @@
                     </ul>
                 </div>
 
-                <!-- Presented By -->
+                <!-- Presenters -->
                 <div class="pt-4 border-t border-purple-400 text-center md:text-left">
                     <p class="text-sm font-light">Presented by:</p>
                     <p class="text-lg font-bold">NUESA x FESSC</p>
@@ -248,7 +253,7 @@
                     <p class="text-lg font-bold text-edu-purple mt-1">Opeyemi 08140712347, Rotimi 09021070738</p>
                 </div>
                 
-                <!-- LLM & Admin FEATURES -->
+                <!-- Admin & LLM FEATURES -->
                 <div class="mt-8 pt-6 border-t border-gray-200">
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Admin & Sponsorship Tools ✨</h3>
                     <!-- Button Grid -->
@@ -302,7 +307,7 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <!-- ** NEW: CSV Download Button ** -->
+            <!-- CSV Download Button -->
             <div class="mb-4">
                 <button onclick="downloadCSV()" id="downloadCsvButton" class="w-full md:w-auto py-2 px-5 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
@@ -321,7 +326,7 @@
         </div>
     </div>
     
-    <!-- ** NEW: Admin Password Prompt Modal ** -->
+    <!-- Admin Password Prompt Modal -->
     <div id="admin-prompt-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300">
             <h3 class="text-xl font-bold text-gray-800 mb-4">Admin Access Required</h3>
@@ -350,10 +355,10 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- News Ticker Footer -->
     <footer class="news-ticker sticky bottom-0 z-10">
         <div class="ticker-wrapper" id="tickerWrapper">
-            <!-- Static Content -->
+            <!-- Fallback Content -->
             <div class="ticker-item"><strong>EDU-LEAGUE:</strong> Battle within Educators</div>
             <div class="ticker-item"><strong>REGISTRATION:</strong> November 10th - November 25th</div>
             <div class="ticker-item"><strong>CONTACT:</strong> Opeyemi 08140712347, Rotimi 09021070738</div>
@@ -369,7 +374,7 @@
 
     <!-- Main Application Script (Firebase & Logic) -->
     <script type="module">
-        // --- *** NEW: Firebase SDK Imports (CDN Modules) *** ---
+        // --- Firebase SDK Imports (CDN Modules) ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
@@ -423,7 +428,6 @@
 
         // Utility function for exponential backoff
         async function fetchWithExponentialBackoff(url, options, maxRetries = 5) {
-            // ... (existing backoff function)
             for (let attempt = 0; attempt < maxRetries; attempt++) {
                 try {
                     const response = await fetch(url, options);
@@ -436,7 +440,6 @@
         }
 
         window.draftSponsorshipEmail = async function() {
-            // ... (existing draft email function, unchanged)
             draftButton.disabled = true;
             draftText.textContent = 'Generating Draft...';
             draftIcon.classList.add('hidden');
@@ -570,7 +573,6 @@
         }
 
         window.copyToClipboard = function(elementId) {
-            // ... (existing copy function, unchanged)
             const element = document.getElementById(elementId);
             const textToCopy = element.innerText;
             const tempInput = document.createElement('textarea');
@@ -588,7 +590,7 @@
             }
         }
         
-        // --- ** NEW: Admin Security & Data Functions ** ---
+        // --- Admin Security & Data Functions ---
         
         window.promptAdminPassword = function() {
             adminPasswordInput.value = "";
