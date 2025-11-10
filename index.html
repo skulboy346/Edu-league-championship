@@ -52,7 +52,7 @@
             min-width: 100%;
             box-sizing: border-box;
             text-align: center;
-            padding: 1rem;
+            /* padding: 1rem; */ /* Removed padding to fit image */
             color: white;
             font-weight: bold;
             background-color: #4c1d95; /* Darker purple bg for slides */
@@ -61,7 +61,7 @@
             width: 100%;
             height: 120px; /* Fixed height for logos */
             object-fit: contain; /* Show the whole logo */
-            margin-bottom: 0.5rem;
+            /* margin-bottom: 0.5rem; */ /* Removed margin */
         }
         
         /* News Ticker Footer */
@@ -123,27 +123,19 @@
                             <!-- Slide 1: Finalist -->
                             <div class="slider-item">
                                 <img src="Finalist.png" alt="Finalist League Logo" onerror="this.onerror=null; this.src='https://placehold.co/200x120/4c1d95/22c55e?text=Finalist.png';">
-                                <p class="text-lg">FINALIST LEAGUE</p>
-                                <p class="text-xs">(The Last Dance for Victory)</p>
                             </div>
                             <!-- Slide 2: Penultimate -->
                             <div class="slider-item">
                                 <img src="Penultimate.png" alt="Penultimate League Logo" onerror="this.onerror=null; this.src='https://placehold.co/200x120/4c1d95/3b82f6?text=Penultimate.png';">
-                                <p class="text-lg">PENULTIMATE LEAGUE</p>
-                                <p class="text-xs">(The Season Rave)</p>
                             </div>
                             <!-- Slide 3: Sophomore -->
                             <div class="slider-item">
                                 <img src="Sophomore.png" alt="Sophomore League Logo" onerror="this.onerror=null; this.src='https://placehold.co/200x120/4c1d95/ef4444?text=Sophomore.png';">
-                                <p class="text-lg">SOPHOMORE LEAGUE</p>
-                                <p class="text-xs">(Sizing The Shoe For Bants)</p>
                             </div>
                             
                             <!-- Duplicate Slides for smooth loop -->
                             <div class="slider-item">
                                 <img src="Finalist.png" alt="Finalist League Logo" onerror="this.onerror=null; this.src='https://placehold.co/200x120/4c1d95/22c55e?text=Finalist.png';">
-                                <p class="text-lg">FINALIST LEAGUE</p>
-                                <p class="text-xs">(The Last Dance for Victory)</p>
                             </div>
                         </div>
                     </div>
@@ -394,7 +386,7 @@
            appId: "1:652544574249:web:6ff33771307e892e7f6d38",
            measurementId: "G-TD780JGNED"
          };
-        // --- *** END OF CONFIG *** ---
+        // --- *** END OF CONFIG ---
 
         // --- Firebase & App State ---
         let db;
@@ -865,7 +857,7 @@
             }
         }
         
-        setInterval(nextSlide, 3000); // Change slide every 3 seconds
+        setInterval(nextSlide, 5000); // Changed to 5 seconds
 
     </script>
 </body>
