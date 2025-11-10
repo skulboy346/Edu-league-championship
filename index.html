@@ -94,7 +94,7 @@
                         </ul>
                     </div>
                     <!-- Presented By -->
-                    <div class="pt-4 border-t border-purple-400">
+                    <div class="pt-4 border-t border-purple-400 text-center md:text-left">
                         <p class="text-sm font-light">Presented by:</p>
                         <p class="text-lg font-bold">NUESA x FESSC</p>
                         <div class="flex justify-center md:justify-start space-x-4 mt-2">
@@ -202,7 +202,7 @@
         </div>
     </div>
     <div id="registrations-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
-        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-2xl w-full text-left transform transition-all scale-95 duration-300">
+        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-3xl w-full text-left transform transition-all scale-95 duration-300">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-2xl font-bold text-gray-800">Registered Teams</h3>
                 <button onclick="closeRegistrations()" class="text-gray-400 hover:text-gray-600">
@@ -212,9 +212,16 @@
             <div id="registrations-list-container" class="max-h-96 overflow-y-auto space-y-3 bg-gray-50 p-4 rounded-lg border">
                 <p id="no-registrations" class="text-gray-500 text-center">No teams have registered yet.</p>
             </div>
-            <button onclick="closeRegistrations()" class="mt-6 w-full py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">
-                Close
-            </button>
+            <!-- *** NEW: Modal Footer with Download Button *** -->
+            <div class="mt-6 flex flex-col md:flex-row gap-3">
+                <button onclick="downloadCSV()" id="downloadCsvButton" class="w-full py-2 px-4 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition duration-150 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Download CSV
+                </button>
+                <button onclick="closeRegistrations()" class="w-full py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">
+                    Close
+                </button>
+            </div>
         </div>
     </div>
     <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
@@ -245,13 +252,13 @@
 
 
     <script type="module">
-        // --- *** NEW: Firebase SDK Imports (CDN Modules) *** ---
+        // --- *** NEW: Added getDocs *** ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, setLogLevel } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, getDocs, setLogLevel } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-        // --- *** STEP 1: YOUR FIREBASE CONFIG IS PASTED HERE *** ---
+        // --- *** YOUR FIREBASE CONFIG *** ---
         const firebaseConfig = {
            apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
            authDomain: "sonic-verbena-239117.firebaseapp.com",
@@ -270,8 +277,12 @@
         let userId;
         let registrationsCollection;
         
-        // --- DOM Elements (unchanged) ---
+        // --- *** NEW: Admin Password *** ---
+        const ADMIN_PASSWORD = "EDUADMIN2025";
+        
+        // --- DOM Elements ---
         const form = document.getElementById('registrationForm');
+        // ... (all other DOM elements are the same) ...
         const submitButton = document.getElementById('submitButton');
         const confirmationBox = document.getElementById('confirmation-box');
         const draftButton = document.getElementById('draftButton');
@@ -293,9 +304,10 @@
         const apiKey = ""; 
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
         
-        // --- All window functions (unchanged) ---
+        // --- All window functions ---
         
         async function fetchWithExponentialBackoff(url, options, maxRetries = 5) {
+            // ... (unchanged) ...
             for (let attempt = 0; attempt < maxRetries; attempt++) {
                 try {
                     const response = await fetch(url, options);
@@ -312,6 +324,7 @@
         }
 
         window.draftSponsorshipEmail = async function() {
+            // ... (unchanged) ...
             draftButton.disabled = true;
             draftText.textContent = 'Generating Draft...';
             draftIcon.classList.add('hidden');
@@ -361,6 +374,7 @@
         }
 
         window.handleSubmit = async function(event) {
+            // ... (unchanged) ...
             event.preventDefault(); 
             if (!form.checkValidity()) {
                 form.reportValidity();
@@ -411,6 +425,7 @@
         }
 
         window.showConfirmation = function() {
+            // ... (unchanged) ...
             confirmationBox.classList.remove('opacity-0', 'pointer-events-none');
             confirmationBox.classList.add('opacity-100', 'pointer-events-auto');
             confirmationBox.querySelector('div').classList.remove('scale-95');
@@ -418,6 +433,7 @@
         }
 
         window.closeConfirmation = function() {
+            // ... (unchanged) ...
             confirmationBox.classList.add('opacity-0', 'pointer-events-none');
             confirmationBox.classList.remove('opacity-100', 'pointer-events-auto');
             confirmationBox.querySelector('div').classList.add('scale-95');
@@ -425,6 +441,7 @@
         }
         
         window.showCustomAlert = function(title, message) {
+            // ... (unchanged) ...
             customAlertTitle.textContent = title;
             customAlertMessage.textContent = message;
             customAlertModal.classList.remove('opacity-0', 'pointer-events-none');
@@ -434,6 +451,7 @@
         }
         
         window.closeCustomAlert = function() {
+            // ... (unchanged) ...
             customAlertModal.classList.add('opacity-0', 'pointer-events-none');
             customAlertModal.classList.remove('opacity-100');
             customAlertModal.querySelector('div').classList.add('scale-95');
@@ -441,6 +459,7 @@
         }
 
         window.copyToClipboard = function(elementId) {
+            // ... (unchanged) ...
             const element = document.getElementById(elementId);
             const textToCopy = element.innerText;
             const tempInput = document.createElement('textarea');
@@ -458,21 +477,99 @@
             }
         }
         
+        // --- *** UPDATED: Admin Password Check *** ---
         window.showRegistrations = function() {
-            registrationsModal.classList.remove('opacity-0', 'pointer-events-none');
-            registrationsModal.classList.add('opacity-100', 'pointer-events-auto');
-            registrationsModal.querySelector('div').classList.remove('scale-95');
-            registrationsModal.querySelector('div').classList.add('scale-100');
+            const password = window.prompt("Enter Admin Password:", "");
+            if (password === ADMIN_PASSWORD) {
+                // Password is correct, show the modal
+                registrationsModal.classList.remove('opacity-0', 'pointer-events-none');
+                registrationsModal.classList.add('opacity-100', 'pointer-events-auto');
+                registrationsModal.querySelector('div').classList.remove('scale-95');
+                registrationsModal.querySelector('div').classList.add('scale-100');
+            } else if (password !== null) {
+                // Password was entered but incorrect
+                showCustomAlert("Access Denied", "Incorrect password.");
+            }
+            // If password is null (user clicked "Cancel"), do nothing.
         }
 
         window.closeRegistrations = function() {
+            // ... (unchanged) ...
             registrationsModal.classList.add('opacity-0', 'pointer-events-none');
             registrationsModal.classList.remove('opacity-100', 'pointer-events-auto');
             registrationsModal.querySelector('div').classList.add('scale-95');
             registrationsModal.querySelector('div').classList.remove('scale-100');
         }
         
+        // --- *** NEW: Download CSV Function *** ---
+        window.downloadCSV = async function() {
+            if (!registrationsCollection) {
+                showCustomAlert("Error", "Database not connected.");
+                return;
+            }
+
+            const downloadButton = document.getElementById('downloadCsvButton');
+            downloadButton.disabled = true;
+            downloadButton.innerHTML = `<div class="loader w-5 h-5 border-4 border-t-4 border-white rounded-full"></div><span class="ml-2">Fetching Data...</span>`;
+
+            try {
+                // 1. Fetch all documents
+                const querySnapshot = await getDocs(registrationsCollection);
+                
+                let csvContent = "data:text/csv;charset=utf-8,";
+                
+                // 2. Define Headers
+                const headers = [
+                    "Department", 
+                    "CoachName", 
+                    "Phone", 
+                    "Email", 
+                    "Level", 
+                    "PaymentStatus", 
+                    "RegistrationStatus", 
+                    "Players"
+                ];
+                csvContent += headers.join(",") + "\r\n";
+
+                // 3. Add Data Rows
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const players = (data.players || []).join(" | "); // Join players with a pipe
+                    
+                    const row = [
+                        data.department || "",
+                        data.coachName || "",
+                        data.phone || "",
+                        data.email || "",
+                        data.level || "",
+                        data.paymentStatus || "",
+                        data.registrationStatus || "",
+                        `"${players}"` // Put players in quotes to handle any commas
+                    ];
+                    csvContent += row.join(",") + "\r\n";
+                });
+
+                // 4. Create and Trigger Download
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "edu_league_registrations.csv");
+                document.body.appendChild(link); 
+                link.click();
+                document.body.removeChild(link);
+
+            } catch (error) {
+                console.error("Error downloading CSV: ", error);
+                showCustomAlert("Error", "Could not download data. " + error.message);
+            } finally {
+                downloadButton.disabled = false;
+                downloadButton.innerHTML = `<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>Download CSV`;
+            }
+        }
+        
+        // --- (Unchanged Functions) ---
         function setupRegistrationListener() {
+            // ... (unchanged) ...
             if (!registrationsCollection) {
                 console.warn("Firestore collection not available.");
                 noRegistrationsMessage.style.display = 'block';
@@ -522,25 +619,17 @@
         }
 
         async function fetchNews() {
-            // Static content as a fallback
+            // ... (unchanged) ...
             const staticNews = [
                 "<strong>EDU-LEAGUE:</strong> Battle within Educators",
                 "<strong>REGISTRATION:</strong> November 10th - November 25th",
                 "<strong>CONTACT:</strong> Opeyemi 08140712347, Rotimi 09021070738",
                 "<strong>LEVELS:</strong> Finalist (400Lvl), Penultimate (300Lvl), Sophomore (200Lvl)"
             ];
-            
             let newsHtml = "";
-            staticNews.forEach(item => {
-                newsHtml += `<div class="ticker-item">${item}</div>`;
-            });
-            // Duplicate for a smooth loop
-            staticNews.forEach(item => {
-                newsHtml += `<div class="ticker-item">${item}</div>`;
-            });
+            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
+            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
             tickerWrapper.innerHTML = newsHtml;
-
-            // Try to fetch live news and replace if successful
             const proxyUrl = 'https://api.allorigins.win/raw?url=';
             const rssFeedUrl = 'https://feeds.skysports.com/data/football.xml';
             try {
@@ -557,44 +646,32 @@
                     }
                 });
                 if(liveNewsHtml) {
-                    tickerWrapper.innerHTML = liveNewsHtml + liveNewsHtml; // Duplicate for loop
+                    tickerWrapper.innerHTML = liveNewsHtml + liveNewsHtml;
                 }
             } catch (error) {
                 console.error('Error fetching live news:', error);
-                // The static content is already there, so no need to do anything else.
             }
         }
         
-        // --- Initialize Firebase ---
         async function initializeFirebase() {
+            // ... (unchanged) ...
             try {
-                // *** UPDATED: Manually initialize app ***
                 if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("PASTE_YOUR_CONFIG_HERE")) {
                     showCustomAlert("Error", "Firebase configuration is missing. Database features will not work.");
                     console.error("Firebase config is missing. Please paste it into index.html.");
                     return;
                 }
-                
                 const app = initializeApp(firebaseConfig);
-                const analytics = getAnalytics(app); // Initialize analytics
+                const analytics = getAnalytics(app); 
                 db = getFirestore(app);
                 auth = getAuth(app);
-                // setLogLevel('Debug');
-
-                // Sign in the user
                 await signInAnonymously(auth);
-
-                // Setup listener for auth changes
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         userId = user.uid;
                         console.log("User signed in:", userId);
-                        
-                        // *** UPDATED: Simplified collection path for live site ***
                         registrationsCollection = collection(db, "registrations");
-                        
                         setupRegistrationListener();
-                        
                         const urlParams = new URLSearchParams(window.location.search);
                         if (urlParams.get('status') === 'complete') {
                              showConfirmation();
@@ -606,14 +683,13 @@
                         registrationsCollection = null; 
                     }
                 });
-
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
                 showCustomAlert("Error", "Could not connect to the database. " + error.message);
             }
         }
 
-        // --- Start the App ---
+        // --- Start the App (unchanged) ---
         initializeFirebase();
         fetchNews();
         
