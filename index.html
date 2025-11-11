@@ -8,6 +8,9 @@
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- ** NEW: Font Awesome for Social Icons ** -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <style>
         /* Custom Font */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
@@ -20,10 +23,12 @@
         .text-edu-purple { color: #6d28d9; }
         .bg-edu-yellow { background-color: #fbbf24; /* Amber/Yellow */ }
         .hover-edu-yellow:hover { background-color: #f59e0b; }
+        
         /* Style for the message boxes (modal replacement) */
-        #confirmation-box, #registrations-modal, #custom-alert-modal, #admin-prompt-modal {
+        #confirmation-box, #registrations-modal, #custom-alert-modal, #admin-prompt-modal, #admin-panel-modal {
             transition: opacity 0.3s ease-in-out;
         }
+        
         /* Loading spinner */
         .loader {
             border-top-color: #6d28d9;
@@ -38,10 +43,11 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
         /* --- Slider Styles --- */
         .slider-container {
-            width: 150px; /* Square size - new width */
-            height: 150px; /* Square size - new height */
+            width: 150px; /* Square size */
+            height: 150px; /* Square size */
             margin: 0 auto; /* Center the slider */
             overflow: hidden;
             border-radius: 0.5rem;
@@ -50,27 +56,48 @@
         .slider-wrapper {
             display: flex;
             transition: transform 0.5s ease-in-out;
-            height: 100%; /* Ensure wrapper takes full height */
+            height: 100%;
         }
         .slider-item {
             min-width: 100%;
-            height: 100%; /* Ensure item takes full height */
+            height: 100%;
             box-sizing: border-box;
             text-align: center;
             color: white;
             font-weight: bold;
             background-color: #4c1d95; /* Darker purple bg for slides */
-            display: flex; /* Use flex to center image vertically */
-            align-items: center; /* Center image vertically */
-            justify-content: center; /* Center image horizontally */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .slider-item img {
-            width: 100%; /* Fill the width */
-            height: 100%; /* Fill the height */
-            object-fit: cover; /* Fill the square, may crop */
+            width: 100%; /* Fill the container */
+            height: 100%; /* Fill the container */
+            object-fit: cover; /* Fill the square, may crop edges */
         }
         
-        /* News Ticker Footer */
+        /* --- Social Icon Bar --- */
+        .social-bar {
+            background-color: #111827; /* Darker than news ticker */
+            padding: 0.75rem 0;
+            border-bottom: 2px solid #374151; /* Thinner border */
+        }
+        .social-icons a {
+            color: #9ca3af; /* Default: Gray */
+            transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+            font-size: 1.5rem; /* 24px */
+        }
+        /* Brand colors on hover */
+        .social-icons a:hover {
+            color: #FFFFFF; /* White on hover */
+            transform: scale(1.1);
+        }
+        .social-icons .fa-facebook { color: #1877F2; }
+        .social-icons .fa-tiktok { color: #000000; } /* Simple black for TikTok */
+        .social-icons .fa-youtube { color: #FF0000; }
+        .social-icons .fa-instagram { color: #E4405F; }
+        
+        /* --- News Ticker Footer --- */
         .news-ticker {
             width: 100%;
             background-color: #1f2937; /* Dark gray/blue */
@@ -82,7 +109,6 @@
         .ticker-wrapper {
             display: flex;
             white-space: nowrap;
-            /* Will be paused on hover via JS */
             animation: ticker 60s linear infinite; 
         }
         .ticker-item {
@@ -93,12 +119,8 @@
             color: #fbbf24; /* Yellow for headlines */
         }
         @keyframes ticker {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-50%); /* Animate to half-width for loop */
-            }
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
     </style>
 </head>
@@ -108,14 +130,15 @@
     <main class="flex-grow flex items-center justify-center p-4">
         <div class="max-w-4xl w-full bg-white shadow-2xl rounded-xl overflow-hidden md:flex">
 
-            <!-- Left Panel: Event Details & Branding (Vibrant Purple) -->
+            <!-- Left Panel: Event Details & Branding -->
             <div class="md:w-1/3 bg-edu-purple text-white p-8 space-y-6 flex flex-col justify-center rounded-t-xl md:rounded-l-xl md:rounded-t-none">
                 
-                <!-- Main Logo -->
+                <!-- Logo -->
                 <div class="flex justify-center pt-4 md:pt-0">
                     <img src="edulogo.jpg" alt="Edu-League Logo" class="rounded-full border-4 border-purple-300 shadow-lg w-32 h-32 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/128x128/6d28d9/fbbf24?text=EDU-LEAGUE';">
                 </div>
 
+                <!-- Title -->
                 <div class="text-center md:text-left">
                     <h1 class="text-3xl font-extrabold tracking-tight">EDU-LEAGUE CHAMPIONSHIP</h1>
                     <p class="mt-1 text-purple-200 text-lg">Battle within Educators</p>
@@ -126,19 +149,16 @@
                     <h2 class="text-xl font-bold border-b border-purple-400 pb-2">League Levels</h2>
                     <div class="slider-container shadow-lg">
                         <div class="slider-wrapper" id="logoSlider">
-                            <!-- Slide 1 -->
                             <div class="slider-item">
                                 <img src="Finalist.png" alt="Finalist League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/22c55e?text=Finalist.png';">
                             </div>
-                            <!-- Slide 2 -->
                             <div class="slider-item">
                                 <img src="Penultimate.png" alt="Penultimate League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/3b82f6?text=Penultimate.png';">
                             </div>
-                            <!-- Slide 3 -->
                             <div class="slider-item">
                                 <img src="Sophomore.png" alt="Sophomore League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/ef4444?text=Sophomore.png';">
                             </div>
-                            <!-- Slide 4 (Duplicate of 1 for loop) -->
+                            <!-- Duplicate first slide for smooth loop -->
                             <div class="slider-item">
                                 <img src="Finalist.png" alt="Finalist League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/22c55e?text=Finalist.png';">
                             </div>
@@ -180,15 +200,16 @@
             <div class="md:w-2/3 p-8 md:p-12">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">Team Registration Form</h2>
 
-                <!-- Key Dates & Fee Bar (Yellow Accent) -->
+                <!-- Key Dates & Fee Bar -->
                 <div class="bg-edu-yellow text-gray-800 p-4 rounded-lg shadow-md mb-6 font-semibold md:flex justify-between items-center text-center md:text-left">
-                    <p>REGISTRATION: Nov 10th - Nov 25th</p>
+                    <p>REGISTRATION: Nov 15th - Nov 25th</p>
                     <p class="mt-2 md:mt-0 md:border-l md:pl-4 border-gray-600">ENTRY FEE PER LEVEL: #70,000</p>
                 </div>
 
+                <!-- Registration Form -->
                 <form id="registrationForm" onsubmit="handleSubmit(event); return false;" class="space-y-4">
                     
-                    <!-- Department Selection (8 Departments) -->
+                    <!-- Department -->
                     <div>
                         <label for="department" class="block text-sm font-medium text-gray-700">Department Affiliation</label>
                         <select id="department" name="department" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border bg-white">
@@ -210,7 +231,7 @@
                         <input type="text" id="coachName" name="coachName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
                     </div>
 
-                    <!-- Contact Details (Email & Phone) -->
+                    <!-- Email & Phone -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
@@ -222,7 +243,7 @@
                         </div>
                     </div>
                     
-                    <!-- Level Selection (3 Levels) -->
+                    <!-- Competition Level -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Select Competition Level (3 Levels)</label>
                         <div class="flex flex-wrap gap-4">
@@ -247,45 +268,62 @@
                     </button>
                 </form>
                 
-                <!-- Contact Information -->
+                <!-- Contact Info -->
                 <div class="mt-8 pt-4 border-t border-gray-200 text-center">
                     <p class="text-sm text-gray-600 font-semibold">For Enquiries & Sponsorship:</p>
-                    <p class="text-lg font-bold text-edu-purple mt-1">Opeyemi 08140712347, Rotimi 09021070738</p>
-                </div>
-                
-                <!-- Admin & LLM FEATURES -->
-                <div class="mt-8 pt-6 border-t border-gray-200">
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">Admin & Sponsorship Tools ✨</h3>
-                    <!-- Button Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Draft Email Button -->
-                        <button onclick="draftSponsorshipEmail()" id="draftButton" class="w-full py-3 bg-edu-purple text-white font-bold rounded-md shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-edu-purple focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
-                            <svg id="draftIcon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                            <span id="draftText">Draft Sponsorship Email</span>
-                            <div id="draftLoader" class="loader w-6 h-6 border-4 border-t-4 border-white rounded-full hidden"></div>
-                        </button>
-                        <!-- View Registrations Button -->
-                        <button onclick="promptAdminPassword()" id="viewRegButton" class="w-full py-3 bg-gray-600 text-white font-bold rounded-md shadow-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            <span>View Registered Teams (<span id="regCount">0</span>)</span>
-                        </button>
-                    </div>
-                    
-                    <!-- LLM Draft Result Area -->
-                    <div id="draftResult" class="mt-4 hidden p-4 bg-gray-100 rounded-lg shadow-inner">
-                        <h4 class="font-bold text-gray-800 mb-2">Generated Draft:</h4>
-                        <pre id="draftContent" class="whitespace-pre-wrap text-sm text-gray-700 bg-white p-3 rounded-md border"></pre>
-                        <button onclick="copyToClipboard('draftContent')" class="mt-3 text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-1 px-3 rounded-full transition">
-                            Copy to Clipboard
-                        </button>
-                    </div>
+                    <p class="text-lg font-bold text-edu-purple mt-1">OPEYEMI 08140712347</p>
                 </div>
             </div>
 
         </div>
     </main>
+    
+    <!-- Floating Admin Button -->
+    <button onclick="promptAdminPassword()" id="floatingAdminButton" class="fixed bottom-28 right-6 md:bottom-24 md:right-8 z-40 w-16 h-16 bg-edu-purple text-white rounded-full shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-edu-purple focus:ring-offset-2 transition transform hover:scale-110">
+        <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+    </button>
+    
+    <!-- Footer Area (Social & News) -->
+    <footer class="sticky bottom-0 z-10">
+        <!-- Social Media Bar -->
+        <div class="social-bar">
+            <div class="social-icons max-w-4xl mx-auto flex justify-center space-x-8">
+                <a href="https://facebook.com/YOUR-PAGE-HERE" target="_blank" aria-label="Facebook">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://tiktok.com/@YOUR-PROFILE-HERE" target="_blank" aria-label="TikTok">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+                <a href="https://youtube.com/YOUR-CHANNEL-HERE" target="_blank" aria-label="YouTube">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="https://instagram.com/YOUR-PROFILE-HERE" target="_blank" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- News Ticker -->
+        <div class="news-ticker">
+            <div class="ticker-wrapper" id="tickerWrapper">
+                <!-- Static Fallback Content (will be replaced by JS) -->
+                <div class="ticker-item"><strong>EDU-LEAGUE:</strong> Battle within Educators</div>
+                <div class="ticker-item"><strong>REGISTRATION:</strong> Nov 15th - Nov 25th</div>
+                <div class="ticker-item"><strong>CONTACT:</strong> OPEYEMI 08140712347</div>
+                <div class="ticker-item"><strong>LEVELS:</strong> Finalist (400Lvl), Penultimate (300Lvl), Sophomore (200Lvl)</div>
+                <!-- Duplicate for loop -->
+                <div class="ticker-item"><strong>EDU-LEAGUE:</strong> Battle within Educators</div>
+                <div class="ticker-item"><strong>REGISTRATION:</strong> Nov 15th - Nov 25th</div>
+                <div class="ticker-item"><strong>CONTACT:</strong> OPEYEMI 08140712347</div>
+                <div class="ticker-item"><strong>LEVELS:</strong> Finalist (400Lvl), Penultimate (300Lvl), Sophomore (200Lvl)</div>
+            </div>
+        </div>
+    </footer>
 
-    <!-- Registration Confirmation Box (Modal Replacement) -->
+
+    <!-- MODALS -->
+
+    <!-- Registration 100% Complete Modal -->
     <div id="confirmation-box" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
         <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300">
             <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -297,40 +335,11 @@
         </div>
     </div>
     
-    <!-- View Registrations Modal -->
-    <div id="registrations-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
-        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-4xl w-full text-left transform transition-all scale-95 duration-300">
-            <!-- Modal Header -->
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-2xl font-bold text-gray-800">Admin Panel - Registered Teams</h3>
-                <button onclick="closeRegistrations()" class="text-gray-400 hover:text-gray-600">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <!-- CSV Download Button -->
-            <div class="mb-4">
-                <button onclick="downloadCSV()" id="downloadCsvButton" class="w-full md:w-auto py-2 px-5 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    Download Registrations (CSV)
-                </button>
-            </div>
-            <!-- Modal Body (Scrollable List) -->
-            <div id="registrations-list-container" class="max-h-96 overflow-y-auto space-y-3 bg-gray-50 p-4 rounded-lg border">
-                <!-- Registrations will be injected here by JavaScript -->
-                <p id="no-registrations" class="text-gray-500 text-center">No teams have registered yet.</p>
-            </div>
-            <!-- Modal Footer -->
-            <button onclick="closeRegistrations()" class="mt-6 w-full py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">
-                Close
-            </button>
-        </div>
-    </div>
-    
     <!-- Admin Password Prompt Modal -->
     <div id="admin-prompt-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300">
             <h3 class="text-xl font-bold text-gray-800 mb-4">Admin Access Required</h3>
-            <p class="text-gray-600 mb-4">Please enter the admin password to view registrations.</p>
+            <p class="text-gray-600 mb-4">Please enter the admin password.</p>
             <input type="password" id="adminPasswordInput" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border mb-2" placeholder="Enter password...">
             <p id="adminPasswordError" class="text-sm text-red-600 mb-4 hidden">Incorrect password.</p>
             <div class="flex gap-4">
@@ -344,7 +353,63 @@
         </div>
     </div>
     
-    <!-- Custom Alert Modal -->
+    <!-- Admin *PANEL* Modal (Holds all admin tools) -->
+    <div id="admin-panel-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
+        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-4xl w-full text-left transform transition-all scale-95 duration-300">
+            
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-bold text-gray-800">Admin Panel</h3>
+                <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <!-- Admin Tools Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Left Column: Registrations -->
+                <div class="space-y-4">
+                    <h4 class="text-xl font-bold text-gray-800">View Registrations (<span id="regCount">0</span>)</h4>
+                    <button onclick="downloadCSV()" id="downloadCsvButton" class="w-full py-2 px-5 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Download Registrations (CSV)
+                    </button>
+                    <!-- Registration List -->
+                    <div id="registrations-list-container" class="max-h-64 overflow-y-auto space-y-3 bg-gray-50 p-4 rounded-lg border">
+                        <p id="no-registrations" class="text-gray-500 text-center">No teams have registered yet.</p>
+                        <!-- List is injected here -->
+                    </div>
+                </div>
+                
+                <!-- Right Column: Sponsorship Tools -->
+                <div class="space-y-4">
+                    <h4 class="text-xl font-bold text-gray-800">Sponsorship Tools</h4>
+                    <button onclick="draftSponsorshipEmail()" id="draftButton" class="w-full py-3 bg-edu-purple text-white font-bold rounded-md shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-edu-purple focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
+                        <svg id="draftIcon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        <span id="draftText">Draft Sponsorship Email</span>
+                        <div id="draftLoader" class="loader w-6 h-6 border-4 border-t-4 border-white rounded-full hidden"></div>
+                    </button>
+                    <!-- Draft Result Area -->
+                    <div id="draftResult" class="hidden p-4 bg-gray-100 rounded-lg shadow-inner max-h-64 overflow-y-auto">
+                        <h4 class="font-bold text-gray-800 mb-2">Generated Draft:</h4>
+                        <pre id="draftContent" class="whitespace-pre-wrap text-sm text-gray-700 bg-white p-3 rounded-md border"></pre>
+                        <button onclick="copyToClipboard('draftContent')" class="mt-3 text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-1 px-3 rounded-full transition">
+                            Copy to Clipboard
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Modal Footer -->
+            <button onclick="closeAdminPanel()" class="mt-8 w-full py-2 px-4 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 transition duration-150">
+                Close Admin Panel
+            </button>
+        </div>
+    </div>
+    
+    <!-- Custom Alert Modal (for general feedback) -->
     <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300">
             <h3 id="custom-alert-title" class="text-xl font-bold text-gray-800 mb-2">Alert</h3>
@@ -355,24 +420,8 @@
         </div>
     </div>
 
-    <!-- News Ticker Footer -->
-    <footer class="news-ticker sticky bottom-0 z-10">
-        <div class="ticker-wrapper" id="tickerWrapper">
-            <!-- Fallback Content -->
-            <div class="ticker-item"><strong>EDU-LEAGUE:</strong> Battle within Educators</div>
-            <div class="ticker-item"><strong>REGISTRATION:</strong> November 10th - November 25th</div>
-            <div class="ticker-item"><strong>CONTACT:</strong> Opeyemi 08140712347, Rotimi 09021070738</div>
-            <div class="ticker-item"><strong>LEVELS:</strong> Finalist (400Lvl), Penultimate (300Lvl), Sophomore (200Lvl)</div>
-            <!-- Duplicate for loop -->
-            <div class="ticker-item"><strong>EDU-LEAGUE:</strong> Battle within Educators</div>
-            <div class="ticker-item"><strong>REGISTRATION:</strong> November 10th - November 25th</div>
-            <div class="ticker-item"><strong>CONTACT:</strong> Opeyemi 08140712347, Rotimi 09021070738</div>
-            <div class="ticker-item"><strong>LEVELS:</strong> Finalist (400Lvl), Penultimate (300Lvl), Sophomore (200Lvl)</div>
-        </div>
-    </footer>
 
-
-    <!-- Main Application Script (Firebase & Logic) -->
+    <!-- Main Application Script -->
     <script type="module">
         // --- Firebase SDK Imports (CDN Modules) ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
@@ -380,7 +429,7 @@
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, getDocs, setLogLevel } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-        // --- *** STEP 1: YOUR FIREBASE CONFIG IS PASTED HERE *** ---
+        // --- STEP 1: YOUR FIREBASE CONFIG IS PASTED HERE ---
         const firebaseConfig = {
            apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
            authDomain: "sonic-verbena-239117.firebaseapp.com",
@@ -391,14 +440,14 @@
            appId: "1:652544574249:web:6ff33771307e892e7f6d38",
            measurementId: "G-TD780JGNED"
          };
-        // --- *** END OF CONFIG ---
+        // --- END OF CONFIG ---
 
         // --- Firebase & App State ---
         let db;
         let auth;
         let userId;
         let registrationsCollection;
-        const ADMIN_PASSWORD = "EDUADMIN2025"; // Your new admin password
+        const ADMIN_PASSWORD = "EDUADMIN2025";
         
         // --- DOM Elements ---
         const form = document.getElementById('registrationForm');
@@ -410,7 +459,7 @@
         const draftIcon = document.getElementById('draftIcon');
         const draftResult = document.getElementById('draftResult');
         const draftContent = document.getElementById('draftContent');
-        const registrationsModal = document.getElementById('registrations-modal');
+        const adminPanelModal = document.getElementById('admin-panel-modal');
         const registrationsListContainer = document.getElementById('registrations-list-container');
         const noRegistrationsMessage = document.getElementById('no-registrations');
         const regCount = document.getElementById('regCount');
@@ -439,6 +488,7 @@
             throw new Error('API request failed after maximum retries.');
         }
 
+        // --- Sponsorship Email ---
         window.draftSponsorshipEmail = async function() {
             draftButton.disabled = true;
             draftText.textContent = 'Generating Draft...';
@@ -446,18 +496,21 @@
             draftLoader.classList.remove('hidden');
             draftResult.classList.add('hidden');
             draftContent.textContent = '';
+            
             const eventDetails = {
                 name: "EDU-LEAGUE CHAMPIONSHIP - Battle within Educators",
                 organizer: "NUESA x FACULTY OF EDUCATION SPORT SECRETARY COUNCIL",
                 structure: "8 Departments, 3 Levels (Finalist, Penultimate, Sophomore), 3 Cups",
-                dates: "Registration Nov 10th - Nov 25th",
+                dates: "Registration Nov 15th - Nov 25th", // Corrected Date
                 fee: "#70,000 per level",
-                contact: "Opeyemi 08140712347, Rotimi 09021070738",
+                contact: "OPEYEMI 08140712347", // Corrected Contact
             };
+
             const systemPrompt = "You are an expert sports league manager and persuasive copywriter. Your goal is to draft a professional, concise email aimed at securing event sponsorship. The tone should be formal yet exciting. Include a placeholder for the sponsor's name, and clearly highlight the potential audience size and the structure of the league.";
             const userQuery = `Draft a sponsorship inquiry email for the event named: ${eventDetails.name}. It is presented by ${eventDetails.organizer}. The event involves ${eventDetails.structure} and has an Entry Fee of ${eventDetails.fee}. The registration window is ${eventDetails.dates}. Contact for details: ${eventDetails.contact}. The email should be concise (under 200 words) and highlight exposure to the entire faculty community.`;
             const payload = { contents: [{ parts: [{ text: userQuery }] }], systemInstruction: { parts: [{ text: systemPrompt }] }, };
             const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) };
+
             try {
                 const response = await fetchWithExponentialBackoff(apiUrl, options);
                 if (!response.ok) { throw new Error(`API request failed with status ${response.status}`); }
@@ -481,6 +534,7 @@
 
         // --- Form & Modal Logic ---
 
+        // Handle the main registration form submission
         window.handleSubmit = async function(event) {
             event.preventDefault(); 
             if (!form.checkValidity()) {
@@ -496,7 +550,6 @@
             submitButton.disabled = true;
             submitButton.textContent = "Processing...";
 
-            // Get form data
             const department = document.getElementById('department').value;
             const coachName = document.getElementById('coachName').value;
             const email = document.getElementById('email').value;
@@ -505,7 +558,7 @@
             const fee = "70000"; 
 
             const registrationData = {
-                teamName: department, // Use department as the main identifier
+                teamName: department,
                 coachName: coachName,
                 email,
                 phone,
@@ -514,22 +567,19 @@
                 registeredAt: new Date().toISOString(),
                 paymentStatus: "Pending",
                 registrationStatus: "Pending Payment",
-                players: [] // Initialize as empty array
+                players: []
             };
 
             try {
-                // Save data to Firestore
                 const docRef = await addDoc(registrationsCollection, registrationData);
                 console.log("Document written with ID: ", docRef.id);
-                
                 form.reset();
                 
-                // Redirect to payment page
                 const params = new URLSearchParams({
                     team: department,
                     level: level,
                     fee: fee,
-                    teamId: docRef.id // Pass the Firestore Document ID
+                    teamId: docRef.id
                 });
                 window.location.assign(`./payment_page.html?${params.toString()}`);
                 
@@ -542,20 +592,18 @@
             return false;
         }
 
+        // Show the final 100% complete message
         window.showConfirmation = function() {
             confirmationBox.classList.remove('opacity-0', 'pointer-events-none');
             confirmationBox.classList.add('opacity-100', 'pointer-events-auto');
             confirmationBox.querySelector('div').classList.remove('scale-95');
             confirmationBox.querySelector('div').classList.add('scale-100');
         }
-
         window.closeConfirmation = function() {
             confirmationBox.classList.add('opacity-0', 'pointer-events-none');
-            confirmationBox.classList.remove('opacity-100', 'pointer-events-auto');
-            confirmationBox.querySelector('div').classList.add('scale-95');
-            confirmationBox.querySelector('div').classList.remove('scale-100');
         }
         
+        // General alert modal
         window.showCustomAlert = function(title, message) {
             customAlertTitle.textContent = title;
             customAlertMessage.textContent = message;
@@ -564,14 +612,11 @@
             customAlertModal.querySelector('div').classList.remove('scale-95');
             customAlertModal.querySelector('div').classList.add('scale-100');
         }
-        
         window.closeCustomAlert = function() {
             customAlertModal.classList.add('opacity-0', 'pointer-events-none');
-            customAlertModal.classList.remove('opacity-100');
-            customAlertModal.querySelector('div').classList.add('scale-95');
-            customAlertModal.querySelector('div').classList.remove('scale-100');
         }
 
+        // Copy to clipboard utility
         window.copyToClipboard = function(elementId) {
             const element = document.getElementById(elementId);
             const textToCopy = element.innerText;
@@ -592,6 +637,7 @@
         
         // --- Admin Security & Data Functions ---
         
+        // Show the password prompt
         window.promptAdminPassword = function() {
             adminPasswordInput.value = "";
             adminPasswordError.classList.add('hidden');
@@ -604,35 +650,29 @@
         
         window.closeAdminPrompt = function() {
             adminPromptModal.classList.add('opacity-0', 'pointer-events-none');
-            adminPromptModal.classList.remove('opacity-100');
-            adminPromptModal.querySelector('div').classList.add('scale-95');
-            adminPromptModal.querySelector('div').classList.remove('scale-100');
         }
         
+        // Check password and open admin panel
         window.checkAdminPassword = function() {
             const pass = adminPasswordInput.value;
             if (pass === ADMIN_PASSWORD) {
                 closeAdminPrompt();
-                showRegistrations(); // Success! Show the real modal.
+                // Show the main admin panel
+                adminPanelModal.classList.remove('opacity-0', 'pointer-events-none');
+                adminPanelModal.classList.add('opacity-100', 'pointer-events-auto');
+                adminPanelModal.querySelector('div').classList.remove('scale-95');
+                adminPanelModal.querySelector('div').classList.add('scale-100');
             } else {
                 adminPasswordError.classList.remove('hidden');
             }
         }
         
-        window.showRegistrations = function() {
-            registrationsModal.classList.remove('opacity-0', 'pointer-events-none');
-            registrationsModal.classList.add('opacity-100', 'pointer-events-auto');
-            registrationsModal.querySelector('div').classList.remove('scale-95');
-            registrationsModal.querySelector('div').classList.add('scale-100');
-        }
-
-        window.closeRegistrations = function() {
-            registrationsModal.classList.add('opacity-0', 'pointer-events-none');
-            registrationsModal.classList.remove('opacity-100', 'pointer-events-auto');
-            registrationsModal.querySelector('div').classList.add('scale-95');
-            registrationsModal.querySelector('div').classList.remove('scale-100');
+        // Close the main admin panel
+        window.closeAdminPanel = function() {
+            adminPanelModal.classList.add('opacity-0', 'pointer-events-none');
         }
         
+        // Set up the real-time list of registrations
         function setupRegistrationListener() {
             if (!registrationsCollection) {
                  console.error("setupRegistrationListener: No collection ref.");
@@ -678,6 +718,7 @@
             });
         }
         
+        // Download all registrations as a CSV file
         window.downloadCSV = async function() {
             if (!registrationsCollection) {
                 showCustomAlert("Error", "Database not connected.");
@@ -689,14 +730,12 @@
                 const querySnapshot = await getDocs(registrationsCollection);
                 let csvContent = "data:text/csv;charset=utf-8,";
                 
-                // CSV Headers
                 const headers = [
                     "Department", "Level", "CoachName", "Phone", "Email", 
                     "PaymentStatus", "RegistrationStatus", "RegisteredAt", "Roster"
                 ];
                 csvContent += headers.join(",") + "\r\n";
 
-                // CSV Rows
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     const players = (data.players || []).join(" | "); // Join players with a pipe
@@ -709,14 +748,13 @@
                         `"${data.paymentStatus || ''}"`,
                         `"${data.registrationStatus || ''}"`,
                         `"${data.registeredAt || ''}"`,
-                        `"${players}"` // Add the player list as the last column
+                        `"${players}"`
                     ];
                     csvContent += row.join(",") + "\r\n";
                 });
                 
                 closeCustomAlert();
                 
-                // Create and trigger download link
                 const encodedUri = encodeURI(csvContent);
                 const link = document.createElement("a");
                 link.setAttribute("href", encodedUri);
@@ -733,25 +771,18 @@
         
         // --- News Ticker ---
         async function fetchNews() {
-            // Static content as a fallback
             const staticNews = [
                 "<strong>EDU-LEAGUE:</strong> Battle within Educators",
-                "<strong>REGISTRATION:</strong> November 10th - November 25th",
-                "<strong>CONTACT:</strong> Opeyemi 08140712347, Rotimi 09021070738",
+                "<strong>REGISTRATION:</strong> Nov 15th - Nov 25th",
+                "<strong>CONTACT:</strong> OPEYEMI 08140712347",
                 "<strong>LEVELS:</strong> Finalist (400Lvl), Penultimate (300Lvl), Sophomore (200Lvl)"
             ];
             
             let newsHtml = "";
-            staticNews.forEach(item => {
-                newsHtml += `<div class="ticker-item">${item}</div>`;
-            });
-            // Duplicate for a smooth loop
-            staticNews.forEach(item => {
-                newsHtml += `<div class="ticker-item">${item}</div>`;
-            });
+            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
+            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
             tickerWrapper.innerHTML = newsHtml;
 
-            // Try to fetch live news and replace if successful
             const proxyUrl = 'https://api.allorigins.win/raw?url=';
             const rssFeedUrl = 'https://feeds.skysports.com/data/football.xml';
             try {
@@ -762,21 +793,18 @@
                 const items = data.querySelectorAll("item");
                 let liveNewsHtml = "";
                 items.forEach((el, index) => {
-                    if (index < 15) { // Get first 15 headlines
+                    if (index < 15) { 
                         const title = el.querySelector("title").innerHTML;
                         liveNewsHtml += `<div class="ticker-item"><strong>LATEST:</strong> ${title}</div>`;
                     }
                 });
-                
                 if(liveNewsHtml) {
                     tickerWrapper.innerHTML = liveNewsHtml + liveNewsHtml; // Duplicate for loop
                 }
             } catch (error) {
                 console.error('Error fetching live news:', error);
-                // The static content is already there, so no need to do anything else.
             }
             
-            // Add hover-to-pause
             const ticker = document.querySelector('.news-ticker');
             ticker.addEventListener('mouseover', () => tickerWrapper.style.animationPlayState = 'paused');
             ticker.addEventListener('mouseout', () => tickerWrapper.style.animationPlayState = 'running');
@@ -786,7 +814,6 @@
         // --- Initialize Firebase ---
         async function initializeFirebase() {
              try {
-                // *** UPDATED: Manually initialize app ***
                 if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("PASTE_YOUR_CONFIG_HERE")) {
                     showCustomAlert("Error", "Firebase configuration is missing. Database features will not work.");
                     console.error("Firebase config is missing. Please paste it into index.html.");
@@ -797,34 +824,25 @@
                 const analytics = getAnalytics(app); // Initialize analytics
                 db = getFirestore(app);
                 auth = getAuth(app);
-                // setLogLevel('Debug'); // Enable for deep debugging
-
-                // Sign in the user
+                
                 await signInAnonymously(auth);
 
-                // Setup listener for auth changes
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         userId = user.uid;
                         console.log("User signed in:", userId);
-                        
-                        // *** UPDATED: Simplified collection path for live deploy ***
                         registrationsCollection = collection(db, "registrations");
-                        
-                        // Start the real-time listener for registrations
                         setupRegistrationListener();
                         
-                        // Check for final completion status
                         const urlParams = new URLSearchParams(window.location.search);
                         if (urlParams.get('status') === 'complete') {
-                             showConfirmation(); // Show the "Registration 100% Complete" modal
+                             showConfirmation();
                             window.history.replaceState(null, '', window.location.pathname);
                         }
-                        
                     } else {
                         console.log("User signed out.");
                         userId = null;
-                        registrationsCollection = null; // Clear collection reference
+                        registrationsCollection = null;
                     }
                 });
 
@@ -842,7 +860,7 @@
         let currentSlide = 0;
         const slider = document.getElementById('logoSlider');
         const slides = document.querySelectorAll('.slider-item');
-        const totalSlides = slides.length / 2; // Since we duplicated them
+        const totalSlides = slides.length / 2; 
 
         function nextSlide() {
             currentSlide++;
@@ -850,16 +868,15 @@
             slider.style.transform = `translateX(-${currentSlide * 100}%)`;
 
             if (currentSlide >= totalSlides) {
-                // After reaching the "duplicate" slide, reset to the start without animation
                 setTimeout(() => {
                     currentSlide = 0;
                     slider.style.transition = 'none';
                     slider.style.transform = `translateX(0)`;
-                }, 500); // Wait for the transition to finish
+                }, 500); 
             }
         }
         
-        setInterval(nextSlide, 5000); // Changed to 5 seconds
+        setInterval(nextSlide, 5000); // 5 seconds
 
     </script>
 </body>
