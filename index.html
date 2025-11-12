@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- ... (All the <head> contents are the same as your last version) ... -->
+    <!-- ... (All the <head> contents are the same) ... -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDU-LEAGUE CHAMPIONSHIP Registration</title>
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-        /* ... (All the <style> code is identical to your last version) ... */
+        /* ... (All the <style> code is identical) ... */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f7f9fd; }
         .bg-edu-purple { background-color: #6d28d9; }
@@ -102,8 +102,8 @@
 
     <!-- Main Content Area -->
     <main class="flex-grow flex items-center justify-center p-4">
+        <!-- ... (All your existing sidebar and form HTML is here, unchanged) ... -->
         <div class="max-w-4xl w-full bg-white shadow-2xl rounded-xl overflow-hidden md:flex">
-
             <!-- Left Panel (Sidebar) -->
             <div class="md:w-1/3 bg-edu-purple text-white p-8 space-y-6 flex flex-col justify-center rounded-t-xl md:rounded-l-xl md:rounded-t-none">
                 <div class="flex justify-center pt-4 md:pt-0">
@@ -407,16 +407,16 @@
     <!-- Main Application Script (Firebase & Logic) -->
     <script type="module">
         // --- Firebase SDK Imports ---
-        import { initializeApp } from "https.www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-        import { getAnalytics } from "https.www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https.www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, getDocs, doc, setDoc, serverTimestamp, setLogLevel } from "https.www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, getDocs, doc, setDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
         // --- *** YOUR FIREBASE CONFIG IS PASTED HERE *** ---
         const firebaseConfig = {
            apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
            authDomain: "sonic-verbena-239117.firebaseapp.com",
-           databaseURL: "https.sonic-verbena-239117.firebaseio.com",
+           databaseURL: "https-sonic-verbena-239117.firebaseio.com",
            projectId: "sonic-verbena-239117",
            storageBucket: "sonic-verbena-239117.firebasestorage.app",
            messagingSenderId: "652544574249",
@@ -432,7 +432,7 @@
         let registrationsCollection;
         let newsCollection, scheduleCollection, galleryCollection, settingsCollection;
         
-        // --- ** NEW: Admin & Reporter Passwords ** ---
+        // --- Admin & Reporter Passwords ---
         const SUPER_ADMIN_PASSWORD = "EDUADMIN2025"; 
         const REPORTER_PASSWORDS = [
             "NEWS2025",
@@ -474,7 +474,7 @@
 
         // --- LLM API Setup ---
         const apiKey = ""; 
-        const apiUrl = `https.generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
         
         // --- Utility function for exponential backoff ---
         async function fetchWithExponentialBackoff(url, options, maxRetries = 5) {
@@ -488,6 +488,26 @@
             }
             throw new Error('API request failed after maximum retries.');
         }
+
+        // --- ** NEW: Modal Helper Functions (FIX) ** ---
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            const content = modal.querySelector('.modal-content');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.add('opacity-100');
+            if (content) content.classList.remove('scale-95');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            const content = modal.querySelector('.modal-content');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.classList.remove('opacity-100');
+            if (content) content.classList.add('scale-95');
+        }
+        // --- ** END OF FIX ** ---
 
         // --- Admin Panel Tab Logic ---
         adminTabButtons.forEach(button => {
@@ -633,24 +653,6 @@
             return false;
         }
 
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (!modal) return;
-            const content = modal.querySelector('.modal-content');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            modal.classList.add('opacity-100');
-            if (content) content.classList.remove('scale-95');
-        }
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (!modal) return;
-            const content = modal.querySelector('.modal-content');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            modal.classList.remove('opacity-100');
-            if (content) content.classList.add('scale-95');
-        }
-
         window.showConfirmation = () => openModal('confirmation-box');
         window.closeConfirmation = () => closeModal('confirmation-box');
         window.showCustomAlert = (title, message) => {
@@ -695,7 +697,7 @@
                 return;
             }
 
-            // ** NEW: Check if password is in the reporter list **
+            // Check if password is in the reporter list
             const isReporter = REPORTER_PASSWORDS.some(reporterPass => reporterPass.toLowerCase() === passLower);
             
             if (isReporter) {
@@ -706,7 +708,6 @@
             }
         }
         
-        // ** NEW: 'role' parameter ('admin' or 'reporter') **
         window.showAdminPanel = function(role = 'reporter') {
             if (role === 'admin') {
                 // Show all tabs
@@ -830,8 +831,8 @@
             staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
             staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
             tickerWrapper.innerHTML = newsHtml;
-            const proxyUrl = 'https.api.allorigins.win/raw?url=';
-            const rssFeedUrl = 'https.feeds.skysports.com/data/football.xml';
+            const proxyUrl = 'https_api.allorigins.win/raw?url=';
+            const rssFeedUrl = 'https_feeds.skysports.com/data/football.xml';
             try {
                 const response = await fetch(proxyUrl + encodeURIComponent(rssFeedUrl));
                 if (!response.ok) throw new Error('Network response was not ok for live news.');
