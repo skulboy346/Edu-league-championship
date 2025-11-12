@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDU-LEAGUE CHAMPIONSHIP 2025</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* Custom Font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fd;
+        }
+        .bg-edu-purple { background-color: #6d28d9; }
+        .text-edu-purple { color: #6d28d9; }
+        .bg-edu-yellow { background-color: #fbbf24; }
+        
+        /* Tab Styles */
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button[aria-selected="true"] {
+            border-color: #6d28d9;
+            background-color: #6d28d9;
+            color: white;
+        }
+        .tab-button[aria-selected="false"] {
+            border-color: #d1d5db;
+            background-color: #f3f4f6;
+            color: #4b5563;
+        }
+        .tab-panel {
+            display: none; /* Hidden by default, shown by JS */
+        }
+        
+        /* News Ticker Footer */
+        .news-ticker {
+            width: 100%;
+            background-color: #1f2937;
+            color: white;
+            padding: 0.75rem 0;
+            overflow: hidden;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .ticker-wrapper {
+            display: flex;
+            white-space: nowrap;
+            animation: ticker 60s linear infinite; 
+        }
+        .ticker-item { padding: 0 1.5rem; color: #d1d5db; }
+        .ticker-item strong { color: #fbbf24; }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .social-bar {
+            background-color: #374151;
+            border-top: 1px solid #4b5563;
+        }
+        .social-icon { transition: color 0.3s ease; }
+        /* Brand Colors */
+        .social-fb { color: #1877F2; } .social-fb:hover { color: #FFFFFF; }
+        .social-tk { color: #000000; } .social-tk:hover { color: #FFFFFF; }
+        .social-yt { color: #FF0000; } .social-yt:hover { color: #FFFFFF; }
+        .social-ig { color: #E4405F; } .social-ig:hover { color: #FFFFFF; }
+    </style>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+    <!-- ** NEW: Main Navigation Bar ** -->
+    <nav class="bg-white shadow-md sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="edulogo.jpg" alt="Logo" class="h-10 w-10 rounded-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/40x40/6d28d9/fbbf24?text=EDU';">
+                <span class="text-xl font-bold text-edu-purple">EDU-LEAGUE</span>
+            </div>
+            <div class="flex space-x-4">
+                <a href="./index.html" class="text-gray-600 hover:text-edu-purple font-semibold">Registration</a>
+                <a href="./championship.html" class="text-edu-purple font-bold border-b-2 border-edu-purple">Championship Hub</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow container mx-auto p-4 md:p-8">
+        <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-8">EDU-LEAGUE CHAMPIONSHIP 2025</h1>
+
+        <!-- Tab Navigation -->
+        <div class="mb-6">
+            <div class="flex flex-wrap justify-center -mb-px space-x-2 md:space-x-4" id="tab-buttons" role="tablist">
+                <button class="tab-button text-lg font-bold py-3 px-6 rounded-t-lg border-b-2" id="tab-news" role="tab" aria-controls="panel-news" aria-selected="true">
+                    News & Updates
+                </button>
+                <button class="tab-button text-lg font-bold py-3 px-6 rounded-t-lg border-b-2" id="tab-schedule" role="tab" aria-controls="panel-schedule" aria-selected="false">
+                    Schedule & Scores
+                </button>
+                <button class="tab-button text-lg font-bold py-3 px-6 rounded-t-lg border-b-2" id="tab-gallery" role="tab" aria-controls="panel-gallery" aria-selected="false">
+                    Gallery
+                </button>
+                <button class="tab-button text-lg font-bold py-3 px-6 rounded-t-lg border-b-2" id="tab-stream" role="tab" aria-controls="panel-stream" aria-selected="false">
+                    Live Stream
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Content Panels -->
+        <div id="tab-panels" class="bg-white rounded-lg shadow-xl p-6 md:p-10 min-h-[400px]">
+            <!-- News Panel -->
+            <div id="panel-news" role="tabpanel" aria-labelledby="tab-news" class="tab-panel space-y-6">
+                <!-- News items will be loaded here by JS -->
+                <p id="no-news" class="text-center text-gray-500">No news updates posted yet. Check back soon!</p>
+            </div>
+
+            <!-- Schedule Panel -->
+            <div id="panel-schedule" role="tabpanel" aria-labelledby="tab-schedule" class="tab-panel">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Matchup</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status / Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedule-body" class="bg-white divide-y divide-gray-200">
+                            <!-- Schedule items will be loaded here by JS -->
+                            <tr id="no-schedule"><td colspan="3" class="px-6 py-4 text-center text-gray-500">Match schedule has not been posted yet.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Gallery Panel -->
+            <div id="panel-gallery" role="tabpanel" aria-labelledby="tab-gallery" class="tab-panel">
+                <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Gallery items will be loaded here by JS -->
+                    <p id="no-gallery" class="text-center text-gray-500 col-span-full">No photos or videos have been added to the gallery.</p>
+                </div>
+            </div>
+
+            <!-- Live Stream Panel -->
+            <div id="panel-stream" role="tabpanel" aria-labelledby="tab-stream" class="tab-panel">
+                <div class="aspect-w-16 aspect-h-9 bg-black rounded-lg overflow-hidden shadow-lg">
+                    <iframe id="stream-iframe" class="w-full h-full" 
+                            src="" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+                <div id="no-stream" class="text-center text-gray-500 p-8">
+                    <h3 class="text-2xl font-bold mb-2">No Live Stream Active</h3>
+                    <p>When a match is live, the stream will appear here. Check the schedule for match times!</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="sticky bottom-0 z-10 mt-12">
+        <!-- Social Media Bar -->
+        <div class="social-bar p-3">
+            <div class="max-w-4xl mx-auto flex justify-center items-center space-x-6">
+                <a href="https://facebook.com/YOUR-PAGE-HERE" target="_blank" class="social-icon social-fb" aria-label="Facebook"><i class="fab fa-facebook fa-2x"></i></a>
+                <a href="https://tiktok.com/@YOUR-PAGE-HERE" target="_blank" class="social-icon social-tk" aria-label="TikTok"><i class="fab fa-tiktok fa-2x"></i></a>
+                <a href="https://youtube.com/YOUR-CHANNEL-HERE" target="_blank" class="social-icon social-yt" aria-label="YouTube"><i class="fab fa-youtube fa-2x"></i></a>
+                <a href="https://instagram.com/YOUR-PAGE-HERE" target="_blank" class="social-icon social-ig" aria-label="Instagram"><i class="fab fa-instagram fa-2x"></i></a>
+            </div>
+        </div>
+        <!-- News Ticker -->
+        <div class="news-ticker">
+            <div class="ticker-wrapper" id="tickerWrapper">
+                <!-- Content will be injected by JS -->
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Custom Alert Modal -->
+    <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300 modal-content">
+            <h3 id="custom-alert-title" class="text-xl font-bold text-gray-800 mb-2">Alert</h3>
+            <p id="custom-alert-message" class="text-gray-600 mb-6">This is an alert message.</p>
+            <button onclick="closeCustomAlert()" class="py-2 px-6 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">
+                OK
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Firebase & Logic Script -->
+    <script type="module">
+        // --- Firebase SDK Imports (CDN Modules) ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, query, doc, orderBy, setLogLevel } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+        // --- *** STEP 1: PASTE YOUR CONFIG HERE *** ---
+        // Replace this with the config object from your Firebase project
+        const firebaseConfig = {
+            apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
+            authDomain: "sonic-verbena-239117.firebaseapp.com",
+            databaseURL: "https://sonic-verbena-239117.firebaseio.com",
+            projectId: "sonic-verbena-239117",
+            storageBucket: "sonic-verbena-239117.firebasestorage.app",
+            messagingSenderId: "652544574249",
+            appId: "1:652544574249:web:6ff33771307e892e7f6d38",
+            measurementId: "G-TD780JGNED"
+        };
+        // --- *** END OF CONFIG ---
+
+        // --- Firebase & App State ---
+        let db;
+        let auth;
+        let userId;
+
+        // --- DOM Elements ---
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+        const newsPanel = document.getElementById('panel-news');
+        const noNews = document.getElementById('no-news');
+        const scheduleBody = document.getElementById('schedule-body');
+        const noSchedule = document.getElementById('no-schedule');
+        const galleryGrid = document.getElementById('gallery-grid');
+        const noGallery = document.getElementById('no-gallery');
+        const streamIframe = document.getElementById('stream-iframe');
+        const noStream = document.getElementById('no-stream');
+        const tickerWrapper = document.getElementById('tickerWrapper');
+        const customAlertModal = document.getElementById('custom-alert-modal');
+        const customAlertTitle = document.getElementById('custom-alert-title');
+        const customAlertMessage = document.getElementById('custom-alert-message');
+
+        // --- Tab Navigation Logic ---
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Deselect all buttons and hide all panels
+                tabButtons.forEach(btn => btn.setAttribute('aria-selected', 'false'));
+                tabPanels.forEach(panel => panel.style.display = 'none');
+                
+                // Select clicked button and show its panel
+                button.setAttribute('aria-selected', 'true');
+                const panelId = button.getAttribute('aria-controls');
+                document.getElementById(panelId).style.display = 'block';
+            });
+        });
+        // Show the first tab by default
+        document.getElementById('panel-news').style.display = 'block';
+
+        // --- Modal Functions ---
+        function openModal(modalId) { /* ... (utility function) ... */ }
+        function closeModal(modalId) { /* ... (utility function) ... */ }
+        window.showCustomAlert = (title, message) => {
+            customAlertTitle.textContent = title;
+            customAlertMessage.textContent = message;
+            customAlertModal.classList.remove('opacity-0', 'pointer-events-none');
+            customAlertModal.classList.add('opacity-100');
+        }
+        window.closeCustomAlert = () => {
+            customAlertModal.classList.add('opacity-0', 'pointer-events-none');
+            customAlertModal.classList.remove('opacity-100');
+        }
+
+        // --- News Ticker (Copied from index.html) ---
+        async function fetchNews() {
+            // Static content as a fallback
+            const staticNews = [
+                "<strong>EDU-LEAGUE:</strong> Battle within Educators",
+                "<strong>REGISTRATION:</strong> Nov 15th - Nov 25th",
+                "<strong>CONTACT:</strong> OPEYEMI 08140712347",
+                "<strong>LEVELS:</strong> 🏆 Finalist (400Lvl) 🔥 Penultimate (300Lvl) 👟 Sophomore (200Lvl)"
+            ];
+            
+            let newsHtml = "";
+            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
+            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; }); // Duplicate for loop
+            tickerWrapper.innerHTML = newsHtml;
+
+            // Try to fetch live news and replace if successful
+            const proxyUrl = 'https://api.allorigins.win/raw?url=';
+            const rssFeedUrl = 'https://feeds.skysports.com/data/football.xml';
+            try {
+                const response = await fetch(proxyUrl + encodeURIComponent(rssFeedUrl));
+                if (!response.ok) throw new Error('Network response was not ok for live news.');
+                const str = await response.text();
+                const data = new window.DOMParser().parseFromString(str, "text/xml");
+                const items = data.querySelectorAll("item");
+                let liveNewsHtml = "";
+                items.forEach((el, index) => {
+                    if (index < 15) { 
+                        const title = el.querySelector("title").innerHTML;
+                        liveNewsHtml += `<div class="ticker-item"><strong>LATEST:</strong> ${title}</div>`;
+                    }
+                });
+                
+                if(liveNewsHtml) {
+                    tickerWrapper.innerHTML = newsHtml + liveNewsHtml + newsHtml + liveNewsHtml; 
+                }
+            } catch (error) {
+                console.error('Error fetching live news:', error);
+            }
+            
+            const ticker = document.querySelector('.news-ticker');
+            ticker.addEventListener('mouseover', () => tickerWrapper.style.animationPlayState = 'paused');
+            ticker.addEventListener('mouseout', () => tickerWrapper.style.animationPlayState = 'running');
+        }
+        
+        // --- Data Fetching Logic ---
+        
+        // 1. Listen for News Updates
+        function listenForNews(db) {
+            const newsCollection = collection(db, "news_posts");
+            // Order by timestamp, descending (newest first)
+            const q = query(newsCollection, orderBy("timestamp", "desc"));
+            
+            onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    noNews.style.display = 'block';
+                    newsPanel.innerHTML = '';
+                    newsPanel.appendChild(noNews);
+                    return;
+                }
+                
+                noNews.style.display = 'none';
+                newsPanel.innerHTML = ''; // Clear panel
+                snapshot.forEach((doc) => {
+                    const post = doc.data();
+                    const postEl = document.createElement('article');
+                    postEl.className = 'border-b border-gray-200 pb-6';
+                    postEl.innerHTML = `
+                        <h2 class="text-2xl font-bold text-edu-purple mb-2">${post.title}</h2>
+                        <p class="text-sm text-gray-500 mb-3">Posted on ${new Date(post.timestamp.toDate()).toLocaleString()}</p>
+                        <p class="text-gray-700 whitespace-pre-wrap">${post.content}</p>
+                    `;
+                    newsPanel.appendChild(postEl);
+                });
+            }, (error) => {
+                console.error("Error fetching news: ", error);
+                noNews.textContent = "Error loading news updates.";
+                noNews.style.display = 'block';
+            });
+        }
+        
+        // 2. Listen for Schedule Updates
+        function listenForSchedule(db) {
+            const scheduleCollection = collection(db, "schedules");
+            // Order by match time, ascending (upcoming first)
+            const q = query(scheduleCollection, orderBy("matchTime"));
+            
+            onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    noSchedule.style.display = 'table-row';
+                    scheduleBody.innerHTML = '';
+                    scheduleBody.appendChild(noSchedule);
+                    return;
+                }
+                
+                noSchedule.style.display = 'none';
+                scheduleBody.innerHTML = ''; // Clear body
+                snapshot.forEach((doc) => {
+                    const match = doc.data();
+                    const matchTime = new Date(match.matchTime).toLocaleString();
+                    const statusColor = match.status === 'Live' ? 'text-red-600 font-bold' : (match.status === 'Final' ? 'text-gray-900 font-bold' : 'text-gray-500');
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${matchTime}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${match.teamA} vs ${match.teamB}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm ${statusColor}">${match.status}</td>
+                    `;
+                    scheduleBody.appendChild(row);
+                });
+            }, (error) => {
+                console.error("Error fetching schedule: ", error);
+                noSchedule.cells[0].textContent = "Error loading schedule.";
+                noSchedule.style.display = 'table-row';
+            });
+        }
+        
+        // 3. Listen for Gallery Updates
+        function listenForGallery(db) {
+            const galleryCollection = collection(db, "gallery_links");
+            const q = query(galleryCollection, orderBy("timestamp", "desc"));
+            
+            onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    noGallery.style.display = 'block';
+                    galleryGrid.innerHTML = '';
+                    galleryGrid.appendChild(noGallery);
+                    return;
+                }
+                
+                noGallery.style.display = 'none';
+                galleryGrid.innerHTML = ''; // Clear grid
+                snapshot.forEach((doc) => {
+                    const item = doc.data();
+                    const itemEl = document.createElement('a');
+                    itemEl.href = item.url;
+                    itemEl.target = "_blank";
+                    itemEl.rel = "noopener noreferrer";
+                    itemEl.className = "block bg-gray-100 rounded-lg shadow overflow-hidden group";
+                    
+                    // Simple placeholder. For real images, you'd need a thumbnail URL.
+                    // Here we just link the text.
+                    itemEl.innerHTML = `
+                        <div class="p-4">
+                            <h3 class="text-lg font-bold text-edu-purple group-hover:underline">${item.title}</h3>
+                            <p class="text-sm text-gray-500 truncate">${item.url}</p>
+                        </div>
+                    `;
+                    galleryGrid.appendChild(itemEl);
+                });
+            }, (error) => {
+                console.error("Error fetching gallery: ", error);
+                noGallery.textContent = "Error loading gallery.";
+                noGallery.style.display = 'block';
+            });
+        }
+        
+        // 4. Listen for Live Stream Updates
+        function listenForLiveStream(db) {
+            const streamDoc = doc(db, "settings", "live_stream");
+            
+            onSnapshot(streamDoc, (doc) => {
+                if (doc.exists()) {
+                    const data = doc.data();
+                    let url = data.url;
+                    
+                    if (url) {
+                        // Attempt to convert YouTube/Facebook URLs to embeddable URLs
+                        if (url.includes("youtube.com/watch?v=")) {
+                            url = url.replace("watch?v=", "embed/");
+                        } else if (url.includes("youtu.be/")) {
+                            url = url.replace("youtu.be/", "youtube.com/embed/");
+                        } else if (url.includes("facebook.com/") && url.includes("/videos/")) {
+                            url = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false`;
+                        }
+                        
+                        streamIframe.src = url;
+                        streamIframe.style.display = 'block';
+                        noStream.style.display = 'none';
+                    } else {
+                        streamIframe.src = "";
+                        streamIframe.style.display = 'none';
+                        noStream.style.display = 'block';
+                    }
+                } else {
+                    streamIframe.src = "";
+                    streamIframe.style.display = 'none';
+                    noStream.style.display = 'block';
+                }
+            }, (error) => {
+                console.error("Error fetching live stream: ", error);
+                noStream.innerHTML = "<h3 class='text-2xl font-bold mb-2'>Error Loading Stream</h3><p>Could not connect to the live stream settings.</p>";
+                noStream.style.display = 'block';
+            });
+        }
+
+        // --- Initialize Firebase ---
+        async function initializeFirebase() {
+             try {
+                if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("PASTE_YOUR_CONFIG_HERE")) {
+                    showCustomAlert("Error", "Firebase configuration is missing. Database features will not work.");
+                    console.error("Firebase config is missing. Please paste it into championship.html.");
+                    return;
+                }
+
+                const app = initializeApp(firebaseConfig);
+                const analytics = getAnalytics(app); 
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                await signInAnonymously(auth);
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("User signed in:", userId);
+                        
+                        // Start all data listeners
+                        listenForNews(db);
+                        listenForSchedule(db);
+                        listenForGallery(db);
+                        listenForLiveStream(db);
+                        
+                    } else {
+                        console.log("User signed out.");
+                        userId = null;
+                    }
+                });
+
+            } catch (error) {
+                console.error("Firebase Initialization Error:", error);
+                showCustomAlert("Error", "Could not connect to the database. " + error.message);
+            }
+        }
+
+        // --- Start the App ---
+        initializeFirebase();
+        fetchNews();
+    </script>
+</body>
+</html>
