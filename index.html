@@ -86,7 +86,7 @@
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen">
 
-    <!-- ** NEW: Main Navigation Bar ** -->
+    <!-- ** Main Navigation Bar ** -->
     <nav class="bg-white shadow-md sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <a href="./championship.html" class="flex items-center space-x-2">
@@ -102,10 +102,11 @@
 
     <!-- Main Content Area -->
     <main class="flex-grow flex items-center justify-center p-4">
-        <!-- ... (All your existing sidebar and form HTML is here, unchanged) ... -->
         <div class="max-w-4xl w-full bg-white shadow-2xl rounded-xl overflow-hidden md:flex">
+
             <!-- Left Panel (Sidebar) -->
             <div class="md:w-1/3 bg-edu-purple text-white p-8 space-y-6 flex flex-col justify-center rounded-t-xl md:rounded-l-xl md:rounded-t-none">
+                <!-- ... (Sidebar content is all correct) ... -->
                 <div class="flex justify-center pt-4 md:pt-0">
                     <img src="edulogo.jpg" alt="Edu-League Logo" class="rounded-full border-4 border-purple-300 shadow-lg w-32 h-32 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/128x128/6d28d9/fbbf24?text=EDU-LEAGUE';">
                 </div>
@@ -143,6 +144,7 @@
 
             <!-- Right Panel: Registration Form -->
             <div class="md:w-2/3 p-8 md:p-12">
+                <!-- ... (Form content is all correct) ... -->
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">Team Registration Form</h2>
                 <div class="bg-edu-yellow text-gray-800 p-4 rounded-lg shadow-md mb-6 font-semibold md:flex justify-between items-center text-center md:text-left">
                     <p>REGISTRATION: Nov 15th - Nov 25th</p>
@@ -416,7 +418,7 @@
         const firebaseConfig = {
            apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
            authDomain: "sonic-verbena-239117.firebaseapp.com",
-           databaseURL: "https-sonic-verbena-239117.firebaseio.com",
+           databaseURL: "https://sonic-verbena-239117.firebaseio.com",
            projectId: "sonic-verbena-239117",
            storageBucket: "sonic-verbena-239117.firebasestorage.app",
            messagingSenderId: "652544574249",
@@ -831,8 +833,8 @@
             staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
             staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
             tickerWrapper.innerHTML = newsHtml;
-            const proxyUrl = 'https_api.allorigins.win/raw?url=';
-            const rssFeedUrl = 'https_feeds.skysports.com/data/football.xml';
+            const proxyUrl = 'https://api.allorigins.win/raw?url=';
+            const rssFeedUrl = 'https://feeds.skysports.com/data/football.xml';
             try {
                 const response = await fetch(proxyUrl + encodeURIComponent(rssFeedUrl));
                 if (!response.ok) throw new Error('Network response was not ok for live news.');
@@ -894,38 +896,39 @@
         initializeFirebase();
         fetchNews();
         
-        // --- Slider Logic ---
+        // --- ** NEW: Corrected Slider Logic ** ---
         (function() {
             const slider = document.getElementById('logoSlider');
             if (!slider) return;
             const slides = slider.querySelectorAll('.slider-item');
-            if (slides.length <= 1) return; // Don't run if 1 or 0 slides
+            if (slides.length <= 1) return;
             
-            const totalSlides = slides.length; // This is the 3 unique slides
+            const totalSlides = slides.length; // 3
             let currentSlide = 0;
             
-            // Clone slides for infinite loop
-            slides.forEach(slide => {
-                slider.appendChild(slide.cloneNode(true));
-            });
+            // Clone first slide and add to end
+            slider.appendChild(slides[0].cloneNode(true));
+            
+            const slideInterval = 8000; // 8s pause
+            const transitionTime = 1000; // 1s transition
 
             function nextSlide() {
                 currentSlide++;
-                slider.style.transition = 'transform 1s ease-in-out'; // 1s slide
+                slider.style.transition = `transform ${transitionTime}ms ease-in-out`;
                 slider.style.transform = `translateX(-${currentSlide * 100}%)`;
 
-                // When it reaches the end of the *original* set
                 if (currentSlide === totalSlides) {
-                    // After the transition finishes, jump back to the start
+                    // We've reached the clone
+                    // After the transition finishes, reset
                     setTimeout(() => {
-                        slider.style.transition = 'none'; // No animation for the jump
-                        slider.style.transform = `translateX(0)`; // Jump to slide 0
+                        slider.style.transition = 'none';
+                        slider.style.transform = 'translateX(0)';
                         currentSlide = 0;
-                    }, 1000); // Must match transition duration
+                    }, transitionTime); // Wait for transition to end
                 }
             }
             
-            setInterval(nextSlide, 8000); // 8s pause + 1s slide = 9s total per slide
+            setInterval(nextSlide, slideInterval); // Run `nextSlide` every 8s
         })();
 
     </script>
