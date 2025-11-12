@@ -1,191 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ... (All the <head> contents are the same as your last version) ... -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDU-LEAGUE CHAMPIONSHIP Registration</title>
-    
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome for Social Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-        /* Custom Font */
+        /* ... (All the <style> code is identical to your last version) ... */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7f9fd;
-        }
-        /* Custom color classes matching the purple/yellow theme */
-        .bg-edu-purple { background-color: #6d28d9; /* Deep Purple */ }
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fd; }
+        .bg-edu-purple { background-color: #6d28d9; }
         .text-edu-purple { color: #6d28d9; }
-        .bg-edu-yellow { background-color: #fbbf24; /* Amber/Yellow */ }
+        .bg-edu-yellow { background-color: #fbbf24; }
         .hover-edu-yellow:hover { background-color: #f59e0b; }
-        /* Style for the message boxes (modal replacement) */
         #confirmation-box, #registrations-modal, #custom-alert-modal, #admin-prompt-modal, #admin-panel-modal {
             transition: opacity 0.3s ease-in-out;
         }
-        /* Loading spinner */
+        .modal-content { transition: all 0.3s ease-in-out; }
         .loader {
             border-top-color: #6d28d9;
-            -webkit-animation: spinner 1.5s linear infinite;
             animation: spinner 1.5s linear infinite;
         }
-        @-webkit-keyframes spinner {
-            0% { -webkit-transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); }
-        }
-        @keyframes spinner {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        /* --- Slider Styles --- */
+        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* Slider Styles */
         .slider-container {
-            width: 150px; /* Square size - new width */
-            height: 150px; /* Square size - new height */
-            margin: 0 auto; /* Center the slider */
-            overflow: hidden;
-            border-radius: 0.5rem;
-            border: 3px solid #fbbf24; /* Yellow border */
+            width: 150px; height: 150px; margin: 0 auto;
+            overflow: hidden; border-radius: 0.5rem; border: 3px solid #fbbf24;
         }
         .slider-wrapper {
-            display: flex;
-            transition: transform 1s ease-in-out; /* Slower 1s transition */
-            height: 100%; /* Ensure wrapper takes full height */
+            display: flex; transition: transform 1s ease-in-out; /* Slower 1s transition */
+            height: 100%;
         }
         .slider-item {
-            min-width: 100%;
-            height: 100%; /* Ensure item takes full height */
-            box-sizing: border-box;
-            text-align: center;
-            color: white;
-            font-weight: bold;
-            background-color: #4c1d95; /* Darker purple bg for slides */
-            display: flex; /* Use flex to center image vertically */
-            align-items: center; /* Center image vertically */
-            justify-content: center; /* Center image horizontally */
+            min-width: 100%; height: 100%; box-sizing: border-box;
+            text-align: center; color: white; font-weight: bold;
+            background-color: #4c1d95; display: flex;
+            align-items: center; justify-content: center;
         }
         .slider-item img {
-            width: 100%; /* Fill the container */
-            height: 100%; /* Fill the container */
-            object-fit: cover; /* Fill the square, may crop edges */
+            width: 100%; height: 100%; object-fit: cover; /* Fill the square */
         }
-        
-        /* --- Social Media Bar --- */
-        .social-bar {
-            background-color: #f9fafb; /* Light gray */
-            border-top: 1px solid #e5e7eb; /* Reduced border size */
-        }
-        .social-icon {
-            font-size: 1.75rem; /* 28px */
-            transition: color 0.2s ease-in-out;
-            /* Brand colors */
-            color: #1877F2; /* Default, will be overridden */
-        }
-        .fa-facebook { color: #1877F2; }
-        .fa-tiktok { color: #000000; }
-        .fa-youtube { color: #FF0000; }
-        .fa-instagram { color: #E4405F; }
-        /* Hover state */
-        .social-icon:hover {
-            color: #4b5563 !important; /* Change to gray on hover */
-        }
-
-        /* --- News Ticker Footer --- */
+        /* News Ticker Footer */
         .news-ticker {
-            width: 100%;
-            background-color: #1f2937; /* Dark gray/blue */
-            color: white;
-            padding: 0.75rem 0;
-            overflow: hidden;
+            width: 100%; background-color: #1f2937; color: white;
+            padding: 0.75rem 0; overflow: hidden;
             box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         .ticker-wrapper {
-            display: flex;
-            white-space: nowrap;
+            display: flex; white-space: nowrap;
             animation: ticker 60s linear infinite; 
         }
-        .ticker-item {
-            padding: 0 1.5rem;
-            color: #d1d5db; /* Lighter gray text */
+        .ticker-item { padding: 0 1.5rem; color: #d1d5db; }
+        .ticker-item strong { color: #fbbf24; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .social-bar {
+            background-color: #374151;
+            border-top: 1px solid #4b5563;
         }
-        .ticker-item strong {
-            color: #fbbf24; /* Yellow for headlines */
+        .social-icon { transition: color 0.3s ease; }
+        .social-fb { color: #1877F2; } .social-fb:hover { color: #FFFFFF; }
+        .social-tk { color: #000000; } .social-tk:hover { color: #FFFFFF; }
+        .social-yt { color: #FF0000; } .social-yt:hover { color: #FFFFFF; }
+        .social-ig { color: #E4405F; } .social-ig:hover { color: #FFFFFF; }
+        
+        /* Admin Panel Tab Styles */
+        .admin-tab-button {
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
         }
-        @keyframes ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        .admin-tab-button[aria-selected="true"] {
+            border-bottom-color: #6d28d9;
+            color: #6d28d9;
+            font-weight: 600;
+        }
+        .admin-tab-button[aria-selected="false"] {
+            color: #6b7280;
+        }
+        .admin-tab-panel {
+            display: none; /* Hidden by default */
         }
     </style>
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen">
 
+    <!-- Main Navigation Bar -->
+    <nav class="bg-white shadow-md sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="edulogo.jpg" alt="Logo" class="h-10 w-10 rounded-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/40x40/6d28d9/fbbf24?text=EDU';">
+                <span class="text-xl font-bold text-edu-purple">EDU-LEAGUE</span>
+            </div>
+            <div class="flex space-x-4">
+                <a href="./index.html" class="text-edu-purple font-bold border-b-2 border-edu-purple">Registration</a>
+                <a href="./championship.html" class="text-gray-600 hover:text-edu-purple font-semibold">Championship Hub</a>
+            </div>
+        </div>
+    </nav>
+
     <!-- Main Content Area -->
     <main class="flex-grow flex items-center justify-center p-4">
         <div class="max-w-4xl w-full bg-white shadow-2xl rounded-xl overflow-hidden md:flex">
 
-            <!-- Left Panel: Event Details -->
+            <!-- Left Panel (Sidebar) -->
             <div class="md:w-1/3 bg-edu-purple text-white p-8 space-y-6 flex flex-col justify-center rounded-t-xl md:rounded-l-xl md:rounded-t-none">
-                
-                <!-- Main Logo -->
                 <div class="flex justify-center pt-4 md:pt-0">
                     <img src="edulogo.jpg" alt="Edu-League Logo" class="rounded-full border-4 border-purple-300 shadow-lg w-32 h-32 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/128x128/6d28d9/fbbf24?text=EDU-LEAGUE';">
                 </div>
-
-                <!-- Event Title -->
                 <div class="text-center md:text-left">
                     <h1 class="text-3xl font-extrabold tracking-tight">EDU-LEAGUE CHAMPIONSHIP</h1>
                     <p class="mt-1 text-purple-200 text-lg">Battle within Educators</p>
                 </div>
-
-                <!-- League Level Slider -->
                 <div class="space-y-2">
                     <h2 class="text-xl font-bold border-b border-purple-400 pb-2">League Levels</h2>
                     <div class="slider-container shadow-lg">
                         <div class="slider-wrapper" id="logoSlider">
-                            <!-- Slide 1 -->
-                            <div class="slider-item">
-                                <img src="Finalist.png" alt="Finalist League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/22c55e?text=Finalist.png';">
-                            </div>
-                            <!-- Slide 2 -->
-                            <div class="slider-item">
-                                <img src="Penultimate.png" alt="Penultimate League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/3b82f6?text=Penultimate.png';">
-                            </div>
-                            <!-- Slide 3 -->
-                            <div class="slider-item">
-                                <img src="Sophomore.png" alt="Sophomore League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/ef4444?text=Sophomore.png';">
-                            </div>
-                            
-                            <!-- Slide 1 (Duplicate for smooth loop) -->
-                            <div class="slider-item">
-                                <img src="Finalist.png" alt="Finalist League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/22c55e?text=Finalist.png';">
-                            </div>
+                            <div class="slider-item"><img src="Finalist.png" alt="Finalist League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/22c55e?text=Finalist.png';"></div>
+                            <div class="slider-item"><img src="Penultimate.png" alt="Penultimate League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/3b82f6?text=Penultimate.png';"></div>
+                            <div class="slider-item"><img src="Sophomore.png" alt="Sophomore League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/ef4444?text=Sophomore.png';"></div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Event Structure -->
                 <div class="space-y-4">
                     <h2 class="text-xl font-bold border-b border-purple-400 pb-2">Event Structure</h2>
                     <ul class="space-y-2 text-purple-100 font-semibold">
-                        <li class="flex items-center space-x-2">
-                            <svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 0 100-16 8 8 0 000 16zm-1-8V7a1 1 0 012 0v3h2a1 1 0 110 2h-2v2a1 1 0 11-2 0v-2H7a1 1 0 110-2h2z"/></svg>
-                            <span>Competing Departments: 8</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-4 7a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/></svg>
-                            <span>Championship Levels: 3</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/></svg>
-                            <span>Available Trophies: 3 Cups</span>
-                        </li>
+                        <li class="flex items-center space-x-2"><svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 0 100-16 8 8 0 000 16zm-1-8V7a1 1 0 012 0v3h2a1 1 0 110 2h-2v2a1 1 0 11-2 0v-2H7a1 1 0 110-2h2z"/></svg><span>Competing Departments: 8</span></li>
+                        <li class="flex items-center space-x-2"><svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-4 7a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/></svg><span>Championship Levels: 3</span></li>
+                        <li class="flex items-center space-x-2"><svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/></svg><span>Available Trophies: 3 Cups</span></li>
                     </ul>
                 </div>
-
-                <!-- Presenters -->
                 <div class="pt-4 border-t border-purple-400 text-center md:text-left">
                     <p class="text-sm font-light">Presented by:</p>
                     <p class="text-lg font-bold">NUESA x FESSC</p>
@@ -199,17 +144,11 @@
             <!-- Right Panel: Registration Form -->
             <div class="md:w-2/3 p-8 md:p-12">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">Team Registration Form</h2>
-
-                <!-- Key Dates & Fee Bar -->
                 <div class="bg-edu-yellow text-gray-800 p-4 rounded-lg shadow-md mb-6 font-semibold md:flex justify-between items-center text-center md:text-left">
                     <p>REGISTRATION: Nov 15th - Nov 25th</p>
                     <p class="mt-2 md:mt-0 md:border-l md:pl-4 border-gray-600">ENTRY FEE PER LEVEL: #70,000</p>
                 </div>
-
-                <!-- Form -->
                 <form id="registrationForm" onsubmit="handleSubmit(event); return false;" class="space-y-4">
-                    
-                    <!-- Department Selection -->
                     <div>
                         <label for="department" class="block text-sm font-medium text-gray-700">Department Affiliation</label>
                         <select id="department" name="department" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border bg-white">
@@ -224,14 +163,10 @@
                             <option value="Technology and Vocational Education (TVESA)">Technology and Vocational Education (TVESA)</option>
                         </select>
                     </div>
-
-                    <!-- Coach Name -->
                     <div>
                         <label for="coachName" class="block text-sm font-medium text-gray-700">Coach Name</label>
                         <input type="text" id="coachName" name="coachName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
                     </div>
-
-                    <!-- Contact Details Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
@@ -242,33 +177,18 @@
                             <input type="tel" id="phone" name="phone" pattern="[0-9]{11}" placeholder="e.g., 08140712347" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
                         </div>
                     </div>
-                    
-                    <!-- Level Selection -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Select Competition Level (3 Levels)</label>
                         <div class="flex flex-wrap gap-4">
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="level" value="Finalist (400Lvl)" required class="form-radio text-edu-purple focus:ring-edu-purple">
-                                <span class="ml-2">Finalist (400Lvl)</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="level" value="Penultimate (300Lvl)" class="form-radio text-edu-purple focus:ring-edu-purple">
-                                <span class="ml-2">Penultimate (300Lvl)</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="level" value="Sophomore (200Lvl)" class="form-radio text-edu-purple focus:ring-edu-purple">
-                                <span class="ml-2">Sophomore (200Lvl)</span>
-                            </label>
+                            <label class="inline-flex items-center"><input type="radio" name="level" value="Finalist (400Lvl)" required class="form-radio text-edu-purple focus:ring-edu-purple"><span class="ml-2">Finalist (400Lvl)</span></label>
+                            <label class="inline-flex items-center"><input type="radio" name="level" value="Penultimate (300Lvl)" class="form-radio text-edu-purple focus:ring-edu-purple"><span class="ml-2">Penultimate (300Lvl)</span></label>
+                            <label class="inline-flex items-center"><input type="radio" name="level" value="Sophomore (200Lvl)" class="form-radio text-edu-purple focus:ring-edu-purple"><span class="ml-2">Sophomore (200Lvl)</span></label>
                         </div>
                     </div>
-
-                    <!-- Submit Button -->
                     <button type="submit" id="submitButton" class="w-full mt-6 py-3 bg-edu-yellow text-gray-900 font-bold rounded-md shadow-lg hover-edu-yellow focus:outline-none focus:ring-2 focus:ring-edu-yellow focus:ring-offset-2 transition duration-150 ease-in-out">
                         Register Team Now
                     </button>
                 </form>
-                
-                <!-- Contact Information -->
                 <div class="mt-8 pt-4 border-t border-gray-200 text-center">
                     <p class="text-sm text-gray-600 font-semibold">For Enquiries & Sponsorship:</p>
                     <p class="text-lg font-bold text-edu-purple mt-1">OPEYEMI 08140712347</p>
@@ -277,17 +197,15 @@
 
         </div>
     </main>
-
+    
     <!-- Floating Admin Button -->
-    <button onclick="promptAdminPassword()" id="floatingAdminButton" class="fixed bottom-24 right-6 bg-edu-purple text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center z-40 hover:bg-purple-800 transition-transform transform hover:scale-110">
+    <button onclick="promptAdminPassword()" id="admin-fab" class="fixed bottom-24 right-6 bg-edu-purple text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center z-40 hover:bg-purple-800 transition-transform hover:scale-110">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
     </button>
 
-    <!-- MODALS -->
-    
-    <!-- Registration Confirmation Box (Modal Replacement) -->
+    <!-- Registration Confirmation Box (Modal) -->
     <div id="confirmation-box" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
-        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300">
+        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300 modal-content">
             <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             <h3 class="text-xl font-bold text-gray-800 mb-2">Registration 100% Complete!</h3>
             <p class="text-gray-600 mb-6">Your team is fully registered and your roster is submitted. Good luck!</p>
@@ -297,11 +215,11 @@
         </div>
     </div>
     
-    <!-- Admin Password Prompt Modal -->
+    <!-- Admin Password Prompt (Modal) -->
     <div id="admin-prompt-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300">
-            <h3 class="text-xl font-bold text-gray-800 mb-4">Admin Access Required</h3>
-            <p class="text-gray-600 mb-4">Please enter the admin password.</p>
+        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300 modal-content">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Admin/Reporter Login</h3>
+            <p class="text-gray-600 mb-4">Please enter your access password.</p>
             <input type="password" id="adminPasswordInput" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border mb-2" placeholder="Enter password...">
             <p id="adminPasswordError" class="text-sm text-red-600 mb-4 hidden">Incorrect password.</p>
             <div class="flex gap-4">
@@ -315,61 +233,9 @@
         </div>
     </div>
     
-    <!-- Admin PANEL Modal (Contains all tools) -->
-    <div id="admin-panel-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
-        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-4xl w-full text-left transform transition-all scale-95 duration-300">
-            <!-- Modal Header -->
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-gray-800">Admin Panel</h3>
-                <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-gray-600">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            
-            <!-- Admin Content -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
-                <!-- Left: Registrations List -->
-                <div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-3">Registered Teams (<span id="regCount">0</span>)</h4>
-                    <button onclick="downloadCSV()" id="downloadCsvButton" class="w-full mb-4 py-2 px-5 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        Download Registrations (CSV)
-                    </button>
-                    <div id="registrations-list-container" class="max-h-96 overflow-y-auto space-y-3 bg-gray-50 p-4 rounded-lg border">
-                        <p id="no-registrations" class="text-gray-500 text-center">No teams have registered yet.</p>
-                    </div>
-                </div>
-                
-                <!-- Right: Sponsorship Tools -->
-                <div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-3">Sponsorship Tools ✨</h4>
-                    <button onclick="draftSponsorshipEmail()" id="draftButton" class="w-full py-3 bg-edu-purple text-white font-bold rounded-md shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-edu-purple focus:ring-offset-2 transition duration-150 ease-in-out flex items-center justify-center">
-                        <svg id="draftIcon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                        <span id="draftText">Draft Sponsorship Email</span>
-                        <div id="draftLoader" class="loader w-6 h-6 border-4 border-t-4 border-white rounded-full hidden"></div>
-                    </button>
-                    <div id="draftResult" class="mt-4 hidden p-4 bg-gray-100 rounded-lg shadow-inner max-h-96 overflow-y-auto">
-                        <h4 class="font-bold text-gray-800 mb-2">Generated Draft:</h4>
-                        <pre id="draftContent" class="whitespace-pre-wrap text-sm text-gray-700 bg-white p-3 rounded-md border"></pre>
-                        <button onclick="copyToClipboard('draftContent')" class="mt-3 text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-1 px-3 rounded-full transition">
-                            Copy to Clipboard
-                        </button>
-                    </div>
-                </div>
-                
-            </div>
-            
-            <!-- Modal Footer -->
-            <button onclick="closeAdminPanel()" class="mt-8 w-full py-2 px-4 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 transition duration-150">
-                Close Admin Panel
-            </button>
-        </div>
-    </div>
-    
-    <!-- Custom Alert Modal -->
+    <!-- Custom Alert Modal (Modal) -->
     <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300">
+        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300 modal-content">
             <h3 id="custom-alert-title" class="text-xl font-bold text-gray-800 mb-2">Alert</h3>
             <p id="custom-alert-message" class="text-gray-600 mb-6">This is an alert message.</p>
             <button onclick="closeCustomAlert()" class="py-2 px-6 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">
@@ -377,40 +243,162 @@
             </button>
         </div>
     </div>
+    
+    <!-- Main Admin Panel (Modal) -->
+    <div id="admin-panel-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
+        <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full text-left transform transition-all scale-95 duration-300 modal-content flex flex-col max-h-[90vh]">
+            
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 class="text-2xl font-bold text-gray-800">Admin Panel</h3>
+                <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <!-- Admin Tab Buttons -->
+            <div class="border-b border-gray-200 px-6">
+                <nav class="flex flex-wrap -mb-px space-x-6" id="admin-tab-buttons" role="tablist">
+                    <button class="admin-tab-button py-4 px-1" id="admin-tab-registrations" role="tab" aria-controls="admin-panel-registrations" aria-selected="true">Registrations</button>
+                    <button class="admin-tab-button py-4 px-1" id="admin-tab-news" role="tab" aria-controls="admin-panel-news" aria-selected="false">Post News</button>
+                    <button class="admin-tab-button py-4 px-1" id="admin-tab-schedule" role="tab" aria-controls="admin-panel-schedule" aria-selected="false">Manage Schedule</button>
+                    <button class="admin-tab-button py-4 px-1" id="admin-tab-gallery" role="tab" aria-controls="admin-panel-gallery" aria-selected="false">Manage Gallery</button>
+                    <button class="admin-tab-button py-4 px-1" id="admin-tab-stream" role="tab" aria-controls="admin-panel-stream" aria-selected="false">Live Stream</button>
+                    <button class="admin-tab-button py-4 px-1" id="admin-tab-sponsor" role="tab" aria-controls="admin-panel-sponsor" aria-selected="false">Sponsorship</button>
+                </nav>
+            </div>
+            
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-6 space-y-6 overflow-y-auto">
+                <!-- Admin Tab Panels -->
+                
+                <!-- Panel 1: Registrations -->
+                <div id="admin-panel-registrations" role="tabpanel" aria-labelledby="admin-tab-registrations" class="admin-tab-panel">
+                    <button onclick="downloadCSV()" id="downloadCsvButton" class="w-full md:w-auto mb-4 py-2 px-5 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Download Registrations (CSV)
+                    </button>
+                    <div id="registrations-list-container" class="max-h-96 overflow-y-auto space-y-3 bg-gray-50 p-4 rounded-lg border">
+                        <p id="no-registrations" class="text-gray-500 text-center">No teams have registered yet.</p>
+                        <!-- List from 'setupRegistrationListener' goes here -->
+                    </div>
+                </div>
+                
+                <!-- Panel 2: Post News -->
+                <div id="admin-panel-news" role="tabpanel" aria-labelledby="admin-tab-news" class="admin-tab-panel space-y-4">
+                    <h4 class="text-xl font-semibold text-gray-700">Post a New Update</h4>
+                    <form id="newsForm" onsubmit="postNews(event); return false;">
+                        <div>
+                            <label for="newsTitle" class="block text-sm font-medium text-gray-700">Title</label>
+                            <input type="text" id="newsTitle" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
+                        </div>
+                        <div>
+                            <label for="newsContent" class="block text-sm font-medium text-gray-700">Content</label>
+                            <textarea id="newsContent" rows="5" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple p-2 border"></textarea>
+                        </div>
+                        <button type="submit" id="postNewsButton" class="py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700">Post News</button>
+                    </form>
+                </div>
+                
+                <!-- Panel 3: Manage Schedule -->
+                <div id="admin-panel-schedule" role="tabpanel" aria-labelledby="admin-tab-schedule" class="admin-tab-panel space-y-4">
+                    <h4 class="text-xl font-semibold text-gray-700">Add/Update Match Schedule</h4>
+                    <form id="scheduleForm" onsubmit="postSchedule(event); return false;" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="teamA" class="block text-sm font-medium text-gray-700">Team A</label>
+                            <input type="text" id="teamA" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                        </div>
+                        <div>
+                            <label for="teamB" class="block text-sm font-medium text-gray-700">Team B</label>
+                            <input type="text" id="teamB" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="matchTime" class="block text-sm font-medium text-gray-700">Date and Time</label>
+                            <input type="datetime-local" id="matchTime" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                        </div>
+                        <div>
+                            <label for="matchStatus" class="block text-sm font-medium text-gray-700">Status / Final Score</label>
+                            <input type="text" id="matchStatus" placeholder="e.g., Upcoming, or 2-1" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" id="postScheduleButton" class="py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700">Add Match to Schedule</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Panel 4: Manage Gallery -->
+                <div id="admin-panel-gallery" role="tabpanel" aria-labelledby="admin-tab-gallery" class="admin-tab-panel space-y-4">
+                    <h4 class="text-xl font-semibold text-gray-700">Add Gallery Link</h4>
+                    <form id="galleryForm" onsubmit="postGalleryLink(event); return false;">
+                        <div>
+                            <label for="galleryTitle" class="block text-sm font-medium text-gray-700">Title</label>
+                            <input type="text" id="galleryTitle" placeholder="e.g., Finals Day Highlights" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                        </div>
+                        <div>
+                            <label for="galleryUrl" class="block text-sm font-medium text-gray-700">URL (Link to Imgur, Facebook Album, or YouTube Video)</label>
+                            <input type="url" id="galleryUrl" placeholder="https://..." required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                        </div>
+                        <button type="submit" id="postGalleryButton" class="py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700">Add to Gallery</button>
+                    </form>
+                </div>
+                
+                <!-- Panel 5: Live Stream -->
+                <div id="admin-panel-stream" role="tabpanel" aria-labelledby="admin-tab-stream" class="admin-tab-panel space-y-4">
+                    <h4 class="text-xl font-semibold text-gray-700">Set Live Stream URL</h4>
+                    <form id="streamForm" onsubmit="setLiveStream(event); return false;">
+                        <div>
+                            <label for="streamUrl" class="block text-sm font-medium text-gray-700">Stream URL (YouTube or Facebook Live)</label>
+                            <input type="url" id="streamUrl" placeholder="https://youtube.com/live/..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                            <p class="text-xs text-gray-500 mt-1">Leave blank and save to turn off the stream.</p>
+                        </div>
+                        <button type="submit" id="setStreamButton" class="py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700">Set Stream</button>
+                    </form>
+                </div>
 
-    <!-- Page Footer -->
-    <footer class="sticky bottom-0 z-10">
-        <!-- Social Media Bar -->
-        <div class="social-bar p-4">
-            <div class="flex justify-center items-center space-x-6">
-                <a href="https://facebook.com/YOUR-PAGE-HERE" target="_blank" class="text-gray-400" title="Facebook">
-                    <i class="fab fa-facebook social-icon"></i>
-                </a>
-                <a href="https://tiktok.com/@YOUR-PAGE-HERE" target="_blank" class="text-gray-400" title="TikTok">
-                    <i class="fab fa-tiktok social-icon"></i>
-                </a>
-                <a href="https://youtube.com/YOUR-CHANNEL-HERE" target="_blank" class="text-gray-400" title="YouTube">
-                    <i class="fab fa-youtube social-icon"></i>
-                </a>
-                <a href="https://instagram.com/YOUR-PAGE-HERE" target="_blank" class="text-gray-400" title="Instagram">
-                    <i class="fab fa-instagram social-icon"></i>
-                </a>
+                <!-- Panel 6: Sponsorship -->
+                <div id="admin-panel-sponsor" role="tabpanel" aria-labelledby="admin-tab-sponsor" class="admin-tab-panel space-y-4">
+                    <h4 class="text-xl font-semibold text-gray-700">Draft Sponsorship Email</h4>
+                    <button onclick="draftSponsorshipEmail()" id="draftButton" class="w-full py-3 bg-edu-purple text-white font-bold rounded-md shadow-lg hover:bg-purple-700 flex items-center justify-center">
+                        <svg id="draftIcon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        <span id="draftText">Draft Sponsorship Email</span>
+                        <div id="draftLoader" class="loader w-6 h-6 border-4 border-t-4 border-white rounded-full hidden"></div>
+                    </button>
+                    <div id="draftResult" class="hidden p-4 bg-gray-100 rounded-lg shadow-inner">
+                        <h4 class="font-bold text-gray-800 mb-2">Generated Draft:</h4>
+                        <pre id="draftContent" class="whitespace-pre-wrap text-sm text-gray-700 bg-white p-3 rounded-md border max-h-60 overflow-y-auto"></pre>
+                        <button onclick="copyToClipboard('draftContent')" class="mt-3 text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-1 px-3 rounded-full transition">
+                            Copy to Clipboard
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="p-4 bg-gray-50 border-t text-right">
+                <button onclick="closeAdminPanel()" class="py-2 px-6 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 transition duration-150">
+                    Close Panel
+                </button>
             </div>
         </div>
-        
+    </div>
+
+
+    <!-- Footer Area -->
+    <footer class="sticky bottom-0 z-10">
+        <!-- Social Media Bar -->
+        <div class="social-bar p-3">
+            <div class="max-w-4xl mx-auto flex justify-center items-center space-x-6">
+                <a href="https://facebook.com/YOUR-PAGE-HERE" target="_blank" class="social-icon social-fb" aria-label="Facebook"><i class="fab fa-facebook fa-2x"></i></a>
+                <a href="https://tiktok.com/@YOUR-PAGE-HERE" target="_blank" class="social-icon social-tk" aria-label="TikTok"><i class="fab fa-tiktok fa-2x"></i></a>
+                <a href="https://youtube.com/YOUR-CHANNEL-HERE" target="_blank" class="social-icon social-yt" aria-label="YouTube"><i class="fab fa-youtube fa-2x"></i></a>
+                <a href="https://instagram.com/YOUR-PAGE-HERE" target="_blank" class="social-icon social-ig" aria-label="Instagram"><i class="fab fa-instagram fa-2x"></i></a>
+            </div>
+        </div>
         <!-- News Ticker -->
         <div class="news-ticker">
             <div class="ticker-wrapper" id="tickerWrapper">
-                <!-- Static content as fallback -->
-                <div class="ticker-item"><strong>EDU-LEAGUE:</strong> Battle within Educators</div>
-                <div class="ticker-item"><strong>REGISTRATION:</strong> Nov 15th - Nov 25th</div>
-                <div class="ticker-item"><strong>CONTACT:</strong> OPEYEMI 08140712347</div>
-                <div class="ticker-item"><strong>LEVELS:</strong> 🏆 Finalist (400Lvl), 🔥 Penultimate (300Lvl), 👟 Sophomore (200Lvl)</div>
-                <!-- Duplicate for loop -->
-                <div class="ticker-item"><strong>EDU-LEAGUE:</strong> Battle within Educators</div>
-                <div class="ticker-item"><strong>REGISTRATION:</strong> Nov 15th - Nov 25th</div>
-                <div class="ticker-item"><strong>CONTACT:</strong> OPEYEMI 08140712347</div>
-                <div class="ticker-item"><strong>LEVELS:</strong> 🏆 Finalist (400Lvl), 🔥 Penultimate (300Lvl), 👟 Sophomore (200Lvl)</div>
+                <!-- Content will be injected by JS -->
             </div>
         </div>
     </footer>
@@ -418,17 +406,17 @@
 
     <!-- Main Application Script (Firebase & Logic) -->
     <script type="module">
-        // --- Firebase SDK Imports (CDN Modules) ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, getDocs, setLogLevel } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+        // --- Firebase SDK Imports ---
+        import { initializeApp } from "https.www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+        import { getAnalytics } from "https.www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https.www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, getDocs, doc, setDoc, serverTimestamp, setLogLevel } from "https.www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-        // --- *** STEP 1: YOUR FIREBASE CONFIG IS PASTED HERE *** ---
+        // --- *** YOUR FIREBASE CONFIG IS PASTED HERE *** ---
         const firebaseConfig = {
            apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
            authDomain: "sonic-verbena-239117.firebaseapp.com",
-           databaseURL: "https://sonic-verbena-239117.firebaseio.com",
+           databaseURL: "https.sonic-verbena-239117.firebaseio.com",
            projectId: "sonic-verbena-239117",
            storageBucket: "sonic-verbena-239117.firebasestorage.app",
            messagingSenderId: "652544574249",
@@ -442,36 +430,53 @@
         let auth;
         let userId;
         let registrationsCollection;
-        const ADMIN_PASSWORD = "EDUADMIN2025"; // Your new admin password
+        let newsCollection, scheduleCollection, galleryCollection, settingsCollection;
+        
+        // --- ** NEW: Admin & Reporter Passwords ** ---
+        const SUPER_ADMIN_PASSWORD = "EDUADMIN2025"; 
+        const REPORTER_PASSWORDS = [
+            "NEWS2025",
+            "MEDIA2025",
+            "POST2025"
+        ];
         
         // --- DOM Elements ---
         const form = document.getElementById('registrationForm');
         const submitButton = document.getElementById('submitButton');
         const confirmationBox = document.getElementById('confirmation-box');
-        const draftButton = document.getElementById('draftButton');
-        const draftLoader = document.getElementById('draftLoader');
-        const draftText = document.getElementById('draftText');
-        const draftIcon = document.getElementById('draftIcon');
-        const draftResult = document.getElementById('draftResult');
-        const draftContent = document.getElementById('draftContent');
-        const registrationsModal = document.getElementById('admin-panel-modal'); // Changed to new panel
         const registrationsListContainer = document.getElementById('registrations-list-container');
         const noRegistrationsMessage = document.getElementById('no-registrations');
-        const regCount = document.getElementById('regCount');
         const customAlertModal = document.getElementById('custom-alert-modal');
         const customAlertTitle = document.getElementById('custom-alert-title');
         const customAlertMessage = document.getElementById('custom-alert-message');
         const adminPromptModal = document.getElementById('admin-prompt-modal');
         const adminPasswordInput = document.getElementById('adminPasswordInput');
         const adminPasswordError = document.getElementById('adminPasswordError');
-        const adminPanelModal = document.getElementById('admin-panel-modal');
         const tickerWrapper = document.getElementById('tickerWrapper');
+        const adminPanelModal = document.getElementById('admin-panel-modal');
+        const adminTabButtons = document.querySelectorAll('.admin-tab-button');
+        const adminTabPanels = document.querySelectorAll('.admin-tab-panel');
+        const draftButton = document.getElementById('draftButton');
+        const draftLoader = document.getElementById('draftLoader');
+        const draftText = document.getElementById('draftText');
+        const draftIcon = document.getElementById('draftIcon');
+        const draftResult = document.getElementById('draftResult');
+        const draftContent = document.getElementById('draftContent');
+        
+        // Admin Tab Buttons (for hiding/showing)
+        const tabBtnRegistrations = document.getElementById('admin-tab-registrations');
+        const tabBtnSponsor = document.getElementById('admin-tab-sponsor');
+        const tabBtnNews = document.getElementById('admin-tab-news');
+        const panelRegistrations = document.getElementById('admin-panel-registrations');
+        const panelSponsor = document.getElementById('admin-panel-sponsor');
+        const panelNews = document.getElementById('admin-panel-news');
+
 
         // --- LLM API Setup ---
         const apiKey = ""; 
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-        // Utility function for exponential backoff
+        const apiUrl = `https.generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        
+        // --- Utility function for exponential backoff ---
         async function fetchWithExponentialBackoff(url, options, maxRetries = 5) {
             for (let attempt = 0; attempt < maxRetries; attempt++) {
                 try {
@@ -484,6 +489,77 @@
             throw new Error('API request failed after maximum retries.');
         }
 
+        // --- Admin Panel Tab Logic ---
+        adminTabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                adminTabButtons.forEach(btn => btn.setAttribute('aria-selected', 'false'));
+                adminTabPanels.forEach(panel => panel.style.display = 'none');
+                
+                button.setAttribute('aria-selected', 'true');
+                const panelId = button.getAttribute('aria-controls');
+                document.getElementById(panelId).style.display = 'block';
+            });
+        });
+        
+        // --- Admin Panel CMS Functions ---
+        window.postNews = async function(event) {
+            event.preventDefault();
+            const title = document.getElementById('newsTitle').value;
+            const content = document.getElementById('newsContent').value;
+            const button = document.getElementById('postNewsButton');
+            button.disabled = true; button.textContent = "Posting...";
+            try {
+                await addDoc(newsCollection, { title: title, content: content, timestamp: serverTimestamp() });
+                showCustomAlert("Success", "News update has been posted!");
+                document.getElementById('newsForm').reset();
+            } catch (error) { console.error("Error posting news: ", error); showCustomAlert("Error", "Could not post news. " + error.message);
+            } finally { button.disabled = false; button.textContent = "Post News"; }
+        }
+        
+        window.postSchedule = async function(event) {
+            event.preventDefault();
+            const teamA = document.getElementById('teamA').value;
+            const teamB = document.getElementById('teamB').value;
+            const matchTime = document.getElementById('matchTime').value;
+            const status = document.getElementById('matchStatus').value;
+            const button = document.getElementById('postScheduleButton');
+            button.disabled = true; button.textContent = "Adding...";
+            try {
+                await addDoc(scheduleCollection, { teamA: teamA, teamB: teamB, matchTime: matchTime, status: status });
+                showCustomAlert("Success", "Match has been added to the schedule!");
+                document.getElementById('scheduleForm').reset();
+            } catch (error) { console.error("Error posting schedule: ", error); showCustomAlert("Error", "Could not add match. " + error.message);
+            } finally { button.disabled = false; button.textContent = "Add Match to Schedule"; }
+        }
+        
+        window.postGalleryLink = async function(event) {
+            event.preventDefault();
+            const title = document.getElementById('galleryTitle').value;
+            const url = document.getElementById('galleryUrl').value;
+            const button = document.getElementById('postGalleryButton');
+            button.disabled = true; button.textContent = "Adding...";
+            try {
+                await addDoc(galleryCollection, { title: title, url: url, timestamp: serverTimestamp() });
+                showCustomAlert("Success", "Gallery link has been added!");
+                document.getElementById('galleryForm').reset();
+            } catch (error) { console.error("Error posting gallery link: ", error); showCustomAlert("Error", "Could not add link. " + error.message);
+            } finally { button.disabled = false; button.textContent = "Add to Gallery"; }
+        }
+        
+        window.setLiveStream = async function(event) {
+            event.preventDefault();
+            const url = document.getElementById('streamUrl').value;
+            const button = document.getElementById('setStreamButton');
+            button.disabled = true; button.textContent = "Saving...";
+            try {
+                const streamDocRef = doc(db, "settings", "live_stream");
+                await setDoc(streamDocRef, { url: url, updatedAt: serverTimestamp() });
+                showCustomAlert("Success", "Live stream link has been updated!");
+            } catch (error) { console.error("Error setting stream: ", error); showCustomAlert("Error", "Could not set stream. " + error.message);
+            } finally { button.disabled = false; button.textContent = "Set Stream"; }
+        }
+
+        // --- Sponsorship Email Function ---
         window.draftSponsorshipEmail = async function() {
             draftButton.disabled = true;
             draftText.textContent = 'Generating Draft...';
@@ -495,9 +571,9 @@
                 name: "EDU-LEAGUE CHAMPIONSHIP - Battle within Educators",
                 organizer: "NUESA x FACULTY OF EDUCATION SPORT SECRETARY COUNCIL",
                 structure: "8 Departments, 3 Levels (Finalist, Penultimate, Sophomore), 3 Cups",
-                dates: "Registration Nov 15th - Nov 25th", // Corrected Date
+                dates: "Registration Nov 15th - Nov 25th",
                 fee: "#70,000 per level",
-                contact: "OPEYEMI 08140712347", // Corrected Contact
+                contact: "OPEYEMI 08140712347",
             };
             const systemPrompt = "You are an expert sports league manager and persuasive copywriter. Your goal is to draft a professional, concise email aimed at securing event sponsorship. The tone should be formal yet exciting. Include a placeholder for the sponsor's name, and clearly highlight the potential audience size and the structure of the league.";
             const userQuery = `Draft a sponsorship inquiry email for the event named: ${eventDetails.name}. It is presented by ${eventDetails.organizer}. The event involves ${eventDetails.structure} and has an Entry Fee of ${eventDetails.fee}. The registration window is ${eventDetails.dates}. Contact for details: ${eventDetails.contact}. The email should be concise (under 200 words) and highlight exposure to the entire faculty community.`;
@@ -524,60 +600,30 @@
             }
         }
 
-        // --- Form & Modal Logic ---
-
+        // --- Registration Form & Modal Logic ---
         window.handleSubmit = async function(event) {
             event.preventDefault(); 
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return false;
-            }
-            if (!registrationsCollection) {
-                console.error("Firestore is not initialized.");
-                showCustomAlert("Error", "Database not connected. Please refresh.");
-                return false;
-            }
-            
+            if (!form.checkValidity()) { form.reportValidity(); return false; }
+            if (!registrationsCollection) { showCustomAlert("Error", "Database not connected. Please refresh."); return false; }
             submitButton.disabled = true;
             submitButton.textContent = "Processing...";
-
-            // Get form data
             const department = document.getElementById('department').value;
             const coachName = document.getElementById('coachName').value;
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
             const level = document.querySelector('input[name="level"]:checked').value;
             const fee = "70000"; 
-
             const registrationData = {
-                teamName: department, // Use department as the main identifier
-                coachName: coachName,
-                email,
-                phone,
-                department,
-                level,
-                registeredAt: new Date().toISOString(),
-                paymentStatus: "Pending",
-                registrationStatus: "Pending Payment",
-                players: [] // Initialize as empty array
+                teamName: department, coachName: coachName, email, phone, department, level,
+                registeredAt: new Date().toISOString(), paymentStatus: "Pending", registrationStatus: "Pending Payment",
+                players: [] 
             };
-
             try {
-                // Save data to Firestore
                 const docRef = await addDoc(registrationsCollection, registrationData);
                 console.log("Document written with ID: ", docRef.id);
-                
                 form.reset();
-                
-                // Redirect to payment page
-                const params = new URLSearchParams({
-                    team: department,
-                    level: level,
-                    fee: fee,
-                    teamId: docRef.id // Pass the Firestore Document ID
-                });
+                const params = new URLSearchParams({ team: department, level: level, fee: fee, teamId: docRef.id });
                 window.location.assign(`./payment_page.html?${params.toString()}`);
-                
             } catch (e) {
                 console.error("Error adding document: ", e);
                 showCustomAlert("Error", "Could not complete registration. Please try again.");
@@ -587,35 +633,32 @@
             return false;
         }
 
-        window.showConfirmation = function() {
-            confirmationBox.classList.remove('opacity-0', 'pointer-events-none');
-            confirmationBox.classList.add('opacity-100', 'pointer-events-auto');
-            confirmationBox.querySelector('div').classList.remove('scale-95');
-            confirmationBox.querySelector('div').classList.add('scale-100');
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            const content = modal.querySelector('.modal-content');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.add('opacity-100');
+            if (content) content.classList.remove('scale-95');
         }
 
-        window.closeConfirmation = function() {
-            confirmationBox.classList.add('opacity-0', 'pointer-events-none');
-            confirmationBox.classList.remove('opacity-100', 'pointer-events-auto');
-            confirmationBox.querySelector('div').classList.add('scale-95');
-            confirmationBox.querySelector('div').classList.remove('scale-100');
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            const content = modal.querySelector('.modal-content');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.classList.remove('opacity-100');
+            if (content) content.classList.add('scale-95');
         }
-        
-        window.showCustomAlert = function(title, message) {
+
+        window.showConfirmation = () => openModal('confirmation-box');
+        window.closeConfirmation = () => closeModal('confirmation-box');
+        window.showCustomAlert = (title, message) => {
             customAlertTitle.textContent = title;
             customAlertMessage.textContent = message;
-            customAlertModal.classList.remove('opacity-0', 'pointer-events-none');
-            customAlertModal.classList.add('opacity-100');
-            customAlertModal.querySelector('div').classList.remove('scale-95');
-            customAlertModal.querySelector('div').classList.add('scale-100');
+            openModal('custom-alert-modal');
         }
-        
-        window.closeCustomAlert = function() {
-            customAlertModal.classList.add('opacity-0', 'pointer-events-none');
-            customAlertModal.classList.remove('opacity-100');
-            customAlertModal.querySelector('div').classList.add('scale-95');
-            customAlertModal.querySelector('div').classList.remove('scale-100');
-        }
+        window.closeCustomAlert = () => closeModal('custom-alert-modal');
 
         window.copyToClipboard = function(elementId) {
             const element = document.getElementById(elementId);
@@ -627,69 +670,80 @@
             try {
                 document.execCommand('copy');
                 showCustomAlert("Success", "Email draft copied to clipboard!"); 
-            } catch (err) {
-                console.error('Could not copy text: ', err);
-                showCustomAlert("Error", "Could not copy text.");
-            } finally {
-                document.body.removeChild(tempInput);
-            }
+            } catch (err) { console.error('Could not copy text: ', err); showCustomAlert("Error", "Could not copy text.");
+            } finally { document.body.removeChild(tempInput); }
         }
         
         // --- Admin Security & Data Functions ---
-        
         window.promptAdminPassword = function() {
             adminPasswordInput.value = "";
             adminPasswordError.classList.add('hidden');
-            adminPromptModal.classList.remove('opacity-0', 'pointer-events-none');
-            adminPromptModal.classList.add('opacity-100');
-            adminPromptModal.querySelector('div').classList.remove('scale-95');
-            adminPromptModal.querySelector('div').classList.add('scale-100');
+            openModal('admin-prompt-modal');
             adminPasswordInput.focus();
         }
         
-        window.closeAdminPrompt = function() {
-            adminPromptModal.classList.add('opacity-0', 'pointer-events-none');
-            adminPromptModal.classList.remove('opacity-100');
-            adminPromptModal.querySelector('div').classList.add('scale-95');
-            adminPromptModal.querySelector('div').classList.remove('scale-100');
-        }
+        window.closeAdminPrompt = () => closeModal('admin-prompt-modal');
         
         window.checkAdminPassword = function() {
             const pass = adminPasswordInput.value;
-            if (pass === ADMIN_PASSWORD) {
+            const passLower = pass.toLowerCase();
+            
+            // Check for Super Admin
+            if (pass === SUPER_ADMIN_PASSWORD) {
                 closeAdminPrompt();
-                showAdminPanel(); // Success! Show the new admin panel.
+                showAdminPanel('admin'); // Show all tabs
+                return;
+            }
+
+            // ** NEW: Check if password is in the reporter list **
+            const isReporter = REPORTER_PASSWORDS.some(reporterPass => reporterPass.toLowerCase() === passLower);
+            
+            if (isReporter) {
+                closeAdminPrompt();
+                showAdminPanel('reporter'); // Show limited tabs
             } else {
                 adminPasswordError.classList.remove('hidden');
             }
         }
         
-        window.showAdminPanel = function() {
-            adminPanelModal.classList.remove('opacity-0', 'pointer-events-none');
-            adminPanelModal.classList.add('opacity-100', 'pointer-events-auto');
-            adminPanelModal.querySelector('div').classList.remove('scale-95');
-            adminPanelModal.querySelector('div').classList.add('scale-100');
+        // ** NEW: 'role' parameter ('admin' or 'reporter') **
+        window.showAdminPanel = function(role = 'reporter') {
+            if (role === 'admin') {
+                // Show all tabs
+                tabBtnRegistrations.style.display = 'block';
+                tabBtnSponsor.style.display = 'block';
+                // Select registrations tab by default for admin
+                adminTabButtons.forEach(btn => btn.setAttribute('aria-selected', 'false'));
+                adminTabPanels.forEach(panel => panel.style.display = 'none');
+                tabBtnRegistrations.setAttribute('aria-selected', 'true');
+                panelRegistrations.style.display = 'block';
+            } else {
+                // 'reporter' role
+                // ** HIDE sensitive tabs **
+                tabBtnRegistrations.style.display = 'none';
+                tabBtnSponsor.style.display = 'none';
+                
+                // Select 'Post News' tab by default for reporters
+                adminTabButtons.forEach(btn => btn.setAttribute('aria-selected', 'false'));
+                adminTabPanels.forEach(panel => panel.style.display = 'none');
+                tabBtnNews.setAttribute('aria-selected', 'true');
+                panelNews.style.display = 'block';
+            }
+            
+            // Open the modal
+            openModal('admin-panel-modal');
         }
 
-        window.closeAdminPanel = function() {
-            adminPanelModal.classList.add('opacity-0', 'pointer-events-none');
-            adminPanelModal.classList.remove('opacity-100', 'pointer-events-auto');
-            adminPanelModal.querySelector('div').classList.add('scale-95');
-            adminPanelModal.querySelector('div').classList.remove('scale-100');
-        }
+        window.closeAdminPanel = () => closeModal('admin-panel-modal');
         
         function setupRegistrationListener() {
-            if (!registrationsCollection) {
-                 console.error("setupRegistrationListener: No collection ref.");
-                 return;
-            }
+            if (!registrationsCollection) { return; }
             const q = query(registrationsCollection);
             onSnapshot(q, (querySnapshot) => {
                 if (querySnapshot.empty) {
                     noRegistrationsMessage.style.display = 'block';
                     registrationsListContainer.innerHTML = '';
                     registrationsListContainer.appendChild(noRegistrationsMessage);
-                    regCount.textContent = '0';
                     return;
                 }
                 noRegistrationsMessage.style.display = 'none';
@@ -701,50 +755,44 @@
                     const regElement = document.createElement('div');
                     regElement.className = 'p-3 bg-white border border-gray-200 rounded-lg shadow-sm';
                     let statusColor = 'text-yellow-600'; 
-                    if (data.registrationStatus === 'Complete') {
-                        statusColor = 'text-green-600';
-                    } else if (data.paymentStatus === 'Verified') {
-                        statusColor = 'text-blue-600';
-                    }
+                    if (data.registrationStatus === 'Complete') { statusColor = 'text-green-600'; }
+                    else if (data.paymentStatus === 'Verified') { statusColor = 'text-blue-600'; }
+                    
+                    let logoImg = '';
+                    if (data.level.includes('Finalist')) logoImg = `<img src="Finalist.png" alt="Finalist" class="w-8 h-8 rounded-full object-cover mr-2" onerror="this.style.display='none'">`;
+                    else if (data.level.includes('Penultimate')) logoImg = `<img src="Penultimate.png" alt="Penultimate" class="w-8 h-8 rounded-full object-cover mr-2" onerror="this.style.display='none'">`;
+                    else if (data.level.includes('Sophomore')) logoImg = `<img src="Sophomore.png" alt="Sophomore" class="w-8 h-8 rounded-full object-cover mr-2" onerror="this.style.display='none'">`;
+
                     regElement.innerHTML = `
                         <div class="flex justify-between items-start">
-                            <h4 class="text-lg font-bold text-edu-purple">${data.department}</h4>
-                            <span class="text-sm font-semibold ${statusColor}">${data.registrationStatus || data.paymentStatus}</span>
+                            <div class="flex items-center">
+                                ${logoImg}
+                                <h4 class="text-lg font-bold text-edu-purple">${data.department}</h4>
+                            </div>
+                            <span class="text-sm font-semibold ${statusColor} flex-shrink-0 ml-2">${data.registrationStatus || data.paymentStatus}</span>
                         </div>
-                        <p class="text-sm text-gray-600">Coach: ${data.coachName}</p>
-                        <p class="text-sm text-gray-600">Contact: ${data.phone} | ${data.email}</p>
-                        <p class="text-sm text-gray-700 font-semibold mt-1">Level: ${data.level}</p>
+                        <p class="text-sm text-gray-600 pl-10">Coach: ${data.coachName}</p>
+                        <p class="text-sm text-gray-600 pl-10">Contact: ${data.phone} | ${data.email}</p>
+                        <p class="text-sm text-gray-700 font-semibold mt-1 pl-10">Level: ${data.level}</p>
                     `;
                     registrationsListContainer.appendChild(regElement);
                 });
-                regCount.textContent = count;
             }, (error) => {
                 console.error("Error listening to registrations: ", error);
             });
         }
         
         window.downloadCSV = async function() {
-            if (!registrationsCollection) {
-                showCustomAlert("Error", "Database not connected.");
-                return;
-            }
+            if (!registrationsCollection) { showCustomAlert("Error", "Database not connected."); return; }
             showCustomAlert("Processing...", "Fetching all registration data...");
-            
             try {
                 const querySnapshot = await getDocs(registrationsCollection);
                 let csvContent = "data:text/csv;charset=utf-8,";
-                
-                // CSV Headers
-                const headers = [
-                    "Department", "Level", "CoachName", "Phone", "Email", 
-                    "PaymentStatus", "RegistrationStatus", "RegisteredAt", "Roster"
-                ];
+                const headers = ["Department", "Level", "CoachName", "Phone", "Email", "PaymentStatus", "RegistrationStatus", "RegisteredAt", "Roster", "PaymentCode"];
                 csvContent += headers.join(",") + "\r\n";
-
-                // CSV Rows
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    const players = (data.players || []).join(" | "); // Join players with a pipe
+                    const players = (data.players || []).join(" | ");
                     const row = [
                         `"${data.department || ''}"`,
                         `"${data.level || ''}"`,
@@ -754,14 +802,12 @@
                         `"${data.paymentStatus || ''}"`,
                         `"${data.registrationStatus || ''}"`,
                         `"${data.registeredAt || ''}"`,
-                        `"${players}"` // Add the player list as the last column
+                        `"${players}"`,
+                        `"${data.paymentCodeUsed || ''}"` // Added payment code
                     ];
                     csvContent += row.join(",") + "\r\n";
                 });
-                
                 closeCustomAlert();
-                
-                // Create and trigger download link
                 const encodedUri = encodeURI(csvContent);
                 const link = document.createElement("a");
                 link.setAttribute("href", encodedUri);
@@ -769,36 +815,23 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                
-            } catch (error) {
-                console.error("Error fetching data for CSV: ", error);
-                showCustomAlert("Error", "Could not download data. " + error.message);
-            }
+            } catch (error) { console.error("Error fetching data for CSV: ", error); showCustomAlert("Error", "Could not download data. " + error.message); }
         }
         
         // --- News Ticker ---
         async function fetchNews() {
-            // Static content as a fallback
             const staticNews = [
                 "<strong>EDU-LEAGUE:</strong> Battle within Educators",
                 "<strong>REGISTRATION:</strong> Nov 15th - Nov 25th",
                 "<strong>CONTACT:</strong> OPEYEMI 08140712347",
-                "<strong>LEVELS:</strong> 🏆 Finalist (400Lvl), 🔥 Penultimate (300Lvl), 👟 Sophomore (200Lvl)"
+                "<strong>LEVELS:</strong> 🏆 Finalist (400Lvl) 🔥 Penultimate (300Lvl) 👟 Sophomore (200Lvl)"
             ];
-            
             let newsHtml = "";
-            staticNews.forEach(item => {
-                newsHtml += `<div class="ticker-item">${item}</div>`;
-            });
-            // Duplicate for a smooth loop
-            staticNews.forEach(item => {
-                newsHtml += `<div class="ticker-item">${item}</div>`;
-            });
+            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
+            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
             tickerWrapper.innerHTML = newsHtml;
-
-            // Try to fetch live news and replace if successful
-            const proxyUrl = 'https://api.allorigins.win/raw?url=';
-            const rssFeedUrl = 'https://feeds.skysports.com/data/football.xml';
+            const proxyUrl = 'https.api.allorigins.win/raw?url=';
+            const rssFeedUrl = 'https.feeds.skysports.com/data/football.xml';
             try {
                 const response = await fetch(proxyUrl + encodeURIComponent(rssFeedUrl));
                 if (!response.ok) throw new Error('Network response was not ok for live news.');
@@ -807,25 +840,14 @@
                 const items = data.querySelectorAll("item");
                 let liveNewsHtml = "";
                 items.forEach((el, index) => {
-                    if (index < 15) { // Get first 15 headlines
-                        const title = el.querySelector("title").innerHTML;
-                        liveNewsHtml += `<div class="ticker-item"><strong>LATEST:</strong> ${title}</div>`;
-                    }
+                    if (index < 15) { const title = el.querySelector("title").innerHTML; liveNewsHtml += `<div class="ticker-item"><strong>LATEST:</strong> ${title}</div>`; }
                 });
-                
-                if(liveNewsHtml) {
-                    tickerWrapper.innerHTML = liveNewsHtml + liveNewsHtml; // Duplicate for loop
-                }
-            } catch (error) {
-                console.error('Error fetching live news:', error);
-            }
-            
-            // Add hover-to-pause
+                if(liveNewsHtml) { tickerWrapper.innerHTML = newsHtml + liveNewsHtml + newsHtml + liveNewsHtml; }
+            } catch (error) { console.error('Error fetching live news:', error); }
             const ticker = document.querySelector('.news-ticker');
             ticker.addEventListener('mouseover', () => tickerWrapper.style.animationPlayState = 'paused');
             ticker.addEventListener('mouseout', () => tickerWrapper.style.animationPlayState = 'running');
         }
-
 
         // --- Initialize Firebase ---
         async function initializeFirebase() {
@@ -835,39 +857,32 @@
                     console.error("Firebase config is missing. Please paste it into index.html.");
                     return;
                 }
-
                 const app = initializeApp(firebaseConfig);
-                const analytics = getAnalytics(app); // Initialize analytics
+                const analytics = getAnalytics(app); 
                 db = getFirestore(app);
                 auth = getAuth(app);
-                // setLogLevel('Debug');
-
-                // Sign in the user
                 await signInAnonymously(auth);
-
-                // Setup listener for auth changes
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         userId = user.uid;
                         console.log("User signed in:", userId);
-                        
                         registrationsCollection = collection(db, "registrations");
-                        
+                        newsCollection = collection(db, "news_posts");
+                        scheduleCollection = collection(db, "schedules");
+                        galleryCollection = collection(db, "gallery_links");
+                        settingsCollection = collection(db, "settings");
                         setupRegistrationListener();
-                        
                         const urlParams = new URLSearchParams(window.location.search);
                         if (urlParams.get('status') === 'complete') {
                              showConfirmation();
                             window.history.replaceState(null, '', window.location.pathname);
                         }
-                        
                     } else {
                         console.log("User signed out.");
                         userId = null;
-                        registrationsCollection = null; 
+                        registrationsCollection = null;
                     }
                 });
-
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
                 showCustomAlert("Error", "Could not connect to the database. " + error.message);
@@ -879,31 +894,38 @@
         fetchNews();
         
         // --- Slider Logic ---
-        let currentSlide = 0;
-        const slider = document.getElementById('logoSlider');
-        const slides = document.querySelectorAll('.slider-item');
-        // ** FIXED SLIDER LOGIC **
-        // We have 3 unique slides. The 4th is a duplicate for looping.
-        // We must not count the duplicate in our total.
-        const totalSlides = 3; 
+        (function() {
+            const slider = document.getElementById('logoSlider');
+            if (!slider) return;
+            const slides = slider.querySelectorAll('.slider-item');
+            if (slides.length <= 1) return; // Don't run if 1 or 0 slides
+            
+            const totalSlides = slides.length; // This is the 3 unique slides
+            let currentSlide = 0;
+            
+            // Clone slides for infinite loop
+            slides.forEach(slide => {
+                slider.appendChild(slide.cloneNode(true));
+            });
 
-        function nextSlide() {
-            currentSlide++;
-            slider.style.transition = 'transform 1s ease-in-out'; // Smoother 1s transition
-            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            function nextSlide() {
+                currentSlide++;
+                slider.style.transition = 'transform 1s ease-in-out'; // 1s slide
+                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
 
-            if (currentSlide >= totalSlides) { 
-                // When we've shown the 3rd slide (Sophomore) and moved to the 4th (Finalist duplicate)
-                // Reset to the 1st slide (Finalist) instantly after the animation finishes
-                setTimeout(() => {
-                    currentSlide = 0;
-                    slider.style.transition = 'none'; // No animation for the reset
-                    slider.style.transform = `translateX(0)`;
-                }, 1000); // Must match the transition duration
+                // When it reaches the end of the *original* set
+                if (currentSlide === totalSlides) {
+                    // After the transition finishes, jump back to the start
+                    setTimeout(() => {
+                        slider.style.transition = 'none'; // No animation for the jump
+                        slider.style.transform = `translateX(0)`; // Jump to slide 0
+                        currentSlide = 0;
+                    }, 1000); // Must match transition duration
+                }
             }
-        }
-        
-        setInterval(nextSlide, 8000); // 8-second pause on each slide
+            
+            setInterval(nextSlide, 8000); // 8s pause + 1s slide = 9s total per slide
+        })();
 
     </script>
 </body>
