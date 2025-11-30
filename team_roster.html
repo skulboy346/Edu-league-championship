@@ -1,47 +1,546 @@
-<!-- ... (Head and Body HTML same as previous, just updating script) ... -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Roster - EDU-LEAGUE</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* Custom Font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fd;
+        }
+        /* Custom color classes */
+        .bg-edu-purple { background-color: #6d28d9; }
+        .text-edu-purple { color: #6d28d9; }
+        .border-edu-purple { border-color: #6d28d9; }
+        .ring-edu-purple:focus { ring-color: #6d28d9; }
+        .bg-edu-yellow { background-color: #fbbf24; }
+        .hover-edu-yellow:hover { background-color: #f59e0b; }
+        
+        /* Added styles for player list */
+        .player-entry {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: fadeIn 0.3s ease-out;
+            background-color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem; /* rounded-md */
+            border: 1px solid #e5e7eb; /* border-gray-200 */
+        }
+        .player-name {
+            flex-grow: 1;
+            font-weight: 600; /* font-semibold */
+            color: #374151; /* text-gray-700 */
+        }
+        .remove-player-btn {
+            background-color: #fee2e2; /* bg-red-100 */
+            color: #b91c1c; /* text-red-700 */
+            border: none;
+            border-radius: 9999px; /* rounded-full */
+            width: 1.75rem; /* w-7 */
+            height: 1.75rem; /* h-7 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.25rem; /* text-xl */
+            line-height: 1;
+            transition: background-color 0.2s;
+        }
+        .remove-player-btn:hover {
+            background-color: #fecaca; /* hover:bg-red-200 */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* --- Social Bar Styles --- */
+        .social-bar {
+            background-color: #111827;
+            padding: 0.75rem 0;
+            border-t: 1px solid #374151; /* Lighter border: border-gray-700 */
+            text-align: center;
+        }
+        .social-icon {
+            font-size: 1.75rem; /* Larger icons */
+            margin: 0 0.75rem;
+            transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+        .social-icon:hover {
+            transform: scale(1.2);
+            color: #FFFFFF !important; /* NEW: Change to white on hover */
+        }
+        /* Official Brand Colors (NOW DEFAULT) */
+        .social-icon.fa-facebook { color: #1877F2; }
+        .social-icon.fa-tiktok { color: #FFFFFF; }
+        .social-icon.fa-youtube { color: #FF0000; }
+        .social-icon.fa-instagram { color: #E4405F; }
+
+        /* --- News Ticker Footer --- */
+        .news-ticker {
+            width: 100%;
+            background-color: #1f2937;
+            color: white;
+            padding: 0.75rem 0;
+            overflow: hidden;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .ticker-wrapper {
+            display: flex;
+            white-space: nowrap;
+            animation: ticker 60s linear infinite; 
+        }
+        .ticker-item {
+            padding: 0 1.5rem;
+            color: #d1d5db; 
+        }
+        .ticker-item strong {
+            color: #fbbf24; 
+        }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+    <!-- Main Content Area -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-3xl w-full bg-white shadow-2xl rounded-xl overflow-hidden">
+            
+            <!-- Header -->
+            <div class="bg-edu-purple text-white p-8">
+                <h1 class="text-3xl font-extrabold tracking-tight text-center">Team Roster Submission</h1>
+                <p class="mt-1 text-purple-200 text-lg text-center">EDU-LEAGUE CHAMPIONSHIP</p>
+            </div>
+
+            <!-- Roster Form -->
+            <div class="p-8 md:p-10 space-y-6">
+                
+                <!-- Team Info Display -->
+                <div class="bg-gray-100 p-4 rounded-lg border border-gray-200 text-center">
+                    <h2 id="teamNameDisplay" class="text-2xl font-bold text-edu-purple">Loading Team...</h2>
+                    <p id="levelDisplay" class="text-lg font-semibold text-gray-700">Loading Level...</p>
+                </div>
+
+                <form id="rosterForm" onsubmit="saveRoster(event); return false;" class="space-y-6">
+
+                    <!-- Coach Details -->
+                    <fieldset class="space-y-4">
+                        <legend class="text-xl font-bold text-gray-800 border-b pb-2 mb-3">Team Officials (2 Total)</legend>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Head Coach -->
+                            <div class="space-y-2">
+                                <label for="coachName" class="block text-sm font-medium text-gray-700">1. Head Coach Name</label>
+                                <input type="text" id="coachName" name="coachName" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border">
+                                <label for="coachPhone" class="block text-sm font-medium text-gray-700">Head Coach Phone</label>
+                                <input type="tel" id="coachPhone" name="coachPhone" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border" placeholder="080...">
+                            </div>
+                            <!-- Asst Coach -->
+                            <div class="space-y-2">
+                                <label for="asstCoachName" class="block text-sm font-medium text-gray-700">2. Assistant Coach Name</label>
+                                <input type="text" id="asstCoachName" name="asstCoachName" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border">
+                                <label for="asstCoachPhone" class="block text-sm font-medium text-gray-700">Assistant Coach Phone</label>
+                                <input type="tel" id="asstCoachPhone" name="asstCoachPhone" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border" placeholder="090...">
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Player Details -->
+                    <fieldset>
+                        <legend class="text-xl font-bold text-gray-800 border-b pb-2 mb-3">Players (Max 18)</legend>
+                        
+                        <!-- Player Add Input -->
+                        <div class="flex gap-3 mb-4">
+                            <div class="flex-grow">
+                                <label for="newPlayerName" class="block text-sm font-medium text-gray-700">New Player Full Name</label>
+                                <input type="text" id="newPlayerName" name="newPlayerName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple ring-edu-purple h-10 p-2 border" placeholder="e.g., John Doe">
+                            </div>
+                            <button type="button" id="addPlayerButton" onclick="addPlayer()" class="mt-6 px-4 py-2 bg-edu-purple text-white font-semibold rounded-md shadow hover:bg-purple-700 h-10">Add</button>
+                        </div>
+                        
+                        <p id="playerLimitMessage" class="text-sm text-red-600 font-semibold text-center hidden mb-3">Maximum of 18 players reached.</p>
+
+                        <!-- Player List Container -->
+                        <div id="playerListContainer" class="max-h-64 overflow-y-auto space-y-2 bg-gray-50 p-4 rounded-lg border">
+                            <p id="noPlayersMessage" class="text-gray-500 text-center">No players added yet.</p>
+                            <!-- Players will be added here -->
+                        </div>
+                        <input type="hidden" id="playerCount" value="0">
+                    </fieldset>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submitRosterButton" class="w-full mt-8 py-3 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                        Submit Roster & Complete Registration
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Roster Success Box (Modal) -->
+    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
+        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300 modal-content">
+            <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Registration 100% Complete!</h3>
+            <p class="text-gray-600 mb-6">Your team roster has been submitted. We'll be in touch with the schedule. Good luck!</p>
+            <button onclick="goToHome()" class="py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">
+                Back to Home Page
+            </button>
+        </div>
+    </div>
+    
+    <!-- Custom Alert Modal -->
+    <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300 modal-content">
+            <h3 id="custom-alert-title" class="text-xl font-bold text-gray-800 mb-2">Alert</h3>
+            <p id="custom-alert-message" class="text-gray-600 mb-6">This is an alert message.</p>
+            <button onclick="closeCustomAlert()" class="py-2 px-6 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">
+                OK
+            </button>
+        </div>
+    </div>
+    
+    <!-- Social Media Bar -->
+    <footer class="social-bar sticky bottom-0 z-10 border-t border-gray-700">
+        <div>
+            <a href="https://facebook.com/YOUR-PAGE-HERE" target="_blank" class="social-icon fa-brands fa-facebook"></a>
+            <a href="https://tiktok.com/@YOUR-PAGE-HERE" target="_blank" class="social-icon fa-brands fa-tiktok"></a>
+            <a href="https://youtube.com/YOUR-CHANNEL-HERE" target="_blank" class="social-icon fa-brands fa-youtube"></a>
+            <a href="https://instagram.com/YOUR-PAGE-HERE" target="_blank" class="social-icon fa-brands fa-instagram"></a>
+        </div>
+    </footer>
+
+    <!-- News Ticker Footer -->
+    <footer class="news-ticker sticky bottom-0 z-10">
+        <div class="ticker-wrapper" id="tickerWrapper">
+            <!-- Content will be injected by JS -->
+            <div class="ticker-item"><strong>EDU-LEAGUE:</strong> Loading latest news...</div>
+        </div>
+    </footer>
+
     <!-- Firebase & Logic Script -->
     <script type="module">
-        // ... (Imports, Config, State, DOM Elements same as before) ...
+        // --- Firebase SDK Imports (CDN Modules) ---
+        // ** FIXED: Use Stable 10.13.1 Version **
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
-        // ... (Custom Alert, Add/Remove Player same as before) ...
+        // --- *** STEP 1: YOUR FIREBASE CONFIG IS PASTED HERE *** ---
+        const firebaseConfig = {
+           apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
+           authDomain: "sonic-verbena-239117.firebaseapp.com",
+           databaseURL: "https://sonic-verbena-239117.firebaseio.com",
+           projectId: "sonic-verbena-239117",
+           storageBucket: "sonic-verbena-239117.firebasestorage.app",
+           messagingSenderId: "652544574249",
+           appId: "1:652544574249:web:6ff33771307e892e7f6d38",
+           measurementId: "G-TD780JGNED"
+         };
+        // --- *** END OF CONFIG ---
 
-        // ... (Save Roster logic same as before) ...
+        // --- Firebase & App State ---
+        let db;
+        let auth;
+        let userId;
+        let teamDocRef;
+        let teamDocId;
+        const MAX_PLAYERS = 18;
+        let players = []; // Local array to manage the player list
+
+        // --- DOM Elements ---
+        const teamNameDisplay = document.getElementById('teamNameDisplay');
+        const levelDisplay = document.getElementById('levelDisplay');
+        const newPlayerInput = document.getElementById('newPlayerName');
+        const addPlayerButton = document.getElementById('addPlayerButton');
+        const playerListContainer = document.getElementById('playerListContainer');
+        const noPlayersMessage = document.getElementById('noPlayersMessage');
+        const playerLimitMessage = document.getElementById('playerLimitMessage');
+        const playerCountInput = document.getElementById('playerCount');
+        const successModal = document.getElementById('success-modal');
+        const submitRosterButton = document.getElementById('submitRosterButton');
+        const customAlertModal = document.getElementById('custom-alert-modal');
+        const customAlertTitle = document.getElementById('custom-alert-title');
+        const customAlertMessage = document.getElementById('custom-alert-message');
+        const tickerWrapper = document.getElementById('tickerWrapper');
+
+        // --- Custom Alert ---
+        window.showCustomAlert = function(title, message) {
+            customAlertTitle.textContent = title;
+            customAlertMessage.textContent = message;
+            customAlertModal.classList.remove('opacity-0', 'pointer-events-none');
+            customAlertModal.classList.add('opacity-100');
+            customAlertModal.querySelector('div').classList.remove('scale-95');
+            customAlertModal.querySelector('div').classList.add('scale-100');
+        }
+        
+        window.closeCustomAlert = function() {
+            customAlertModal.classList.add('opacity-0', 'pointer-events-none');
+            customAlertModal.classList.remove('opacity-100');
+            customAlertModal.querySelector('div').classList.add('scale-95');
+            customAlertModal.querySelector('div').classList.remove('scale-100');
+        }
+        
+        // --- Player & Roster Logic ---
+        window.addPlayer = function() {
+            const playerName = newPlayerInput.value.trim();
+            if (playerName === "") {
+                showCustomAlert("Error", "Please enter a player name.");
+                return;
+            }
+            
+            if (players.length >= MAX_PLAYERS) {
+                showCustomAlert("Limit Reached", "You have reached the maximum of 18 players.");
+                return;
+            }
+
+            players.push(playerName);
+            newPlayerInput.value = "";
+            renderPlayerList();
+        }
+
+        function renderPlayerList() {
+            // Clear current list
+            playerListContainer.innerHTML = '';
+            
+            if (players.length === 0) {
+                playerListContainer.appendChild(noPlayersMessage);
+                noPlayersMessage.style.display = 'block';
+            } else {
+                noPlayersMessage.style.display = 'none';
+            }
+            
+            // Re-render list from local array
+            players.forEach((name, index) => {
+                const playerElement = document.createElement('div');
+                playerElement.className = 'player-entry';
+                playerElement.innerHTML = `
+                    <span class="player-name">${index + 1}. ${name}</span>
+                    <button type="button" class="remove-player-btn" onclick="removePlayer(${index})">&times;</button>
+                `;
+                playerListContainer.appendChild(playerElement);
+            });
+            
+            // Update count
+            playerCountInput.value = players.length;
+            
+            // Toggle max player limit message and inputs
+            if (players.length >= MAX_PLAYERS) {
+                playerLimitMessage.classList.remove('hidden');
+                newPlayerInput.disabled = true;
+                addPlayerButton.disabled = true;
+            } else {
+                playerLimitMessage.classList.add('hidden');
+                newPlayerInput.disabled = false;
+                addPlayerButton.disabled = false;
+            }
+        }
+
+        window.removePlayer = function(index) {
+            players.splice(index, 1); // Remove from array
+            renderPlayerList();
+        }
+
+        window.saveRoster = async function(event) {
+            event.preventDefault();
+            
+            if (players.length === 0) {
+                showCustomAlert("Error", "Please add at least one player to the roster.");
+                return;
+            }
+            
+            submitRosterButton.disabled = true;
+            submitRosterButton.textContent = "Saving Roster...";
+            
+            // Consolidate all roster data
+            const rosterData = {
+                coachDetails: {
+                    headCoachName: document.getElementById('coachName').value,
+                    headCoachPhone: document.getElementById('coachPhone').value,
+                    asstCoachName: document.getElementById('asstCoachName').value,
+                    asstCoachPhone: document.getElementById('asstCoachPhone').value,
+                },
+                players: players, // The local array of player names
+                rosterSubmittedAt: new Date().toISOString(),
+                registrationStatus: "Complete" // Mark registration as 100% complete
+            };
+            
+            if (!teamDocRef) {
+                 console.error("Firestore document reference is not set.");
+                 showCustomAlert("Error", "Database connection lost. Please refresh and try again.");
+                 submitRosterButton.disabled = false;
+                 submitRosterButton.textContent = "Submit Roster & Complete Registration";
+                 return;
+            }
+
+            try {
+                // Update the existing document in Firestore with the new roster data
+                await updateDoc(teamDocRef, rosterData);
+                console.log("Roster saved and registration marked as Complete.");
+                
+                // Show success modal
+                successModal.classList.remove('opacity-0', 'pointer-events-none');
+                successModal.classList.add('opacity-100', 'pointer-events-auto');
+                successModal.querySelector('div').classList.remove('scale-95');
+                successModal.querySelector('div').classList.add('scale-100');
+
+            } catch (error) {
+                console.error("Error saving roster: ", error);
+                showCustomAlert("Error", "Could not save roster. Please try again.");
+                submitRosterButton.disabled = false;
+                submitRosterButton.textContent = "Submit Roster & Complete Registration";
+            }
+        }
         
         window.goToHome = function() {
-            // Redirect to index.html and add status=complete
-            // Also clear storage as they are done
-            localStorage.removeItem('eduLeagueTeamID');
+            // Redirect back to the main page with a success flag
             window.location.assign(`./index.html?status=complete`);
         }
         
-        // --- Page Load Logic ---
+        // --- News Ticker ---
+        async function fetchNews() {
+            const staticNews = [
+                "<strong>EDU-LEAGUE:</strong> Battle within Educators",
+                "<strong>REGISTRATION:</strong> Nov 15th - Nov 25th (FREE)",
+                "<strong>CONTACT:</strong> OPEYEMI 08140712347",
+                "<strong>LEVELS:</strong> 🏆 Finalist (400Lvl) 🔥 Penultimate (300Lvl) 👟 Sophomore (200Lvl)"
+            ];
+            
+            let newsHtml = "";
+            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
+            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; }); // Duplicate
+            tickerWrapper.innerHTML = newsHtml;
+
+            const proxyUrl = 'https://api.allorigins.win/raw?url=';
+            const rssFeedUrl = 'https://feeds.skysports.com/data/football.xml';
+            try {
+                const response = await fetch(proxyUrl + encodeURIComponent(rssFeedUrl));
+                if (!response.ok) throw new Error('Network response was not ok for live news.');
+                const str = await response.text();
+                const data = new window.DOMParser().parseFromString(str, "text/xml");
+                const items = data.querySelectorAll("item");
+                let liveNewsHtml = "";
+                items.forEach((el, index) => {
+                    if (index < 15) { 
+                        const title = el.querySelector("title").innerHTML;
+                        liveNewsHtml += `<div class="ticker-item"><strong>LATEST:</strong> ${title}</div>`;
+                    }
+                });
+                
+                if(liveNewsHtml) {
+                    tickerWrapper.innerHTML = liveNewsHtml + liveNewsHtml; 
+                }
+            } catch (error) {
+                console.error('Error fetching live news:', error);
+            }
+            
+            const ticker = document.querySelector('.news-ticker');
+            ticker.addEventListener('mouseover', () => tickerWrapper.style.animationPlayState = 'paused');
+            ticker.addEventListener('mouseout', () => tickerWrapper.style.animationPlayState = 'running');
+        }
+
+        // --- Page Load & Firebase Init ---
+        
+        // This function runs first to get the Team ID from the URL
         async function loadTeamData() {
             const params = new URLSearchParams(window.location.search);
             teamDocId = params.get('teamId');
             
-            // ** NEW: Recovery Logic **
             if (!teamDocId) {
-                const savedId = localStorage.getItem('eduLeagueTeamID');
-                if (savedId) {
-                    teamDocId = savedId;
-                    console.log("Recovered Team ID from storage:", teamDocId);
-                } else {
-                    console.error("Team ID is missing!");
-                    showCustomAlert("Error", "Session expired. Please go back to registration.");
-                    teamNameDisplay.textContent = "Error: Session Lost";
-                    document.getElementById('rosterForm').classList.add('hidden');
-                    return;
-                }
-            } else {
-                // Save valid ID
-                localStorage.setItem('eduLeagueTeamID', teamDocId);
+                console.error("Team ID is missing from URL!");
+                showCustomAlert("Error", "Team ID is missing. Please go back to the payment page.");
+                teamNameDisplay.textContent = "Error: Invalid Team ID";
+                levelDisplay.textContent = "Please return to the previous page.";
+                document.getElementById('rosterForm').classList.add('hidden');
+                return;
             }
 
+            // Now that we have the ID, initialize Firebase
             await initializeFirebase();
-            // ... (Rest of logic same as before) ...
+            
+            if (!teamDocRef) {
+                 console.error("Team Doc Ref not set after init.");
+                 return;
+            }
+
+            // Now fetch the data for the team
+            try {
+                const docSnap = await getDoc(teamDocRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    teamNameDisplay.textContent = data.teamName;
+                    levelDisplay.textContent = data.level;
+                    // Pre-fill coach name if it was entered on the first page
+                    if (data.coachName) {
+                        document.getElementById('coachName').value = data.coachName;
+                    }
+                } else {
+                    console.error("No such document!");
+                    showCustomAlert("Error", "Could not find your team's registration data.");
+                }
+            } catch (error) {
+                console.error("Error fetching team data: ", error);
+                showCustomAlert("Error", "Could not load team data. " + error.message);
+            }
         }
 
-        // ... (Initialize Firebase same as before) ...
+        async function initializeFirebase() {
+            try {
+                if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("PASTE_YOUR_CONFIG_HERE")) {
+                    showCustomAlert("Error", "Firebase configuration is missing. Database features will not work.");
+                    console.error("Firebase config is missing. Please paste it into team_roster.html.");
+                    return;
+                }
+
+                const app = initializeApp(firebaseConfig);
+                const analytics = getAnalytics(app);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                // setLogLevel('Debug');
+
+                await signInAnonymously(auth);
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("User signed in:", userId);
+                        
+                        if (teamDocId) {
+                            // *** UPDATED: Simplified collection path ***
+                            teamDocRef = doc(db, "registrations", teamDocId);
+                            console.log("Team doc ref set:", teamDocRef.path);
+                        } else {
+                            console.error("Auth change: Team ID is missing from URL!");
+                        }
+                        
+                    } else {
+                        console.log("User signed out.");
+                        userId = null;
+                        teamDocRef = null;
+                    }
+                });
+
+            } catch (error) {
+                console.error("Firebase Initialization Error:", error);
+                showCustomAlert("Error", "Could not connect to the database. " + error.message);
+            }
+        }
+
+        // --- Start the App ---
+        loadTeamData();
+        fetchNews();
 
     </script>
 </body>

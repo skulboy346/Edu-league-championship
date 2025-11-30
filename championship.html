@@ -75,6 +75,23 @@
         .social-tk { color: #000000; } .social-tk:hover { color: #FFFFFF; }
         .social-yt { color: #FF0000; } .social-yt:hover { color: #FFFFFF; }
         .social-ig { color: #E4405F; } .social-ig:hover { color: #FFFFFF; }
+        
+        /* Admin Panel Tab Styles */
+        .admin-tab-button {
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+        }
+        .admin-tab-button[aria-selected="true"] {
+            border-bottom-color: #6d28d9;
+            color: #6d28d9;
+            font-weight: 600;
+        }
+        .admin-tab-button[aria-selected="false"] {
+            color: #6b7280;
+        }
+        .admin-tab-panel {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen">
@@ -117,8 +134,8 @@
 
         <!-- Tab Content Panels -->
         <div id="tab-panels" class="bg-white rounded-lg shadow-xl p-6 md:p-10 min-h-[400px]">
-            <!-- News Panel (Visible by default) -->
-            <div id="panel-news" role="tabpanel" aria-labelledby="tab-news" class="tab-panel space-y-6" style="display: block;">
+            <!-- News Panel -->
+            <div id="panel-news" role="tabpanel" aria-labelledby="tab-news" class="tab-panel space-y-6">
                 <!-- News items will be loaded here by JS -->
                 <p id="no-news" class="text-center text-gray-500">No news updates posted yet. Check back soon!</p>
             </div>
@@ -168,6 +185,178 @@
         </div>
 
     </main>
+    
+    <!-- Floating Admin Button -->
+    <button onclick="promptAdminPassword()" id="admin-fab" class="fixed bottom-24 md:bottom-28 right-4 md:right-6 bg-edu-purple text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center z-40 hover:bg-purple-800 transition-transform hover:scale-110">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+    </button>
+    
+    <!-- Admin Password Prompt (Modal) -->
+    <div id="admin-prompt-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300 modal-content">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Admin/Reporter Login</h3>
+            <p class="text-gray-600 mb-4">Please enter your access password.</p>
+            <input type="password" id="adminPasswordInput" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border mb-2" placeholder="Enter password...">
+            <p id="adminPasswordError" class="text-sm text-red-600 mb-4 hidden">Incorrect password.</p>
+            <div class="flex gap-4">
+                <button onclick="closeAdminPrompt()" class="w-1/2 py-2 px-4 bg-gray-200 text-gray-700 font-semibold rounded-md hover:bg-gray-300 transition duration-150">
+                    Cancel
+                </button>
+                <button onclick="checkAdminPassword()" class="w-1/2 py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">
+                    Login
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Admin Panel (Modal) -->
+    <div id="admin-panel-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
+        <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full text-left transform transition-all scale-95 duration-300 modal-content flex flex-col max-h-[90vh]">
+            
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 class="text-2xl font-bold text-gray-800">Admin Panel</h3>
+                <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <!-- Admin Tab Buttons -->
+            <div class="border-b border-gray-200 px-6">
+                <nav class="flex flex-wrap -mb-px space-x-6" id="admin-tab-buttons" role="tablist">
+                    <button class="admin-tab-button py-4 px-1" id="admin-tab-news" role="tab" aria-controls="admin-panel-news" aria-selected="true">Post News</button>
+                    <button class="admin-tab-button py-4 px-1" id="admin-tab-schedule" role="tab" aria-controls="admin-panel-schedule" aria-selected="false">Manage Schedule</button>
+                    <button class="admin-tab-button py-4 px-1" id="admin-tab-gallery" role="tab" aria-controls="admin-panel-gallery" aria-selected="false">Manage Gallery</button>
+                    <button class="admin-tab-button py-4 px-1" id="admin-tab-stream" role="tab" aria-controls="admin-panel-stream" aria-selected="false">Live Stream</button>
+                    <!-- Only show these for Super Admin -->
+                    <button class="admin-tab-button py-4 px-1 hidden" id="admin-tab-registrations" role="tab" aria-controls="admin-panel-registrations" aria-selected="false">Registrations</button>
+                    <button class="admin-tab-button py-4 px-1 hidden" id="admin-tab-sponsor" role="tab" aria-controls="admin-panel-sponsor" aria-selected="false">Sponsorship</button>
+                </nav>
+            </div>
+            
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-6 space-y-6 overflow-y-auto">
+                <!-- Panel: Post News (Updated with File Upload) -->
+                <div id="admin-panel-news" role="tabpanel" aria-labelledby="admin-tab-news" class="admin-tab-panel">
+                    <h4 class="text-xl font-semibold text-gray-700">Post a New Update</h4>
+                    <form id="newsForm" onsubmit="postNews(event); return false;">
+                        <div>
+                            <label for="newsTitle" class="block text-sm font-medium text-gray-700">Title</label>
+                            <input type="text" id="newsTitle" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
+                        </div>
+                        <!-- UPDATED IMAGE INPUT -->
+                        <div>
+                            <label for="newsImage" class="block text-sm font-medium text-gray-700">News Image(s)</label>
+                            <input type="file" id="newsImage" accept="image/*" multiple class="mt-1 block w-full text-sm text-gray-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-md file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-edu-purple file:text-white
+                                hover:file:bg-purple-700
+                            ">
+                            <p class="text-xs text-gray-500 mt-1">Select one or more images from your device.</p>
+                        </div>
+                        <div>
+                            <label for="newsContent" class="block text-sm font-medium text-gray-700">Content</label>
+                            <textarea id="newsContent" rows="5" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple p-2 border"></textarea>
+                        </div>
+                        <button type="submit" id="postNewsButton" class="py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 mt-4">Post News</button>
+                    </form>
+                </div>
+                
+                <!-- Panel: Manage Schedule -->
+                <div id="admin-panel-schedule" role="tabpanel" aria-labelledby="admin-tab-schedule" class="admin-tab-panel space-y-4">
+                    <h4 class="text-xl font-semibold text-gray-700">Add/Update Match Schedule</h4>
+                    <form id="scheduleForm" onsubmit="postSchedule(event); return false;" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="teamA" class="block text-sm font-medium text-gray-700">Team A</label>
+                            <input type="text" id="teamA" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                        </div>
+                        <div>
+                            <label for="teamB" class="block text-sm font-medium text-gray-700">Team B</label>
+                            <input type="text" id="teamB" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="matchTime" class="block text-sm font-medium text-gray-700">Date and Time</label>
+                            <input type="datetime-local" id="matchTime" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                        </div>
+                        <div>
+                            <label for="matchStatus" class="block text-sm font-medium text-gray-700">Status / Final Score</label>
+                            <input type="text" id="matchStatus" placeholder="e.g., Upcoming, or 2-1" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" id="postScheduleButton" class="py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700">Add Match to Schedule</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Panel: Manage Gallery -->
+                <div id="admin-panel-gallery" role="tabpanel" aria-labelledby="admin-tab-gallery" class="admin-tab-panel space-y-4">
+                    <h4 class="text-xl font-semibold text-gray-700">Add Gallery Link</h4>
+                    <form id="galleryForm" onsubmit="postGalleryLink(event); return false;">
+                        <div>
+                            <label for="galleryTitle" class="block text-sm font-medium text-gray-700">Title</label>
+                            <input type="text" id="galleryTitle" placeholder="e.g., Finals Day Highlights" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                        </div>
+                        <div>
+                            <label for="galleryUrl" class="block text-sm font-medium text-gray-700">URL (Link to Imgur, Facebook Album, or YouTube Video)</label>
+                            <input type="url" id="galleryUrl" placeholder="https://..." required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                        </div>
+                        <button type="submit" id="postGalleryButton" class="py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700">Add to Gallery</button>
+                    </form>
+                </div>
+                
+                <!-- Panel: Live Stream -->
+                <div id="admin-panel-stream" role="tabpanel" aria-labelledby="admin-tab-stream" class="admin-tab-panel space-y-4">
+                    <h4 class="text-xl font-semibold text-gray-700">Set Live Stream URL</h4>
+                    <form id="streamForm" onsubmit="setLiveStream(event); return false;">
+                        <div>
+                            <label for="streamUrl" class="block text-sm font-medium text-gray-700">Stream URL (YouTube or Facebook Live)</label>
+                            <input type="url" id="streamUrl" placeholder="https://youtube.com/live/..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border">
+                            <p class="text-xs text-gray-500 mt-1">Leave blank and save to turn off the stream.</p>
+                        </div>
+                        <button type="submit" id="setStreamButton" class="py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700">Set Stream</button>
+                    </form>
+                </div>
+
+                <!-- Panel: Registrations (Admin Only) -->
+                <div id="admin-panel-registrations" role="tabpanel" aria-labelledby="admin-tab-registrations" class="admin-tab-panel">
+                    <div class="p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
+                        <p class="font-bold">Restricted Area</p>
+                        <p>Full registration management is available on the Registration Page.</p>
+                    </div>
+                </div>
+                
+                <!-- Panel: Sponsorship (Admin Only) -->
+                <div id="admin-panel-sponsor" role="tabpanel" aria-labelledby="admin-tab-sponsor" class="admin-tab-panel">
+                    <div class="p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
+                        <p class="font-bold">Restricted Area</p>
+                         <p>Sponsorship tools are available on the Registration Page.</p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="p-4 bg-gray-50 border-t text-right">
+                <button onclick="closeAdminPanel()" class="py-2 px-6 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 transition duration-150">
+                    Close Panel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Alert Modal -->
+    <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300 modal-content">
+            <h3 id="custom-alert-title" class="text-xl font-bold text-gray-800 mb-2">Alert</h3>
+            <p id="custom-alert-message" class="text-gray-600 mb-6">This is an alert message.</p>
+            <button onclick="closeCustomAlert()" class="py-2 px-6 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">
+                OK
+            </button>
+        </div>
+    </div>
+
 
     <!-- Footer Area -->
     <footer class="sticky bottom-0 z-10 mt-12">
@@ -187,47 +376,39 @@
             </div>
         </div>
     </footer>
-    
-    <!-- Custom Alert Modal -->
-    <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300 modal-content">
-            <h3 id="custom-alert-title" class="text-xl font-bold text-gray-800 mb-2">Alert</h3>
-            <p id="custom-alert-message" class="text-gray-600 mb-6">This is an alert message.</p>
-            <button onclick="closeCustomAlert()" class="py-2 px-6 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">
-                OK
-            </button>
-        </div>
-    </div>
 
 
     <!-- Firebase & Logic Script -->
     <script type="module">
-        // --- Firebase SDK Imports (CDN Modules) ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, query, doc, orderBy, setLogLevel } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+        // --- Firebase SDK Imports ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, getDocs, doc, setDoc, serverTimestamp, setLogLevel, orderBy } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-        // --- *** STEP 1: PASTE YOUR FIREBASE CONFIG HERE *** ---
+        // --- *** PASTE YOUR FIREBASE CONFIG HERE *** ---
         const firebaseConfig = {
-           apiKey: "PASTE_YOUR_CONFIG_HERE",
-           authDomain: "PASTE_YOUR_CONFIG_HERE",
-           projectId: "PASTE_YOUR_CONFIG_HERE",
-           storageBucket: "PASTE_YOUR_CONFIG_HERE",
-           messagingSenderId: "PASTE_YOUR_CONFIG_HERE",
-           appId: "PASTE_YOUR_CONFIG_HERE",
-           measurementId: "PASTE_YOUR_CONFIG_HERE"
-         };
+            apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
+            authDomain: "sonic-verbena-239117.firebaseapp.com",
+            databaseURL: "https://sonic-verbena-239117.firebaseio.com",
+            projectId: "sonic-verbena-239117",
+            storageBucket: "sonic-verbena-239117.firebasestorage.app",
+            messagingSenderId: "652544574249",
+            appId: "1:652544574249:web:6ff33771307e892e7f6d38",
+            measurementId: "G-TD780JGNED"
+        };
         // --- *** END OF CONFIG *** ---
 
         // --- Firebase & App State ---
         let db;
         let auth;
         let userId;
+        let newsCollection, scheduleCollection, galleryCollection, settingsCollection;
+        
+        const SUPER_ADMIN_PASSWORD = "EDUADMIN2025"; 
+        const REPORTER_PASSWORDS = ["NEWS2025", "MEDIA2025", "POST2025"];
 
         // --- DOM Elements ---
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabPanels = document.querySelectorAll('.tab-panel');
         const newsPanel = document.getElementById('panel-news');
         const noNews = document.getElementById('no-news');
         const scheduleBody = document.getElementById('schedule-body');
@@ -237,113 +418,278 @@
         const streamIframe = document.getElementById('stream-iframe');
         const noStream = document.getElementById('no-stream');
         const tickerWrapper = document.getElementById('tickerWrapper');
+        
+        // Admin Elements
+        const adminPromptModal = document.getElementById('admin-prompt-modal');
+        const adminPasswordInput = document.getElementById('adminPasswordInput');
+        const adminPasswordError = document.getElementById('adminPasswordError');
+        const adminPanelModal = document.getElementById('admin-panel-modal');
+        const adminTabButtons = document.querySelectorAll('.admin-tab-button');
+        const adminTabPanels = document.querySelectorAll('.admin-tab-panel');
+        
+        // Alert Modal
         const customAlertModal = document.getElementById('custom-alert-modal');
         const customAlertTitle = document.getElementById('custom-alert-title');
         const customAlertMessage = document.getElementById('custom-alert-message');
 
-        // --- Tab Navigation Logic ---
+        // --- Tab Navigation Logic (Public) ---
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabPanels = document.querySelectorAll('.tab-panel');
         tabButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // Deselect all buttons and hide all panels
                 tabButtons.forEach(btn => btn.setAttribute('aria-selected', 'false'));
                 tabPanels.forEach(panel => panel.style.display = 'none');
-                
-                // Select clicked button and show its panel
                 button.setAttribute('aria-selected', 'true');
                 const panelId = button.getAttribute('aria-controls');
                 document.getElementById(panelId).style.display = 'block';
             });
         });
-        // Note: First tab 'panel-news' is visible by default via inline CSS to prevent white screen
+        document.getElementById('panel-news').style.display = 'block';
+
+        // --- Admin Tab Logic ---
+        adminTabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                adminTabButtons.forEach(btn => btn.setAttribute('aria-selected', 'false'));
+                adminTabPanels.forEach(panel => panel.style.display = 'none');
+                button.setAttribute('aria-selected', 'true');
+                const panelId = button.getAttribute('aria-controls');
+                document.getElementById(panelId).style.display = 'block';
+            });
+        });
 
         // --- Modal Functions ---
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            const content = modal.querySelector('.modal-content');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.add('opacity-100');
+            if (content) content.classList.remove('scale-95');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            const content = modal.querySelector('.modal-content');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.classList.remove('opacity-100');
+            if (content) content.classList.add('scale-95');
+        }
+
         window.showCustomAlert = (title, message) => {
             customAlertTitle.textContent = title;
             customAlertMessage.textContent = message;
-            customAlertModal.classList.remove('opacity-0', 'pointer-events-none');
-            customAlertModal.classList.add('opacity-100');
+            openModal('custom-alert-modal');
         }
-        window.closeCustomAlert = () => {
-            customAlertModal.classList.add('opacity-0', 'pointer-events-none');
-            customAlertModal.classList.remove('opacity-100');
-        }
+        window.closeCustomAlert = () => closeModal('custom-alert-modal');
+        window.closeConfirmation = () => {}; // Stub for safety
 
-        // --- News Ticker ---
-        async function fetchNews() {
-            // Static content as a fallback
-            const staticNews = [
-                "<strong>EDU-LEAGUE:</strong> Battle within Educators",
-                "<strong>REGISTRATION:</strong> Nov 15th - Nov 25th (FREE)",
-                "<strong>CONTACT:</strong> OPEYEMI 08140712347",
-                "<strong>LEVELS:</strong> 🏆 Finalist (400Lvl) 🔥 Penultimate (300Lvl) 👟 Sophomore (200Lvl)"
-            ];
+        // --- Admin Security ---
+        window.promptAdminPassword = function() {
+            adminPasswordInput.value = "";
+            adminPasswordError.classList.add('hidden');
+            openModal('admin-prompt-modal');
+            adminPasswordInput.focus();
+        }
+        
+        window.closeAdminPrompt = () => closeModal('admin-prompt-modal');
+        
+        window.checkAdminPassword = function() {
+            const pass = adminPasswordInput.value;
+            const passLower = pass.toLowerCase();
             
-            let newsHtml = "";
-            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
-            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; }); // Duplicate for loop
-            tickerWrapper.innerHTML = newsHtml;
+            if (pass === SUPER_ADMIN_PASSWORD) {
+                closeAdminPrompt();
+                showAdminPanel('admin');
+                return;
+            }
 
-            // Try to fetch live news
-            const proxyUrl = 'https://api.allorigins.win/raw?url=';
-            const rssFeedUrl = 'https://feeds.skysports.com/data/football.xml';
+            const isReporter = REPORTER_PASSWORDS.some(p => p.toLowerCase() === passLower);
+            if (isReporter) {
+                closeAdminPrompt();
+                showAdminPanel('reporter');
+            } else {
+                adminPasswordError.classList.remove('hidden');
+            }
+        }
+        
+        window.showAdminPanel = function(role) {
+            // Setup tabs based on role
+            const regTab = document.getElementById('admin-tab-registrations');
+            const sponsTab = document.getElementById('admin-tab-sponsor');
+            const newsTab = document.getElementById('admin-tab-news');
+            
+            if (role === 'admin') {
+                 regTab.classList.remove('hidden');
+                 sponsTab.classList.remove('hidden');
+                 // Default to news tab here for simplicity
+                 newsTab.click();
+            } else {
+                 regTab.classList.add('hidden');
+                 sponsTab.classList.add('hidden');
+                 newsTab.click();
+            }
+            openModal('admin-panel-modal');
+        }
+        window.closeAdminPanel = () => closeModal('admin-panel-modal');
+
+        // --- Content Functions ---
+        
+        // Post News (UPDATED WITH MULTIPLE IMAGE PROCESSING)
+        window.postNews = async function(event) {
+            event.preventDefault();
+            const title = document.getElementById('newsTitle').value;
+            const content = document.getElementById('newsContent').value;
+            const imageInput = document.getElementById('newsImage');
+            const files = imageInput.files; // Get files
+            const button = document.getElementById('postNewsButton');
+            
+            button.disabled = true; 
+            button.textContent = "Processing...";
+            
             try {
-                const response = await fetch(proxyUrl + encodeURIComponent(rssFeedUrl));
-                if (!response.ok) throw new Error('Network response was not ok for live news.');
-                const str = await response.text();
-                const data = new window.DOMParser().parseFromString(str, "text/xml");
-                const items = data.querySelectorAll("item");
-                let liveNewsHtml = "";
-                items.forEach((el, index) => {
-                    if (index < 15) { 
-                        const title = el.querySelector("title").innerHTML;
-                        liveNewsHtml += `<div class="ticker-item"><strong>LATEST:</strong> ${title}</div>`;
+                const imageUrls = [];
+                
+                // Process images if selected
+                if (files.length > 0) {
+                    button.textContent = `Compressing ${files.length} Images...`;
+                    
+                    for (let i = 0; i < files.length; i++) {
+                         const file = files[i];
+                         const base64 = await new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                const img = new Image();
+                                img.onload = () => {
+                                    const canvas = document.createElement('canvas');
+                                    const ctx = canvas.getContext('2d');
+                                    // Resize to max 800px width
+                                    const maxWidth = 800;
+                                    let width = img.width;
+                                    let height = img.height;
+                                    
+                                    if (width > maxWidth) {
+                                        height *= maxWidth / width;
+                                        width = maxWidth;
+                                    }
+                                    
+                                    canvas.width = width;
+                                    canvas.height = height;
+                                    ctx.drawImage(img, 0, 0, width, height);
+                                    // Compress
+                                    resolve(canvas.toDataURL('image/jpeg', 0.7));
+                                };
+                                img.onerror = reject;
+                                img.src = e.target.result;
+                            };
+                            reader.onerror = reject;
+                            reader.readAsDataURL(file);
+                        });
+                        imageUrls.push(base64);
                     }
+                }
+                
+                button.textContent = "Posting...";
+                
+                await addDoc(newsCollection, { 
+                    title: title, 
+                    content: content, 
+                    imageUrls: imageUrls, // Save array of images
+                    imageUrl: imageUrls[0] || null, // Backward compatibility for single image logic if needed
+                    timestamp: serverTimestamp() 
                 });
                 
-                if(liveNewsHtml) {
-                    tickerWrapper.innerHTML = liveNewsHtml + liveNewsHtml; 
-                }
-            } catch (error) {
-                console.error('Error fetching live news:', error);
+                showCustomAlert("Success", "News update has been posted!");
+                document.getElementById('newsForm').reset();
+                imageInput.value = ""; 
+                
+            } catch (error) { 
+                console.error("Error posting news: ", error); 
+                showCustomAlert("Error", "Could not post news. " + error.message);
+            } finally { 
+                button.disabled = false; 
+                button.textContent = "Post News"; 
             }
-            
-            const ticker = document.querySelector('.news-ticker');
-            ticker.addEventListener('mouseover', () => tickerWrapper.style.animationPlayState = 'paused');
-            ticker.addEventListener('mouseout', () => tickerWrapper.style.animationPlayState = 'running');
         }
         
-        // --- Data Fetching Logic ---
+        // Post Schedule (Same as before)
+        window.postSchedule = async function(event) {
+            event.preventDefault();
+            // ... (Input gathering same as index.html) ...
+            const teamA = document.getElementById('teamA').value;
+            const teamB = document.getElementById('teamB').value;
+            const matchTime = document.getElementById('matchTime').value;
+            const status = document.getElementById('matchStatus').value;
+            
+            try {
+                await addDoc(scheduleCollection, { teamA, teamB, matchTime, status });
+                showCustomAlert("Success", "Schedule updated!");
+                document.getElementById('scheduleForm').reset();
+            } catch (e) { showCustomAlert("Error", e.message); }
+        }
+
+        // Post Gallery (Same as before)
+        window.postGalleryLink = async function(event) {
+             event.preventDefault();
+             const title = document.getElementById('galleryTitle').value;
+             const url = document.getElementById('galleryUrl').value;
+             try {
+                 await addDoc(galleryCollection, { title, url, timestamp: serverTimestamp() });
+                 showCustomAlert("Success", "Gallery link added!");
+                 document.getElementById('galleryForm').reset();
+             } catch(e) { showCustomAlert("Error", e.message); }
+        }
+        
+        // Set Stream (Same as before)
+        window.setLiveStream = async function(event) {
+             event.preventDefault();
+             const url = document.getElementById('streamUrl').value;
+             try {
+                 await setDoc(doc(db, "settings", "live_stream"), { url, updatedAt: serverTimestamp() });
+                 showCustomAlert("Success", "Stream updated!");
+             } catch(e) { showCustomAlert("Error", e.message); }
+        }
+
+        // --- Data Listeners ---
         
         function listenForNews(db) {
-            const newsCollection = collection(db, "news_posts");
-            const q = query(newsCollection, orderBy("timestamp", "desc"));
-            
+            const q = query(collection(db, "news_posts"), orderBy("timestamp", "desc"));
             onSnapshot(q, (snapshot) => {
                 if (snapshot.empty) {
                     noNews.style.display = 'block';
-                    newsPanel.innerHTML = '';
-                    newsPanel.appendChild(noNews);
+                    document.getElementById('panel-news').innerHTML = '';
+                    document.getElementById('panel-news').appendChild(noNews);
                     return;
                 }
-                
                 noNews.style.display = 'none';
-                newsPanel.innerHTML = ''; // Clear panel
+                const container = document.getElementById('panel-news');
+                container.innerHTML = '';
                 snapshot.forEach((doc) => {
                     const post = doc.data();
                     const postEl = document.createElement('article');
                     postEl.className = 'bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-6';
                     
+                    // Image rendering logic
                     let imgHtml = '';
+                    
+                    // Handle legacy single image
                     if (post.imageUrl && !post.imageUrls) {
                          imgHtml = `<img src="${post.imageUrl}" alt="News Image" class="w-full h-64 object-cover">`;
-                    } else if (post.imageUrls && post.imageUrls.length > 0) {
+                    }
+                    // Handle new multiple images
+                    else if (post.imageUrls && post.imageUrls.length > 0) {
                         if (post.imageUrls.length === 1) {
                             imgHtml = `<img src="${post.imageUrls[0]}" alt="News Image" class="w-full h-64 object-cover">`;
                         } else {
+                            // Grid layout for multiple images
                             let gridContent = post.imageUrls.map(url => 
                                 `<img src="${url}" alt="News Image" class="w-full h-48 object-cover rounded-md border border-gray-100">`
                             ).join('');
-                            const gridClass = post.imageUrls.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3';
+                            
+                            // Use a grid that adjusts based on count
+                            const gridClass = post.imageUrls.length === 2 ? 'grid-cols-2' : 
+                                              post.imageUrls.length === 3 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3';
+                            
                             imgHtml = `<div class="grid ${gridClass} gap-2 p-2 bg-gray-50">${gridContent}</div>`;
                         }
                     }
@@ -356,23 +702,24 @@
                             <p class="text-gray-700 whitespace-pre-wrap leading-relaxed">${post.content}</p>
                         </div>
                     `;
-                    newsPanel.appendChild(postEl);
+                    container.appendChild(postEl);
                 });
-            }, (error) => {
-                console.error("Error fetching news: ", error);
             });
         }
-        
+
+        // (The other listeners - Schedule, Gallery, Stream - are identical to the previous logic in index.html but targeting the IDs in this file. I will include them for completeness)
         function listenForSchedule(db) {
              const q = query(collection(db, "schedules"), orderBy("matchTime"));
              onSnapshot(q, (snap) => {
-                 if(snap.empty) { noSchedule.style.display='table-row'; scheduleBody.innerHTML=''; scheduleBody.appendChild(noSchedule); return;}
-                 noSchedule.style.display='none'; scheduleBody.innerHTML='';
+                 const tbody = document.getElementById('schedule-body');
+                 const noSched = document.getElementById('no-schedule');
+                 if(snap.empty) { noSched.style.display='table-row'; tbody.innerHTML=''; tbody.appendChild(noSched); return;}
+                 noSched.style.display='none'; tbody.innerHTML='';
                  snap.forEach(doc => {
                      const m = doc.data();
                      const row = document.createElement('tr');
                      row.innerHTML = `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${new Date(m.matchTime).toLocaleString()}</td><td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">${m.teamA} vs ${m.teamB}</td><td class="px-6 py-4 whitespace-nowrap text-sm">${m.status}</td>`;
-                     scheduleBody.appendChild(row);
+                     tbody.appendChild(row);
                  });
              });
         }
@@ -380,67 +727,83 @@
         function listenForGallery(db) {
              const q = query(collection(db, "gallery_links"), orderBy("timestamp", "desc"));
              onSnapshot(q, (snap) => {
-                 if(snap.empty) { noGallery.style.display='block'; galleryGrid.innerHTML=''; galleryGrid.appendChild(noGallery); return;}
-                 noGallery.style.display='none'; galleryGrid.innerHTML='';
+                 const grid = document.getElementById('gallery-grid');
+                 const noGal = document.getElementById('no-gallery');
+                 if(snap.empty) { noGal.style.display='block'; grid.innerHTML=''; grid.appendChild(noGal); return;}
+                 noGal.style.display='none'; grid.innerHTML='';
                  snap.forEach(doc => {
                      const d = doc.data();
                      const item = document.createElement('a');
                      item.href = d.url; item.target="_blank"; item.className="block bg-gray-100 rounded-lg shadow p-4 hover:bg-gray-200 transition";
                      item.innerHTML = `<h3 class="font-bold text-edu-purple">${d.title}</h3><p class="text-sm text-gray-500 truncate">${d.url}</p>`;
-                     galleryGrid.appendChild(item);
+                     grid.appendChild(item);
                  });
              });
         }
 
         function listenForStream(db) {
             onSnapshot(doc(db, "settings", "live_stream"), (docSnap) => {
+                const iframe = document.getElementById('stream-iframe');
+                const noStr = document.getElementById('no-stream');
                 if(docSnap.exists() && docSnap.data().url) {
                     let url = docSnap.data().url;
+                    // Simple embed converter
                     if(url.includes('watch?v=')) url = url.replace('watch?v=', 'embed/');
-                    streamIframe.src = url; streamIframe.style.display = 'block'; noStream.style.display='none';
+                    iframe.src = url; iframe.style.display = 'block'; noStr.style.display='none';
                 } else {
-                    streamIframe.style.display='none'; noStream.style.display='block';
+                    iframe.style.display='none'; noStr.style.display='block';
                 }
             });
         }
+        
+        // --- News Ticker ---
+        async function fetchNews() {
+            const staticNews = [
+                "<strong>EDU-LEAGUE:</strong> Battle within Educators",
+                "<strong>REGISTRATION:</strong> Nov 15th - Nov 25th (FREE)",
+                "<strong>CONTACT:</strong> OPEYEMI 08140712347",
+                "<strong>LEVELS:</strong> 🏆 Finalist (400Lvl) 🔥 Penultimate (300Lvl) 👟 Sophomore (200Lvl)"
+            ];
+            
+            let newsHtml = "";
+            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; });
+            staticNews.forEach(item => { newsHtml += `<div class="ticker-item">${item}</div>`; }); 
+            tickerWrapper.innerHTML = newsHtml;
+        }
 
-        // --- Initialize Firebase ---
+        // --- Initialize ---
         async function initializeFirebase() {
              try {
                 if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("PASTE_YOUR_CONFIG_HERE")) {
-                    showCustomAlert("Error", "Firebase config missing. Please update the file.");
+                    showCustomAlert("Error", "Firebase config missing.");
                     return;
                 }
-
                 const app = initializeApp(firebaseConfig);
-                const analytics = getAnalytics(app); 
                 db = getFirestore(app);
                 auth = getAuth(app);
-                
                 await signInAnonymously(auth);
-
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        userId = user.uid;
-                        console.log("User signed in:", userId);
+                        console.log("User signed in");
+                        newsCollection = collection(db, "news_posts");
+                        scheduleCollection = collection(db, "schedules");
+                        galleryCollection = collection(db, "gallery_links");
+                        settingsCollection = collection(db, "settings");
                         
-                        // Start listeners
                         listenForNews(db);
                         listenForSchedule(db);
                         listenForGallery(db);
                         listenForStream(db);
                     }
                 });
-
             } catch (error) {
-                console.error("Firebase Initialization Error:", error);
-                showCustomAlert("Error", "Connection failed: " + error.message);
+                console.error("Firebase Init Error:", error);
             }
         }
 
-        // --- Start the App ---
         initializeFirebase();
         fetchNews();
+
     </script>
 </body>
 </html>
