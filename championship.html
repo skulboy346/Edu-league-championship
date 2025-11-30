@@ -95,22 +95,6 @@
         .admin-tab-panel {
             display: none;
         }
-
-        /* Cropper Styles */
-        .img-container {
-            max-height: 400px;
-            width: 100%;
-            overflow: hidden;
-            margin-bottom: 1rem;
-            background-color: #f3f4f6;
-            border: 2px dashed #d1d5db;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .img-container img {
-            max-width: 100%;
-        }
         
         /* Like Button Animation */
         .like-btn {
@@ -258,6 +242,7 @@
                     <button class="admin-tab-button py-4 px-1" id="admin-tab-schedule" role="tab" aria-controls="admin-panel-schedule" aria-selected="false">Manage Schedule</button>
                     <button class="admin-tab-button py-4 px-1" id="admin-tab-gallery" role="tab" aria-controls="admin-panel-gallery" aria-selected="false">Manage Gallery</button>
                     <button class="admin-tab-button py-4 px-1" id="admin-tab-stream" role="tab" aria-controls="admin-panel-stream" aria-selected="false">Live Stream</button>
+                    <!-- Only show these for Super Admin -->
                     <button class="admin-tab-button py-4 px-1 hidden" id="admin-tab-registrations" role="tab" aria-controls="admin-panel-registrations" aria-selected="false">Registrations</button>
                     <button class="admin-tab-button py-4 px-1 hidden" id="admin-tab-sponsor" role="tab" aria-controls="admin-panel-sponsor" aria-selected="false">Sponsorship</button>
                 </nav>
@@ -265,7 +250,7 @@
             
             <!-- Modal Body (Scrollable) -->
             <div class="p-6 space-y-6 overflow-y-auto">
-                <!-- Panel: Post News (UPDATED WITH IMAGE PREVIEW & CROPPER) -->
+                <!-- Panel: Post News (UPDATED WITH MULTIPLE IMAGE + CROPPER) -->
                 <div id="admin-panel-news" role="tabpanel" aria-labelledby="admin-tab-news" class="admin-tab-panel">
                     <h4 class="text-xl font-semibold text-gray-700">Post a New Update</h4>
                     <form id="newsForm" onsubmit="postNews(event); return false;">
@@ -273,14 +258,14 @@
                             <label for="newsTitle" class="block text-sm font-medium text-gray-700">Title</label>
                             <input type="text" id="newsTitle" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
                         </div>
-                        <!-- UPDATED IMAGE INPUT & PREVIEW -->
+                        <!-- UPDATED: File input for multiple images -->
                         <div>
-                            <label for="newsImage" class="block text-sm font-medium text-gray-700">News Image</label>
-                            <input type="file" id="newsImage" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-edu-purple file:text-white hover:file:bg-purple-700">
-                            <div class="img-container hidden" id="imgPreviewContainer">
-                                <img id="imageToCrop" src="">
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">Select an image to preview and crop (optional).</p>
+                            <label for="newsImage" class="block text-sm font-medium text-gray-700">News Image(s)</label>
+                            <input type="file" id="newsImage" accept="image/*" multiple class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-edu-purple file:text-white hover:file:bg-purple-700">
+                            <p class="text-xs text-gray-500 mt-1">Select one or more images. Click thumbnails below to crop/edit before posting.</p>
+                            
+                            <!-- Preview & Crop Area -->
+                            <div id="previewGrid" class="grid grid-cols-3 gap-2 mt-2"></div>
                         </div>
                         <div>
                             <label for="newsContent" class="block text-sm font-medium text-gray-700">Content</label>
@@ -292,7 +277,6 @@
                 
                 <!-- Panel: Manage Schedule -->
                 <div id="admin-panel-schedule" role="tabpanel" aria-labelledby="admin-tab-schedule" class="admin-tab-panel space-y-4">
-                    <!-- ... (Same as before) ... -->
                     <h4 class="text-xl font-semibold text-gray-700">Add/Update Match Schedule</h4>
                     <form id="scheduleForm" onsubmit="postSchedule(event); return false;" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div><label for="teamA" class="block text-sm font-medium text-gray-700">Team A</label><input type="text" id="teamA" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border"></div>
@@ -315,7 +299,7 @@
                 
                 <!-- Panel: Live Stream -->
                 <div id="admin-panel-stream" role="tabpanel" aria-labelledby="admin-tab-stream" class="admin-tab-panel space-y-4">
-                     <h4 class="text-xl font-semibold text-gray-700">Set Live Stream URL</h4>
+                    <h4 class="text-xl font-semibold text-gray-700">Set Live Stream URL</h4>
                     <form id="streamForm" onsubmit="setLiveStream(event); return false;">
                         <div><label for="streamUrl" class="block text-sm font-medium text-gray-700">Stream URL</label><input type="url" id="streamUrl" placeholder="https://youtube.com/live/..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-10 p-2 border"></div>
                         <button type="submit" id="setStreamButton" class="py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700">Set Stream</button>
@@ -339,6 +323,23 @@
                 <button onclick="closeAdminPanel()" class="py-2 px-6 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 transition duration-150">
                     Close Panel
                 </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ** NEW: Dedicated Cropper Modal ** -->
+    <div id="cropper-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-[60] hidden">
+        <div class="bg-white rounded-lg shadow-2xl max-w-3xl w-full flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="text-lg font-bold">Crop Image</h3>
+                <button onclick="closeCropper()" class="text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div class="p-4 flex-grow relative bg-gray-100" style="min-height: 300px;">
+                <img id="cropperImage" src="" class="max-w-full max-h-full block mx-auto">
+            </div>
+            <div class="p-4 border-t flex justify-end gap-4">
+                <button onclick="closeCropper()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+                <button onclick="saveCrop()" class="px-4 py-2 bg-edu-purple text-white rounded hover:bg-purple-700">Save Crop</button>
             </div>
         </div>
     </div>
@@ -386,14 +387,12 @@
 
         // --- *** PASTE YOUR FIREBASE CONFIG HERE *** ---
         const firebaseConfig = {
-           apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
-           authDomain: "sonic-verbena-239117.firebaseapp.com",
-           databaseURL: "https://sonic-verbena-239117.firebaseio.com",
-           projectId: "sonic-verbena-239117",
-           storageBucket: "sonic-verbena-239117.firebasestorage.app",
-           messagingSenderId: "652544574249",
-           appId: "1:652544574249:web:6ff33771307e892e7f6d38",
-           measurementId: "G-TD780JGNED"
+           apiKey: "PASTE_YOUR_CONFIG_HERE",
+           authDomain: "PASTE_YOUR_CONFIG_HERE",
+           projectId: "PASTE_YOUR_CONFIG_HERE",
+           storageBucket: "PASTE_YOUR_CONFIG_HERE",
+           messagingSenderId: "PASTE_YOUR_CONFIG_HERE",
+           appId: "PASTE_YOUR_CONFIG_HERE"
          };
         // --- *** END OF CONFIG *** ---
 
@@ -402,7 +401,6 @@
         let auth;
         let userId;
         let newsCollection, scheduleCollection, galleryCollection, settingsCollection;
-        let cropper; // Global cropper instance
         
         const SUPER_ADMIN_PASSWORD = "EDUADMIN2025"; 
         const REPORTER_PASSWORDS = ["NEWS2025", "MEDIA2025", "POST2025"];
@@ -411,15 +409,20 @@
         const newsPanel = document.getElementById('panel-news');
         const noNews = document.getElementById('no-news');
         // ... other existing elements ...
-        const imageToCrop = document.getElementById('imageToCrop');
-        const imgPreviewContainer = document.getElementById('imgPreviewContainer');
         const newsImageInput = document.getElementById('newsImage');
+        const previewGrid = document.getElementById('previewGrid');
+        const cropperModal = document.getElementById('cropper-modal');
+        const cropperImage = document.getElementById('cropperImage');
+        
+        // Cropper State
+        let cropperInstance = null;
+        let currentCropIndex = -1;
+        let pendingImages = []; // Stores { file: File, dataUrl: string }
 
         // ... (LLM Setup & Utility Functions unchanged) ...
         const apiKey = ""; 
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
         async function fetchWithExponentialBackoff(url, options, maxRetries = 5) {
-             // ... implementation from previous ...
              for (let attempt = 0; attempt < maxRetries; attempt++) {
                 try {
                     const response = await fetch(url, options);
@@ -430,7 +433,6 @@
             }
             throw new Error('API request failed');
         }
-
 
         // --- Modal Functions (unchanged) ---
         function openModal(modalId) {
@@ -505,27 +507,81 @@
         }
         window.closeAdminPanel = () => closeModal('admin-panel-modal');
 
-        // --- Image Cropping Logic ---
-        newsImageInput.addEventListener('change', function(e) {
-            const files = e.target.files;
-            if (files && files.length > 0) {
-                const file = files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imageToCrop.src = e.target.result;
-                    imgPreviewContainer.classList.remove('hidden');
-                    
-                    if (cropper) { cropper.destroy(); }
-                    cropper = new Cropper(imageToCrop, {
-                        aspectRatio: 16 / 9,
-                        viewMode: 1,
-                    });
-                };
-                reader.readAsDataURL(file);
+        // --- Image Processing Logic (Refactored) ---
+        
+        newsImageInput.addEventListener('change', async function(e) {
+            const files = Array.from(e.target.files);
+            if (files.length === 0) return;
+            
+            // Process newly added files
+            for (const file of files) {
+                 const dataUrl = await readFileAsDataURL(file);
+                 pendingImages.push({ file: file, dataUrl: dataUrl });
             }
+            renderPreviewGrid();
         });
+        
+        function readFileAsDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        function renderPreviewGrid() {
+            previewGrid.innerHTML = '';
+            pendingImages.forEach((imgData, index) => {
+                const div = document.createElement('div');
+                div.className = 'relative group h-24 bg-gray-200 rounded overflow-hidden';
+                div.innerHTML = `
+                    <img src="${imgData.dataUrl}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                        <button type="button" onclick="openCropper(${index})" class="text-white bg-blue-600 p-1 rounded hover:bg-blue-700" title="Edit"><i class="fas fa-pencil-alt"></i></button>
+                        <button type="button" onclick="removeImage(${index})" class="text-white bg-red-600 p-1 rounded hover:bg-red-700" title="Remove"><i class="fas fa-times"></i></button>
+                    </div>
+                `;
+                previewGrid.appendChild(div);
+            });
+        }
+        
+        window.removeImage = function(index) {
+            pendingImages.splice(index, 1);
+            renderPreviewGrid();
+        }
+        
+        window.openCropper = function(index) {
+            currentCropIndex = index;
+            cropperImage.src = pendingImages[index].dataUrl;
+            cropperModal.classList.remove('hidden');
+            
+            if (cropperInstance) cropperInstance.destroy();
+            cropperInstance = new Cropper(cropperImage, {
+                viewMode: 1,
+                autoCropArea: 1,
+            });
+        }
+        
+        window.closeCropper = function() {
+            cropperModal.classList.add('hidden');
+            if (cropperInstance) {
+                cropperInstance.destroy();
+                cropperInstance = null;
+            }
+        }
+        
+        window.saveCrop = function() {
+            if (cropperInstance && currentCropIndex >= 0) {
+                const canvas = cropperInstance.getCroppedCanvas();
+                // Update the stored dataUrl with cropped version
+                pendingImages[currentCropIndex].dataUrl = canvas.toDataURL('image/jpeg');
+                renderPreviewGrid();
+                closeCropper();
+            }
+        }
 
-        // --- Post News with Crop & Like Logic ---
+        // --- Post News ---
         window.postNews = async function(event) {
             event.preventDefault();
             const title = document.getElementById('newsTitle').value;
@@ -534,26 +590,32 @@
             button.disabled = true; button.textContent = "Posting...";
             
             try {
-                let imageUrl = null;
-                if (cropper) {
-                    // Get cropped canvas
-                    const canvas = cropper.getCroppedCanvas();
-                    imageUrl = canvas.toDataURL('image/jpeg');
-                }
+                // Upload all images in pendingImages
+                const imageUrls = [];
+                
+                // Simple compression/resize logic before upload if needed, 
+                // but here we assume dataUrls from previews/crops are ready.
+                // In a real app with storage bucket, we'd upload files here.
+                // For firestore-only (limited size), we save base64 strings.
+                
+                // Ensure we don't exceed document limits (approx 1MB)
+                // This is a naive implementation. Ideally use Firebase Storage.
+                
+                pendingImages.forEach(img => imageUrls.push(img.dataUrl));
                 
                 await addDoc(newsCollection, { 
                     title: title, 
                     content: content, 
-                    imageUrl: imageUrl,
+                    imageUrls: imageUrls, 
+                    imageUrl: imageUrls[0] || null,
                     timestamp: serverTimestamp(),
-                    likes: 0 // Initialize likes
+                    likes: 0
                 });
                 
                 showCustomAlert("Success", "News update posted!");
                 document.getElementById('newsForm').reset();
-                newsImageInput.value = "";
-                imgPreviewContainer.classList.add('hidden');
-                if (cropper) { cropper.destroy(); cropper = null; }
+                pendingImages = []; // Clear
+                renderPreviewGrid();
                 
             } catch (error) { 
                 console.error("Error posting news: ", error); 
@@ -563,28 +625,17 @@
             }
         }
         
-        // --- Like Feature ---
+        // --- Like Feature (unchanged) ---
         window.toggleLike = async function(docId) {
-            // Basic local storage check to prevent spamming likes in one session
             const likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '{}');
-            if (likedPosts[docId]) {
-                // Optional: Could implement unlike here, but keeping it simple
-                return; 
-            }
+            if (likedPosts[docId]) return; 
             
             const postRef = doc(db, "news_posts", docId);
             try {
-                await updateDoc(postRef, {
-                    likes: increment(1)
-                });
-                // Mark locally as liked
+                await updateDoc(postRef, { likes: increment(1) });
                 likedPosts[docId] = true;
                 localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
-                
-                // Visual feedback handles automatically via onSnapshot
-            } catch (error) {
-                console.error("Error liking post:", error);
-            }
+            } catch (error) { console.error("Error liking post:", error); }
         }
 
         // --- Data Listeners ---
@@ -601,7 +652,6 @@
                 noNews.style.display = 'none';
                 container.innerHTML = '';
                 
-                // Check local storage for liked state styling
                 const likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '{}');
 
                 snapshot.forEach((doc) => {
@@ -613,8 +663,18 @@
                     postEl.className = 'bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-6';
                     
                     let imgHtml = '';
-                    if (post.imageUrl) {
-                        imgHtml = `<img src="${post.imageUrl}" alt="News Image" class="w-full h-64 object-cover">`;
+                    if (post.imageUrl && !post.imageUrls) {
+                         imgHtml = `<img src="${post.imageUrl}" alt="News Image" class="w-full h-64 object-cover">`;
+                    } else if (post.imageUrls && post.imageUrls.length > 0) {
+                        if (post.imageUrls.length === 1) {
+                            imgHtml = `<img src="${post.imageUrls[0]}" alt="News Image" class="w-full h-64 object-cover">`;
+                        } else {
+                            let gridContent = post.imageUrls.map(url => 
+                                `<img src="${url}" alt="News Image" class="w-full h-48 object-cover rounded-md border border-gray-100">`
+                            ).join('');
+                            const gridClass = post.imageUrls.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3';
+                            imgHtml = `<div class="grid ${gridClass} gap-2 p-2 bg-gray-50">${gridContent}</div>`;
+                        }
                     }
                     
                     postEl.innerHTML = `
