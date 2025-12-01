@@ -113,13 +113,13 @@
     <!-- Main Navigation Bar -->
     <nav class="bg-white shadow-md sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <a href="./championship.html" class="flex items-center space-x-2">
+            <a href="#" class="flex items-center space-x-2">
                 <img src="edulogo.jpg" alt="Logo" class="h-10 w-10 rounded-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/40x40/6d28d9/fbbf24?text=EDU';">
                 <span class="text-xl font-bold text-edu-purple">EDU-LEAGUE</span>
             </a>
             <div class="flex space-x-4">
-                <a href="./index.html" class="text-gray-600 hover:text-edu-purple font-semibold">Registration</a>
-                <a href="./championship.html" class="text-edu-purple font-bold border-b-2 border-edu-purple">Championship Hub</a>
+                <a href="#" class="text-gray-600 hover:text-edu-purple font-semibold">Registration</a>
+                <a href="#" class="text-edu-purple font-bold border-b-2 border-edu-purple">Championship Hub</a>
             </div>
         </div>
     </nav>
@@ -183,7 +183,7 @@
 
             <!-- Live Stream Panel -->
             <div id="panel-stream" role="tabpanel" aria-labelledby="tab-stream" class="tab-panel">
-                <div class="aspect-w-16 aspect-h-9 bg-black rounded-lg overflow-hidden shadow-lg">
+                <div class="aspect-w-16 aspect-h-9 bg-black rounded-lg overflow-hidden shadow-lg" style="aspect-ratio: 16/9;">
                     <iframe id="stream-iframe" class="w-full h-full" 
                             src="" 
                             frameborder="0" 
@@ -327,7 +327,7 @@
         </div>
     </div>
     
-    <!-- ** NEW: Dedicated Cropper Modal ** -->
+    <!-- ** Dedicated Cropper Modal ** -->
     <div id="cropper-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-[60] hidden">
         <div class="bg-white rounded-lg shadow-2xl max-w-3xl w-full flex flex-col max-h-[90vh]">
             <div class="p-4 border-b flex justify-between items-center">
@@ -378,28 +378,28 @@
 
     <!-- Firebase & Logic Script -->
     <script type="module">
-        // --- Firebase SDK Imports ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-        // ** ADDED updateDoc, increment, arrayUnion **
-        import { getFirestore, collection, addDoc, onSnapshot, query, getDocs, doc, setDoc, serverTimestamp, setLogLevel, orderBy, updateDoc, increment, arrayUnion } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+        // --- Firebase SDK Imports (Using CDN for browser compatibility) ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, getDocs, doc, setDoc, serverTimestamp, setLogLevel, orderBy, updateDoc, increment, arrayUnion } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-        // --- *** PASTE YOUR FIREBASE CONFIG HERE *** ---
+        // --- *** FIREBASE CONFIGURATION *** ---
         const firebaseConfig = {
-           apiKey: "PASTE_YOUR_CONFIG_HERE",
-           authDomain: "PASTE_YOUR_CONFIG_HERE",
-           projectId: "PASTE_YOUR_CONFIG_HERE",
-           storageBucket: "PASTE_YOUR_CONFIG_HERE",
-           messagingSenderId: "PASTE_YOUR_CONFIG_HERE",
-           appId: "PASTE_YOUR_CONFIG_HERE"
-         };
+          apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
+          authDomain: "sonic-verbena-239117.firebaseapp.com",
+          databaseURL: "https://sonic-verbena-239117.firebaseio.com",
+          projectId: "sonic-verbena-239117",
+          storageBucket: "sonic-verbena-239117.firebasestorage.app",
+          messagingSenderId: "652544574249",
+          appId: "1:652544574249:web:6ff33771307e892e7f6d38",
+          measurementId: "G-TD780JGNED"
+        };
         // --- *** END OF CONFIG *** ---
 
         // --- Firebase & App State ---
         let db;
         let auth;
-        let userId;
         let newsCollection, scheduleCollection, galleryCollection, settingsCollection;
         
         const SUPER_ADMIN_PASSWORD = "EDUADMIN2025"; 
@@ -408,7 +408,6 @@
         // --- DOM Elements ---
         const newsPanel = document.getElementById('panel-news');
         const noNews = document.getElementById('no-news');
-        // ... other existing elements ...
         const newsImageInput = document.getElementById('newsImage');
         const previewGrid = document.getElementById('previewGrid');
         const cropperModal = document.getElementById('cropper-modal');
@@ -417,24 +416,9 @@
         // Cropper State
         let cropperInstance = null;
         let currentCropIndex = -1;
-        let pendingImages = []; // Stores { file: File, dataUrl: string }
+        let pendingImages = []; 
 
-        // ... (LLM Setup & Utility Functions unchanged) ...
-        const apiKey = ""; 
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-        async function fetchWithExponentialBackoff(url, options, maxRetries = 5) {
-             for (let attempt = 0; attempt < maxRetries; attempt++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (response.status !== 429) { return response; }
-                } catch (error) { if (attempt === maxRetries - 1) throw error; }
-                const delay = Math.pow(2, attempt) * 1000;
-                await new Promise(resolve => setTimeout(resolve, delay));
-            }
-            throw new Error('API request failed');
-        }
-
-        // --- Modal Functions (unchanged) ---
+        // --- Modal Functions ---
         function openModal(modalId) {
             const modal = document.getElementById(modalId);
             if (!modal) return;
@@ -460,7 +444,7 @@
         }
         window.closeCustomAlert = () => closeModal('custom-alert-modal');
 
-        // --- Admin & Tab Logic (unchanged) ---
+        // --- Admin & Tab Logic ---
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabPanels = document.querySelectorAll('.tab-panel');
         tabButtons.forEach(button => {
@@ -507,13 +491,10 @@
         }
         window.closeAdminPanel = () => closeModal('admin-panel-modal');
 
-        // --- Image Processing Logic (Refactored) ---
-        
+        // --- Image Processing Logic ---
         newsImageInput.addEventListener('change', async function(e) {
             const files = Array.from(e.target.files);
             if (files.length === 0) return;
-            
-            // Process newly added files
             for (const file of files) {
                  const dataUrl = await readFileAsDataURL(file);
                  pendingImages.push({ file: file, dataUrl: dataUrl });
@@ -555,26 +536,18 @@
             currentCropIndex = index;
             cropperImage.src = pendingImages[index].dataUrl;
             cropperModal.classList.remove('hidden');
-            
             if (cropperInstance) cropperInstance.destroy();
-            cropperInstance = new Cropper(cropperImage, {
-                viewMode: 1,
-                autoCropArea: 1,
-            });
+            cropperInstance = new Cropper(cropperImage, { viewMode: 1, autoCropArea: 1 });
         }
         
         window.closeCropper = function() {
             cropperModal.classList.add('hidden');
-            if (cropperInstance) {
-                cropperInstance.destroy();
-                cropperInstance = null;
-            }
+            if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
         }
         
         window.saveCrop = function() {
             if (cropperInstance && currentCropIndex >= 0) {
                 const canvas = cropperInstance.getCroppedCanvas();
-                // Update the stored dataUrl with cropped version
                 pendingImages[currentCropIndex].dataUrl = canvas.toDataURL('image/jpeg');
                 renderPreviewGrid();
                 closeCropper();
@@ -590,17 +563,7 @@
             button.disabled = true; button.textContent = "Posting...";
             
             try {
-                // Upload all images in pendingImages
                 const imageUrls = [];
-                
-                // Simple compression/resize logic before upload if needed, 
-                // but here we assume dataUrls from previews/crops are ready.
-                // In a real app with storage bucket, we'd upload files here.
-                // For firestore-only (limited size), we save base64 strings.
-                
-                // Ensure we don't exceed document limits (approx 1MB)
-                // This is a naive implementation. Ideally use Firebase Storage.
-                
                 pendingImages.forEach(img => imageUrls.push(img.dataUrl));
                 
                 await addDoc(newsCollection, { 
@@ -614,7 +577,7 @@
                 
                 showCustomAlert("Success", "News update posted!");
                 document.getElementById('newsForm').reset();
-                pendingImages = []; // Clear
+                pendingImages = []; 
                 renderPreviewGrid();
                 
             } catch (error) { 
@@ -625,11 +588,54 @@
             }
         }
         
-        // --- Like Feature (unchanged) ---
+        // --- Schedule & Gallery Posting Logic ---
+        window.postSchedule = async function(event) {
+            event.preventDefault();
+            const teamA = document.getElementById('teamA').value;
+            const teamB = document.getElementById('teamB').value;
+            const time = document.getElementById('matchTime').value;
+            const status = document.getElementById('matchStatus').value;
+            const button = document.getElementById('postScheduleButton');
+            button.disabled = true; button.textContent = "Adding...";
+            try {
+                await addDoc(scheduleCollection, { teamA, teamB, time, status, timestamp: serverTimestamp() });
+                showCustomAlert("Success", "Match added to schedule!");
+                document.getElementById('scheduleForm').reset();
+            } catch (error) { showCustomAlert("Error", error.message); }
+            finally { button.disabled = false; button.textContent = "Add Match to Schedule"; }
+        }
+
+        window.postGalleryLink = async function(event) {
+            event.preventDefault();
+            const title = document.getElementById('galleryTitle').value;
+            const url = document.getElementById('galleryUrl').value;
+            const button = document.getElementById('postGalleryButton');
+            button.disabled = true; button.textContent = "Adding...";
+            try {
+                await addDoc(galleryCollection, { title, url, type: 'link', timestamp: serverTimestamp() });
+                showCustomAlert("Success", "Link added to gallery!");
+                document.getElementById('galleryForm').reset();
+            } catch (error) { showCustomAlert("Error", error.message); }
+            finally { button.disabled = false; button.textContent = "Add to Gallery"; }
+        }
+
+        window.setLiveStream = async function(event) {
+            event.preventDefault();
+            const url = document.getElementById('streamUrl').value;
+            const button = document.getElementById('setStreamButton');
+            button.disabled = true; button.textContent = "Setting...";
+            try {
+                // We use a specific ID 'live_stream_config' to always update the same doc
+                await setDoc(doc(db, "settings", "live_stream_config"), { url: url, timestamp: serverTimestamp() });
+                showCustomAlert("Success", "Live stream URL updated!");
+            } catch (error) { showCustomAlert("Error", error.message); }
+            finally { button.disabled = false; button.textContent = "Set Stream"; }
+        }
+
+        // --- Like Feature ---
         window.toggleLike = async function(docId) {
             const likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '{}');
             if (likedPosts[docId]) return; 
-            
             const postRef = doc(db, "news_posts", docId);
             try {
                 await updateDoc(postRef, { likes: increment(1) });
@@ -643,29 +649,39 @@
             const q = query(collection(db, "news_posts"), orderBy("timestamp", "desc"));
             onSnapshot(q, (snapshot) => {
                 const container = document.getElementById('panel-news');
+                // Also update ticker
+                const tickerWrapper = document.getElementById('tickerWrapper');
+                
                 if (snapshot.empty) {
                     noNews.style.display = 'block';
                     container.innerHTML = '';
                     container.appendChild(noNews);
+                    tickerWrapper.innerHTML = '<div class="ticker-item">Welcome to Edu-League 2025! Stay tuned for updates.</div>';
                     return;
                 }
                 noNews.style.display = 'none';
                 container.innerHTML = '';
+                tickerWrapper.innerHTML = '';
                 
                 const likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '{}');
 
                 snapshot.forEach((doc) => {
                     const post = doc.data();
+                    
+                    // Add to Ticker
+                    const tickerItem = document.createElement('div');
+                    tickerItem.className = 'ticker-item';
+                    tickerItem.innerHTML = `<strong>NEW:</strong> ${post.title} &nbsp;&nbsp;&bull;&nbsp;&nbsp;`;
+                    tickerWrapper.appendChild(tickerItem);
+                    
+                    // Add to Main Panel
                     const isLiked = likedPosts[doc.id];
                     const heartClass = isLiked ? 'fa-solid text-red-500' : 'fa-regular text-gray-500';
-                    
                     const postEl = document.createElement('article');
                     postEl.className = 'bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-6';
                     
                     let imgHtml = '';
-                    if (post.imageUrl && !post.imageUrls) {
-                         imgHtml = `<img src="${post.imageUrl}" alt="News Image" class="w-full h-64 object-cover">`;
-                    } else if (post.imageUrls && post.imageUrls.length > 0) {
+                    if (post.imageUrls && post.imageUrls.length > 0) {
                         if (post.imageUrls.length === 1) {
                             imgHtml = `<img src="${post.imageUrls[0]}" alt="News Image" class="w-full h-64 object-cover">`;
                         } else {
@@ -675,6 +691,8 @@
                             const gridClass = post.imageUrls.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3';
                             imgHtml = `<div class="grid ${gridClass} gap-2 p-2 bg-gray-50">${gridContent}</div>`;
                         }
+                    } else if (post.imageUrl) {
+                        imgHtml = `<img src="${post.imageUrl}" alt="News Image" class="w-full h-64 object-cover">`;
                     }
                     
                     postEl.innerHTML = `
@@ -694,32 +712,115 @@
                     `;
                     container.appendChild(postEl);
                 });
+                
+                // Clone ticker items for infinite scroll effect
+                if (tickerWrapper.children.length > 0) {
+                     // Simple duplicate to fill space if needed, CSS animation handles the loop
+                     // For true infinite loop in CSS, we often need content to be wider than screen
+                }
             });
         }
         
-        // ... (Other listeners: Schedule, Gallery, Stream - same as before) ...
-        function listenForSchedule(db) { /* ... same implementation ... */ }
-        function listenForGallery(db) { /* ... same implementation ... */ }
-        function listenForStream(db) { /* ... same implementation ... */ }
+        function listenForSchedule(db) {
+            const q = query(collection(db, "schedules"), orderBy("time", "asc"));
+            onSnapshot(q, (snapshot) => {
+                const tbody = document.getElementById('schedule-body');
+                if (snapshot.empty) { tbody.innerHTML = '<tr id="no-schedule"><td colspan="3" class="px-6 py-4 text-center text-gray-500">Match schedule has not been posted yet.</td></tr>'; return; }
+                
+                tbody.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const match = doc.data();
+                    const dateObj = new Date(match.time);
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <div class="font-bold">${dateObj.toLocaleDateString()}</div>
+                            <div class="text-gray-500">${dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <span class="text-edu-purple">${match.teamA}</span> <span class="text-gray-400 mx-2">vs</span> <span class="text-edu-purple">${match.teamB}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                ${match.status}
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
+        }
 
-        // ... (Existing logic for fetchNews, initializeFirebase) ...
+        function listenForGallery(db) {
+             const q = query(collection(db, "gallery_links"), orderBy("timestamp", "desc"));
+             onSnapshot(q, (snapshot) => {
+                const grid = document.getElementById('gallery-grid');
+                if (snapshot.empty) { grid.innerHTML = '<p id="no-gallery" class="text-center text-gray-500 col-span-full">No items yet.</p>'; return; }
+                grid.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const item = doc.data();
+                    const card = document.createElement('div');
+                    card.className = "bg-white rounded-lg shadow overflow-hidden";
+                    // Simple link card for now
+                    card.innerHTML = `
+                        <div class="h-48 bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-image text-4xl text-gray-400"></i>
+                        </div>
+                        <div class="p-4">
+                            <h5 class="font-bold text-gray-800 mb-2">${item.title}</h5>
+                            <a href="${item.url}" target="_blank" class="text-edu-purple hover:underline text-sm">View Content &rarr;</a>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+             });
+        }
         
+        function listenForStream(db) {
+            onSnapshot(doc(db, "settings", "live_stream_config"), (doc) => {
+                const noStream = document.getElementById('no-stream');
+                const iframe = document.getElementById('stream-iframe');
+                const container = iframe.parentElement;
+                
+                if (doc.exists() && doc.data().url) {
+                    let url = doc.data().url;
+                    // Convert YouTube watch URL to Embed URL if necessary
+                    if(url.includes("watch?v=")) {
+                        const videoId = url.split("v=")[1].split("&")[0];
+                        url = `https://www.youtube.com/embed/${videoId}`;
+                    } else if (url.includes("youtu.be/")) {
+                        const videoId = url.split("youtu.be/")[1];
+                        url = `https://www.youtube.com/embed/${videoId}`;
+                    }
+                    
+                    iframe.src = url;
+                    noStream.style.display = 'none';
+                    container.style.display = 'block';
+                } else {
+                    noStream.style.display = 'block';
+                    container.style.display = 'none';
+                    iframe.src = "";
+                }
+            });
+        }
+
+        // --- Initialization ---
         async function initializeFirebase() {
              try {
-                if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("PASTE_YOUR_CONFIG_HERE")) {
-                    showCustomAlert("Error", "Firebase config missing.");
-                    return;
-                }
                 const app = initializeApp(firebaseConfig);
+                const analytics = getAnalytics(app); // Optional
                 db = getFirestore(app);
                 auth = getAuth(app);
+                
+                // Anonymous Auth
                 await signInAnonymously(auth);
+                
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
+                        console.log("Connected to Firebase as", user.uid);
                         newsCollection = collection(db, "news_posts");
                         scheduleCollection = collection(db, "schedules");
                         galleryCollection = collection(db, "gallery_links");
-                        settingsCollection = collection(db, "settings");
                         
                         listenForNews(db);
                         listenForSchedule(db);
@@ -727,11 +828,13 @@
                         listenForStream(db);
                     }
                 });
-            } catch (error) { console.error("Firebase Init Error:", error); }
+            } catch (error) { 
+                console.error("Firebase Init Error:", error);
+                showCustomAlert("Connection Error", "Could not connect to database. Check console.");
+            }
         }
 
         initializeFirebase();
-        // fetchNews(); // Using the News Ticker logic from before if needed
 
     </script>
 </body>
