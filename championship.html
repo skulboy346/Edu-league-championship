@@ -106,6 +106,25 @@
         .liked {
             color: #ef4444; /* Red heart */
         }
+
+        /* Slider Styles */
+        #slider-modal {
+            backdrop-filter: blur(5px);
+        }
+        .slider-image-container {
+            max-height: 80vh;
+        }
+        
+        /* Comments Section Transition */
+        .comments-section {
+            transition: max-height 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .comments-section.open {
+            max-height: 500px; /* Approximate max height for scroll */
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen">
@@ -343,6 +362,54 @@
             </div>
         </div>
     </div>
+    
+    <!-- ** Image Slider Modal (New) ** -->
+    <div id="slider-modal" class="fixed inset-0 bg-black bg-opacity-90 z-[70] hidden flex items-center justify-center">
+        <button onclick="closeSlider()" class="absolute top-4 right-4 text-white text-4xl z-50 hover:text-gray-300">&times;</button>
+        
+        <button onclick="prevSlide()" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-4xl p-4 hover:bg-white hover:bg-opacity-10 rounded-full z-50">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        
+        <div class="slider-image-container max-w-5xl w-full p-4">
+            <img id="slider-image" src="" class="max-h-[85vh] mx-auto object-contain rounded shadow-2xl transition-all duration-300">
+            <p id="slider-counter" class="text-center text-white mt-4 font-semibold text-lg"></p>
+        </div>
+        
+        <button onclick="nextSlide()" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-4xl p-4 hover:bg-white hover:bg-opacity-10 rounded-full z-50">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+    
+    <!-- ** Share Modal (NEW) ** -->
+    <div id="share-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[80] hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-sm transform transition-all scale-95 duration-300 modal-content overflow-hidden">
+            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-800">Share Post</h3>
+                <button onclick="closeShareModal()" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 grid grid-cols-2 gap-4">
+                <button onclick="triggerShare('whatsapp')" class="flex flex-col items-center justify-center p-4 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 transition-colors">
+                    <i class="fab fa-whatsapp text-3xl mb-2"></i>
+                    <span class="text-sm font-semibold">WhatsApp</span>
+                </button>
+                <button onclick="triggerShare('facebook')" class="flex flex-col items-center justify-center p-4 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors">
+                    <i class="fab fa-facebook text-3xl mb-2"></i>
+                    <span class="text-sm font-semibold">Facebook</span>
+                </button>
+                <button onclick="triggerShare('copy')" class="flex flex-col items-center justify-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-600 transition-colors">
+                    <i class="fas fa-link text-3xl mb-2"></i>
+                    <span class="text-sm font-semibold">Copy Link</span>
+                </button>
+                <button onclick="triggerShare('native')" class="flex flex-col items-center justify-center p-4 rounded-lg bg-purple-50 hover:bg-purple-100 text-edu-purple transition-colors">
+                    <i class="fas fa-share-nodes text-3xl mb-2"></i>
+                    <span class="text-sm font-semibold">More</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Custom Alert Modal -->
     <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
@@ -492,7 +559,6 @@
         window.closeAdminPanel = () => closeModal('admin-panel-modal');
 
         // --- Image Processing Logic ---
-        // NEW: Compression Helper
         function compressImage(dataUrl, maxWidth = 800, quality = 0.6) {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -578,6 +644,45 @@
                 pendingImages[currentCropIndex].dataUrl = canvas.toDataURL('image/jpeg', 0.6);
                 renderPreviewGrid();
                 closeCropper();
+            }
+        }
+
+        // --- Slider Logic (New) ---
+        let currentSliderImages = [];
+        let currentSliderIndex = 0;
+        const sliderModal = document.getElementById('slider-modal');
+        const sliderImage = document.getElementById('slider-image');
+        const sliderCounter = document.getElementById('slider-counter');
+        
+        window.openSlider = function(imagesStr, index) {
+            currentSliderImages = JSON.parse(decodeURIComponent(imagesStr));
+            currentSliderIndex = index;
+            updateSlider();
+            sliderModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+        
+        window.closeSlider = function() {
+            sliderModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        
+        window.updateSlider = function() {
+            sliderImage.src = currentSliderImages[currentSliderIndex];
+            sliderCounter.textContent = `${currentSliderIndex + 1} / ${currentSliderImages.length}`;
+        }
+        
+        window.nextSlide = function() {
+            if (currentSliderImages.length > 1) {
+                currentSliderIndex = (currentSliderIndex + 1) % currentSliderImages.length;
+                updateSlider();
+            }
+        }
+        
+        window.prevSlide = function() {
+            if (currentSliderImages.length > 1) {
+                currentSliderIndex = (currentSliderIndex - 1 + currentSliderImages.length) % currentSliderImages.length;
+                updateSlider();
             }
         }
 
@@ -670,6 +775,118 @@
                 localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
             } catch (error) { console.error("Error liking post:", error); }
         }
+        
+        // --- Share Feature (New & Updated) ---
+        let currentShareData = {};
+
+        window.sharePost = function(title, content) {
+            currentShareData = {
+                title: title,
+                text: content,
+                url: window.location.href
+            };
+            const modal = document.getElementById('share-modal');
+            modal.classList.remove('hidden');
+            // small timeout for transition
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('.modal-content').classList.remove('scale-95');
+            }, 10);
+        }
+
+        window.closeShareModal = function() {
+            const modal = document.getElementById('share-modal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('.modal-content').classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        window.triggerShare = async function(platform) {
+            const { title, text, url } = currentShareData;
+            const encodedText = encodeURIComponent(text.substring(0, 100) + '...');
+            const encodedUrl = encodeURIComponent(url);
+            const encodedTitle = encodeURIComponent(title);
+
+            if (platform === 'whatsapp') {
+                window.open(`https://wa.me/?text=*${encodedTitle}*%0A${encodedText}%0A${encodedUrl}`, '_blank');
+            } else if (platform === 'facebook') {
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, '_blank');
+            } else if (platform === 'copy') {
+                try {
+                    await navigator.clipboard.writeText(`${title}\n${text}\n${url}`);
+                    showCustomAlert("Copied", "Link copied to clipboard!");
+                    closeShareModal();
+                } catch (err) {
+                    console.error('Failed to copy', err);
+                }
+            } else if (platform === 'native') {
+                if (navigator.share) {
+                    navigator.share({ title, text, url }).catch(console.error);
+                } else {
+                    showCustomAlert("Info", "Native sharing not supported on this device.");
+                }
+            }
+        }
+
+        // --- Comments Feature (New) ---
+        window.toggleComments = async function(postId) {
+             const section = document.getElementById(`comments-${postId}`);
+             const list = document.getElementById(`comment-list-${postId}`);
+             const loadBtn = document.getElementById(`load-comments-${postId}`);
+             
+             if (section.classList.contains('open')) {
+                 section.classList.remove('open');
+             } else {
+                 section.classList.add('open');
+                 // Load comments if empty
+                 if (list.children.length === 0) {
+                     loadComments(postId);
+                 }
+             }
+        }
+        
+        window.postComment = async function(postId) {
+            const input = document.getElementById(`comment-input-${postId}`);
+            const text = input.value.trim();
+            if(!text) return;
+            
+            try {
+                // We use a top-level collection for simplicity to avoid index requirements in complex queries
+                // In production, a subcollection is fine, but sometimes requires index deployment.
+                // Let's use a subcollection pattern which is standard.
+                // NOTE: If this fails due to index, we might need to check console.
+                await addDoc(collection(db, `news_posts/${postId}/comments`), {
+                    text: text,
+                    timestamp: serverTimestamp()
+                });
+                input.value = "";
+            } catch(e) {
+                console.error("Error posting comment", e);
+                showCustomAlert("Error", "Could not post comment.");
+            }
+        }
+        
+        function loadComments(postId) {
+             const list = document.getElementById(`comment-list-${postId}`);
+             const q = query(collection(db, `news_posts/${postId}/comments`), orderBy("timestamp", "asc"));
+             
+             onSnapshot(q, (snapshot) => {
+                 list.innerHTML = '';
+                 if (snapshot.empty) {
+                     list.innerHTML = '<p class="text-gray-400 text-sm italic">No comments yet. Be the first!</p>';
+                     return;
+                 }
+                 snapshot.forEach(doc => {
+                     const c = doc.data();
+                     const div = document.createElement('div');
+                     div.className = "bg-gray-100 p-2 rounded mb-2 text-sm";
+                     div.textContent = c.text;
+                     list.appendChild(div);
+                 });
+                 // Scroll to bottom
+                 list.scrollTop = list.scrollHeight;
+             });
+        }
 
         // --- Data Listeners ---
         function listenForNews(db) {
@@ -694,6 +911,7 @@
 
                 snapshot.forEach((doc) => {
                     const post = doc.data();
+                    const postId = doc.id;
                     
                     // Add to Ticker
                     const tickerItem = document.createElement('div');
@@ -702,24 +920,34 @@
                     tickerWrapper.appendChild(tickerItem);
                     
                     // Add to Main Panel
-                    const isLiked = likedPosts[doc.id];
+                    const isLiked = likedPosts[postId];
                     const heartClass = isLiked ? 'fa-solid text-red-500' : 'fa-regular text-gray-500';
                     const postEl = document.createElement('article');
                     postEl.className = 'bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-6';
                     
+                    // --- Rectangular Image Logic (New) ---
                     let imgHtml = '';
                     if (post.imageUrls && post.imageUrls.length > 0) {
-                        if (post.imageUrls.length === 1) {
-                            imgHtml = `<img src="${post.imageUrls[0]}" alt="News Image" class="w-full h-64 object-cover">`;
-                        } else {
-                            let gridContent = post.imageUrls.map(url => 
-                                `<img src="${url}" alt="News Image" class="w-full h-48 object-cover rounded-md border border-gray-100">`
-                            ).join('');
-                            const gridClass = post.imageUrls.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3';
-                            imgHtml = `<div class="grid ${gridClass} gap-2 p-2 bg-gray-50">${gridContent}</div>`;
-                        }
+                        const encodedImages = encodeURIComponent(JSON.stringify(post.imageUrls));
+                        const moreCount = post.imageUrls.length - 1;
+                        const overlayHtml = moreCount > 0 
+                            ? `<div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-white text-3xl font-bold cursor-pointer pointer-events-none">+${moreCount}</div>` 
+                            : '';
+                        
+                        imgHtml = `
+                            <div class="relative w-full aspect-video cursor-pointer group" onclick="openSlider('${encodedImages}', 0)">
+                                <img src="${post.imageUrls[0]}" alt="News Image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                ${overlayHtml}
+                            </div>
+                        `;
                     } else if (post.imageUrl) {
-                        imgHtml = `<img src="${post.imageUrl}" alt="News Image" class="w-full h-64 object-cover">`;
+                        // Legacy single image fallback
+                        const encodedImages = encodeURIComponent(JSON.stringify([post.imageUrl]));
+                        imgHtml = `
+                            <div class="relative w-full aspect-video cursor-pointer group" onclick="openSlider('${encodedImages}', 0)">
+                                <img src="${post.imageUrl}" alt="News Image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            </div>
+                        `;
                     }
                     
                     postEl.innerHTML = `
@@ -729,22 +957,40 @@
                             <p class="text-sm text-gray-500 mb-4">${post.timestamp ? new Date(post.timestamp.toDate()).toLocaleString() : 'Just now'}</p>
                             <p class="text-gray-700 whitespace-pre-wrap leading-relaxed mb-4">${post.content}</p>
                             
-                            <div class="flex items-center">
-                                <button onclick="toggleLike('${doc.id}')" class="flex items-center space-x-2 group focus:outline-none">
-                                    <i class="${heartClass} fa-heart text-2xl group-hover:text-red-500 transition-colors like-btn ${isLiked ? 'liked' : ''}"></i>
-                                    <span class="font-semibold text-gray-600 group-hover:text-gray-800">${post.likes || 0}</span>
+                            <div class="flex items-center space-x-6 border-t pt-4">
+                                <!-- Like Button -->
+                                <button onclick="toggleLike('${postId}')" class="flex items-center space-x-2 group focus:outline-none text-gray-600 hover:text-red-500">
+                                    <i class="${heartClass} fa-heart text-xl transition-colors like-btn ${isLiked ? 'liked' : ''}"></i>
+                                    <span class="font-semibold">${post.likes || 0}</span>
                                 </button>
+                                
+                                <!-- Comment Button -->
+                                <button onclick="toggleComments('${postId}')" class="flex items-center space-x-2 group focus:outline-none text-gray-600 hover:text-blue-500">
+                                    <i class="fa-regular fa-comment text-xl"></i>
+                                    <span class="font-semibold">Comment</span>
+                                </button>
+                                
+                                <!-- Share Button (New) -->
+                                <button onclick="sharePost('${post.title.replace(/'/g, "\\'")}', '${post.content.replace(/\n/g, ' ').replace(/'/g, "\\'")}')" class="flex items-center space-x-2 group focus:outline-none text-gray-600 hover:text-green-500 ml-auto">
+                                    <i class="fa-solid fa-share-nodes text-xl"></i>
+                                    <span class="font-semibold">Share</span>
+                                </button>
+                            </div>
+                            
+                            <!-- Comments Section (Hidden by default) -->
+                            <div id="comments-${postId}" class="comments-section mt-4 border-t pt-4 border-gray-100">
+                                <div id="comment-list-${postId}" class="mb-4 max-h-60 overflow-y-auto space-y-2">
+                                    <!-- Comments loaded here -->
+                                </div>
+                                <div class="flex gap-2">
+                                    <input type="text" id="comment-input-${postId}" placeholder="Write a comment..." class="flex-grow border rounded px-3 py-2 text-sm focus:outline-none focus:border-edu-purple">
+                                    <button onclick="postComment('${postId}')" class="bg-edu-purple text-white px-4 py-2 rounded text-sm hover:bg-purple-700">Post</button>
+                                </div>
                             </div>
                         </div>
                     `;
                     container.appendChild(postEl);
                 });
-                
-                // Clone ticker items for infinite scroll effect
-                if (tickerWrapper.children.length > 0) {
-                     // Simple duplicate to fill space if needed, CSS animation handles the loop
-                     // For true infinite loop in CSS, we often need content to be wider than screen
-                }
             });
         }
         
