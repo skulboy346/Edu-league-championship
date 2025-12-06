@@ -11,29 +11,17 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
         
-        /* Card Hover */
         .news-card { transition: all 0.3s ease; display: flex; flex-direction: column; }
         .news-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1); }
-        
-        /* Text Truncation */
-        .line-clamp-3 {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        /* Interaction Buttons */
+        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         .liked { color: #ef4444; animation: pop 0.3s ease; }
         @keyframes pop { 50% { transform: scale(1.2); } }
-        
-        /* Modal Scrollbar */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Fade Animation for Widget */
-        .fade-enter { opacity: 0; transition: opacity 0.5s ease-in; }
-        .fade-enter-active { opacity: 1; }
+        
+        /* Table Styles */
+        .tab-active { background-color: #16a34a; color: white; border-color: #16a34a; }
+        .tab-inactive { background-color: white; color: #374151; border-color: #e5e7eb; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -62,25 +50,50 @@
         <div class="bg-gray-900 text-white py-8">
             <div class="max-w-4xl mx-auto px-4">
                 <h2 class="text-center text-green-500 font-bold text-xs uppercase tracking-widest mb-4">Official Matchday Fixtures</h2>
-                
                 <div id="match-widget" class="bg-white/10 rounded-xl p-6 backdrop-blur-sm border border-white/20 flex items-center justify-between transition-opacity duration-500">
                     <div class="flex flex-col items-center w-1/3 text-center">
                         <img id="teamA_img" src="edulogo.jpg" class="w-16 h-16 md:w-20 md:h-20 object-contain mb-2 bg-white rounded-full p-1 shadow-lg">
                         <h3 id="teamA_name" class="font-bold text-sm md:text-lg leading-tight">Loading</h3>
                     </div>
-
                     <div class="text-center w-1/3">
                         <div class="text-2xl md:text-4xl font-black text-white mb-1 italic">VS</div>
                         <div class="text-[10px] md:text-xs text-gray-300 font-mono uppercase bg-black/30 rounded px-2 py-1 inline-block" id="match_details">...</div>
                     </div>
-
                     <div class="flex flex-col items-center w-1/3 text-center">
                         <img id="teamB_img" src="edulogo.jpg" class="w-16 h-16 md:w-20 md:h-20 object-contain mb-2 bg-white rounded-full p-1 shadow-lg">
                         <h3 id="teamB_name" class="font-bold text-sm md:text-lg leading-tight">Loading</h3>
                     </div>
                 </div>
-                
                 <div id="slider-dots" class="flex justify-center gap-2 mt-4"></div>
+            </div>
+        </div>
+
+        <div class="max-w-4xl mx-auto px-4 mt-8">
+            <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+                <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+                    <h3 class="font-bold text-gray-800"><i class="fa-solid fa-list-ol mr-2 text-green-600"></i>Standings</h3>
+                    <div class="flex space-x-1">
+                        <button onclick="loadTable('Finalist')" id="tab-Finalist" class="tab-active px-3 py-1 rounded text-xs font-bold transition">Finalist</button>
+                        <button onclick="loadTable('Penultimate')" id="tab-Penultimate" class="tab-inactive px-3 py-1 rounded text-xs font-bold transition">Penultimate</button>
+                        <button onclick="loadTable('Sophomore')" id="tab-Sophomore" class="tab-inactive px-3 py-1 rounded text-xs font-bold transition">Sophomore</button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-gray-100 text-gray-500 uppercase text-xs">
+                            <tr>
+                                <th class="py-3 px-4 w-10">#</th>
+                                <th class="py-3 px-4">Team</th>
+                                <th class="py-3 px-4 text-center">PL</th>
+                                <th class="py-3 px-4 text-center">GD</th>
+                                <th class="py-3 px-4 text-center font-black text-gray-800">PTS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="league-table-body">
+                            <tr><td colspan="5" class="p-4 text-center text-gray-400">Loading table...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -93,27 +106,24 @@
 
     <div id="newsModal" class="fixed inset-0 bg-black bg-opacity-90 z-[60] hidden flex items-center justify-center p-0 md:p-4 backdrop-blur-sm">
         <div class="bg-white md:rounded-2xl w-full max-w-3xl h-full md:h-[90vh] flex flex-col overflow-hidden relative shadow-2xl">
-            
             <div class="p-4 border-b flex justify-between items-center bg-white z-10">
                 <h3 class="font-bold text-gray-800 text-lg truncate pr-4">Post Details</h3>
                 <button onclick="closeModal()" class="bg-gray-100 p-2 rounded-full hover:bg-gray-200 text-gray-600 transition"><i class="fa-solid fa-times text-xl"></i></button>
             </div>
-
             <div class="overflow-y-auto flex-grow bg-gray-50 no-scrollbar pb-20">
-                <img id="modalImg" class="w-full max-h-96 object-contain bg-black hidden">
-                
+                <div id="media-container" class="w-full bg-black flex justify-center">
+                    <img id="modalImg" class="w-full max-h-96 object-contain hidden">
+                </div>
                 <div class="p-6 md:p-8 bg-white">
                     <span id="modalDate" class="text-xs font-bold text-green-600 uppercase tracking-wide"></span>
                     <h2 id="modalTitle" class="text-2xl md:text-3xl font-black text-gray-900 mt-2 mb-6 leading-tight"></h2>
                     <p id="modalBody" class="text-gray-800 whitespace-pre-line text-base leading-relaxed"></p>
                 </div>
-
                 <div class="p-6 border-t bg-gray-50">
                     <h4 class="font-bold text-gray-700 mb-4 text-sm uppercase">Comments</h4>
                     <div id="comments-list" class="space-y-3 mb-4"></div>
                 </div>
             </div>
-
             <form onsubmit="postComment(event)" class="bg-white p-3 border-t flex gap-2 items-center absolute bottom-0 w-full">
                 <input id="commentName" class="w-1/4 text-xs border p-2 rounded bg-gray-50 focus:outline-none focus:ring-1 focus:ring-green-500" placeholder="Name" required maxlength="15">
                 <input id="commentInput" class="flex-grow text-sm p-2 border rounded bg-gray-50 focus:outline-none focus:ring-1 focus:ring-green-500" placeholder="Write a comment..." required autocomplete="off">
@@ -125,7 +135,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, increment, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, increment, addDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         // --- FIREBASE KEYS ---
         const firebaseConfig = {
@@ -137,7 +147,6 @@
            appId: "1:652544574249:web:6ff33771307e892e7f6d38",
            measurementId: "G-TD780JGNED"
         };
-        // -------------------------------
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -146,77 +155,88 @@
         let currentPostId = null;
         let commentsUnsubscribe = null;
         let matchInterval = null;
+        let currentTableLevel = 'Finalist';
 
         signInAnonymously(auth).catch(console.error);
 
-        // --- FOLLOW SYSTEM ---
-        window.toggleFollow = () => {
-            const btn = document.getElementById('followBtn');
-            const isFollowing = localStorage.getItem('eduLeagueFollowing') === 'true';
-            if (isFollowing) {
-                localStorage.setItem('eduLeagueFollowing', 'false');
-                btn.innerHTML = '<i class="fa-regular fa-bell mr-2"></i> Follow Updates';
-                btn.className = "bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-xs font-bold border hover:bg-green-50 transition flex items-center";
-            } else {
-                localStorage.setItem('eduLeagueFollowing', 'true');
-                btn.innerHTML = '<i class="fa-solid fa-bell mr-2"></i> Following';
-                btn.className = "bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-bold border border-green-200 transition flex items-center";
-                alert("You are now following EDU-LEAGUE updates!");
-            }
-        }
-        if(localStorage.getItem('eduLeagueFollowing') === 'true') {
-            const btn = document.getElementById('followBtn');
-            btn.innerHTML = '<i class="fa-solid fa-bell mr-2"></i> Following';
-            btn.className = "bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-bold border border-green-200 transition flex items-center";
-        }
+        // --- 1. LEAGUE TABLE LOGIC ---
+        window.loadTable = (level) => {
+            currentTableLevel = level;
+            // Update Tabs
+            ['Finalist', 'Penultimate', 'Sophomore'].forEach(l => {
+                const btn = document.getElementById(`tab-${l}`);
+                if(l === level) { btn.classList.add('tab-active'); btn.classList.remove('tab-inactive'); }
+                else { btn.classList.remove('tab-active'); btn.classList.add('tab-inactive'); }
+            });
 
-        // --- MATCH SPOTLIGHT (UPDATED FOR MULTIPLE) ---
+            // Fetch Data
+            const tbody = document.getElementById('league-table-body');
+            tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-400">Loading...</td></tr>';
+
+            onSnapshot(doc(db, "app_content", `league_table_${level.toLowerCase()}`), (docSnap) => {
+                if(!docSnap.exists()) { tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-400">No data yet.</td></tr>'; return; }
+                
+                const data = docSnap.data();
+                // Convert object to array and sort
+                const teams = Object.keys(data).map(dept => ({
+                    name: dept, ...data[dept]
+                }));
+
+                // Sort: Points DESC, then GD DESC
+                teams.sort((a, b) => (b.pts - a.pts) || (b.gd - a.gd));
+
+                tbody.innerHTML = '';
+                teams.forEach((t, i) => {
+                    // Highlight top 4 (Green) and Bottom 2 (Red) if needed, or just standard
+                    const rankClass = i < 4 ? 'text-green-700 font-bold' : 'text-gray-600';
+                    tbody.innerHTML += `
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="py-3 px-4 font-bold ${rankClass}">${i+1}</td>
+                            <td class="py-3 px-4 font-semibold text-gray-800">${t.name}</td>
+                            <td class="py-3 px-4 text-center text-gray-600">${t.mp}</td>
+                            <td class="py-3 px-4 text-center text-gray-600">${t.gd > 0 ? '+'+t.gd : t.gd}</td>
+                            <td class="py-3 px-4 text-center font-black text-gray-900 bg-gray-50">${t.pts}</td>
+                        </tr>
+                    `;
+                });
+            });
+        }
+        // Load default on start
+        loadTable('Finalist');
+
+        // --- 2. MATCH SPOTLIGHT (MULTIPLE) ---
         onSnapshot(doc(db, "app_content", "current_fixture"), (docSnap) => {
             if(docSnap.exists()) {
                 const data = docSnap.data();
-                
-                // Clear any existing interval to prevent speeding up
                 if(matchInterval) clearInterval(matchInterval);
 
                 if (data.matches && Array.isArray(data.matches) && data.matches.length > 0) {
                     let idx = 0;
-                    
-                    // Setup Dots
                     const dotsContainer = document.getElementById('slider-dots');
                     dotsContainer.innerHTML = data.matches.map((_, i) => `<div class="h-2 w-2 rounded-full bg-gray-500 opacity-50 transition-all" id="dot-${i}"></div>`).join('');
 
                     const updateDisplay = () => {
                         const m = data.matches[idx];
                         const widget = document.getElementById('match-widget');
-                        
-                        // Fade effect
                         widget.style.opacity = 0;
-                        
                         setTimeout(() => {
                             document.getElementById('teamA_name').textContent = m.teamA;
                             document.getElementById('teamB_name').textContent = m.teamB;
                             document.getElementById('match_details').textContent = `${m.date} • ${m.time} • ${m.venue}`;
                             document.getElementById('teamA_img').src = m.teamALogo || 'edulogo.jpg';
                             document.getElementById('teamB_img').src = m.teamBLogo || 'edulogo.jpg';
-                            
-                            // Update dots
                             for(let i=0; i<data.matches.length; i++) {
                                 const dot = document.getElementById(`dot-${i}`);
                                 if(i===idx) { dot.classList.add('bg-white'); dot.classList.remove('bg-gray-500'); }
                                 else { dot.classList.remove('bg-white'); dot.classList.add('bg-gray-500'); }
                             }
-                            
                             widget.style.opacity = 1;
-                        }, 250); // Wait for fade out
-
+                        }, 250);
                         idx = (idx + 1) % data.matches.length;
                     };
-
                     updateDisplay();
-                    if(data.matches.length > 1) matchInterval = setInterval(updateDisplay, 5000); // 5 Seconds
-                
+                    if(data.matches.length > 1) matchInterval = setInterval(updateDisplay, 5000); 
                 } else {
-                    // Fallback for single match (Legacy support)
                     document.getElementById('teamA_name').textContent = data.teamA || 'Team A';
                     document.getElementById('teamB_name').textContent = data.teamB || 'Team B';
                     document.getElementById('match_details').textContent = `${data.date} • ${data.time} • ${data.venue}`;
@@ -226,37 +246,34 @@
             }
         });
 
-        // --- LOAD POSTS ---
+        // --- 3. NEWS FEED ---
         const q = query(collection(db, "news_posts"), orderBy("timestamp", "desc"));
         onSnapshot(q, (snapshot) => {
             const grid = document.getElementById('news-grid');
             document.getElementById('loading').classList.add('hidden');
             grid.classList.remove('hidden');
             grid.innerHTML = '';
-            
             if (snapshot.empty) { grid.innerHTML = '<p class="text-center col-span-full text-gray-400">No news updates available.</p>'; return; }
 
             snapshot.forEach(doc => {
                 const data = doc.data();
                 const pid = doc.id;
-                const imgUrl = data.imageUrl || 'https://placehold.co/600x400/16a34a/ffffff?text=EDU-LEAGUE+NEWS';
+                const mediaUrl = data.imageUrl || 'https://placehold.co/600x400/16a34a/ffffff?text=EDU-LEAGUE+NEWS';
                 const likes = data.likes || 0;
                 const commentsCount = data.commentsCount || 0;
                 const isLiked = localStorage.getItem(`liked_${pid}`) ? 'liked' : 'text-gray-400';
                 const heartIcon = localStorage.getItem(`liked_${pid}`) ? 'fa-solid' : 'fa-regular';
-                
-                let dateStr = "Recent";
-                if(data.timestamp) dateStr = data.timestamp.toDate().toLocaleDateString('en-US', {month:'short', day:'numeric'});
+                let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-US', {month:'short', day:'numeric'}) : "Recent";
+
+                const isVideo = mediaUrl.includes('.mp4') || mediaUrl.includes('.mov') || mediaUrl.includes('.webm') || mediaUrl.includes('/video/upload/');
+                let mediaHtml = isVideo ? `<video src="${mediaUrl}" class="w-full h-full object-cover" controls playsinline muted></video>` : `<img src="${mediaUrl}" class="w-full h-full object-cover">`;
 
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-xl shadow-sm overflow-hidden news-card border border-gray-100 h-full';
-                card.dataset.title = data.title; card.dataset.content = data.content; card.dataset.img = imgUrl; card.dataset.date = dateStr;
+                card.dataset.title = data.title; card.dataset.content = data.content; card.dataset.media = mediaUrl; card.dataset.isvideo = isVideo; card.dataset.date = dateStr;
 
                 card.innerHTML = `
-                    <div class="relative cursor-pointer h-48 bg-gray-100" onclick="openModal('${pid}')">
-                        <img src="${imgUrl}" class="w-full h-full object-cover">
-                        <div class="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm uppercase">${dateStr}</div>
-                    </div>
+                    <div class="relative h-48 bg-gray-100">${mediaHtml}<div class="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm uppercase">${dateStr}</div></div>
                     <div class="p-5 flex flex-col flex-grow">
                         <h3 class="text-lg font-bold text-gray-900 mb-2 leading-snug cursor-pointer hover:text-green-600 transition" onclick="openModal('${pid}')">${data.title}</h3>
                         <p class="text-sm text-gray-500 line-clamp-3 mb-4 flex-grow">${data.content}</p>
@@ -268,53 +285,35 @@
                             </div>
                             <button onclick="handleShare('${data.title}')" class="text-gray-400 hover:text-green-600 interaction-btn"><i class="fa-solid fa-share-nodes"></i></button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 grid.appendChild(card);
             });
         });
 
-        // --- INTERACTIONS ---
-        window.handleLike = async (id) => {
-            const isLiked = localStorage.getItem(`liked_${id}`);
-            const btn = document.getElementById(`like-btn-${id}`);
-            const countSpan = document.getElementById(`like-count-${id}`);
-            const icon = btn.querySelector('i');
-            let newCount = parseInt(countSpan.innerText);
-            if (isLiked) { newCount--; localStorage.removeItem(`liked_${id}`); btn.classList.remove('liked'); icon.classList.replace('fa-solid', 'fa-regular'); } 
-            else { newCount++; localStorage.setItem(`liked_${id}`, 'true'); btn.classList.add('liked'); icon.classList.replace('fa-regular', 'fa-solid'); }
-            countSpan.innerText = newCount;
-            await updateDoc(doc(db, "news_posts", id), { likes: increment(isLiked ? -1 : 1) });
+        // --- UTILS ---
+        window.toggleFollow = () => { /* ... (Same as before) ... */ 
+            const btn = document.getElementById('followBtn'); const isFollowing = localStorage.getItem('eduLeagueFollowing') === 'true';
+            if (isFollowing) { localStorage.setItem('eduLeagueFollowing', 'false'); btn.innerHTML = '<i class="fa-regular fa-bell mr-2"></i> Follow Updates'; btn.className = "bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-xs font-bold border hover:bg-green-50 transition flex items-center"; } 
+            else { localStorage.setItem('eduLeagueFollowing', 'true'); btn.innerHTML = '<i class="fa-solid fa-bell mr-2"></i> Following'; btn.className = "bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-bold border border-green-200 transition flex items-center"; alert("You are now following EDU-LEAGUE updates!"); }
         }
+        window.handleLike = async (id) => { /* ... */ const isLiked = localStorage.getItem(`liked_${id}`); const btn = document.getElementById(`like-btn-${id}`); const countSpan = document.getElementById(`like-count-${id}`); const icon = btn.querySelector('i'); let newCount = parseInt(countSpan.innerText); if (isLiked) { newCount--; localStorage.removeItem(`liked_${id}`); btn.classList.remove('liked'); icon.classList.replace('fa-solid', 'fa-regular'); } else { newCount++; localStorage.setItem(`liked_${id}`, 'true'); btn.classList.add('liked'); icon.classList.replace('fa-regular', 'fa-solid'); } countSpan.innerText = newCount; await updateDoc(doc(db, "news_posts", id), { likes: increment(isLiked ? -1 : 1) }); }
         window.handleShare = (title) => { if (navigator.share) navigator.share({ title: 'EDU-LEAGUE Update', text: title, url: window.location.href }); else { navigator.clipboard.writeText(window.location.href); alert("Link copied!"); } }
-
-        // --- MODAL & COMMENTS ---
+        
         window.openModal = (pid) => {
             currentPostId = pid;
-            const card = document.querySelector(`div[onclick="openModal('${pid}')"]`).parentNode;
-            document.getElementById('modalTitle').innerText = card.dataset.title;
-            document.getElementById('modalBody').innerText = card.dataset.content;
-            document.getElementById('modalDate').innerText = card.dataset.date;
-            const img = document.getElementById('modalImg');
-            if(card.dataset.img.includes('placehold.co')) img.classList.add('hidden'); else { img.src = card.dataset.img; img.classList.remove('hidden'); }
-            document.getElementById('newsModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
+            const buttons = document.querySelectorAll(`button[onclick="openModal('${pid}')"]`);
+            const card = buttons[0].closest('.news-card'); 
+            document.getElementById('modalTitle').innerText = card.dataset.title; document.getElementById('modalBody').innerText = card.dataset.content; document.getElementById('modalDate').innerText = card.dataset.date;
+            const imgEl = document.getElementById('modalImg'); const container = document.getElementById('media-container');
+            const existingVideo = container.querySelector('video'); if(existingVideo) existingVideo.remove(); imgEl.classList.add('hidden');
+            if (card.dataset.isvideo === 'true') { const video = document.createElement('video'); video.src = card.dataset.media; video.controls = true; video.autoplay = true; video.className = "w-full max-h-96 object-contain"; container.appendChild(video); } 
+            else { imgEl.src = card.dataset.media; imgEl.classList.remove('hidden'); }
+            document.getElementById('newsModal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
             const list = document.getElementById('comments-list'); list.innerHTML = '<p class="text-xs text-gray-400">Loading comments...</p>';
-            commentsUnsubscribe = onSnapshot(query(collection(db, "news_posts", pid, "comments"), orderBy("timestamp", "asc")), (snap) => {
-                list.innerHTML = '';
-                if(snap.empty) { list.innerHTML = '<p class="text-xs text-gray-400 italic">No comments yet.</p>'; return; }
-                snap.forEach(d => { const c = d.data(); list.innerHTML += `<div class="bg-gray-50 p-2 rounded-lg border text-sm"><p class="font-bold text-green-700 text-xs">${c.user}</p><p class="text-gray-700">${c.text}</p></div>`; });
-            });
+            commentsUnsubscribe = onSnapshot(query(collection(db, "news_posts", pid, "comments"), orderBy("timestamp", "asc")), (snap) => { list.innerHTML = ''; if(snap.empty) { list.innerHTML = '<p class="text-xs text-gray-400 italic">No comments yet.</p>'; return; } snap.forEach(d => { const c = d.data(); list.innerHTML += `<div class="bg-gray-50 p-2 rounded-lg border text-sm"><p class="font-bold text-green-700 text-xs">${c.user}</p><p class="text-gray-700">${c.text}</p></div>`; }); });
         }
         window.closeModal = () => { document.getElementById('newsModal').classList.add('hidden'); document.body.style.overflow = 'auto'; if(commentsUnsubscribe) commentsUnsubscribe(); }
-        window.postComment = async (e) => {
-            e.preventDefault(); if(!currentPostId) return;
-            const input = document.getElementById('commentInput'); const nameInput = document.getElementById('commentName');
-            const text = input.value.trim(); const user = nameInput.value.trim() || "Fan";
-            if(!text) return; input.value = ''; 
-            await addDoc(collection(db, "news_posts", currentPostId, "comments"), { user, text, timestamp: serverTimestamp() });
-            await updateDoc(doc(db, "news_posts", currentPostId), { commentsCount: increment(1) });
-        }
+        window.postComment = async (e) => { e.preventDefault(); if(!currentPostId) return; const input = document.getElementById('commentInput'); const nameInput = document.getElementById('commentName'); const text = input.value.trim(); const user = nameInput.value.trim() || "Fan"; if(!text) return; input.value = ''; await addDoc(collection(db, "news_posts", currentPostId, "comments"), { user, text, timestamp: serverTimestamp() }); await updateDoc(doc(db, "news_posts", currentPostId), { commentsCount: increment(1) }); }
     </script>
 </body>
 </html>

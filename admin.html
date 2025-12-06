@@ -37,7 +37,6 @@
         
         <div id="login-section" class="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8">
             <div class="text-center mb-6">
-                <div class="h-12 w-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl mx-auto mb-3"><i class="fa-solid fa-lock"></i></div>
                 <h2 class="text-2xl font-bold text-gray-900">Secure Access</h2>
             </div>
             <div class="space-y-4">
@@ -52,10 +51,10 @@
             <div class="grid grid-cols-3 md:grid-cols-6 gap-2 mb-6 overflow-x-auto">
                 <button onclick="switchTab('registrations')" id="btn-registrations" class="active-tab py-3 px-2 text-xs md:text-sm rounded-lg font-bold border shadow-sm whitespace-nowrap"><i class="fa-solid fa-users mr-2"></i> Teams</button>
                 <button onclick="switchTab('news')" id="btn-news" class="inactive-tab py-3 px-2 text-xs md:text-sm rounded-lg font-bold border shadow-sm whitespace-nowrap"><i class="fa-regular fa-newspaper mr-2"></i> News</button>
-                <button onclick="switchTab('widget')" id="btn-widget" class="inactive-tab py-3 px-2 text-xs md:text-sm rounded-lg font-bold border shadow-sm whitespace-nowrap"><i class="fa-solid fa-stopwatch mr-2"></i> Spotlight</button>
+                <button onclick="switchTab('widget')" id="btn-widget" class="inactive-tab py-3 px-2 text-xs md:text-sm rounded-lg font-bold border shadow-sm whitespace-nowrap"><i class="fa-solid fa-stopwatch mr-2"></i> Widget</button>
                 <button onclick="switchTab('schedule')" id="btn-schedule" class="inactive-tab py-3 px-2 text-xs md:text-sm rounded-lg font-bold border shadow-sm whitespace-nowrap"><i class="fa-solid fa-calendar-days mr-2"></i> Schedule</button>
                 <button onclick="switchTab('league')" id="btn-league" class="inactive-tab py-3 px-2 text-xs md:text-sm rounded-lg font-bold border shadow-sm whitespace-nowrap"><i class="fa-solid fa-list-ol mr-2"></i> Tables</button>
-                <button onclick="switchTab('stats')" id="btn-stats" class="inactive-tab py-3 px-2 text-xs md:text-sm rounded-lg font-bold border shadow-sm whitespace-nowrap"><i class="fa-solid fa-futbol mr-2"></i> Stats</button>
+                <button onclick="switchTab('stats')" id="btn-stats" class="inactive-tab py-3 px-2 text-xs md:text-sm rounded-lg font-bold border shadow-sm whitespace-nowrap"><i class="fa-solid fa-futbol mr-2"></i> Player Stats</button>
             </div>
 
             <div id="tab-registrations" class="bg-white rounded-xl shadow-md p-6 border border-gray-200">
@@ -65,12 +64,22 @@
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Department</label>
                             <select id="logoDeptSelect" class="w-full border p-2.5 rounded-lg bg-white font-semibold">
-                                </select>
+                                <option value="Adult Edu">Adult Education</option>
+                                <option value="Art Edu">Art Education</option>
+                                <option value="Edu Found">Education Foundation</option>
+                                <option value="Edu Mgt">Education Management</option>
+                                <option value="HKHE">HKHE</option>
+                                <option value="Sci Edu">Science Education</option>
+                                <option value="Soc Sci Edu">Social Science Edu</option>
+                                <option value="TVESA">TVESA</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Level</label>
                             <select id="logoLevelSelect" class="w-full border p-2.5 rounded-lg bg-white font-semibold">
-                                <option value="Finalist">Finalist</option><option value="Penultimate">Penultimate</option><option value="Sophomore">Sophomore</option>
+                                <option value="Finalist">Finalist</option>
+                                <option value="Penultimate">Penultimate</option>
+                                <option value="Sophomore">Sophomore</option>
                             </select>
                         </div>
                         <div>
@@ -88,11 +97,11 @@
             <div id="tab-news" class="bg-white rounded-xl shadow-md p-6 border border-gray-200 hidden">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-4">
-                        <h3 class="font-bold">Post News</h3>
+                        <h3 class="font-bold">Post News (Photo/Video)</h3>
                         <input id="newsTitle" class="w-full border p-3 rounded-lg font-bold" placeholder="Headline">
                         <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 relative">
-                            <input id="newsFile" type="file" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImage(event)">
-                            <div id="uploadPlaceholder"><i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400"></i><p class="text-xs text-gray-500 font-bold">Upload Image</p></div>
+                            <input id="newsFile" type="file" accept="image/*,video/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImage(event)">
+                            <div id="uploadPlaceholder"><i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400"></i><p class="text-xs text-gray-500 font-bold">Upload Image or Video</p></div>
                             <img id="imagePreview" class="hidden h-24 mx-auto object-cover rounded shadow">
                         </div>
                         <div id="progressArea" class="hidden"><div class="w-full bg-gray-200 rounded-full h-2"><div id="progressBar" class="bg-green-600 h-2 rounded-full" style="width: 0%"></div></div></div>
@@ -109,9 +118,7 @@
             <div id="tab-widget" class="bg-white rounded-xl shadow-md p-6 border border-gray-200 hidden">
                 <h3 class="font-bold text-gray-900 text-lg mb-4">Homepage Spotlight (Add Multiple Games)</h3>
                 <p class="text-sm text-gray-500 mb-4">Add all key matches for the day here. They will rotate on the homepage.</p>
-                
                 <div id="widget-matches-container" class="space-y-4 mb-4"></div>
-                
                 <div class="flex gap-4">
                     <button onclick="addWidgetMatchRow()" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-bold hover:bg-gray-300">+ Add Game</button>
                     <button onclick="saveSpotlightWidget()" class="bg-gray-900 text-white px-8 py-2 rounded-lg font-bold hover:bg-black">Publish Spotlight</button>
@@ -222,9 +229,8 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, query, orderBy, getDocs, onSnapshot, deleteDoc, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-        // --- PASTE FIREBASE CONFIG HERE ---
+        // --- 1. PASTE FIREBASE CONFIG HERE ---
         const firebaseConfig = {
            apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
            authDomain: "sonic-verbena-239117.firebaseapp.com",
@@ -234,13 +240,17 @@
            appId: "1:652544574249:web:6ff33771307e892e7f6d38",
            measurementId: "G-TD780JGNED"
         };
-        // ----------------------------------
+
+        // --- 2. CLOUDINARY KEYS (INSERTED) ---
+        const CLOUD_NAME = "dxdxgrvvb"; 
+        const UPLOAD_PRESET = "edu_league"; 
+
+        // ---------------------------------------
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const storage = getStorage(app);
         const auth = getAuth(app);
-
+        
         const DEPARTMENTS = ["Adult Edu", "Art Edu", "Edu Found", "Edu Mgt", "HKHE", "Sci Edu", "Soc Sci Edu", "TVESA"];
         const ADMIN_PASS = "EDUADMIN2025"; 
         let currentTableLevel = "Finalist"; 
@@ -249,8 +259,9 @@
         window.login = async () => {
             const pin = document.getElementById('adminPin').value;
             const btn = document.getElementById('loginBtn');
+            
             if(pin === ADMIN_PASS) {
-                btn.textContent = "Connecting...";
+                btn.textContent = "Connecting..."; 
                 try {
                     await signInAnonymously(auth);
                     document.getElementById('login-section').classList.add('hidden');
@@ -259,10 +270,12 @@
                     initDashboard();
                 } catch (e) {
                     console.error(e);
-                    alert("PIN correct, but database connection failed. Check console.");
+                    alert("PIN correct, but database connection failed.");
                     btn.textContent = "Login";
                 }
-            } else { document.getElementById('loginError').classList.remove('hidden'); }
+            } else { 
+                document.getElementById('loginError').classList.remove('hidden'); 
+            }
         }
         window.logout = () => window.location.reload();
 
@@ -284,173 +297,187 @@
             loadSchedule();
             loadTeamsForStatsDropdown(); 
             loadLeaderboard('goals'); 
-            addWidgetMatchRow(); // Init widget
+            addWidgetMatchRow();   
         }
 
-        // --- 1. SPOTLIGHT WIDGET (UPDATED FOR MULTIPLE) ---
-        window.addWidgetMatchRow = (tA='', tB='', date='', time='', venue='') => {
-            const div = document.createElement('div');
-            div.className = "grid grid-cols-1 md:grid-cols-6 gap-2 bg-gray-50 p-3 rounded widget-row mb-2 items-center";
-            
-            // Build Options
-            const opts = DEPARTMENTS.map(d => `<option value="${d}" ${d===tA?'selected':''}>${d}</option>`).join('');
-            const optsB = DEPARTMENTS.map(d => `<option value="${d}" ${d===tB?'selected':''}>${d}</option>`).join('');
+        // --- UPDATED CLOUDINARY UPLOAD (SUPPORTS VIDEO) ---
+        async function uploadToCloudinary(file) {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", UPLOAD_PRESET);
 
-            div.innerHTML = `
-                <select class="w-teamA border p-2 rounded text-xs font-bold col-span-2"><option value="">Home Team</option>${opts}</select>
-                <select class="w-teamB border p-2 rounded text-xs font-bold col-span-2"><option value="">Away Team</option>${optsB}</select>
-                <input class="w-time border p-2 rounded text-xs col-span-1" placeholder="Time (4PM)" value="${time}">
-                <button onclick="this.parentElement.remove()" class="text-red-500 text-center"><i class="fa-solid fa-trash"></i></button>
-                <div class="col-span-6 grid grid-cols-2 gap-2 mt-1">
-                     <input class="w-date border p-1 rounded text-xs" placeholder="Date (Dec 12)" value="${date}">
-                     <input class="w-venue border p-1 rounded text-xs" placeholder="Venue" value="${venue}">
-                </div>
-            `;
-            document.getElementById('widget-matches-container').appendChild(div);
-        }
-
-        window.saveSpotlightWidget = async () => {
-            const rows = document.querySelectorAll('.widget-row');
-            const matches = [];
+            // Change 'image' to 'auto' in the URL to allow videos
+            const type = file.type.startsWith('video/') ? 'video' : 'image';
             
-            for (const r of rows) {
-                const tA = r.querySelector('.w-teamA').value;
-                const tB = r.querySelector('.w-teamB').value;
-                if(tA && tB) {
-                    let logoA="", logoB="";
-                    // Fetch Logos
-                    const dA = await getDoc(doc(db, "team_assets", tA)); if(dA.exists()) logoA = dA.data().logoUrl;
-                    const dB = await getDoc(doc(db, "team_assets", tB)); if(dB.exists()) logoB = dB.data().logoUrl;
-                    
-                    matches.push({
-                        teamA: tA, teamB: tB, teamALogo: logoA, teamBLogo: logoB,
-                        date: r.querySelector('.w-date').value,
-                        time: r.querySelector('.w-time').value,
-                        venue: r.querySelector('.w-venue').value
-                    });
+            try {
+                // We use 'auto' here so Cloudinary figures it out
+                const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await response.json();
+                if (data.secure_url) {
+                    return data.secure_url;
+                } else {
+                    throw new Error("Upload failed: " + (data.error?.message || "Unknown error"));
                 }
+            } catch (error) {
+                console.error("Cloudinary Error:", error);
+                throw error;
             }
-
-            await setDoc(doc(db, "app_content", "current_fixture"), { matches: matches });
-            alert("Spotlight Updated!");
         }
 
-        // --- 2. REGISTRATIONS ---
-        window.loadRegistrations = async () => { 
-            const list = document.getElementById('registrations-list');
-            list.innerHTML = 'Loading...';
-            const snap = await getDocs(query(collection(db, "registrations"), orderBy("registeredAt", "desc")));
-            list.innerHTML = snap.empty ? '<p class="text-center text-gray-400">No teams.</p>' : '';
-            snap.forEach(d => {
-                const data = d.data();
-                const color = data.registrationStatus === "Complete" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800";
-                list.innerHTML += `<div class="p-3 bg-gray-50 rounded border flex justify-between items-center"><div><h4 class="font-bold text-gray-800">${data.department} <span class="text-xs text-gray-500 font-normal">(${data.level})</span></h4><p class="text-xs text-gray-500">${data.coachName} | ${data.phone}</p></div><span class="px-2 py-1 rounded text-xs font-bold ${color}">${data.registrationStatus}</span></div>`;
-            });
-        }
-
-        // --- 3. NEWS ---
+        // --- NEWS (UPDATED FOR CLOUDINARY) ---
         window.postNews = async () => {
             const title = document.getElementById('newsTitle').value;
             const content = document.getElementById('newsContent').value;
             const file = document.getElementById('newsFile').files[0];
             const btn = document.getElementById('publishBtn');
 
-            if(!title || !content) return alert("Fill data");
-            btn.disabled = true; btn.textContent = "Uploading...";
+            if(!title || !content) return alert("Please fill Title and Content");
+
+            btn.disabled = true;
+            btn.textContent = "Uploading File...";
             let imageUrl = "";
 
             try {
                 if(file) {
                     document.getElementById('progressArea').classList.remove('hidden');
-                    const storageRef = ref(storage, 'news/' + Date.now() + '_' + file.name);
-                    const task = uploadBytesResumable(storageRef, file);
-                    await new Promise((res, rej) => task.on('state_changed', s => document.getElementById('progressBar').style.width = (s.bytesTransferred/s.totalBytes)*100+'%', rej, res));
-                    imageUrl = await getDownloadURL(task.snapshot.ref);
+                    // Cloudinary upload
+                    imageUrl = await uploadToCloudinary(file);
                 }
-                await addDoc(collection(db, "news_posts"), { title, content, imageUrl, timestamp: serverTimestamp() });
-                alert("Published!"); btn.disabled = false; btn.textContent = "Publish";
-                document.getElementById('newsTitle').value = ""; document.getElementById('newsContent').value = "";
+
+                btn.textContent = "Saving...";
+                await addDoc(collection(db, "news_posts"), { 
+                    title, 
+                    content, 
+                    imageUrl, 
+                    timestamp: serverTimestamp() 
+                });
+
+                alert("News Published Successfully!");
+                
+                // Reset Form
+                document.getElementById('newsTitle').value = "";
+                document.getElementById('newsContent').value = "";
+                document.getElementById('newsFile').value = "";
+                document.getElementById('imagePreview').classList.add('hidden');
+                document.getElementById('uploadPlaceholder').classList.remove('hidden');
                 document.getElementById('progressArea').classList.add('hidden');
-            } catch(e) { alert(e.message); btn.disabled=false; }
-        }
-        window.previewImage = (e) => { const f = e.target.files[0]; if(f) { document.getElementById('imagePreview').src = URL.createObjectURL(f); document.getElementById('imagePreview').classList.remove('hidden'); document.getElementById('uploadPlaceholder').classList.add('hidden'); } }
-        function loadNewsHistory() { onSnapshot(query(collection(db, "news_posts"), orderBy("timestamp", "desc")), snap => { document.getElementById('admin-news-list').innerHTML = ''; snap.forEach(d => document.getElementById('admin-news-list').innerHTML += `<div class="p-2 border rounded flex justify-between bg-white mb-2"><span class="text-xs truncate w-3/4 font-semibold">${d.data().title}</span><button onclick="deletePost('${d.id}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button></div>`); }); }
-        window.deletePost = async (id) => { if(confirm("Delete?")) await deleteDoc(doc(db, "news_posts", id)); }
+                btn.textContent = "Publish News";
+                btn.disabled = false;
 
-        // --- 4. PLAYER STATS ---
-        window.loadTeamsForStatsDropdown = async () => {
-            const select = document.getElementById('statsTeamSelect');
-            select.innerHTML = '<option value="">Select Team</option>';
-            const q = query(collection(db, "registrations"));
-            const snap = await getDocs(q);
-            snap.forEach(doc => { const d = doc.data(); if(d.registrationStatus === "Complete") { const opt = document.createElement('option'); opt.value = doc.id; opt.textContent = `${d.department} (${d.level})`; select.appendChild(opt); } });
-        }
-        window.loadPlayersForStats = async () => { 
-            const teamId = document.getElementById('statsTeamSelect').value; const select = document.getElementById('statsPlayerSelect'); select.innerHTML = '<option value="">Select Player</option>'; if(!teamId) return;
-            const snap = await getDoc(doc(db, "registrations", teamId)); if(snap.exists() && snap.data().players) snap.data().players.forEach(p => { const opt = document.createElement('option'); opt.value = p.name; opt.textContent = p.name; select.appendChild(opt); });
-        }
-        window.fetchCurrentStats = async () => { 
-            const teamSelect = document.getElementById('statsTeamSelect'); const player = document.getElementById('statsPlayerSelect').value; const teamName = teamSelect.options[teamSelect.selectedIndex].text; if(!player) return;
-            const statId = (teamName + "_" + player).replace(/\s+/g, '').toLowerCase(); const snap = await getDoc(doc(db, "player_stats", statId));
-            if(snap.exists()) { document.getElementById('playerGoals').value = snap.data().goals || 0; document.getElementById('playerAssists').value = snap.data().assists || 0; document.getElementById('playerYellow').value = snap.data().yellowCards || 0; document.getElementById('playerRed').value = snap.data().redCards || 0; document.getElementById('playerSaves').value = snap.data().saves || 0; } 
-            else { ['playerGoals', 'playerAssists', 'playerYellow', 'playerRed', 'playerSaves'].forEach(id => document.getElementById(id).value = 0); }
-        }
-        window.savePlayerStats = async () => { 
-            const teamSelect = document.getElementById('statsTeamSelect'); const player = document.getElementById('statsPlayerSelect').value; if(!player) return alert("Select a player");
-            const teamName = teamSelect.options[teamSelect.selectedIndex].text; const goals = parseInt(document.getElementById('playerGoals').value)||0; const assists = parseInt(document.getElementById('playerAssists').value)||0; const yellow = parseInt(document.getElementById('playerYellow').value)||0; const red = parseInt(document.getElementById('playerRed').value)||0; const saves = parseInt(document.getElementById('playerSaves').value)||0;
-            const statId = (teamName + "_" + player).replace(/\s+/g, '').toLowerCase();
-            await setDoc(doc(db, "player_stats", statId), { name: player, team: teamName, goals, assists, yellowCards: yellow, redCards: red, saves, updatedAt: serverTimestamp() });
-            alert("Stats Updated!"); loadLeaderboard('goals'); 
-        }
-        window.loadLeaderboard = async (type) => { 
-            const body = document.getElementById('leaderboardBody'); body.innerHTML = '<tr><td colspan="4" class="p-4 text-center">Loading...</td></tr>';
-            const titles = { goals: 'Goals', assists: 'Assists', yellowCards: 'Yellow Cards', redCards: 'Red Cards', saves: 'GK Saves' }; document.getElementById('leaderboardTitle').textContent = `Leaderboard: ${titles[type]}`;
-            const snap = await getDocs(query(collection(db, "player_stats"), orderBy(type, "desc")));
-            body.innerHTML = ''; if(snap.empty) { body.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-400">No stats yet.</td></tr>'; return; }
-            let rank = 1; snap.forEach(doc => { const d = doc.data(); const count = d[type]; if(count > 0) { let color = "text-gray-800"; if(type === 'goals') color = "text-green-600"; if(type === 'assists') color = "text-blue-600"; if(type === 'yellowCards') color = "text-yellow-600"; if(type === 'redCards') color = "text-red-600"; if(type === 'saves') color = "text-purple-600"; body.innerHTML += `<tr class="border-b"><td class="p-2 font-bold text-gray-500">${rank++}</td><td class="p-2 font-bold text-gray-800">${d.name}</td><td class="p-2 text-xs text-gray-500">${d.team}</td><td class="p-2 text-center font-black ${color}">${count}</td></tr>`; } });
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed: " + error.message);
+                btn.disabled = false;
+                btn.textContent = "Publish News";
+            }
         }
 
-        // --- OTHERS ---
-        function populateTeamSelects() {
-            const options = DEPARTMENTS.map(d => `<option value="${d}">${d}</option>`).join('');
-            document.querySelectorAll('.w-teamA, .w-teamB').forEach(s => {
-               if(s.children.length <= 1) s.innerHTML += options;
-            });
-            document.getElementById('logoDeptSelect').innerHTML = options; // Ensure logo uploader has options
-        }
+        // --- TEAM LOGO UPLOAD (UPDATED FOR CLOUDINARY) ---
         window.uploadTeamLogo = async () => { 
             const dept = document.getElementById('logoDeptSelect').value;
             const level = document.getElementById('logoLevelSelect').value;
             const file = document.getElementById('teamLogoFile').files[0];
             const btn = document.getElementById('uploadLogoBtn');
             const status = document.getElementById('logoStatus');
+
             if(!file) return alert("Select a file");
             btn.disabled = true; btn.textContent = "Uploading...";
-            const storageRef = ref(storage, 'team_logos/' + dept + '.png');
-            const task = uploadBytesResumable(storageRef, file);
-            task.on('state_changed', null, null, async () => {
-                const url = await getDownloadURL(task.snapshot.ref);
+
+            try {
+                const url = await uploadToCloudinary(file);
+                
+                // Save URL to Firestore
                 await setDoc(doc(db, "team_assets", dept), { logoUrl: url, levelUpdated: level }, { merge: true });
+                
                 btn.disabled = false; btn.textContent = "Save Official Team Badge";
-                status.classList.remove('hidden'); setTimeout(() => status.classList.add('hidden'), 3000);
+                status.classList.remove('hidden'); 
+                setTimeout(() => status.classList.add('hidden'), 3000);
                 alert(`${dept} Logo Saved!`);
-            });
+            } catch (error) {
+                console.error("Logo Upload Error:", error);
+                alert("Upload Failed: " + error.message);
+                btn.disabled = false;
+                btn.textContent = "Save Official Team Badge";
+            }
         }
+
+        window.previewImage = (e) => { 
+            const f = e.target.files[0]; 
+            if(f) { 
+                document.getElementById('imagePreview').src = URL.createObjectURL(f); 
+                document.getElementById('imagePreview').classList.remove('hidden'); 
+                document.getElementById('uploadPlaceholder').classList.add('hidden'); 
+            } 
+        }
+
+        // --- SPOTLIGHT WIDGET (MULTIPLE) ---
+        window.addWidgetMatchRow = (tA='', tB='', date='', time='', venue='') => {
+            const div = document.createElement('div');
+            div.className = "grid grid-cols-1 md:grid-cols-6 gap-2 bg-gray-50 p-3 rounded widget-row mb-2 items-center";
+            div.innerHTML = `
+                <select class="w-teamA border p-2 rounded text-xs font-bold col-span-2"><option value="">Home Team</option></select>
+                <select class="w-teamB border p-2 rounded text-xs font-bold col-span-2"><option value="">Away Team</option></select>
+                <input class="w-time border p-2 rounded text-xs col-span-1" placeholder="Time" value="${time}">
+                <button onclick="this.parentElement.remove()" class="text-red-500 text-center"><i class="fa-solid fa-trash"></i></button>
+                <div class="col-span-6 grid grid-cols-2 gap-2 mt-1">
+                     <input class="w-date border p-1 rounded text-xs" placeholder="Date" value="${date}">
+                     <input class="w-venue border p-1 rounded text-xs" placeholder="Venue" value="${venue}">
+                </div>
+            `;
+            document.getElementById('widget-matches-container').appendChild(div);
+            // Populate these specific dropdowns immediately
+            const options = DEPARTMENTS.map(d => `<option value="${d}">${d}</option>`).join('');
+            div.querySelector('.w-teamA').innerHTML += options;
+            div.querySelector('.w-teamB').innerHTML += options;
+            div.querySelector('.w-teamA').value = tA;
+            div.querySelector('.w-teamB').value = tB;
+        }
+
+        window.saveSpotlightWidget = async () => {
+            const rows = document.querySelectorAll('.widget-row');
+            const matches = [];
+            for (const r of rows) {
+                const tA = r.querySelector('.w-teamA').value;
+                const tB = r.querySelector('.w-teamB').value;
+                if(tA && tB) {
+                    let logoA="", logoB="";
+                    const dA = await getDoc(doc(db, "team_assets", tA)); if(dA.exists()) logoA = dA.data().logoUrl;
+                    const dB = await getDoc(doc(db, "team_assets", tB)); if(dB.exists()) logoB = dB.data().logoUrl;
+                    matches.push({ teamA: tA, teamB: tB, teamALogo: logoA, teamBLogo: logoB, date: r.querySelector('.w-date').value, time: r.querySelector('.w-time').value, venue: r.querySelector('.w-venue').value });
+                }
+            }
+            await setDoc(doc(db, "app_content", "current_fixture"), { matches: matches });
+            alert("Spotlight Updated!");
+        }
+
+        // --- OTHER FUNCTIONS ---
+        function populateTeamSelects() {
+            const options = DEPARTMENTS.map(d => `<option value="${d}">${d}</option>`).join('');
+            document.getElementById('logoDeptSelect').innerHTML = options;
+            document.getElementById('statsTeamSelect').innerHTML = '<option value="">Select Team</option>';
+        }
+
+        function loadNewsHistory() { onSnapshot(query(collection(db, "news_posts"), orderBy("timestamp", "desc")), snap => { document.getElementById('admin-news-list').innerHTML = ''; snap.forEach(d => document.getElementById('admin-news-list').innerHTML += `<div class="p-2 border rounded flex justify-between bg-white mb-2"><span class="text-xs truncate w-3/4 font-semibold">${d.data().title}</span><button onclick="deletePost('${d.id}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button></div>`); }); }
+        window.deletePost = async (id) => { if(confirm("Delete?")) await deleteDoc(doc(db, "news_posts", id)); }
+
+        window.loadRegistrations = async () => { const list = document.getElementById('registrations-list'); list.innerHTML = 'Loading...'; const snap = await getDocs(query(collection(db, "registrations"), orderBy("registeredAt", "desc"))); list.innerHTML = snap.empty ? '<p class="text-center text-gray-400">No teams.</p>' : ''; snap.forEach(d => { const data = d.data(); const color = data.registrationStatus === "Complete" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"; list.innerHTML += `<div class="p-3 bg-gray-50 rounded border flex justify-between items-center"><div><h4 class="font-bold text-gray-800">${data.department} <span class="text-xs text-gray-500 font-normal">(${data.level})</span></h4><p class="text-xs text-gray-500">${data.coachName} | ${data.phone}</p></div><span class="px-2 py-1 rounded text-xs font-bold ${color}">${data.registrationStatus}</span></div>`; }); }
+
         window.addMatchInput = (tA='', tB='', time='', res='') => { document.getElementById('schedule-container').innerHTML += `<div class="grid grid-cols-4 gap-2 bg-gray-50 p-2 rounded match-row mb-2"><input class="border p-2 rounded s-teamA" placeholder="Team A" value="${tA}"><input class="border p-2 rounded s-teamB" placeholder="Team B" value="${tB}"><input class="border p-2 rounded s-time" placeholder="Time" value="${time}"><input class="border p-2 rounded s-result" placeholder="Score" value="${res}"></div>`; }
-        window.loadSchedule = async () => { 
-            const docId = "schedule_" + document.getElementById('matchDaySelect').value.replace(/\s+/g, '_').toLowerCase();
-            const snap = await getDoc(doc(db, "schedules", docId));
-            const c = document.getElementById('schedule-container'); c.innerHTML='';
-            if(snap.exists() && snap.data().matches) snap.data().matches.forEach(m=>window.addMatchInput(m.teamA, m.teamB, m.time, m.result)); else window.addMatchInput();
-        }
-        window.saveSchedule = async () => { 
-            const matches=[]; document.querySelectorAll('.match-row').forEach(r=>matches.push({teamA:r.querySelector('.s-teamA').value, teamB:r.querySelector('.s-teamB').value, time:r.querySelector('.s-time').value, result:r.querySelector('.s-result').value}));
-            await setDoc(doc(db, "schedules", "schedule_" + document.getElementById('matchDaySelect').value.replace(/\s+/g, '_').toLowerCase()), { matches });
-            alert("Schedule Saved");
-        }
+        window.loadSchedule = async () => { const docId = "schedule_" + document.getElementById('matchDaySelect').value.replace(/\s+/g, '_').toLowerCase(); const snap = await getDoc(doc(db, "schedules", docId)); const c = document.getElementById('schedule-container'); c.innerHTML=''; if(snap.exists() && snap.data().matches) snap.data().matches.forEach(m=>window.addMatchInput(m.teamA, m.teamB, m.time, m.result)); else window.addMatchInput(); }
+        window.saveSchedule = async () => { const matches=[]; document.querySelectorAll('.match-row').forEach(r=>matches.push({teamA:r.querySelector('.s-teamA').value, teamB:r.querySelector('.s-teamB').value, time:r.querySelector('.s-time').value, result:r.querySelector('.s-result').value})); await setDoc(doc(db, "schedules", "schedule_" + document.getElementById('matchDaySelect').value.replace(/\s+/g, '_').toLowerCase()), { matches }); alert("Schedule Saved"); }
+
         window.changeTableLevel = (level) => { currentTableLevel = level; const logoMap = { 'Finalist': 'Finalist.png', 'Penultimate': 'Penultimate.png', 'Sophomore': 'Sophomore.png' }; document.getElementById('division-logo-display').src = logoMap[level]; document.getElementById('division-label').textContent = level; document.getElementById('save-lvl-name').textContent = level; ['Finalist', 'Penultimate', 'Sophomore'].forEach(l => { const b=document.getElementById('lvl-'+l); if(l===level){b.classList.add('sub-active');b.classList.remove('sub-inactive');}else{b.classList.remove('sub-active');b.classList.add('sub-inactive');}}); loadTableEditor(); }
         async function loadTableEditor() { const snap = await getDoc(doc(db, "app_content", `league_table_${currentTableLevel.toLowerCase()}`)); let data = snap.exists() ? snap.data() : {}; DEPARTMENTS.forEach(d => { if(!data[d]) data[d] = { mp:0, w:0, d:0, l:0, gd:0, pts:0 }; }); const tbody = document.getElementById('table-editor-body'); tbody.innerHTML = ''; Object.keys(data).sort().forEach(dept => { const s = data[dept]; tbody.innerHTML += `<tr><td class="py-2 px-4 font-bold text-sm">${dept}</td><td><input id="${dept}-mp" value="${s.mp}" class="stat-input"></td><td><input id="${dept}-w" value="${s.w}" class="stat-input"></td><td><input id="${dept}-d" value="${s.d}" class="stat-input"></td><td><input id="${dept}-l" value="${s.l}" class="stat-input"></td><td><input id="${dept}-gd" value="${s.gd}" class="stat-input"></td><td><input id="${dept}-pts" value="${s.pts}" class="stat-input font-bold bg-green-50 text-green-700"></td></tr>`; }); }
         window.saveTable = async () => { let newData = {}; document.getElementById('table-editor-body').querySelectorAll('tr').forEach(row => { const dept = row.querySelector('td:first-child').innerText; newData[dept] = { mp: parseInt(document.getElementById(`${dept}-mp`).value)||0, w: parseInt(document.getElementById(`${dept}-w`).value)||0, d: parseInt(document.getElementById(`${dept}-d`).value)||0, l: parseInt(document.getElementById(`${dept}-l`).value)||0, gd: parseInt(document.getElementById(`${dept}-gd`).value)||0, pts: parseInt(document.getElementById(`${dept}-pts`).value)||0 }; }); await setDoc(doc(db, "app_content", `league_table_${currentTableLevel.toLowerCase()}`), newData); alert("Table Saved!"); }
+
+        window.loadTeamsForStatsDropdown = async () => { const select = document.getElementById('statsTeamSelect'); select.innerHTML = '<option value="">Select Team</option>'; const q = query(collection(db, "registrations")); const snap = await getDocs(q); snap.forEach(doc => { const d = doc.data(); if(d.registrationStatus === "Complete") { const opt = document.createElement('option'); opt.value = doc.id; opt.textContent = `${d.department} (${d.level})`; select.appendChild(opt); } }); }
+        window.loadPlayersForStats = async () => { const teamId = document.getElementById('statsTeamSelect').value; const select = document.getElementById('statsPlayerSelect'); select.innerHTML = '<option value="">Select Player</option>'; if(!teamId) return; const snap = await getDoc(doc(db, "registrations", teamId)); if(snap.exists() && snap.data().players) snap.data().players.forEach(p => { const opt = document.createElement('option'); opt.value = p.name; opt.textContent = p.name; select.appendChild(opt); }); }
+        window.fetchCurrentStats = async () => { const teamSelect = document.getElementById('statsTeamSelect'); const player = document.getElementById('statsPlayerSelect').value; const teamName = teamSelect.options[teamSelect.selectedIndex].text; if(!player) return; const statId = (teamName + "_" + player).replace(/\s+/g, '').toLowerCase(); const snap = await getDoc(doc(db, "player_stats", statId)); if(snap.exists()) { document.getElementById('playerGoals').value = snap.data().goals || 0; document.getElementById('playerAssists').value = snap.data().assists || 0; document.getElementById('playerYellow').value = snap.data().yellowCards || 0; document.getElementById('playerRed').value = snap.data().redCards || 0; document.getElementById('playerSaves').value = snap.data().saves || 0; } else { ['playerGoals', 'playerAssists', 'playerYellow', 'playerRed', 'playerSaves'].forEach(id => document.getElementById(id).value = 0); } }
+        window.savePlayerStats = async () => { const teamSelect = document.getElementById('statsTeamSelect'); const player = document.getElementById('statsPlayerSelect').value; if(!player) return alert("Select a player"); const teamName = teamSelect.options[teamSelect.selectedIndex].text; const goals = parseInt(document.getElementById('playerGoals').value)||0; const assists = parseInt(document.getElementById('playerAssists').value)||0; const yellow = parseInt(document.getElementById('playerYellow').value)||0; const red = parseInt(document.getElementById('playerRed').value)||0; const saves = parseInt(document.getElementById('playerSaves').value)||0; const statId = (teamName + "_" + player).replace(/\s+/g, '').toLowerCase(); await setDoc(doc(db, "player_stats", statId), { name: player, team: teamName, goals, assists, yellowCards: yellow, redCards: red, saves, updatedAt: serverTimestamp() }); alert("Stats Updated!"); loadLeaderboard('goals'); }
+        window.loadLeaderboard = async (type) => { const body = document.getElementById('leaderboardBody'); const title = document.getElementById('leaderboardTitle'); body.innerHTML = '<tr><td colspan="4" class="p-4 text-center">Loading...</td></tr>'; const titles = { goals: 'Goals', assists: 'Assists', yellowCards: 'Yellow Cards', redCards: 'Red Cards', saves: 'GK Saves' }; title.textContent = `Leaderboard: ${titles[type]}`; const q = query(collection(db, "player_stats"), orderBy(type, "desc")); const snap = await getDocs(q); body.innerHTML = ''; if(snap.empty) { body.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-400">No stats yet.</td></tr>'; return; } let rank = 1; snap.forEach(doc => { const d = doc.data(); const count = d[type]; if(count > 0) { let color = "text-gray-800"; if(type === 'goals') color = "text-green-600"; if(type === 'assists') color = "text-blue-600"; if(type === 'yellowCards') color = "text-yellow-600"; if(type === 'redCards') color = "text-red-600"; if(type === 'saves') color = "text-purple-600"; body.innerHTML += `<tr class="border-b"><td class="p-2 font-bold text-gray-500">${rank++}</td><td class="p-2 font-bold text-gray-800">${d.name}</td><td class="p-2 text-xs text-gray-500">${d.team}</td><td class="p-2 text-center font-black ${color}">${count}</td></tr>`; } }); }
 
     </script>
 </body>
