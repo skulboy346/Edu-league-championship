@@ -135,7 +135,7 @@
             <div class="md:w-2/3 p-8 md:p-12 relative">
                 
                 <div id="resume-banner" class="hidden bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded shadow-sm" role="alert">
-                    <div class="flex justify-between items-center flex-wrap gap-2">
+                    <div class="flex justify-between items-center">
                         <div>
                             <p class="font-bold">Pending Registration Found</p>
                             <p class="text-sm">Incomplete setup for <span id="resume-team" class="font-bold text-blue-900"></span>.</p>
@@ -259,7 +259,7 @@
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, getDocs, doc, getDoc, orderBy, where } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-        // --- *** CONFIGURATION *** ---
+        // --- YOUR CONFIRMED FIREBASE CONFIG ---
         const firebaseConfig = {
            apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
            authDomain: "sonic-verbena-239117.firebaseapp.com",
@@ -270,7 +270,7 @@
            appId: "1:652544574249:web:6ff33771307e892e7f6d38",
            measurementId: "G-TD780JGNED"
          };
-        // -----------------------------
+        // --- END CONFIG ---
 
         let db;
         let auth;
