@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - EDU-LEAGUE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .active-tab { background-color: #16a34a; color: white; border-color: #16a34a; }
+        .inactive-tab { background-color: white; color: #4b5563; border-color: #e5e7eb; }
+        
+        /* Table Input Styling */
+        .stat-input { width: 100%; text-align: center; border: 1px solid #e5e7eb; padding: 4px; border-radius: 4px; }
+        .stat-input:focus { outline: none; border-color: #16a34a; background-color: #f0fdf4; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <nav class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex-shrink-0 flex items-center">
+                        <span class="font-black text-2xl tracking-tighter text-gray-900">EDU-<span class="text-green-600">LEAGUE</span></span>
+                        <span class="ml-2 bg-gray-800 text-white text-xs px-2 py-1 rounded uppercase tracking-widest font-bold">Admin</span>
+                    </a>
+                </div>
+                <div class="flex items-center">
+                    <button onclick="logout()" id="logoutBtn" class="hidden text-sm text-red-600 font-bold hover:text-red-800">
+                        Log Out <i class="fa-solid fa-right-from-bracket ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow py-10 px-4">
+        
+        <div id="login-section" class="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8">
+            <div class="text-center mb-6">
+                <div class="h-12 w-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl mx-auto mb-3">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900">Secure Access</h2>
+                <p class="text-sm text-gray-500">Enter Admin PIN</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <input type="password" id="adminPin" class="w-full border-gray-300 border rounded-lg p-3 text-center text-2xl tracking-widest focus:ring-green-500 focus:border-green-500" placeholder="****">
+                </div>
+                <button onclick="login()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition shadow">
+                    Login
+                </button>
+                <p id="loginError" class="text-red-500 text-center text-sm hidden font-bold mt-2">Incorrect Password</p>
+            </div>
+        </div>
+
+        <div id="dashboard-section" class="max-w-5xl mx-auto hidden">
+            
+            <div class="grid grid-cols-4 gap-2 mb-6">
+                <button onclick="switchTab('registrations')" id="btn-registrations" class="active-tab py-3 px-2 text-sm md:text-base rounded-lg font-bold border shadow-sm flex items-center justify-center">
+                    <i class="fa-solid fa-users mr-2"></i> Teams
+                </button>
+                <button onclick="switchTab('news')" id="btn-news" class="inactive-tab py-3 px-2 text-sm md:text-base rounded-lg font-bold border shadow-sm flex items-center justify-center">
+                    <i class="fa-regular fa-newspaper mr-2"></i> News
+                </button>
+                <button onclick="switchTab('fixture')" id="btn-fixture" class="inactive-tab py-3 px-2 text-sm md:text-base rounded-lg font-bold border shadow-sm flex items-center justify-center">
+                    <i class="fa-regular fa-calendar-check mr-2"></i> Fixture
+                </button>
+                <button onclick="switchTab('league')" id="btn-league" class="inactive-tab py-3 px-2 text-sm md:text-base rounded-lg font-bold border shadow-sm flex items-center justify-center">
+                    <i class="fa-solid fa-list-ol mr-2"></i> Table
+                </button>
+            </div>
+
+            <div id="tab-registrations" class="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+                <h3 class="text-xl font-bold text-gray-900 mb-4 flex justify-between items-center">
+                    <span>Registered Teams</span>
+                    <button onclick="loadRegistrations()" class="text-sm text-green-600 hover:text-green-800"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+                </h3>
+                <div id="registrations-list" class="space-y-3 max-h-[600px] overflow-y-auto">
+                    <p class="text-gray-500 text-center py-4">Loading registrations...</p>
+                </div>
+            </div>
+
+            <div id="tab-news" class="bg-white rounded-xl shadow-md p-6 border border-gray-200 hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 space-y-4">
+                        <h3 class="text-xl font-bold text-gray-900">Publish News</h3>
+                        <input id="newsTitle" class="w-full border p-3 rounded-lg font-bold text-lg" placeholder="Headline (e.g. Adult Edu wins Gold)">
+                        
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 transition cursor-pointer relative">
+                            <input id="newsFile" type="file" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImage(event)">
+                            <div id="uploadPlaceholder">
+                                <i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400"></i>
+                                <p class="text-xs text-gray-500 font-bold">Tap to upload image</p>
+                            </div>
+                            <img id="imagePreview" class="hidden h-24 mx-auto object-cover rounded shadow">
+                        </div>
+                        
+                        <div id="progressArea" class="hidden">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div id="progressBar" class="bg-green-600 h-2 rounded-full" style="width: 0%"></div>
+                            </div>
+                            <p id="progressText" class="text-xs text-green-600 mt-1 font-bold text-right">0%</p>
+                        </div>
+
+                        <textarea id="newsContent" class="w-full border p-3 rounded-lg h-32" placeholder="Write the full story here..."></textarea>
+                        
+                        <button onclick="postNews()" id="publishBtn" class="bg-red-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-red-700 transition w-full">
+                            Publish News
+                        </button>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-4 h-full">
+                        <h4 class="font-bold text-gray-500 uppercase text-xs mb-3">History</h4>
+                        <div id="admin-news-list" class="space-y-3 max-h-[400px] overflow-y-auto">
+                            <p class="text-center text-sm text-gray-400">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-fixture" class="bg-white rounded-xl shadow-md p-6 border border-gray-200 hidden">
+                <h3 class="text-xl font-bold text-gray-900 mb-1">Update Upcoming Match</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                    <div class="space-y-4">
+                        <div><label class="block text-xs font-bold text-gray-500 uppercase">Team A</label><input id="teamA" type="text" class="w-full border p-3 rounded-lg font-bold"></div>
+                        <div><label class="block text-xs font-bold text-gray-500 uppercase">Team B</label><input id="teamB" type="text" class="w-full border p-3 rounded-lg font-bold"></div>
+                    </div>
+                    <div class="space-y-4">
+                        <div><label class="block text-xs font-bold text-gray-500 uppercase">Date</label><input id="fixDate" type="text" class="w-full border p-3 rounded-lg"></div>
+                        <div><label class="block text-xs font-bold text-gray-500 uppercase">Time</label><input id="fixTime" type="text" class="w-full border p-3 rounded-lg"></div>
+                        <div><label class="block text-xs font-bold text-gray-500 uppercase">Venue</label><input id="fixVenue" type="text" class="w-full border p-3 rounded-lg"></div>
+                    </div>
+                </div>
+                <div class="mt-6 pt-6 border-t">
+                    <button onclick="saveFixture()" class="bg-gray-900 text-white px-8 py-3 rounded-lg font-bold hover:bg-black transition w-full md:w-auto">Update Widget</button>
+                </div>
+            </div>
+
+            <div id="tab-league" class="bg-white rounded-xl shadow-md p-6 border border-gray-200 hidden">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Edit League Standings</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead><tr class="bg-gray-100"><th class="p-2 text-left">Dept</th><th class="p-1">MP</th><th class="p-1">W</th><th class="p-1">D</th><th class="p-1">L</th><th class="p-1">GD</th><th class="p-1">Pts</th></tr></thead>
+                        <tbody id="table-editor-body"></tbody>
+                    </table>
+                </div>
+                <button onclick="saveTable()" class="w-full bg-green-600 text-white py-3 mt-4 rounded-lg font-bold hover:bg-green-700">Save League Table</button>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t mt-auto py-6 text-center text-sm text-gray-500">
+        NUESA Sports Admin Panel &copy; 2025
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, query, orderBy, getDocs, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+        // --- PASTE YOUR FIREBASE CONFIG HERE ---
+        const firebaseConfig = {
+           apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
+           authDomain: "sonic-verbena-239117.firebaseapp.com",
+           projectId: "sonic-verbena-239117",
+           storageBucket: "sonic-verbena-239117.firebasestorage.app",
+           messagingSenderId: "652544574249",
+           appId: "1:652544574249:web:6ff33771307e892e7f6d38",
+           measurementId: "G-TD780JGNED"
+        };
+        // ---------------------------------------
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        const DEPARTMENTS = ["Adult Edu", "Art Edu", "Edu Found", "Edu Mgt", "HKHE", "Sci Edu", "Soc Sci Edu", "TVESA"];
+        const ADMIN_PASS = "EDUADMIN2025"; // ** UPDATED PASSWORD **
+
+        // --- AUTHENTICATION (SIMPLE PIN) ---
+        window.login = () => {
+            const pin = document.getElementById('adminPin').value;
+            if(pin === ADMIN_PASS) {
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('dashboard-section').classList.remove('hidden');
+                document.getElementById('logoutBtn').classList.remove('hidden');
+                initDashboard();
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+
+        window.logout = () => window.location.reload();
+
+        // --- DASHBOARD UI ---
+        window.switchTab = (tabName) => {
+            ['registrations', 'fixture', 'league', 'news'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                const btn = document.getElementById(`btn-${t}`);
+                btn.classList.remove('active-tab');
+                btn.classList.add('inactive-tab');
+            });
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const active = document.getElementById(`btn-${tabName}`);
+            active.classList.remove('inactive-tab');
+            active.classList.add('active-tab');
+        }
+
+        function initDashboard() {
+            loadRegistrations(); // Load Registrations
+            loadTableEditor();   // Load League Data
+            loadNewsHistory();   // Load News Data
+        }
+
+        // --- 1. REGISTRATIONS LOGIC (NEW) ---
+        window.loadRegistrations = async () => {
+            const list = document.getElementById('registrations-list');
+            list.innerHTML = '<p class="text-center text-gray-500">Fetching...</p>';
+            
+            try {
+                // Fetch from 'registrations' collection
+                const q = query(collection(db, "registrations"), orderBy("registeredAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                list.innerHTML = ''; // Clear loading
+                
+                if (querySnapshot.empty) {
+                    list.innerHTML = '<p class="text-center text-gray-500">No teams registered yet.</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const date = data.registeredAt ? new Date(data.registeredAt).toLocaleDateString() : 'N/A';
+                    
+                    // Determine Status Color
+                    let statusColor = "bg-yellow-100 text-yellow-800";
+                    if(data.registrationStatus === "Complete") statusColor = "bg-green-100 text-green-800";
+
+                    list.innerHTML += `
+                        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 flex flex-col md:flex-row md:justify-between md:items-center">
+                            <div>
+                                <h4 class="font-bold text-gray-900">${data.department} <span class="text-sm font-normal text-gray-500">(${data.level})</span></h4>
+                                <p class="text-sm text-gray-600">Coach: ${data.coachName}</p>
+                                <p class="text-xs text-gray-400">Phone: ${data.phone} | Registered: ${date}</p>
+                            </div>
+                            <div class="mt-2 md:mt-0 flex items-center">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold ${statusColor}">${data.registrationStatus}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error("Error loading registrations:", error);
+                list.innerHTML = '<p class="text-center text-red-500">Error loading data.</p>';
+            }
+        }
+
+        // --- 2. FIXTURE LOGIC ---
+        window.saveFixture = async () => {
+            await setDoc(doc(db, "app_content", "current_fixture"), {
+                teamA: document.getElementById('teamA').value,
+                teamB: document.getElementById('teamB').value,
+                date: document.getElementById('fixDate').value,
+                time: document.getElementById('fixTime').value,
+                venue: document.getElementById('fixVenue').value
+            });
+            alert("Match Widget Updated!");
+        }
+
+        // --- 3. LEAGUE LOGIC ---
+        async function loadTableEditor() {
+            const snap = await getDoc(doc(db, "app_content", "league_table"));
+            let data = snap.exists() ? snap.data() : {};
+            DEPARTMENTS.forEach(d => { if(!data[d]) data[d] = { mp:0, w:0, d:0, l:0, gd:0, pts:0 }; });
+            const tbody = document.getElementById('table-editor-body'); tbody.innerHTML = '';
+            Object.keys(data).sort().forEach(dept => {
+                const s = data[dept];
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="py-2 px-4 font-bold text-sm">${dept}</td>
+                        <td><input id="${dept}-mp" value="${s.mp}" class="stat-input"></td>
+                        <td><input id="${dept}-w" value="${s.w}" class="stat-input"></td>
+                        <td><input id="${dept}-d" value="${s.d}" class="stat-input"></td>
+                        <td><input id="${dept}-l" value="${s.l}" class="stat-input"></td>
+                        <td><input id="${dept}-gd" value="${s.gd}" class="stat-input"></td>
+                        <td><input id="${dept}-pts" value="${s.pts}" class="stat-input font-bold bg-green-50 text-green-700"></td>
+                    </tr>`;
+            });
+        }
+
+        window.saveTable = async () => {
+            let newData = {};
+            const rows = document.getElementById('table-editor-body').querySelectorAll('tr');
+            rows.forEach(row => {
+                const dept = row.querySelector('td:first-child').innerText;
+                newData[dept] = { mp: parseInt(document.getElementById(`${dept}-mp`).value)||0, w: parseInt(document.getElementById(`${dept}-w`).value)||0, d: parseInt(document.getElementById(`${dept}-d`).value)||0, l: parseInt(document.getElementById(`${dept}-l`).value)||0, gd: parseInt(document.getElementById(`${dept}-gd`).value)||0, pts: parseInt(document.getElementById(`${dept}-pts`).value)||0 };
+            });
+            await setDoc(doc(db, "app_content", "league_table"), newData);
+            alert("Table Saved!");
+        }
+
+        // --- 4. NEWS LOGIC ---
+        window.previewImage = (event) => {
+            const file = event.target.files[0];
+            if(file) {
+                document.getElementById('uploadPlaceholder').classList.add('hidden');
+                const img = document.getElementById('imagePreview');
+                img.src = URL.createObjectURL(file);
+                img.classList.remove('hidden');
+            }
+        }
+
+        window.postNews = async () => {
+            const title = document.getElementById('newsTitle').value;
+            const content = document.getElementById('newsContent').value;
+            const file = document.getElementById('newsFile').files[0];
+            const btn = document.getElementById('publishBtn');
+
+            if(!title || !content) return alert("Please fill Title and Content");
+
+            btn.disabled = true; btn.textContent = "Uploading...";
+            let imageUrl = "";
+
+            if(file) {
+                document.getElementById('progressArea').classList.remove('hidden');
+                const storageRef = ref(storage, 'news/' + Date.now() + '_' + file.name);
+                const uploadTask = uploadBytesResumable(storageRef, file);
+                await new Promise((resolve, reject) => {
+                    uploadTask.on('state_changed', 
+                        (snap) => {
+                            const prog = (snap.bytesTransferred / snap.totalBytes) * 100;
+                            document.getElementById('progressBar').style.width = prog + '%';
+                            document.getElementById('progressText').textContent = Math.round(prog) + '%';
+                        },
+                        (err) => { btn.disabled = false; reject(err); },
+                        () => resolve()
+                    );
+                });
+                imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
+            }
+
+            await addDoc(collection(db, "news_posts"), { title, content, imageUrl, timestamp: serverTimestamp() });
+            alert("News Published!");
+            document.getElementById('newsTitle').value = "";
+            document.getElementById('newsContent').value = "";
+            document.getElementById('newsFile').value = "";
+            document.getElementById('imagePreview').classList.add('hidden');
+            document.getElementById('uploadPlaceholder').classList.remove('hidden');
+            document.getElementById('progressArea').classList.add('hidden');
+            btn.textContent = "Publish News";
+            btn.disabled = false;
+        }
+
+        function loadNewsHistory() {
+            onSnapshot(query(collection(db, "news_posts"), orderBy("timestamp", "desc")), (snap) => {
+                const list = document.getElementById('admin-news-list');
+                list.innerHTML = '';
+                snap.forEach(docSnap => {
+                    const n = docSnap.data();
+                    list.innerHTML += `
+                        <div class="bg-white p-3 rounded border shadow-sm flex justify-between items-center">
+                            <div class="truncate w-3/4">
+                                <p class="font-bold text-gray-800 text-xs truncate">${n.title}</p>
+                                <p class="text-[10px] text-gray-400">Posted recently</p>
+                            </div>
+                            <button onclick="deletePost('${docSnap.id}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
+                        </div>`;
+                });
+            });
+        }
+        
+        window.deletePost = async (id) => { if(confirm("Delete post?")) await deleteDoc(doc(db, "news_posts", id)); }
+    </script>
+</body>
+</html>
