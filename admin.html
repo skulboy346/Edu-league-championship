@@ -104,12 +104,7 @@
                             <div id="uploadPlaceholder"><i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400"></i><p class="text-xs text-gray-500 font-bold">Upload Image</p></div>
                             <img id="imagePreview" class="hidden h-24 mx-auto object-cover rounded shadow">
                         </div>
-                        <div id="progressArea" class="hidden">
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div id="progressBar" class="bg-green-600 h-2 rounded-full" style="width: 0%"></div>
-                            </div>
-                            <p id="progressText" class="text-xs text-green-600 mt-1 font-bold text-right">0%</p>
-                        </div>
+                        <div id="progressArea" class="hidden"><div class="w-full bg-gray-200 rounded-full h-2"><div id="progressBar" class="bg-green-600 h-2 rounded-full" style="width: 0%"></div></div><p id="progressText" class="text-xs text-green-600 mt-1 font-bold text-right">0%</p></div>
                         <textarea id="newsContent" class="w-full border p-3 rounded-lg h-32" placeholder="Story..."></textarea>
                         <button onclick="postNews()" id="publishBtn" class="bg-green-600 text-white px-6 py-3 rounded-lg font-bold w-full hover:bg-green-700">Publish News</button>
                     </div>
@@ -177,35 +172,28 @@
 
             <div id="tab-stats" class="bg-white rounded-xl shadow-md p-6 border border-gray-200 hidden">
                 <h3 class="text-xl font-bold text-gray-900 mb-6 border-b pb-2">Player Stats (Goals, Assists & Cards)</h3>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div class="space-y-4">
                         <div class="bg-gray-50 p-4 rounded-lg border">
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">1. Select Team</label>
                             <select id="statsTeamSelect" onchange="loadPlayersForStats()" class="w-full border p-2 rounded font-bold mb-4"><option value="">Loading Teams...</option></select>
-
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">2. Select Player</label>
                             <select id="statsPlayerSelect" onchange="fetchCurrentStats()" class="w-full border p-2 rounded font-bold mb-4"><option value="">Select a Team first</option></select>
-
                             <div class="grid grid-cols-2 gap-4 mb-4">
                                 <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Goals ⚽</label><input type="number" id="playerGoals" class="w-full border p-2 rounded text-center font-bold text-green-600 text-xl" value="0"></div>
                                 <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Assists 👟</label><input type="number" id="playerAssists" class="w-full border p-2 rounded text-center font-bold text-blue-600 text-xl" value="0"></div>
                             </div>
-
                             <div class="grid grid-cols-2 gap-4 mb-4">
                                 <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Yellow Cards 🟨</label><input type="number" id="playerYellow" class="w-full border p-2 rounded text-center font-bold text-yellow-600 text-xl bg-yellow-50" value="0"></div>
                                 <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Red Cards 🟥</label><input type="number" id="playerRed" class="w-full border p-2 rounded text-center font-bold text-red-600 text-xl bg-red-50" value="0"></div>
                             </div>
-
                             <div class="mb-4">
                                 <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Saves (GK Only) 🧤</label>
                                 <input type="number" id="playerSaves" class="w-full border p-2 rounded text-center font-bold text-purple-600 text-xl bg-purple-50" value="0">
                             </div>
-
                             <button onclick="savePlayerStats()" class="w-full bg-gray-900 text-white py-3 rounded-lg font-bold mt-4 hover:bg-black">Update Player Stats</button>
                         </div>
                     </div>
-
                     <div>
                         <div class="grid grid-cols-2 gap-2 mb-2">
                             <button onclick="loadLeaderboard('goals')" class="bg-green-100 text-green-800 py-1 rounded font-bold text-xs border border-green-200">Top Scorers</button>
@@ -216,7 +204,6 @@
                             <button onclick="loadLeaderboard('redCards')" class="bg-red-100 text-red-800 py-1 rounded font-bold text-xs border border-red-200">Reds</button>
                             <button onclick="loadLeaderboard('saves')" class="bg-purple-100 text-purple-800 py-1 rounded font-bold text-xs border border-purple-200">Saves</button>
                         </div>
-
                         <div id="statsLeaderboard" class="bg-white border rounded-lg overflow-hidden">
                             <h4 id="leaderboardTitle" class="text-xs font-bold bg-gray-100 p-2 text-center text-gray-600 uppercase">Leaderboard</h4>
                             <table class="w-full text-sm">
@@ -237,7 +224,7 @@
         import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, query, orderBy, getDocs, onSnapshot, deleteDoc, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-        // --- PASTE FIREBASE CONFIG HERE ---
+        // --- YOUR FIREBASE CONFIG (INSERTED) ---
         const firebaseConfig = {
            apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
            authDomain: "sonic-verbena-239117.firebaseapp.com",
@@ -257,7 +244,8 @@
 
         // --- AUTH ---
         window.login = () => {
-            if(document.getElementById('adminPin').value === ADMIN_PASS) {
+            const pin = document.getElementById('adminPin').value;
+            if(pin === ADMIN_PASS) {
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('dashboard-section').classList.remove('hidden');
                 document.getElementById('logoutBtn').classList.remove('hidden');
@@ -266,7 +254,6 @@
         }
         window.logout = () => window.location.reload();
 
-        // --- TABS ---
         window.switchTab = (tabName) => {
             ['registrations', 'news', 'widget', 'schedule', 'league', 'stats'].forEach(t => {
                 document.getElementById(`tab-${t}`).classList.add('hidden');
@@ -286,7 +273,7 @@
             loadLeaderboard('goals');    
         }
 
-        // --- NEWS (UPDATED WITH ERROR HANDLING) ---
+        // --- NEWS (WITH UPLOAD FIX) ---
         window.postNews = async () => {
             const title = document.getElementById('newsTitle').value;
             const content = document.getElementById('newsContent').value;
@@ -312,10 +299,7 @@
                                 document.getElementById('progressBar').style.width = prog + '%';
                                 document.getElementById('progressText').textContent = Math.round(prog) + '%';
                             },
-                            (err) => {
-                                console.error("Upload Error:", err);
-                                reject(err); 
-                            },
+                            (err) => { console.error("Upload Error:", err); reject(err); },
                             () => resolve()
                         );
                     });
@@ -323,15 +307,10 @@
                 }
 
                 await addDoc(collection(db, "news_posts"), { 
-                    title, 
-                    content, 
-                    imageUrl, 
-                    timestamp: serverTimestamp() 
+                    title, content, imageUrl, timestamp: serverTimestamp() 
                 });
 
                 alert("News Published Successfully!");
-                
-                // Reset Form
                 document.getElementById('newsTitle').value = "";
                 document.getElementById('newsContent').value = "";
                 document.getElementById('newsFile').value = "";
@@ -343,13 +322,12 @@
 
             } catch (error) {
                 console.error("Full Error:", error);
-                alert("Failed: " + error.message); 
+                alert("Failed: " + error.message);
                 btn.disabled = false;
                 btn.textContent = "Publish News";
             }
         }
 
-        // --- PREVIEW IMAGE ---
         window.previewImage = (e) => { 
             const f = e.target.files[0]; 
             if(f) { 
@@ -359,12 +337,7 @@
             } 
         }
 
-        function loadNewsHistory() { 
-            onSnapshot(query(collection(db, "news_posts"), orderBy("timestamp", "desc")), snap => { 
-                document.getElementById('admin-news-list').innerHTML = ''; 
-                snap.forEach(d => document.getElementById('admin-news-list').innerHTML += `<div class="p-2 border rounded flex justify-between bg-white mb-2"><span class="text-xs truncate w-3/4 font-semibold">${d.data().title}</span><button onclick="deletePost('${d.id}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button></div>`); 
-            }); 
-        }
+        function loadNewsHistory() { onSnapshot(query(collection(db, "news_posts"), orderBy("timestamp", "desc")), snap => { document.getElementById('admin-news-list').innerHTML = ''; snap.forEach(d => document.getElementById('admin-news-list').innerHTML += `<div class="p-2 border rounded flex justify-between bg-white mb-2"><span class="text-xs truncate w-3/4 font-semibold">${d.data().title}</span><button onclick="deletePost('${d.id}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button></div>`); }); }
         window.deletePost = async (id) => { if(confirm("Delete?")) await deleteDoc(doc(db, "news_posts", id)); }
 
         // --- PLAYER STATS ---
@@ -372,149 +345,4 @@
             const select = document.getElementById('statsTeamSelect');
             select.innerHTML = '<option value="">Select Team</option>';
             const q = query(collection(db, "registrations"));
-            const snap = await getDocs(q);
-            snap.forEach(doc => {
-                const d = doc.data();
-                if(d.registrationStatus === "Complete") {
-                    const opt = document.createElement('option');
-                    opt.value = doc.id;
-                    opt.textContent = `${d.department} (${d.level})`;
-                    select.appendChild(opt);
-                }
-            });
-        }
-
-        window.loadPlayersForStats = async () => {
-            const teamId = document.getElementById('statsTeamSelect').value;
-            const select = document.getElementById('statsPlayerSelect');
-            select.innerHTML = '<option value="">Select Player</option>';
-            if(!teamId) return;
-
-            const docRef = doc(db, "registrations", teamId);
-            const snap = await getDoc(docRef);
-            if(snap.exists() && snap.data().players) {
-                snap.data().players.forEach(p => {
-                    const opt = document.createElement('option');
-                    opt.value = p.name;
-                    opt.textContent = p.name;
-                    select.appendChild(opt);
-                });
-            }
-        }
-
-        window.fetchCurrentStats = async () => {
-            const teamSelect = document.getElementById('statsTeamSelect');
-            const player = document.getElementById('statsPlayerSelect').value;
-            const teamName = teamSelect.options[teamSelect.selectedIndex].text;
-            
-            if(!player) return;
-
-            const statId = (teamName + "_" + player).replace(/\s+/g, '').toLowerCase();
-            const snap = await getDoc(doc(db, "player_stats", statId));
-            
-            if(snap.exists()) {
-                document.getElementById('playerGoals').value = snap.data().goals || 0;
-                document.getElementById('playerAssists').value = snap.data().assists || 0;
-                document.getElementById('playerYellow').value = snap.data().yellowCards || 0;
-                document.getElementById('playerRed').value = snap.data().redCards || 0;
-                document.getElementById('playerSaves').value = snap.data().saves || 0;
-            } else {
-                document.getElementById('playerGoals').value = 0;
-                document.getElementById('playerAssists').value = 0;
-                document.getElementById('playerYellow').value = 0;
-                document.getElementById('playerRed').value = 0;
-                document.getElementById('playerSaves').value = 0;
-            }
-        }
-
-        window.savePlayerStats = async () => {
-            const teamSelect = document.getElementById('statsTeamSelect');
-            const player = document.getElementById('statsPlayerSelect').value;
-            if(!player) return alert("Select a player");
-
-            const teamName = teamSelect.options[teamSelect.selectedIndex].text;
-            const goals = parseInt(document.getElementById('playerGoals').value) || 0;
-            const assists = parseInt(document.getElementById('playerAssists').value) || 0;
-            const yellow = parseInt(document.getElementById('playerYellow').value) || 0;
-            const red = parseInt(document.getElementById('playerRed').value) || 0;
-            const saves = parseInt(document.getElementById('playerSaves').value) || 0;
-            
-            const statId = (teamName + "_" + player).replace(/\s+/g, '').toLowerCase();
-
-            await setDoc(doc(db, "player_stats", statId), {
-                name: player,
-                team: teamName,
-                goals: goals,
-                assists: assists,
-                yellowCards: yellow,
-                redCards: red,
-                saves: saves,
-                updatedAt: serverTimestamp()
-            });
-            alert("Stats Updated!");
-            loadLeaderboard('goals'); 
-        }
-
-        window.loadLeaderboard = async (type) => {
-            const body = document.getElementById('leaderboardBody');
-            const title = document.getElementById('leaderboardTitle');
-            body.innerHTML = '<tr><td colspan="4" class="p-4 text-center">Loading...</td></tr>';
-            
-            let displayType = "Goals";
-            if(type === 'assists') displayType = "Assists";
-            if(type === 'yellowCards') displayType = "Yellow Cards";
-            if(type === 'redCards') displayType = "Red Cards";
-            if(type === 'saves') displayType = "GK Saves";
-            title.textContent = `Leaderboard: ${displayType}`;
-
-            const q = query(collection(db, "player_stats"), orderBy(type, "desc"));
-            const snap = await getDocs(q);
-            
-            body.innerHTML = '';
-            if(snap.empty) { body.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-400">No stats yet.</td></tr>'; return; }
-
-            let rank = 1;
-            snap.forEach(doc => {
-                const d = doc.data();
-                const count = d[type];
-                if(count > 0) {
-                    let color = "text-gray-800";
-                    if(type === 'goals') color = "text-green-600";
-                    if(type === 'assists') color = "text-blue-600";
-                    if(type === 'yellowCards') color = "text-yellow-600";
-                    if(type === 'redCards') color = "text-red-600";
-                    if(type === 'saves') color = "text-purple-600";
-
-                    body.innerHTML += `<tr class="border-b"><td class="p-2 font-bold text-gray-500">${rank++}</td><td class="p-2 font-bold text-gray-800">${d.name}</td><td class="p-2 text-xs text-gray-500">${d.team}</td><td class="p-2 text-center font-black ${color}">${count}</td></tr>`;
-                }
-            });
-        }
-
-        // --- OTHERS ---
-        function populateTeamSelects() {
-            const options = DEPARTMENTS.map(d => `<option value="${d}">${d}</option>`).join('');
-            document.getElementById('teamA').innerHTML = `<option value="">Select Team A</option>` + options;
-            document.getElementById('teamB').innerHTML = `<option value="">Select Team B</option>` + options;
-        }
-        window.uploadTeamLogo = async () => { 
-            const dept = document.getElementById('logoDeptSelect').value;
-            const level = document.getElementById('logoLevelSelect').value;
-            const file = document.getElementById('teamLogoFile').files[0];
-            const btn = document.getElementById('uploadLogoBtn');
-            const status = document.getElementById('logoStatus');
-            if(!file) return alert("Select a file");
-            btn.disabled = true; btn.textContent = "Uploading...";
-            const storageRef = ref(storage, 'team_logos/' + dept + '.png');
-            const task = uploadBytesResumable(storageRef, file);
-            task.on('state_changed', null, null, async () => {
-                const url = await getDownloadURL(task.snapshot.ref);
-                await setDoc(doc(db, "team_assets", dept), { logoUrl: url, levelUpdated: level }, { merge: true });
-                btn.disabled = false; btn.textContent = "Save Official Team Badge";
-                status.classList.remove('hidden'); setTimeout(() => status.classList.add('hidden'), 3000);
-                alert(`${dept} Logo Saved!`);
-            });
-        }
-        window.loadRegistrations = async () => { 
-            const list = document.getElementById('registrations-list');
-            list.innerHTML = 'Loading...';
-            const snap = await getDocs(query(collection(db, "registrations"), orderBy("registeredAt", "desc
+            const snap
