@@ -345,4 +345,153 @@
             const select = document.getElementById('statsTeamSelect');
             select.innerHTML = '<option value="">Select Team</option>';
             const q = query(collection(db, "registrations"));
-            const snap
+            const snap = await getDocs(q);
+            snap.forEach(doc => {
+                const d = doc.data();
+                if(d.registrationStatus === "Complete") {
+                    const opt = document.createElement('option');
+                    opt.value = doc.id;
+                    opt.textContent = `${d.department} (${d.level})`;
+                    select.appendChild(opt);
+                }
+            });
+        }
+
+        window.loadPlayersForStats = async () => {
+            const teamId = document.getElementById('statsTeamSelect').value;
+            const select = document.getElementById('statsPlayerSelect');
+            select.innerHTML = '<option value="">Select Player</option>';
+            if(!teamId) return;
+            const docRef = doc(db, "registrations", teamId);
+            const snap = await getDoc(docRef);
+            if(snap.exists() && snap.data().players) {
+                snap.data().players.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.name; opt.textContent = p.name; select.appendChild(opt);
+                });
+            }
+        }
+
+        window.fetchCurrentStats = async () => {
+            const teamSelect = document.getElementById('statsTeamSelect');
+            const player = document.getElementById('statsPlayerSelect').value;
+            const teamName = teamSelect.options[teamSelect.selectedIndex].text;
+            if(!player) return;
+            const statId = (teamName + "_" + player).replace(/\s+/g, '').toLowerCase();
+            const snap = await getDoc(doc(db, "player_stats", statId));
+            if(snap.exists()) {
+                document.getElementById('playerGoals').value = snap.data().goals || 0;
+                document.getElementById('playerAssists').value = snap.data().assists || 0;
+                document.getElementById('playerYellow').value = snap.data().yellowCards || 0;
+                document.getElementById('playerRed').value = snap.data().redCards || 0;
+                document.getElementById('playerSaves').value = snap.data().saves || 0;
+            } else {
+                ['playerGoals', 'playerAssists', 'playerYellow', 'playerRed', 'playerSaves'].forEach(id => document.getElementById(id).value = 0);
+            }
+        }
+
+        window.savePlayerStats = async () => {
+            const teamSelect = document.getElementById('statsTeamSelect');
+            const player = document.getElementById('statsPlayerSelect').value;
+            if(!player) return alert("Select a player");
+            const teamName = teamSelect.options[teamSelect.selectedIndex].text;
+            const goals = parseInt(document.getElementById('playerGoals').value) || 0;
+            const assists = parseInt(document.getElementById('playerAssists').value) || 0;
+            const yellow = parseInt(document.getElementById('playerYellow').value) || 0;
+            const red = parseInt(document.getElementById('playerRed').value) || 0;
+            const saves = parseInt(document.getElementById('playerSaves').value) || 0;
+            const statId = (teamName + "_" + player).replace(/\s+/g, '').toLowerCase();
+            await setDoc(doc(db, "player_stats", statId), {
+                name: player, team: teamName, goals: goals, assists: assists, yellowCards: yellow, redCards: red, saves: saves, updatedAt: serverTimestamp()
+            });
+            alert("Stats Updated!"); loadLeaderboard('goals'); 
+        }
+
+        window.loadLeaderboard = async (type) => {
+            const body = document.getElementById('leaderboardBody');
+            const title = document.getElementById('leaderboardTitle');
+            body.innerHTML = '<tr><td colspan="4" class="p-4 text-center">Loading...</td></tr>';
+            const titles = { goals: 'Goals', assists: 'Assists', yellowCards: 'Yellow Cards', redCards: 'Red Cards', saves: 'GK Saves' };
+            title.textContent = `Leaderboard: ${titles[type]}`;
+            const q = query(collection(db, "player_stats"), orderBy(type, "desc"));
+            const snap = await getDocs(q);
+            body.innerHTML = '';
+            if(snap.empty) { body.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-400">No stats yet.</td></tr>'; return; }
+            let rank = 1;
+            snap.forEach(doc => {
+                const d = doc.data();
+                const count = d[type];
+                if(count > 0) {
+                    let color = "text-gray-800";
+                    if(type === 'goals') color = "text-green-600";
+                    if(type === 'assists') color = "text-blue-600";
+                    if(type === 'yellowCards') color = "text-yellow-600";
+                    if(type === 'redCards') color = "text-red-600";
+                    if(type === 'saves') color = "text-purple-600";
+                    body.innerHTML += `<tr class="border-b"><td class="p-2 font-bold text-gray-500">${rank++}</td><td class="p-2 font-bold text-gray-800">${d.name}</td><td class="p-2 text-xs text-gray-500">${d.team}</td><td class="p-2 text-center font-black ${color}">${count}</td></tr>`;
+                }
+            });
+        }
+
+        // --- OTHER FUNCTIONS ---
+        function populateTeamSelects() {
+            const options = DEPARTMENTS.map(d => `<option value="${d}">${d}</option>`).join('');
+            document.getElementById('teamA').innerHTML = `<option value="">Select Team A</option>` + options;
+            document.getElementById('teamB').innerHTML = `<option value="">Select Team B</option>` + options;
+        }
+        window.uploadTeamLogo = async () => { 
+            const dept = document.getElementById('logoDeptSelect').value;
+            const level = document.getElementById('logoLevelSelect').value;
+            const file = document.getElementById('teamLogoFile').files[0];
+            const btn = document.getElementById('uploadLogoBtn');
+            const status = document.getElementById('logoStatus');
+            if(!file) return alert("Select a file");
+            btn.disabled = true; btn.textContent = "Uploading...";
+            const storageRef = ref(storage, 'team_logos/' + dept + '.png');
+            const task = uploadBytesResumable(storageRef, file);
+            task.on('state_changed', null, null, async () => {
+                const url = await getDownloadURL(task.snapshot.ref);
+                await setDoc(doc(db, "team_assets", dept), { logoUrl: url, levelUpdated: level }, { merge: true });
+                btn.disabled = false; btn.textContent = "Save Official Team Badge";
+                status.classList.remove('hidden'); setTimeout(() => status.classList.add('hidden'), 3000);
+                alert(`${dept} Logo Saved!`);
+            });
+        }
+        window.loadRegistrations = async () => { 
+            const list = document.getElementById('registrations-list');
+            list.innerHTML = 'Loading...';
+            const snap = await getDocs(query(collection(db, "registrations"), orderBy("registeredAt", "desc")));
+            list.innerHTML = snap.empty ? '<p class="text-center text-gray-400">No teams.</p>' : '';
+            snap.forEach(d => {
+                const data = d.data();
+                const color = data.registrationStatus === "Complete" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800";
+                list.innerHTML += `<div class="p-3 bg-gray-50 rounded border flex justify-between items-center"><div><h4 class="font-bold text-gray-800">${data.department} <span class="text-xs text-gray-500 font-normal">(${data.level})</span></h4><p class="text-xs text-gray-500">${data.coachName} | ${data.phone}</p></div><span class="px-2 py-1 rounded text-xs font-bold ${color}">${data.registrationStatus}</span></div>`;
+            });
+        }
+        window.saveFixture = async () => { 
+            const tA = document.getElementById('teamA').value; const tB = document.getElementById('teamB').value;
+            let logoA="", logoB="";
+            const dA = await getDoc(doc(db, "team_assets", tA)); if(dA.exists()) logoA = dA.data().logoUrl;
+            const dB = await getDoc(doc(db, "team_assets", tB)); if(dB.exists()) logoB = dB.data().logoUrl;
+            await setDoc(doc(db, "app_content", "current_fixture"), { teamA: tA, teamB: tB, teamALogo: logoA, teamBLogo: logoB, date: document.getElementById('fixDate').value, time: document.getElementById('fixTime').value, venue: document.getElementById('fixVenue').value });
+            alert("Widget Updated!");
+        }
+        window.addMatchInput = (tA='', tB='', time='', res='') => { document.getElementById('schedule-container').innerHTML += `<div class="grid grid-cols-4 gap-2 bg-gray-50 p-2 rounded match-row mb-2"><input class="border p-2 rounded s-teamA" placeholder="Team A" value="${tA}"><input class="border p-2 rounded s-teamB" placeholder="Team B" value="${tB}"><input class="border p-2 rounded s-time" placeholder="Time" value="${time}"><input class="border p-2 rounded s-result" placeholder="Score" value="${res}"></div>`; }
+        window.loadSchedule = async () => { 
+            const docId = "schedule_" + document.getElementById('matchDaySelect').value.replace(/\s+/g, '_').toLowerCase();
+            const snap = await getDoc(doc(db, "schedules", docId));
+            const c = document.getElementById('schedule-container'); c.innerHTML='';
+            if(snap.exists() && snap.data().matches) snap.data().matches.forEach(m=>window.addMatchInput(m.teamA, m.teamB, m.time, m.result)); else window.addMatchInput();
+        }
+        window.saveSchedule = async () => { 
+            const matches=[]; document.querySelectorAll('.match-row').forEach(r=>matches.push({teamA:r.querySelector('.s-teamA').value, teamB:r.querySelector('.s-teamB').value, time:r.querySelector('.s-time').value, result:r.querySelector('.s-result').value}));
+            await setDoc(doc(db, "schedules", "schedule_" + document.getElementById('matchDaySelect').value.replace(/\s+/g, '_').toLowerCase()), { matches });
+            alert("Schedule Saved");
+        }
+        window.changeTableLevel = (level) => { currentTableLevel = level; const logoMap = { 'Finalist': 'Finalist.png', 'Penultimate': 'Penultimate.png', 'Sophomore': 'Sophomore.png' }; document.getElementById('division-logo-display').src = logoMap[level]; document.getElementById('division-label').textContent = level; document.getElementById('save-lvl-name').textContent = level; ['Finalist', 'Penultimate', 'Sophomore'].forEach(l => { const b=document.getElementById('lvl-'+l); if(l===level){b.classList.add('sub-active');b.classList.remove('sub-inactive');}else{b.classList.remove('sub-active');b.classList.add('sub-inactive');}}); loadTableEditor(); }
+        async function loadTableEditor() { const snap = await getDoc(doc(db, "app_content", `league_table_${currentTableLevel.toLowerCase()}`)); let data = snap.exists() ? snap.data() : {}; DEPARTMENTS.forEach(d => { if(!data[d]) data[d] = { mp:0, w:0, d:0, l:0, gd:0, pts:0 }; }); const tbody = document.getElementById('table-editor-body'); tbody.innerHTML = ''; Object.keys(data).sort().forEach(dept => { const s = data[dept]; tbody.innerHTML += `<tr><td class="py-2 px-4 font-bold text-sm">${dept}</td><td><input id="${dept}-mp" value="${s.mp}" class="stat-input"></td><td><input id="${dept}-w" value="${s.w}" class="stat-input"></td><td><input id="${dept}-d" value="${s.d}" class="stat-input"></td><td><input id="${dept}-l" value="${s.l}" class="stat-input"></td><td><input id="${dept}-gd" value="${s.gd}" class="stat-input"></td><td><input id="${dept}-pts" value="${s.pts}" class="stat-input font-bold bg-green-50 text-green-700"></td></tr>`; }); }
+        window.saveTable = async () => { let newData = {}; document.getElementById('table-editor-body').querySelectorAll('tr').forEach(row => { const dept = row.querySelector('td:first-child').innerText; newData[dept] = { mp: parseInt(document.getElementById(`${dept}-mp`).value)||0, w: parseInt(document.getElementById(`${dept}-w`).value)||0, d: parseInt(document.getElementById(`${dept}-d`).value)||0, l: parseInt(document.getElementById(`${dept}-l`).value)||0, gd: parseInt(document.getElementById(`${dept}-gd`).value)||0, pts: parseInt(document.getElementById(`${dept}-pts`).value)||0 }; }); await setDoc(doc(db, "app_content", `league_table_${currentTableLevel.toLowerCase()}`), newData); alert("Table Saved!"); }
+
+    </script>
+</body>
+</html>
