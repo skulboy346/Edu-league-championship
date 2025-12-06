@@ -6,12 +6,9 @@
     <title>EDU-LEAGUE CHAMPIONSHIP Registration</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
     <link rel="icon" href="edulogo.jpg" type="image/jpeg">
-    <link rel="apple-touch-icon" href="edulogo.jpg">
     
     <style>
-        /* Custom Font */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f7f9fd; }
         .bg-edu-purple { background-color: #6d28d9; }
@@ -19,62 +16,24 @@
         .bg-edu-yellow { background-color: #fbbf24; }
         .hover-edu-yellow:hover { background-color: #f59e0b; }
         
-        /* Modal Styles */
-        #confirmation-box, #custom-alert-modal {
-            transition: opacity 0.3s ease-in-out;
-        }
+        #confirmation-box, #custom-alert-modal { transition: opacity 0.3s ease-in-out; }
         .modal-content { transition: all 0.3s ease-in-out; }
-        
-        /* Loader */
-        .loader {
-            border-top-color: #6d28d9;
-            animation: spinner 1.5s linear infinite;
-        }
+        .loader { border-top-color: #6d28d9; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* Slider Styles */
-        .slider-container {
-            width: 150px; height: 150px; margin: 0 auto;
-            overflow: hidden; border-radius: 0.5rem; border: 3px solid #fbbf24;
-        }
-        .slider-wrapper {
-            display: flex; transition: transform 1s ease-in-out;
-            height: 100%;
-        }
-        .slider-item {
-            min-width: 100%; height: 100%; box-sizing: border-box;
-            text-align: center; color: white; font-weight: bold;
-            background-color: #4c1d95; display: flex;
-            align-items: center; justify-content: center;
-        }
-        .slider-item img {
-            width: 100%; height: 100%; object-fit: cover;
-        }
+        .slider-container { width: 150px; height: 150px; margin: 0 auto; overflow: hidden; border-radius: 0.5rem; border: 3px solid #fbbf24; }
+        .slider-wrapper { display: flex; transition: transform 1s ease-in-out; height: 100%; }
+        .slider-item { min-width: 100%; height: 100%; box-sizing: border-box; text-align: center; color: white; background-color: #4c1d95; display: flex; align-items: center; justify-content: center; }
+        .slider-item img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* News Ticker Footer */
-        .news-ticker {
-            width: 100%; background-color: #1f2937; color: white;
-            padding: 0.75rem 0; overflow: hidden;
-            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        .ticker-wrapper {
-            display: flex; white-space: nowrap;
-            animation: ticker 60s linear infinite; 
-        }
+        .news-ticker { width: 100%; background-color: #1f2937; color: white; padding: 0.75rem 0; overflow: hidden; }
+        .ticker-wrapper { display: flex; white-space: nowrap; animation: ticker 60s linear infinite; }
         .ticker-item { padding: 0 1.5rem; color: #d1d5db; }
         .ticker-item strong { color: #fbbf24; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        
-        /* Social Bar Footer */
-        .social-bar {
-            background-color: #374151;
-            border-top: 1px solid #4b5563;
-        }
-        .social-icon { transition: color 0.3s ease; }
-        .social-fb { color: #1877F2; } .social-fb:hover { color: #FFFFFF; }
-        .social-tk { color: #000000; } .social-tk:hover { color: #FFFFFF; }
-        .social-yt { color: #FF0000; } .social-yt:hover { color: #FFFFFF; }
-        .social-ig { color: #E4405F; } .social-ig:hover { color: #FFFFFF; }
+        .social-bar { background-color: #374151; border-top: 1px solid #4b5563; }
+        .social-icon { transition: color 0.3s ease; color: #9ca3af; }
+        .social-icon:hover { color: #ffffff; }
     </style>
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen">
@@ -82,12 +41,12 @@
     <nav class="bg-white shadow-md sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <a href="./news.html" class="flex items-center space-x-2">
-                <img src="edulogo.jpg" alt="Logo" class="h-10 w-10 rounded-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/40x40/6d28d9/fbbf24?text=EDU';">
+                <img src="edulogo.jpg" alt="Logo" class="h-10 w-10 rounded-full object-cover">
                 <span class="text-xl font-bold text-edu-purple">EDU-LEAGUE</span>
             </a>
             <div class="flex space-x-4">
                 <a href="./index.html" class="text-edu-purple font-bold border-b-2 border-edu-purple">Registration</a>
-                <a href="./news.html" class="text-gray-600 hover:text-edu-purple font-semibold">News & Results</a>
+                <a href="./news.html" class="text-gray-600 hover:text-edu-purple font-semibold">News</a>
             </div>
         </div>
     </nav>
@@ -95,10 +54,8 @@
     <main class="flex-grow flex items-center justify-center p-4">
         <div class="max-w-4xl w-full bg-white shadow-2xl rounded-xl overflow-hidden md:flex">
 
-            <div class="md:w-1/3 bg-edu-purple text-white p-8 space-y-6 flex flex-col justify-center rounded-t-xl md:rounded-l-xl md:rounded-t-none">
-                <div class="flex justify-center pt-4 md:pt-0">
-                    <img src="edulogo.jpg" alt="Edu-League Logo" class="rounded-full border-4 border-purple-300 shadow-lg w-32 h-32 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/128x128/6d28d9/fbbf24?text=EDU-LEAGUE';">
-                </div>
+            <div class="md:w-1/3 bg-edu-purple text-white p-8 space-y-6 flex flex-col justify-center">
+                <div class="flex justify-center"><img src="edulogo.jpg" class="rounded-full border-4 border-purple-300 shadow-lg w-32 h-32 object-cover"></div>
                 <div class="text-center md:text-left">
                     <h1 class="text-3xl font-extrabold tracking-tight">EDU-LEAGUE CHAMPIONSHIP</h1>
                     <p class="mt-1 text-purple-200 text-lg">Battle within Educators</p>
@@ -107,41 +64,30 @@
                     <h2 class="text-xl font-bold border-b border-purple-400 pb-2">League Levels</h2>
                     <div class="slider-container shadow-lg">
                         <div class="slider-wrapper" id="logoSlider">
-                            <div class="slider-item"><img src="Finalist.png" alt="Finalist League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/22c55e?text=Finalist.png';"></div>
-                            <div class="slider-item"><img src="Penultimate.png" alt="Penultimate League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/3b82f6?text=Penultimate.png';"></div>
-                            <div class="slider-item"><img src="Sophomore.png" alt="Sophomore League Logo" onerror="this.onerror=null; this.src='https://placehold.co/150x150/4c1d95/ef4444?text=Sophomore.png';"></div>
+                            <div class="slider-item"><img src="Finalist.png" alt="Finalist"></div>
+                            <div class="slider-item"><img src="Penultimate.png" alt="Penultimate"></div>
+                            <div class="slider-item"><img src="Sophomore.png" alt="Sophomore"></div>
                         </div>
                     </div>
-                </div>
-                <div class="space-y-4">
-                    <h2 class="text-xl font-bold border-b border-purple-400 pb-2">Event Structure</h2>
-                    <ul class="space-y-2 text-purple-100 font-semibold">
-                        <li class="flex items-center space-x-2"><svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 0 100-16 8 8 0 000 16zm-1-8V7a1 1 0 012 0v3h2a1 1 0 110 2h-2v2a1 1 0 11-2 0v-2H7a1 1 0 110-2h2z"/></svg><span>Competing Departments: 8</span></li>
-                        <li class="flex items-center space-x-2"><svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-4 7a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/></svg><span>Championship Levels: 3</span></li>
-                        <li class="flex items-center space-x-2"><svg class="w-5 h-5 text-edu-yellow" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/></svg><span>Available Trophies: 3 Cups</span></li>
-                    </ul>
                 </div>
                 <div class="pt-4 border-t border-purple-400 text-center md:text-left">
                     <p class="text-sm font-light">Presented by:</p>
                     <p class="text-lg font-bold">NUESA x FESSC</p>
                     <div class="flex justify-center md:justify-start space-x-4 mt-2">
-                        <img src="NUESA.jpg" alt="NUESA Logo" class="w-12 h-12 rounded-full border-2 border-purple-300 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/48x48/f7f9fd/6d28d9?text=NUESA';">
-                        <img src="FESSC.png" alt="FESSC Logo" class="w-12 h-12 rounded-full border-2 border-purple-300 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/48x48/f7f9fd/fbbf24?text=FESSC';">
+                        <img src="NUESA.jpg" class="w-12 h-12 rounded-full border-2 border-purple-300 object-cover">
+                        <img src="FESSC.png" class="w-12 h-12 rounded-full border-2 border-purple-300 object-cover">
                     </div>
                 </div>
             </div>
 
             <div class="md:w-2/3 p-8 md:p-12 relative">
                 
-                <div id="resume-banner" class="hidden bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded shadow-sm" role="alert">
-                    <div class="flex justify-between items-center flex-wrap gap-2">
-                        <div>
-                            <p class="font-bold">Pending Registration Found</p>
-                            <p class="text-sm">Incomplete setup for <span id="resume-team" class="font-bold text-blue-900"></span>.</p>
-                        </div>
+                <div id="resume-banner" class="hidden bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded shadow-sm">
+                    <div class="flex justify-between items-center gap-2">
+                        <div><p class="font-bold">Pending Registration</p><p class="text-sm">Incomplete setup for <span id="resume-team" class="font-bold"></span>.</p></div>
                         <div class="flex gap-2">
-                            <button onclick="resumeRegistration()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs transition">Resume</button>
-                            <button onclick="clearRegistration()" class="bg-transparent hover:bg-blue-200 text-blue-700 font-semibold py-2 px-4 rounded text-xs border border-blue-500 transition">Start New</button>
+                            <button onclick="resumeRegistration()" class="bg-blue-600 text-white font-bold py-1 px-3 rounded text-xs hover:bg-blue-700">Resume</button>
+                            <button onclick="clearRegistration()" class="border border-blue-500 text-blue-700 font-bold py-1 px-3 rounded text-xs hover:bg-blue-50">Clear</button>
                         </div>
                     </div>
                 </div>
@@ -149,13 +95,14 @@
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">Team Registration Form</h2>
                 <div class="bg-edu-yellow text-gray-800 p-4 rounded-lg shadow-md mb-6 font-semibold md:flex justify-between items-center text-center md:text-left">
                     <p>REGISTRATION: Nov 15th - Nov 25th</p>
-                    <p class="mt-2 md:mt-0 md:border-l md:pl-4 border-gray-600">ENTRY FEE PER LEVEL: <span class="line-through opacity-75">#70,000</span> <span class="font-bold text-green-700 ml-1">FREE</span></p>
+                    <p class="mt-2 md:mt-0 md:border-l md:pl-4 border-gray-600">ENTRY FEE: <span class="line-through opacity-75">#70,000</span> <span class="font-bold text-green-700 ml-1">FREE</span></p>
                 </div>
+                
                 <form id="registrationForm" onsubmit="handleSubmit(event); return false;" class="space-y-4">
                     <div>
-                        <label for="department" class="block text-sm font-medium text-gray-700">Department Affiliation</label>
-                        <select id="department" name="department" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border bg-white">
-                            <option value="" disabled selected>Select one of the 8 Departments</option>
+                        <label class="block text-sm font-medium text-gray-700">Department Affiliation</label>
+                        <select id="department" name="department" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple h-10 p-2 border bg-white">
+                            <option value="" disabled selected>Select Department</option>
                             <option value="Adult Education (NAAES)">Adult Education (NAAES)</option>
                             <option value="Art Education (AESA)">Art Education (AESA)</option>
                             <option value="Education Foundation (EFSA)">Education Foundation (EFSA)</option>
@@ -166,36 +113,22 @@
                             <option value="Technology and Vocational Education (TVESA)">Technology and Vocational Education (TVESA)</option>
                         </select>
                     </div>
-                    <div>
-                        <label for="coachName" class="block text-sm font-medium text-gray-700">Coach Name</label>
-                        <input type="text" id="coachName" name="coachName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                            <input type="email" id="email" name="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
-                        </div>
-                        <div>
-                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number (0814...)</label>
-                            <input type="tel" id="phone" name="phone" pattern="[0-9]{11}" placeholder="e.g., 08140712347" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border">
-                        </div>
+                    <div><label class="block text-sm font-medium text-gray-700">Coach Name</label><input type="text" id="coachName" required class="mt-1 block w-full rounded-md border h-10 p-2"></div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700">Email</label><input type="email" id="email" required class="mt-1 block w-full rounded-md border h-10 p-2"></div>
+                        <div><label class="block text-sm font-medium text-gray-700">Phone</label><input type="tel" id="phone" required class="mt-1 block w-full rounded-md border h-10 p-2"></div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Select Competition Level (3 Levels)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Level</label>
                         <div class="flex flex-wrap gap-4">
-                            <label class="inline-flex items-center"><input type="radio" name="level" value="Finalist (400Lvl)" required class="form-radio text-edu-purple focus:ring-edu-purple"><span class="ml-2">Finalist (400Lvl)</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="level" value="Penultimate (300Lvl)" class="form-radio text-edu-purple focus:ring-edu-purple"><span class="ml-2">Penultimate (300Lvl)</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="level" value="Sophomore (200Lvl)" class="form-radio text-edu-purple focus:ring-edu-purple"><span class="ml-2">Sophomore (200Lvl)</span></label>
+                            <label class="inline-flex items-center"><input type="radio" name="level" value="Finalist (400Lvl)" required class="text-edu-purple"><span class="ml-2">Finalist (400Lvl)</span></label>
+                            <label class="inline-flex items-center"><input type="radio" name="level" value="Penultimate (300Lvl)" required class="text-edu-purple"><span class="ml-2">Penultimate (300Lvl)</span></label>
+                            <label class="inline-flex items-center"><input type="radio" name="level" value="Sophomore (200Lvl)" required class="text-edu-purple"><span class="ml-2">Sophomore (200Lvl)</span></label>
                         </div>
                     </div>
                     
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">One-Time Access Code</label>
-                        <input type="text" id="accessCode" placeholder="Enter Code (e.g. EDU-A7X9)" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple focus:ring-edu-purple h-10 p-2 border uppercase">
-                    </div>
-
-                    <button type="submit" id="submitButton" class="w-full mt-6 py-3 bg-edu-yellow text-gray-900 font-bold rounded-md shadow-lg hover-edu-yellow focus:outline-none focus:ring-2 focus:ring-edu-yellow focus:ring-offset-2 transition duration-150 ease-in-out">
-                        Register Team Now
+                    <button type="submit" id="submitButton" class="w-full mt-6 py-3 bg-edu-purple text-white font-bold rounded-md shadow-lg hover:bg-purple-700 transition duration-150">
+                        Continue to Verification &rarr;
                     </button>
                 </form>
 
@@ -204,42 +137,19 @@
                         <h3 class="text-lg font-bold text-gray-800 border-l-4 border-edu-purple pl-3">Latest Updates</h3>
                         <a href="news.html" class="text-xs text-edu-purple font-bold hover:underline">View All &rarr;</a>
                     </div>
-                    <div id="homepage-news-list" class="space-y-3">
-                        <p class="text-sm text-gray-400 italic">Loading updates...</p>
-                    </div>
-                </div>
-
-                <div class="mt-8 pt-4 border-t border-gray-200 text-center">
-                    <p class="text-sm text-gray-600 font-semibold">For Enquiries & Sponsorship:</p>
-                    <p class="text-lg font-bold text-edu-purple mt-1">OPEYEMI 08140712347</p>
+                    <div id="homepage-news-list" class="space-y-3"><p class="text-sm text-gray-400 italic">Loading updates...</p></div>
                 </div>
             </div>
-
         </div>
     </main>
     
-    <a href="admin.html" id="admin-fab" class="fixed bottom-24 md:bottom-28 right-4 md:right-6 bg-edu-purple text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center z-40 hover:bg-purple-800 transition-transform hover:scale-110 cursor-pointer">
-        <i class="fa-solid fa-lock text-white text-xl"></i>
-    </a>
+    <a href="admin.html" class="fixed bottom-6 right-6 bg-edu-purple text-white w-12 h-12 rounded-full shadow-2xl flex items-center justify-center z-40 hover:bg-purple-800 transition-transform hover:scale-110"><i class="fa-solid fa-lock"></i></a>
 
-    <div id="confirmation-box" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
-        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300 modal-content">
-            <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Registration 100% Complete!</h3>
-            <p class="text-gray-600 mb-6">Your team is fully registered and your roster is submitted. Good luck!</p>
-            <button onclick="closeConfirmation()" class="py-2 px-4 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">
-                Close
-            </button>
-        </div>
-    </div>
-    
     <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300 modal-content">
             <h3 id="custom-alert-title" class="text-xl font-bold text-gray-800 mb-2">Alert</h3>
-            <p id="custom-alert-message" class="text-gray-600 mb-6">This is an alert message.</p>
-            <button onclick="closeCustomAlert()" class="py-2 px-6 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">
-                OK
-            </button>
+            <p id="custom-alert-message" class="text-gray-600 mb-6">Message</p>
+            <button onclick="closeCustomAlert()" class="py-2 px-6 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">OK</button>
         </div>
     </div>
 
@@ -248,33 +158,31 @@
             <div class="max-w-4xl mx-auto flex justify-center items-center space-x-6">
                 <a href="#" class="social-icon social-fb"><i class="fab fa-facebook fa-2x"></i></a>
                 <a href="#" class="social-icon social-tk"><i class="fab fa-tiktok fa-2x"></i></a>
-                <a href="#" class="social-icon social-yt"><i class="fab fa-youtube fa-2x"></i></a>
                 <a href="#" class="social-icon social-ig"><i class="fab fa-instagram fa-2x"></i></a>
             </div>
         </div>
         <div class="news-ticker">
             <div class="ticker-wrapper" id="tickerWrapper">
-                </div>
+                <div class="ticker-item"><strong>EDU-LEAGUE:</strong> Battle within Educators</div>
+            </div>
         </div>
     </footer>
-
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, getDocs, doc, getDoc, updateDoc, where, orderBy } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, getDocs, doc, getDoc, where, orderBy } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-        // --- FIREBASE CONFIG (INSERTED) ---
+        // --- PASTE FIREBASE CONFIG HERE ---
         const firebaseConfig = {
            apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
            authDomain: "sonic-verbena-239117.firebaseapp.com",
-           databaseURL: "https://sonic-verbena-239117.firebaseio.com",
            projectId: "sonic-verbena-239117",
            storageBucket: "sonic-verbena-239117.firebasestorage.app",
            messagingSenderId: "652544574249",
            appId: "1:652544574249:web:6ff33771307e892e7f6d38",
            measurementId: "G-TD780JGNED"
-         };
+        };
         // ----------------------------------
 
         let db;
@@ -285,83 +193,49 @@
         // DOM Elements
         const form = document.getElementById('registrationForm');
         const submitButton = document.getElementById('submitButton');
-        const confirmationBox = document.getElementById('confirmation-box');
         const customAlertModal = document.getElementById('custom-alert-modal');
         const customAlertTitle = document.getElementById('custom-alert-title');
         const customAlertMessage = document.getElementById('custom-alert-message');
         const resumeBanner = document.getElementById('resume-banner');
         const resumeTeamSpan = document.getElementById('resume-team');
 
-        // Modal Functions
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (!modal) return;
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            const content = modal.querySelector('.modal-content');
-            if (content) content.classList.remove('scale-95');
-        }
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (!modal) return;
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            const content = modal.querySelector('.modal-content');
-            if (content) content.classList.add('scale-95');
-        }
-
         window.showCustomAlert = (title, message) => {
             customAlertTitle.textContent = title;
             customAlertMessage.textContent = message;
-            openModal('custom-alert-modal');
+            customAlertModal.classList.remove('opacity-0', 'pointer-events-none');
         }
-        window.closeCustomAlert = () => closeModal('custom-alert-modal');
-        window.showConfirmation = () => openModal('confirmation-box');
-        window.closeConfirmation = () => closeModal('confirmation-box');
+        window.closeCustomAlert = () => customAlertModal.classList.add('opacity-0', 'pointer-events-none');
 
         // --- HOMEPAGE NEWS WIDGET ---
         async function loadHomepageNews() {
             if (!newsCollection) return;
             const q = query(newsCollection, orderBy("timestamp", "desc"));
             
-            onSnapshot(q, (snapshot) => {
-                const list = document.getElementById('homepage-news-list');
-                if(!list) return;
-                list.innerHTML = '';
-                
-                const docs = snapshot.docs.slice(0, 3); // Get Top 3
-                
-                if (docs.length === 0) {
-                    list.innerHTML = '<p class="text-sm text-gray-400 italic">No news posted yet.</p>';
-                    return;
-                }
+            // Get snapshot once to avoid flickering
+            const snapshot = await getDocs(q);
+            const list = document.getElementById('homepage-news-list');
+            list.innerHTML = '';
+            
+            const docs = snapshot.docs.slice(0, 3);
+            if (docs.length === 0) {
+                list.innerHTML = '<p class="text-sm text-gray-400 italic">No news posted yet.</p>';
+                return;
+            }
 
-                docs.forEach(doc => {
-                    const n = doc.data();
-                    let dateStr = "";
-                    if(n.timestamp) dateStr = n.timestamp.toDate().toLocaleDateString();
-
-                    list.innerHTML += `
-                        <a href="news.html" class="block bg-gray-50 hover:bg-purple-50 p-3 rounded-lg transition border border-gray-100 group">
-                            <div class="flex justify-between">
-                                <h4 class="text-sm font-bold text-gray-800 group-hover:text-edu-purple line-clamp-1">${n.title}</h4>
-                                <span class="text-[10px] text-gray-400 shrink-0 ml-2">${dateStr}</span>
-                            </div>
-                            <p class="text-xs text-gray-500 line-clamp-1 mt-1">${n.content}</p>
-                        </a>
-                    `;
-                });
+            docs.forEach(doc => {
+                const n = doc.data();
+                const dateStr = n.timestamp ? new Date(n.timestamp.seconds * 1000).toLocaleDateString() : '';
+                list.innerHTML += `<a href="news.html" class="block bg-gray-50 hover:bg-purple-50 p-3 rounded-lg transition border border-gray-100 group"><div class="flex justify-between"><h4 class="text-sm font-bold text-gray-800 group-hover:text-edu-purple line-clamp-1">${n.title}</h4><span class="text-[10px] text-gray-400 shrink-0 ml-2">${dateStr}</span></div><p class="text-xs text-gray-500 line-clamp-1 mt-1">${n.content}</p></a>`;
             });
         }
 
         // --- DUPLICATE & RESUME LOGIC ---
-        // 1. Check Duplicate
         async function checkDuplicateRegistration(department, level) {
             const q = query(registrationsCollection, where("department", "==", department), where("level", "==", level));
             const querySnapshot = await getDocs(q);
             return !querySnapshot.empty;
         }
 
-        // 2. Check Existing Session (Resume)
         async function checkExistingSession() {
             const savedTeamId = localStorage.getItem('eduLeagueTeamID');
             if (savedTeamId) {
@@ -371,18 +245,15 @@
                     
                     if (docSnap.exists()) {
                         const data = docSnap.data();
-                        // If complete, ignore it
                         if (data.registrationStatus === "Complete") {
                             localStorage.removeItem('eduLeagueTeamID');
                             return;
                         }
-                        // If incomplete, show banner
                         resumeTeamSpan.textContent = `${data.department} (${data.level})`;
                         resumeBanner.classList.remove('hidden');
                         resumeBanner.dataset.teamId = savedTeamId;
                         resumeBanner.dataset.teamName = data.teamName;
                         resumeBanner.dataset.level = data.level;
-                        resumeBanner.dataset.paymentStatus = data.paymentStatus;
                     } else {
                         localStorage.removeItem('eduLeagueTeamID');
                     }
@@ -391,8 +262,11 @@
         }
         
         window.resumeRegistration = function() {
-            // Simply redirect to news page where payment/updates happen
-            window.location.assign('./news.html');
+            const teamId = resumeBanner.dataset.teamId;
+            const teamName = resumeBanner.dataset.teamName;
+            const level = resumeBanner.dataset.level;
+            const params = new URLSearchParams({ team: teamName, level: level, fee: "FREE", teamId: teamId });
+            window.location.assign(`./payment_page.html?${params.toString()}`);
         }
         
         window.clearRegistration = function() {
@@ -403,74 +277,50 @@
         // --- FORM SUBMISSION ---
         window.handleSubmit = async function(event) {
             event.preventDefault(); 
-            
-            // 1. Basic Validation
             if (!form.checkValidity()) { form.reportValidity(); return false; }
             if (!registrationsCollection) { showCustomAlert("Error", "Database not connected."); return false; }
             
-            // 2. Get Access Code
-            const accessCodeInput = document.getElementById('accessCode'); 
-            if(!accessCodeInput) { alert("Access Code field missing."); return false; }
-            const codeValue = accessCodeInput.value.trim().toUpperCase();
+            submitButton.disabled = true; submitButton.textContent = "Checking...";
 
-            submitButton.disabled = true; submitButton.textContent = "Verifying...";
-
+            const department = document.getElementById('department').value;
+            const level = document.querySelector('input[name="level"]:checked').value;
+            
             try {
-                // 3. CHECK THE CODE
-                const codeRef = doc(db, "access_codes", codeValue);
-                const codeSnap = await getDoc(codeRef);
-
-                if (!codeSnap.exists()) {
-                    showCustomAlert("Invalid Code", "This Access Code does not exist.");
-                    submitButton.disabled = false; submitButton.textContent = "Register Team Now";
-                    return false;
-                }
-
-                if (codeSnap.data().status === "used") {
-                    showCustomAlert("Code Expired", "This code has already been used.");
-                    submitButton.disabled = false; submitButton.textContent = "Register Team Now";
-                    return false;
-                }
-
-                // 4. CHECK DUPLICATE
-                const department = document.getElementById('department').value;
-                const coachName = document.getElementById('coachName').value;
-                const email = document.getElementById('email').value;
-                const phone = document.getElementById('phone').value;
-                const level = document.querySelector('input[name="level"]:checked').value;
-                
+                // Check Duplicates FIRST
                 const isDuplicate = await checkDuplicateRegistration(department, level);
                 if (isDuplicate) {
-                    showCustomAlert("Duplicate", `${department} is already registered for ${level}.`);
+                    showCustomAlert("Duplicate Found", `The Department of ${department} is already registered for ${level}.`);
                     submitButton.disabled = false; submitButton.textContent = "Register Team Now";
                     return false;
                 }
                 
-                submitButton.textContent = "Registering...";
+                submitButton.textContent = "Saving...";
 
                 const registrationData = {
-                    teamName: department, coachName, email, phone, department, level,
-                    accessCodeUsed: codeValue,
-                    registeredAt: new Date().toISOString(), paymentStatus: "Pending", registrationStatus: "Pending Payment", players: [] 
+                    teamName: department, 
+                    coachName: document.getElementById('coachName').value,
+                    email: document.getElementById('email').value, 
+                    phone: document.getElementById('phone').value,
+                    department: department, 
+                    level: level,
+                    registeredAt: new Date().toISOString(), 
+                    paymentStatus: "Pending", 
+                    registrationStatus: "Pending Payment", 
+                    players: [] 
                 };
                 
                 const docRef = await addDoc(registrationsCollection, registrationData);
                 
-                // 5. BURN CODE
-                await updateDoc(codeRef, {
-                    status: "used",
-                    usedBy: department,
-                    usedAt: new Date().toISOString()
-                });
-
-                // Success
                 localStorage.setItem('eduLeagueTeamID', docRef.id);
                 form.reset();
-                window.location.assign('./news.html'); // Redirect to News Page
+                
+                // Redirect to Payment/Access Verification Page
+                const params = new URLSearchParams({ team: department, level: level, fee: "FREE", teamId: docRef.id });
+                window.location.assign(`./payment_page.html?${params.toString()}`);
 
             } catch (e) {
                 console.error("Error:", e);
-                showCustomAlert("Error", "Registration failed. Try again.");
+                showCustomAlert("Error", "Could not complete registration.");
                 submitButton.disabled = false; submitButton.textContent = "Register Team Now";
             }
             return false;
