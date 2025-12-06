@@ -13,7 +13,10 @@
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
         .active-tab { background-color: #16a34a; color: white; border-color: #16a34a; }
         .inactive-tab { background-color: white; color: #4b5563; border-color: #e5e7eb; }
+        .sub-active { background-color: #4c1d95; color: white; border: 1px solid #4c1d95; }
+        .sub-inactive { background-color: white; color: #374151; border: 1px solid #e5e7eb; }
         .stat-input { width: 100%; text-align: center; border: 1px solid #e5e7eb; padding: 4px; border-radius: 4px; }
+        .stat-input:focus { outline: none; border-color: #16a34a; background-color: #f0fdf4; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -22,10 +25,10 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center gap-2">
-                    <img src="edulogo.jpg" class="h-8 w-8 rounded-full">
+                    <img src="edulogo.jpg" class="h-8 w-8 rounded-full border border-gray-200">
                     <span class="font-black text-xl text-gray-900">EDU-LEAGUE <span class="bg-gray-800 text-white text-xs px-2 py-1 rounded ml-1">ADMIN</span></span>
                 </div>
-                <button onclick="logout()" id="logoutBtn" class="hidden text-sm text-red-600 font-bold">Log Out</button>
+                <button onclick="logout()" id="logoutBtn" class="hidden text-sm text-red-600 font-bold hover:text-red-800">Log Out</button>
             </div>
         </div>
     </nav>
@@ -33,30 +36,36 @@
     <main class="flex-grow py-10 px-4">
         
         <div id="login-section" class="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8">
-            <h2 class="text-2xl font-bold text-center text-gray-900 mb-4">Secure Access</h2>
-            <input type="password" id="adminPin" class="w-full border p-3 rounded-lg text-center text-2xl tracking-widest mb-4" placeholder="****">
-            <button onclick="login()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700">Login</button>
-            <p id="loginError" class="text-red-500 text-center text-sm hidden font-bold mt-2">Incorrect Password</p>
+            <div class="text-center mb-6">
+                <div class="h-12 w-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl mx-auto mb-3"><i class="fa-solid fa-lock"></i></div>
+                <h2 class="text-2xl font-bold text-gray-900">Secure Access</h2>
+            </div>
+            <div class="space-y-4">
+                <input type="password" id="adminPin" class="w-full border p-3 rounded-lg text-center text-2xl tracking-widest mb-4" placeholder="****">
+                <button onclick="login()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition shadow">Login</button>
+                <p id="loginError" class="text-red-500 text-center text-sm hidden font-bold mt-2">Incorrect Password</p>
+            </div>
         </div>
 
         <div id="dashboard-section" class="max-w-6xl mx-auto hidden">
             
             <div class="grid grid-cols-5 gap-2 mb-6 overflow-x-auto">
-                <button onclick="switchTab('registrations')" id="btn-registrations" class="active-tab py-3 px-2 text-sm rounded-lg font-bold border">Teams & Logos</button>
-                <button onclick="switchTab('news')" id="btn-news" class="inactive-tab py-3 px-2 text-sm rounded-lg font-bold border">News</button>
-                <button onclick="switchTab('widget')" id="btn-widget" class="inactive-tab py-3 px-2 text-sm rounded-lg font-bold border">Match Widget</button>
-                <button onclick="switchTab('schedule')" id="btn-schedule" class="inactive-tab py-3 px-2 text-sm rounded-lg font-bold border">Full Schedule</button>
-                <button onclick="switchTab('league')" id="btn-league" class="inactive-tab py-3 px-2 text-sm rounded-lg font-bold border">Tables</button>
+                <button onclick="switchTab('registrations')" id="btn-registrations" class="active-tab py-3 px-2 text-sm rounded-lg font-bold border shadow-sm whitespace-nowrap"><i class="fa-solid fa-users mr-2"></i> Teams & Logos</button>
+                <button onclick="switchTab('news')" id="btn-news" class="inactive-tab py-3 px-2 text-sm rounded-lg font-bold border shadow-sm whitespace-nowrap"><i class="fa-regular fa-newspaper mr-2"></i> News</button>
+                <button onclick="switchTab('widget')" id="btn-widget" class="inactive-tab py-3 px-2 text-sm rounded-lg font-bold border shadow-sm whitespace-nowrap"><i class="fa-solid fa-stopwatch mr-2"></i> Widget</button>
+                <button onclick="switchTab('schedule')" id="btn-schedule" class="inactive-tab py-3 px-2 text-sm rounded-lg font-bold border shadow-sm whitespace-nowrap"><i class="fa-solid fa-calendar-days mr-2"></i> Schedule</button>
+                <button onclick="switchTab('league')" id="btn-league" class="inactive-tab py-3 px-2 text-sm rounded-lg font-bold border shadow-sm whitespace-nowrap"><i class="fa-solid fa-list-ol mr-2"></i> Tables</button>
             </div>
 
             <div id="tab-registrations" class="bg-white rounded-xl shadow-md p-6 border border-gray-200">
                 
-                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 mb-6">
-                    <h3 class="font-bold text-blue-900 mb-3"><i class="fa-solid fa-shield-halved mr-2"></i> Upload Team Badges</h3>
-                    <div class="flex flex-col md:flex-row gap-4 items-end">
-                        <div class="w-full">
-                            <label class="text-xs font-bold text-gray-500">Select Department</label>
-                            <select id="logoDeptSelect" class="w-full border p-2 rounded bg-white">
+                <div class="bg-blue-50 p-5 rounded-lg border border-blue-100 mb-8">
+                    <h3 class="font-bold text-blue-900 mb-4 flex items-center"><i class="fa-solid fa-shield-halved mr-2"></i> Upload Team Badges</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Department</label>
+                            <select id="logoDeptSelect" class="w-full border p-2.5 rounded-lg bg-white font-semibold">
                                 <option value="Adult Edu">Adult Education</option>
                                 <option value="Art Edu">Art Education</option>
                                 <option value="Edu Found">Education Foundation</option>
@@ -67,67 +76,120 @@
                                 <option value="TVESA">TVESA</option>
                             </select>
                         </div>
-                        <div class="w-full">
-                            <label class="text-xs font-bold text-gray-500">Upload Logo (PNG/JPG)</label>
-                            <input type="file" id="teamLogoFile" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700">
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Level</label>
+                            <select id="logoLevelSelect" class="w-full border p-2.5 rounded-lg bg-white font-semibold">
+                                <option value="Finalist">Finalist (400L)</option>
+                                <option value="Penultimate">Penultimate (300L)</option>
+                                <option value="Sophomore">Sophomore (200L)</option>
+                            </select>
                         </div>
-                        <button onclick="uploadTeamLogo()" id="uploadLogoBtn" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 w-full md:w-auto">Save Logo</button>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Badge Image</label>
+                            <input type="file" id="teamLogoFile" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white hover:file:bg-blue-700 bg-white border rounded-lg">
+                        </div>
                     </div>
-                    <p id="logoStatus" class="text-xs text-green-600 font-bold mt-2 hidden">Logo uploaded successfully!</p>
+
+                    <button onclick="uploadTeamLogo()" id="uploadLogoBtn" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-sm">
+                        <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Save Official Team Badge
+                    </button>
+                    <p id="logoStatus" class="text-xs text-green-600 font-bold mt-2 hidden text-center"><i class="fa-solid fa-check-circle mr-1"></i> Logo uploaded successfully!</p>
                 </div>
 
-                <h3 class="text-xl font-bold text-gray-900 mb-4">Registered Teams List</h3>
-                <div id="registrations-list" class="space-y-3 max-h-[400px] overflow-y-auto">Loading...</div>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-900">Registered Teams</h3>
+                    <button onclick="loadRegistrations()" class="text-sm text-green-600 hover:text-green-800 font-bold"><i class="fa-solid fa-arrows-rotate"></i> Refresh List</button>
+                </div>
+                <div id="registrations-list" class="space-y-3 max-h-[400px] overflow-y-auto">
+                    <p class="text-center text-gray-400 py-4">Loading...</p>
+                </div>
             </div>
 
             <div id="tab-news" class="bg-white rounded-xl shadow-md p-6 border border-gray-200 hidden">
+                <div class="flex justify-between items-center mb-6 border-b pb-4">
+                    <h3 class="text-xl font-bold text-gray-900">Publish News</h3>
+                    <img src="edulogo.jpg" class="w-10 h-10 rounded-full border">
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-4">
-                        <h3 class="font-bold">Post News</h3>
-                        <input id="newsTitle" class="w-full border p-3 rounded" placeholder="Headline">
-                        <input id="newsFile" type="file" accept="image/*" class="w-full text-sm">
-                        <textarea id="newsContent" class="w-full border p-3 rounded h-32" placeholder="Story..."></textarea>
-                        <button onclick="postNews()" id="publishBtn" class="bg-green-600 text-white px-6 py-2 rounded font-bold w-full">Publish</button>
+                        <input id="newsTitle" class="w-full border p-3 rounded-lg font-bold" placeholder="Headline">
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 relative">
+                            <input id="newsFile" type="file" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImage(event)">
+                            <div id="uploadPlaceholder"><i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400"></i><p class="text-xs text-gray-500 font-bold">Upload Image</p></div>
+                            <img id="imagePreview" class="hidden h-24 mx-auto object-cover rounded shadow">
+                        </div>
+                        <div id="progressArea" class="hidden"><div class="w-full bg-gray-200 rounded-full h-2"><div id="progressBar" class="bg-green-600 h-2 rounded-full" style="width: 0%"></div></div></div>
+                        <textarea id="newsContent" class="w-full border p-3 rounded-lg h-32" placeholder="Story..."></textarea>
+                        <button onclick="postNews()" id="publishBtn" class="bg-green-600 text-white px-6 py-3 rounded-lg font-bold w-full hover:bg-green-700">Publish News</button>
                     </div>
                     <div>
-                        <h3 class="font-bold mb-2">History</h3>
+                        <h3 class="font-bold text-gray-500 uppercase text-xs mb-3">Recent Posts</h3>
                         <div id="admin-news-list" class="space-y-2"></div>
                     </div>
                 </div>
             </div>
 
             <div id="tab-widget" class="bg-white rounded-xl shadow-md p-6 border border-gray-200 hidden">
-                <h3 class="font-bold mb-4">Update Homepage Widget</h3>
+                <h3 class="font-bold text-gray-900 text-lg mb-4">Homepage Spotlight Match</h3>
                 <div class="grid grid-cols-2 gap-4 mb-4">
-                    <select id="teamA" class="border p-3 rounded font-bold"><option>Select Team A</option></select>
-                    <select id="teamB" class="border p-3 rounded font-bold"><option>Select Team B</option></select>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Home Team</label>
+                        <select id="teamA" class="w-full border p-3 rounded-lg font-bold bg-white"><option>Loading...</option></select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Away Team</label>
+                        <select id="teamB" class="w-full border p-3 rounded-lg font-bold bg-white"><option>Loading...</option></select>
+                    </div>
                 </div>
-                <div class="grid grid-cols-3 gap-4 mb-4">
-                    <input id="fixDate" class="border p-3 rounded" placeholder="Date">
-                    <input id="fixTime" class="border p-3 rounded" placeholder="Time">
-                    <input id="fixVenue" class="border p-3 rounded" placeholder="Venue">
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <input id="fixDate" class="border p-3 rounded-lg" placeholder="Date">
+                    <input id="fixTime" class="border p-3 rounded-lg" placeholder="Time">
+                    <input id="fixVenue" class="border p-3 rounded-lg" placeholder="Venue">
                 </div>
-                <button onclick="saveFixture()" class="bg-gray-900 text-white px-6 py-2 rounded font-bold">Update Live Widget</button>
+                <button onclick="saveFixture()" class="bg-gray-900 text-white px-8 py-3 rounded-lg font-bold w-full hover:bg-black">Update Live Widget</button>
             </div>
 
             <div id="tab-schedule" class="bg-white rounded-xl shadow-md p-6 border border-gray-200 hidden">
-                <p>Use Table Tab for Results/Standings</p>
+                <div class="flex justify-between items-center mb-6 border-b pb-4">
+                    <h3 class="text-xl font-bold text-gray-900">Manage Schedule</h3>
+                    <select id="matchDaySelect" onchange="loadSchedule()" class="border-2 border-green-600 rounded-lg p-2 font-bold text-green-700 bg-white">
+                        <option value="Matchday 1">Matchday 1</option>
+                        <option value="Matchday 2">Matchday 2</option>
+                        <option value="Matchday 3">Matchday 3</option>
+                        <option value="Quarter Finals">Quarter Finals</option>
+                        <option value="Semi Finals">Semi Finals</option>
+                        <option value="Finals">Finals</option>
+                    </select>
+                </div>
+                <div id="schedule-container" class="space-y-3 mb-6"></div>
+                <div class="flex gap-4">
+                    <button onclick="addMatchInput()" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-bold hover:bg-gray-300">+ Match Row</button>
+                    <button onclick="saveSchedule()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-green-700">Save Matchday</button>
+                </div>
             </div>
 
             <div id="tab-league" class="bg-white rounded-xl shadow-md p-6 border border-gray-200 hidden">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold">League Table</h3>
-                    <div class="flex gap-2">
-                        <button onclick="changeTableLevel('Finalist')" id="lvl-Finalist" class="sub-active px-3 py-1 rounded text-sm font-bold">Finalist</button>
-                        <button onclick="changeTableLevel('Penultimate')" id="lvl-Penultimate" class="sub-inactive px-3 py-1 rounded text-sm font-bold">Penultimate</button>
-                        <button onclick="changeTableLevel('Sophomore')" id="lvl-Sophomore" class="sub-inactive px-3 py-1 rounded text-sm font-bold">Sophomore</button>
+                <div class="flex justify-between items-center mb-6 bg-gray-50 p-4 rounded-xl border">
+                    <div class="text-center">
+                        <img id="division-logo-display" src="Finalist.png" class="w-12 h-12 object-contain mx-auto" onerror="this.src='edulogo.jpg'">
+                        <p id="division-label" class="text-[10px] font-bold text-gray-500 uppercase mt-1">Finalist</p>
                     </div>
+                    <div class="flex space-x-1">
+                        <button onclick="changeTableLevel('Finalist')" id="lvl-Finalist" class="sub-active px-3 py-1 rounded text-xs font-bold transition">Finalist</button>
+                        <button onclick="changeTableLevel('Penultimate')" id="lvl-Penultimate" class="sub-inactive px-3 py-1 rounded text-xs font-bold transition">Penultimate</button>
+                        <button onclick="changeTableLevel('Sophomore')" id="lvl-Sophomore" class="sub-inactive px-3 py-1 rounded text-xs font-bold transition">Sophomore</button>
+                    </div>
+                    <img src="edulogo.jpg" class="w-12 h-12 rounded-full border">
                 </div>
-                <table class="w-full text-sm">
-                    <thead><tr class="bg-gray-100"><th class="p-2 text-left">Dept</th><th>MP</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr></thead>
-                    <tbody id="table-editor-body"></tbody>
-                </table>
-                <button onclick="saveTable()" class="w-full bg-purple-700 text-white py-3 mt-4 rounded font-bold">Save Table</button>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead><tr class="bg-gray-100"><th class="p-2 text-left">Dept</th><th>MP</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr></thead>
+                        <tbody id="table-editor-body"></tbody>
+                    </table>
+                </div>
+                <button onclick="saveTable()" class="w-full bg-purple-700 text-white py-3 mt-6 rounded-lg font-bold hover:bg-purple-800">Save <span id="save-lvl-name">Finalist</span> Table</button>
             </div>
 
         </div>
@@ -182,19 +244,20 @@
             loadRegistrations();
             loadNewsHistory();
             loadTableEditor();
-            populateTeamSelects(); // New function for dropdowns
+            populateTeamSelects();
+            loadSchedule();
         }
 
-        // --- POPULATE DROPDOWNS ---
         function populateTeamSelects() {
             const options = DEPARTMENTS.map(d => `<option value="${d}">${d}</option>`).join('');
             document.getElementById('teamA').innerHTML = `<option value="">Select Team A</option>` + options;
             document.getElementById('teamB').innerHTML = `<option value="">Select Team B</option>` + options;
         }
 
-        // --- UPLOAD TEAM LOGO ---
+        // --- UPLOAD LOGO (UPDATED FOR LEVEL) ---
         window.uploadTeamLogo = async () => {
             const dept = document.getElementById('logoDeptSelect').value;
+            const level = document.getElementById('logoLevelSelect').value;
             const file = document.getElementById('teamLogoFile').files[0];
             const btn = document.getElementById('uploadLogoBtn');
             const status = document.getElementById('logoStatus');
@@ -202,71 +265,113 @@
             if(!file) return alert("Select a file");
             btn.disabled = true; btn.textContent = "Uploading...";
 
-            // Upload
-            const storageRef = ref(storage, 'team_logos/' + dept + '.png'); // Force PNG name for simplicity
+            const storageRef = ref(storage, 'team_logos/' + dept + '.png');
             const task = uploadBytesResumable(storageRef, file);
             
             task.on('state_changed', null, null, async () => {
                 const url = await getDownloadURL(task.snapshot.ref);
-                // Save URL to 'team_assets' collection
-                await setDoc(doc(db, "team_assets", dept), { logoUrl: url });
-                
-                btn.disabled = false; btn.textContent = "Save Logo";
+                // Save with level metadata
+                await setDoc(doc(db, "team_assets", dept), { logoUrl: url, levelUpdated: level }, { merge: true });
+                btn.disabled = false; btn.textContent = "Save Official Team Badge";
                 status.classList.remove('hidden');
                 setTimeout(() => status.classList.add('hidden'), 3000);
-                alert(`${dept} logo saved!`);
+                alert(`${dept} Logo Saved!`);
             });
         }
 
-        // --- 1. REGISTRATIONS ---
+        // --- REGISTRATIONS ---
         window.loadRegistrations = async () => {
             const list = document.getElementById('registrations-list');
             list.innerHTML = 'Loading...';
             const snap = await getDocs(query(collection(db, "registrations"), orderBy("registeredAt", "desc")));
-            list.innerHTML = snap.empty ? 'No teams.' : '';
-            snap.forEach(d => list.innerHTML += `<div class="p-2 border rounded bg-gray-50 mb-2 text-sm"><b>${d.data().department}</b> (${d.data().registrationStatus})</div>`);
+            list.innerHTML = snap.empty ? '<p class="text-center text-gray-400">No teams registered yet.</p>' : '';
+            snap.forEach(d => {
+                const data = d.data();
+                const color = data.registrationStatus === "Complete" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800";
+                list.innerHTML += `<div class="p-3 bg-gray-50 rounded border flex justify-between items-center"><div><h4 class="font-bold text-gray-800">${data.department} <span class="text-xs text-gray-500 font-normal">(${data.level})</span></h4><p class="text-xs text-gray-500">${data.coachName} | ${data.phone}</p></div><span class="px-2 py-1 rounded text-xs font-bold ${color}">${data.registrationStatus}</span></div>`;
+            });
         }
 
-        // --- 2. NEWS ---
+        // --- NEWS ---
         window.postNews = async () => {
-            // Simplified for brevity - assumes logic from previous iteration
             const title = document.getElementById('newsTitle').value;
             const content = document.getElementById('newsContent').value;
-            await addDoc(collection(db, "news_posts"), { title, content, timestamp: serverTimestamp() });
-            alert("Published");
+            const file = document.getElementById('newsFile').files[0];
+            const btn = document.getElementById('publishBtn');
+            if(!title || !content) return alert("Fill data");
+            btn.disabled = true; btn.textContent = "Uploading...";
+            let imageUrl = "";
+            if(file) {
+                document.getElementById('progressArea').classList.remove('hidden');
+                const storageRef = ref(storage, 'news/' + Date.now() + '_' + file.name);
+                const task = uploadBytesResumable(storageRef, file);
+                await new Promise((res, rej) => task.on('state_changed', s => document.getElementById('progressBar').style.width = (s.bytesTransferred/s.totalBytes)*100+'%', rej, res));
+                imageUrl = await getDownloadURL(task.snapshot.ref);
+            }
+            await addDoc(collection(db, "news_posts"), { title, content, imageUrl, timestamp: serverTimestamp() });
+            alert("Published!"); btn.disabled = false; btn.textContent = "Publish";
+            document.getElementById('newsTitle').value = ""; document.getElementById('newsContent').value = "";
+            document.getElementById('progressArea').classList.add('hidden');
         }
-        function loadNewsHistory() { /* ... */ }
+        window.previewImage = (e) => { const f = e.target.files[0]; if(f) { document.getElementById('imagePreview').src = URL.createObjectURL(f); document.getElementById('imagePreview').classList.remove('hidden'); document.getElementById('uploadPlaceholder').classList.add('hidden'); } }
+        function loadNewsHistory() { onSnapshot(query(collection(db, "news_posts"), orderBy("timestamp", "desc")), snap => { document.getElementById('admin-news-list').innerHTML = ''; snap.forEach(d => document.getElementById('admin-news-list').innerHTML += `<div class="p-2 border rounded flex justify-between bg-white mb-2"><span class="text-xs truncate w-3/4 font-semibold">${d.data().title}</span><button onclick="deletePost('${d.id}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button></div>`); }); }
+        window.deletePost = async (id) => { if(confirm("Delete?")) await deleteDoc(doc(db, "news_posts", id)); }
 
-        // --- 3. WIDGET (UPDATED TO SAVE LOGOS) ---
+        // --- WIDGET ---
         window.saveFixture = async () => {
             const tA = document.getElementById('teamA').value;
             const tB = document.getElementById('teamB').value;
-            
-            // Fetch logos automatically
-            let logoA = "", logoB = "";
-            const docA = await getDoc(doc(db, "team_assets", tA));
-            if(docA.exists()) logoA = docA.data().logoUrl;
-            const docB = await getDoc(doc(db, "team_assets", tB));
-            if(docB.exists()) logoB = docB.data().logoUrl;
-
-            await setDoc(doc(db, "app_content", "current_fixture"), {
-                teamA: tA, teamB: tB,
-                teamALogo: logoA, teamBLogo: logoB, // Save logos to fixture doc
-                date: document.getElementById('fixDate').value,
-                time: document.getElementById('fixTime').value,
-                venue: document.getElementById('fixVenue').value
-            });
-            alert("Widget Updated with Logos!");
+            let logoA="", logoB="";
+            const dA = await getDoc(doc(db, "team_assets", tA)); if(dA.exists()) logoA = dA.data().logoUrl;
+            const dB = await getDoc(doc(db, "team_assets", tB)); if(dB.exists()) logoB = dB.data().logoUrl;
+            await setDoc(doc(db, "app_content", "current_fixture"), { teamA: tA, teamB: tB, teamALogo: logoA, teamBLogo: logoB, date: document.getElementById('fixDate').value, time: document.getElementById('fixTime').value, venue: document.getElementById('fixVenue').value });
+            alert("Widget Updated!");
         }
 
-        // --- 5. TABLES ---
+        // --- SCHEDULE ---
+        window.addMatchInput = (tA='', tB='', time='', res='') => { document.getElementById('schedule-container').innerHTML += `<div class="grid grid-cols-4 gap-2 bg-gray-50 p-2 rounded match-row mb-2"><input class="border p-2 rounded s-teamA" placeholder="Team A" value="${tA}"><input class="border p-2 rounded s-teamB" placeholder="Team B" value="${tB}"><input class="border p-2 rounded s-time" placeholder="Time" value="${time}"><input class="border p-2 rounded s-result" placeholder="Score" value="${res}"></div>`; }
+        window.loadSchedule = async () => { 
+            const docId = "schedule_" + document.getElementById('matchDaySelect').value.replace(/\s+/g, '_').toLowerCase();
+            const snap = await getDoc(doc(db, "schedules", docId));
+            const c = document.getElementById('schedule-container'); c.innerHTML='';
+            if(snap.exists() && snap.data().matches) snap.data().matches.forEach(m=>window.addMatchInput(m.teamA, m.teamB, m.time, m.result));
+            else window.addMatchInput();
+        }
+        window.saveSchedule = async () => {
+            const matches=[]; document.querySelectorAll('.match-row').forEach(r=>matches.push({teamA:r.querySelector('.s-teamA').value, teamB:r.querySelector('.s-teamB').value, time:r.querySelector('.s-time').value, result:r.querySelector('.s-result').value}));
+            await setDoc(doc(db, "schedules", "schedule_" + document.getElementById('matchDaySelect').value.replace(/\s+/g, '_').toLowerCase()), { matches });
+            alert("Schedule Saved");
+        }
+
+        // --- TABLES ---
         window.changeTableLevel = (level) => {
             currentTableLevel = level;
-            // Toggle classes...
+            const logoMap = { 'Finalist': 'Finalist.png', 'Penultimate': 'Penultimate.png', 'Sophomore': 'Sophomore.png' };
+            document.getElementById('division-logo-display').src = logoMap[level];
+            document.getElementById('division-label').textContent = level;
+            document.getElementById('save-lvl-name').textContent = level;
+            ['Finalist', 'Penultimate', 'Sophomore'].forEach(l => { const b=document.getElementById('lvl-'+l); if(l===level){b.classList.add('sub-active');b.classList.remove('sub-inactive');}else{b.classList.remove('sub-active');b.classList.add('sub-inactive');}});
             loadTableEditor();
         }
-        async function loadTableEditor() { /* ...Same as before... */ }
-        window.saveTable = async () => { /* ...Same as before... */ }
+        async function loadTableEditor() {
+            const snap = await getDoc(doc(db, "app_content", `league_table_${currentTableLevel.toLowerCase()}`));
+            let data = snap.exists() ? snap.data() : {};
+            DEPARTMENTS.forEach(d => { if(!data[d]) data[d] = { mp:0, w:0, d:0, l:0, gd:0, pts:0 }; });
+            const tbody = document.getElementById('table-editor-body'); tbody.innerHTML = '';
+            Object.keys(data).sort().forEach(dept => {
+                const s = data[dept];
+                tbody.innerHTML += `<tr><td class="py-2 px-4 font-bold text-sm">${dept}</td><td><input id="${dept}-mp" value="${s.mp}" class="stat-input"></td><td><input id="${dept}-w" value="${s.w}" class="stat-input"></td><td><input id="${dept}-d" value="${s.d}" class="stat-input"></td><td><input id="${dept}-l" value="${s.l}" class="stat-input"></td><td><input id="${dept}-gd" value="${s.gd}" class="stat-input"></td><td><input id="${dept}-pts" value="${s.pts}" class="stat-input font-bold bg-green-50 text-green-700"></td></tr>`;
+            });
+        }
+        window.saveTable = async () => {
+            let newData = {};
+            document.getElementById('table-editor-body').querySelectorAll('tr').forEach(row => {
+                const dept = row.querySelector('td:first-child').innerText;
+                newData[dept] = { mp: parseInt(document.getElementById(`${dept}-mp`).value)||0, w: parseInt(document.getElementById(`${dept}-w`).value)||0, d: parseInt(document.getElementById(`${dept}-d`).value)||0, l: parseInt(document.getElementById(`${dept}-l`).value)||0, gd: parseInt(document.getElementById(`${dept}-gd`).value)||0, pts: parseInt(document.getElementById(`${dept}-pts`).value)||0 };
+            });
+            await setDoc(doc(db, "app_content", `league_table_${currentTableLevel.toLowerCase()}`), newData);
+            alert("Table Saved!");
+        }
 
     </script>
 </body>
