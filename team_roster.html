@@ -7,222 +7,58 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" href="edulogo.jpg" type="image/jpeg">
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f7f9fd; }
-        .bg-edu-purple { background-color: #6d28d9; }
-        .text-edu-purple { color: #6d28d9; }
-        .bg-edu-yellow { background-color: #fbbf24; }
-        
-        .player-entry { animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-        .modal-content { transition: all 0.3s ease-in-out; }
-    </style>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap'); body { font-family: 'Inter', sans-serif; background-color: #f7f9fd; } </style>
 </head>
-<body class="bg-gray-50 flex flex-col min-h-screen">
-
-    <nav class="bg-white shadow-md sticky top-0 z-40">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <a href="./news.html" class="flex items-center space-x-2">
-                <img src="edulogo.jpg" alt="Logo" class="h-10 w-10 rounded-full object-cover">
-                <span class="text-xl font-bold text-edu-purple">EDU-LEAGUE</span>
-            </a>
-            <div class="flex space-x-4">
-                <a href="./index.html" class="text-gray-600 hover:text-edu-purple font-semibold">Registration</a>
-                <a href="./news.html" class="text-gray-600 hover:text-edu-purple font-semibold">News Hub</a>
-            </div>
-        </div>
-    </nav>
-
-    <main class="flex-grow flex items-center justify-center p-4">
-        <div class="max-w-3xl w-full bg-white shadow-2xl rounded-xl overflow-hidden">
-            
-            <div class="bg-edu-purple text-white p-8 text-center">
-                <h1 class="text-3xl font-extrabold tracking-tight">Team Roster</h1>
-                <p class="mt-1 text-purple-200 text-lg">EDU-LEAGUE CHAMPIONSHIP</p>
-            </div>
-
-            <div class="p-8 md:p-10 space-y-6">
-                
-                <div class="bg-gray-100 p-4 rounded-lg border border-gray-200 text-center">
-                    <h2 id="teamNameDisplay" class="text-2xl font-bold text-edu-purple">Loading...</h2>
-                    <p id="levelDisplay" class="text-lg font-semibold text-gray-700">Loading...</p>
-                </div>
-
-                <form id="rosterForm" onsubmit="saveRoster(event); return false;" class="space-y-6">
-                    <fieldset class="space-y-4">
-                        <legend class="text-xl font-bold text-gray-800 border-b pb-2 mb-3">Coaching Staff</legend>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Head Coach</label>
-                                <input type="text" id="coachName" required class="block w-full rounded-md border-gray-300 border h-10 p-2">
-                                <input type="tel" id="coachPhone" required class="block w-full rounded-md border-gray-300 border h-10 p-2" placeholder="Phone">
-                            </div>
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Assistant Coach</label>
-                                <input type="text" id="asstCoachName" required class="block w-full rounded-md border-gray-300 border h-10 p-2">
-                                <input type="tel" id="asstCoachPhone" required class="block w-full rounded-md border-gray-300 border h-10 p-2" placeholder="Phone">
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <fieldset>
-                        <legend class="text-xl font-bold text-gray-800 border-b pb-2 mb-3">Players (Max 18)</legend>
-                        <div class="flex gap-3 mb-4">
-                            <input type="text" id="newPlayerName" class="flex-grow rounded-md border-gray-300 border h-10 p-2" placeholder="Player Name">
-                            <button type="button" onclick="addPlayer()" class="px-4 py-2 bg-edu-purple text-white font-semibold rounded-md shadow hover:bg-purple-700">Add</button>
-                        </div>
-                        <p id="playerLimitMessage" class="text-sm text-red-600 font-semibold hidden mb-3">Max players reached.</p>
-                        <div id="playerListContainer" class="max-h-64 overflow-y-auto space-y-2 bg-gray-50 p-4 rounded-lg border">
-                            <p id="noPlayersMessage" class="text-gray-500 text-center">No players added yet.</p>
-                        </div>
-                    </fieldset>
-
-                    <button type="submit" id="submitRosterButton" class="w-full mt-8 py-3 bg-green-600 text-white font-bold rounded-md shadow-lg hover:bg-green-700 transition">
-                        Submit Roster & Finish
-                    </button>
-                </form>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="bg-white shadow-md sticky top-0 z-40"><div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center"><div class="flex items-center space-x-2"><img src="edulogo.jpg" class="h-10 w-10 rounded-full"><span class="text-xl font-bold text-purple-700">EDU-LEAGUE</span></div><a href="./news.html" class="text-gray-600 font-bold">News</a></div></nav>
+    <main class="max-w-3xl mx-auto p-4 md:p-8">
+        <div class="bg-white shadow-xl rounded-xl overflow-hidden">
+            <div class="bg-purple-800 text-white p-6 text-center"><h2 class="text-2xl font-bold">Official Squad List</h2><p id="teamNameDisplay" class="text-purple-200 mt-1">Loading...</p></div>
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-gray-700">Players (<span id="count">0</span>/18)</h3><span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Auto-Saved</span></div>
+                <div class="flex gap-2 mb-6"><input id="playerName" class="flex-grow border p-3 rounded-lg" placeholder="Player Name"><select id="playerPosition" class="border p-3 rounded-lg"><option>GK</option><option>DEF</option><option>MID</option><option>FWD</option></select><button onclick="addPlayer()" class="bg-purple-700 text-white px-6 rounded-lg font-bold">Add</button></div>
+                <ul id="rosterList" class="space-y-2 mb-6"></ul>
+                <button onclick="finishRoster()" class="w-full bg-green-600 text-white py-4 rounded-lg font-bold hover:bg-green-700 shadow-lg text-lg">Submit Final Roster</button>
             </div>
         </div>
     </main>
-
-    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50 transition-opacity duration-300">
-        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform scale-95 transition-transform duration-300">
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
-                <i class="fa-solid fa-check text-green-600 text-xl"></i>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">You're All Set!</h3>
-            <p class="text-gray-500 mb-6">Your roster is saved. Visit the News Hub for fixtures and updates.</p>
-            <button onclick="window.location.href='news.html'" class="w-full py-2 px-4 bg-edu-purple text-white font-bold rounded-md hover:bg-purple-700">
-                Go to News Hub
-            </button>
-        </div>
-    </div>
-
-    <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform scale-95 transition-transform duration-300">
-            <h3 id="custom-alert-title" class="text-xl font-bold text-gray-800 mb-2">Alert</h3>
-            <p id="custom-alert-message" class="text-gray-600 mb-6">Message</p>
-            <button onclick="closeCustomAlert()" class="py-2 px-6 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700">OK</button>
-        </div>
-    </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
+        const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
+        let teamId = new URLSearchParams(window.location.search).get('teamId');
+        let currentPlayers = [];
 
-        // --- PASTE FIREBASE CONFIG HERE ---
-        const firebaseConfig = {
-           apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
-           authDomain: "sonic-verbena-239117.firebaseapp.com",
-           projectId: "sonic-verbena-239117",
-           storageBucket: "sonic-verbena-239117.firebasestorage.app",
-           messagingSenderId: "652544574249",
-           appId: "1:652544574249:web:6ff33771307e892e7f6d38",
-           measurementId: "G-TD780JGNED"
-        };
-        // ----------------------------------
-
-        let db, auth, teamDocId, teamDocRef;
-        const MAX_PLAYERS = 18;
-        let players = [];
-
-        // DOM Elements
-        const successModal = document.getElementById('success-modal');
-        const customAlertModal = document.getElementById('custom-alert-modal');
-        
         async function init() {
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
             await signInAnonymously(auth);
-            
-            const params = new URLSearchParams(window.location.search);
-            teamDocId = params.get('teamId');
-
-            if(!teamDocId) {
-                alert("No Team ID found.");
-                window.location.href = 'index.html';
-                return;
-            }
-
-            teamDocRef = doc(db, "registrations", teamDocId);
-            const snap = await getDoc(teamDocRef);
-            
+            if(!teamId) return alert("No Team ID");
+            const snap = await getDoc(doc(db, "registrations", teamId));
             if(snap.exists()) {
                 const data = snap.data();
-                document.getElementById('teamNameDisplay').textContent = data.teamName;
-                document.getElementById('levelDisplay').textContent = data.level;
-                if(data.coachName) document.getElementById('coachName').value = data.coachName;
-                if(data.players) {
-                    players = data.players;
-                    renderPlayerList();
-                }
+                document.getElementById('teamNameDisplay').innerText = data.teamName;
+                currentPlayers = data.players || [];
+                renderList();
             }
         }
-
-        // Player Logic
-        window.addPlayer = () => {
-            const name = document.getElementById('newPlayerName').value.trim();
+        window.addPlayer = async () => {
+            const name = document.getElementById('playerName').value.trim();
+            const pos = document.getElementById('playerPosition').value;
             if(!name) return;
-            if(players.length >= MAX_PLAYERS) return alert("Max players reached");
-            players.push(name);
-            document.getElementById('newPlayerName').value = "";
-            renderPlayerList();
+            if(currentPlayers.length >= 18) return alert("Roster full (Max 18)");
+            const newPlayer = { name, position: pos };
+            currentPlayers.push(newPlayer);
+            await updateDoc(doc(db, "registrations", teamId), { players: arrayUnion(newPlayer) });
+            document.getElementById('playerName').value = "";
+            renderList();
         }
-
-        function renderPlayerList() {
-            const list = document.getElementById('playerListContainer');
-            list.innerHTML = players.length ? '' : '<p class="text-gray-500 text-center">No players added yet.</p>';
-            players.forEach((p, i) => {
-                list.innerHTML += `
-                    <div class="player-entry flex items-center justify-between bg-white p-2 rounded border border-gray-200">
-                        <span class="font-semibold text-gray-700">${i+1}. ${p}</span>
-                        <button onclick="removePlayer(${i})" class="text-red-500 hover:text-red-700 font-bold px-2">&times;</button>
-                    </div>`;
-            });
+        function renderList() {
+            const list = document.getElementById('rosterList'); list.innerHTML = '';
+            document.getElementById('count').innerText = currentPlayers.length;
+            currentPlayers.forEach((p, i) => list.innerHTML += `<li class="flex justify-between bg-gray-50 p-3 rounded border"><span class="font-bold">${i+1}. ${p.name}</span><span class="text-sm bg-gray-200 px-2 py-1 rounded text-gray-700 font-mono">${p.position}</span></li>`);
         }
-
-        window.removePlayer = (i) => { players.splice(i, 1); renderPlayerList(); }
-
-        window.saveRoster = async (e) => {
-            e.preventDefault();
-            if(players.length === 0) return alert("Add at least one player.");
-            
-            const btn = document.getElementById('submitRosterButton');
-            btn.disabled = true; btn.textContent = "Saving...";
-
-            try {
-                await updateDoc(teamDocRef, {
-                    coachDetails: {
-                        headCoachName: document.getElementById('coachName').value,
-                        headCoachPhone: document.getElementById('coachPhone').value,
-                        asstCoachName: document.getElementById('asstCoachName').value,
-                        asstCoachPhone: document.getElementById('asstCoachPhone').value,
-                    },
-                    players: players,
-                    registrationStatus: "Complete"
-                });
-                successModal.classList.remove('opacity-0', 'pointer-events-none');
-                successModal.classList.add('opacity-100');
-                successModal.querySelector('div').classList.remove('scale-95');
-                successModal.querySelector('div').classList.add('scale-100');
-            } catch(err) {
-                console.error(err);
-                alert("Error saving roster.");
-                btn.disabled = false; btn.textContent = "Submit Roster";
-            }
-        }
-
-        window.showCustomAlert = (t, m) => {
-            document.getElementById('custom-alert-title').textContent = t;
-            document.getElementById('custom-alert-message').textContent = m;
-            customAlertModal.classList.remove('opacity-0', 'pointer-events-none');
-        }
-        window.closeCustomAlert = () => customAlertModal.classList.add('opacity-0', 'pointer-events-none');
-
+        window.finishRoster = () => { alert("Roster Submitted!"); window.location.href = "news.html"; }
         init();
     </script>
 </body>

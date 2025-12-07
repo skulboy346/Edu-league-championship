@@ -3,374 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDU-LEAGUE CHAMPIONSHIP Registration</title>
+    <title>Registration - EDU-LEAGUE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" href="edulogo.jpg" type="image/jpeg">
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f7f9fd; }
-        .bg-edu-purple { background-color: #6d28d9; }
-        .text-edu-purple { color: #6d28d9; }
-        .bg-edu-yellow { background-color: #fbbf24; }
-        .hover-edu-yellow:hover { background-color: #f59e0b; }
-        
-        #confirmation-box, #custom-alert-modal { transition: opacity 0.3s ease-in-out; }
-        .modal-content { transition: all 0.3s ease-in-out; }
-        .loader { border-top-color: #6d28d9; animation: spinner 1.5s linear infinite; }
-        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .slider-container { width: 150px; height: 150px; margin: 0 auto; overflow: hidden; border-radius: 0.5rem; border: 3px solid #fbbf24; }
-        .slider-wrapper { display: flex; transition: transform 1s ease-in-out; height: 100%; }
-        .slider-item { min-width: 100%; height: 100%; box-sizing: border-box; text-align: center; color: white; background-color: #4c1d95; display: flex; align-items: center; justify-content: center; }
-        .slider-item img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .news-ticker { width: 100%; background-color: #1f2937; color: white; padding: 0.75rem 0; overflow: hidden; }
-        .ticker-wrapper { display: flex; white-space: nowrap; animation: ticker 60s linear infinite; }
-        .ticker-item { padding: 0 1.5rem; color: #d1d5db; }
-        .ticker-item strong { color: #fbbf24; }
-        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .social-bar { background-color: #374151; border-top: 1px solid #4b5563; }
-        .social-icon { transition: color 0.3s ease; color: #9ca3af; }
-        .social-icon:hover { color: #ffffff; }
-    </style>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap'); body { font-family: 'Inter', sans-serif; background-color: #f7f9fd; } .bg-edu-purple { background-color: #6d28d9; } .text-edu-purple { color: #6d28d9; } </style>
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen">
 
     <nav class="bg-white shadow-md sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <a href="./news.html" class="flex items-center space-x-2">
-                <img src="edulogo.jpg" alt="Logo" class="h-10 w-10 rounded-full object-cover">
-                <span class="text-xl font-bold text-edu-purple">EDU-LEAGUE</span>
-            </a>
-            <div class="flex space-x-4">
-                <a href="./index.html" class="text-edu-purple font-bold border-b-2 border-edu-purple">Registration</a>
-                <a href="./news.html" class="text-gray-600 hover:text-edu-purple font-semibold">News</a>
-            </div>
+            <div class="flex items-center space-x-2"><img src="edulogo.jpg" class="h-10 w-10 rounded-full object-cover"><span class="text-xl font-bold text-edu-purple">EDU-LEAGUE</span></div>
+            <div class="flex space-x-4"><a href="./news.html" class="text-gray-600 hover:text-edu-purple font-semibold">News Hub</a></div>
         </div>
     </nav>
 
     <main class="flex-grow flex items-center justify-center p-4">
-        <div class="max-w-4xl w-full bg-white shadow-2xl rounded-xl overflow-hidden md:flex">
-
-            <div class="md:w-1/3 bg-edu-purple text-white p-8 space-y-6 flex flex-col justify-center">
-                <div class="flex justify-center"><img src="edulogo.jpg" class="rounded-full border-4 border-purple-300 shadow-lg w-32 h-32 object-cover"></div>
-                <div class="text-center md:text-left">
-                    <h1 class="text-3xl font-extrabold tracking-tight">EDU-LEAGUE CHAMPIONSHIP</h1>
-                    <p class="mt-1 text-purple-200 text-lg">Battle within Educators</p>
-                </div>
-                <div class="space-y-2">
-                    <h2 class="text-xl font-bold border-b border-purple-400 pb-2">League Levels</h2>
-                    <div class="slider-container shadow-lg">
-                        <div class="slider-wrapper" id="logoSlider">
-                            <div class="slider-item"><img src="Finalist.png" alt="Finalist"></div>
-                            <div class="slider-item"><img src="Penultimate.png" alt="Penultimate"></div>
-                            <div class="slider-item"><img src="Sophomore.png" alt="Sophomore"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="pt-4 border-t border-purple-400 text-center md:text-left">
-                    <p class="text-sm font-light">Presented by:</p>
-                    <p class="text-lg font-bold">NUESA x FESSC</p>
-                    <div class="flex justify-center md:justify-start space-x-4 mt-2">
-                        <img src="NUESA.jpg" class="w-12 h-12 rounded-full border-2 border-purple-300 object-cover">
-                        <img src="FESSC.png" class="w-12 h-12 rounded-full border-2 border-purple-300 object-cover">
-                    </div>
-                </div>
+        <div class="max-w-3xl w-full bg-white shadow-2xl rounded-xl overflow-hidden flex flex-col md:flex-row">
+            <div class="bg-edu-purple w-full md:w-1/3 p-8 text-white flex flex-col justify-center items-center text-center">
+                <img src="edulogo.jpg" class="h-24 w-24 rounded-full border-4 border-white mb-4 object-cover shadow-lg">
+                <h2 class="text-2xl font-extrabold">Welcome Coach</h2>
+                <p class="mt-2 text-purple-200">Register your department team for the 2025/26 Championship Season.</p>
             </div>
 
-            <div class="md:w-2/3 p-8 md:p-12 relative">
-                
-                <div id="resume-banner" class="hidden bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded shadow-sm">
-                    <div class="flex justify-between items-center gap-2">
-                        <div><p class="font-bold">Pending Registration</p><p class="text-sm">Incomplete setup for <span id="resume-team" class="font-bold"></span>.</p></div>
-                        <div class="flex gap-2">
-                            <button onclick="resumeRegistration()" class="bg-blue-600 text-white font-bold py-1 px-3 rounded text-xs hover:bg-blue-700">Resume</button>
-                            <button onclick="clearRegistration()" class="border border-blue-500 text-blue-700 font-bold py-1 px-3 rounded text-xs hover:bg-blue-50">Clear</button>
-                        </div>
-                    </div>
-                </div>
-
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Team Registration Form</h2>
-                <div class="bg-edu-yellow text-gray-800 p-4 rounded-lg shadow-md mb-6 font-semibold md:flex justify-between items-center text-center md:text-left">
-                    <p>REGISTRATION: Nov 15th - Nov 25th</p>
-                    <p class="mt-2 md:mt-0 md:border-l md:pl-4 border-gray-600">ENTRY FEE: <span class="line-through opacity-75">#70,000</span> <span class="font-bold text-green-700 ml-1">FREE</span></p>
-                </div>
-                
-                <form id="registrationForm" onsubmit="handleSubmit(event); return false;" class="space-y-4">
+            <div class="w-full md:w-2/3 p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Team Registration</h2>
+                <form id="regForm" class="space-y-5">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Department Affiliation</label>
-                        <select id="department" name="department" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-edu-purple h-10 p-2 border bg-white">
-                            <option value="" disabled selected>Select Department</option>
-                            <option value="Adult Education (NAAES)">Adult Education (NAAES)</option>
-                            <option value="Art Education (AESA)">Art Education (AESA)</option>
-                            <option value="Education Foundation (EFSA)">Education Foundation (EFSA)</option>
-                            <option value="Education Management (EMSA)">Education Management (EMSA)</option>
-                            <option value="Human Kinetic and Health Education (HKHE)">Human Kinetic and Health Education (HKHE)</option>
-                            <option value="Science Education (ULSESA)">Science Education (ULSESA)</option>
-                            <option value="Social Science Education (SSESA)">Social Science Education (SSESA)</option>
-                            <option value="Technology and Vocational Education (TVESA)">Technology and Vocational Education (TVESA)</option>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Department</label>
+                        <select id="department" required class="w-full border-gray-300 border rounded-lg p-3 bg-gray-50">
+                            <option value="">Select Department</option>
+                            <option value="Adult Edu">Adult Education (NAAES)</option>
+                            <option value="Art Edu">Art Education (AESA)</option>
+                            <option value="Edu Found">Education Foundation (EFSA)</option>
+                            <option value="Edu Mgt">Education Management (EMSA)</option>
+                            <option value="HKHE">Human Kinetics (HKHE)</option>
+                            <option value="Sci Edu">Science Education (ULSESA)</option>
+                            <option value="Soc Sci Edu">Social Science Education</option>
+                            <option value="TVESA">Technology And Vocational Education (TVESA)</option>
                         </select>
                     </div>
-                    <div><label class="block text-sm font-medium text-gray-700">Coach Name</label><input type="text" id="coachName" required class="mt-1 block w-full rounded-md border h-10 p-2"></div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><label class="block text-sm font-medium text-gray-700">Email</label><input type="email" id="email" required class="mt-1 block w-full rounded-md border h-10 p-2"></div>
-                        <div><label class="block text-sm font-medium text-gray-700">Phone</label><input type="tel" id="phone" required class="mt-1 block w-full rounded-md border h-10 p-2"></div>
-                    </div>
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Level</label>
-                        <div class="flex flex-wrap gap-4">
-                            <label class="inline-flex items-center"><input type="radio" name="level" value="Finalist (400Lvl)" required class="text-edu-purple"><span class="ml-2">Finalist (400Lvl)</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="level" value="Penultimate (300Lvl)" required class="text-edu-purple"><span class="ml-2">Penultimate (300Lvl)</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="level" value="Sophomore (200Lvl)" required class="text-edu-purple"><span class="ml-2">Sophomore (200Lvl)</span></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select League/Division</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="inline-flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="radio" name="level" value="Finalist (400Lvl)" required class="text-edu-purple">
+                                <span class="ml-2 text-sm font-bold">Finalist (400L)</span>
+                            </label>
+                            <label class="inline-flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="radio" name="level" value="Penultimate (300Lvl)" required class="text-edu-purple">
+                                <span class="ml-2 text-sm font-bold">Penultimate (300L)</span>
+                            </label>
+                            <label class="inline-flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="radio" name="level" value="Sophomore (200Lvl)" required class="text-edu-purple">
+                                <span class="ml-2 text-sm font-bold">Sophomore (200L)</span>
+                            </label>
+                            <label class="inline-flex items-center p-3 border border-pink-300 bg-pink-50 rounded-lg cursor-pointer hover:bg-pink-100">
+                                <input type="radio" name="level" value="Female League" required class="text-pink-600">
+                                <span class="ml-2 text-sm font-bold text-pink-700">Female League</span>
+                            </label>
                         </div>
                     </div>
-                    
-                    <button type="submit" id="submitButton" class="w-full mt-6 py-3 bg-edu-purple text-white font-bold rounded-md shadow-lg hover:bg-purple-700 transition duration-150">
-                        Continue to Verification &rarr;
-                    </button>
-                </form>
 
-                <div class="mt-10 pt-6 border-t border-gray-100">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold text-gray-800 border-l-4 border-edu-purple pl-3">Latest Updates</h3>
-                        <a href="news.html" class="text-xs text-edu-purple font-bold hover:underline">View All &rarr;</a>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Coach Name</label><input type="text" id="coachName" required class="w-full border-gray-300 border rounded-lg p-3 bg-gray-50"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">WhatsApp Number</label><input type="tel" id="phone" required class="w-full border-gray-300 border rounded-lg p-3 bg-gray-50"></div>
                     </div>
-                    <div id="homepage-news-list" class="space-y-3"><p class="text-sm text-gray-400 italic">Loading updates...</p></div>
-                </div>
+
+                    <button type="submit" id="submitBtn" class="w-full bg-edu-purple text-white font-bold py-3 rounded-lg hover:bg-purple-700 transition shadow-lg mt-4">Continue to Verification &rarr;</button>
+                </form>
             </div>
         </div>
     </main>
-    
-    <a href="admin.html" class="fixed bottom-6 right-6 bg-edu-purple text-white w-12 h-12 rounded-full shadow-2xl flex items-center justify-center z-40 hover:bg-purple-800 transition-transform hover:scale-110"><i class="fa-solid fa-lock"></i></a>
-
-    <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300 modal-content">
-            <h3 id="custom-alert-title" class="text-xl font-bold text-gray-800 mb-2">Alert</h3>
-            <p id="custom-alert-message" class="text-gray-600 mb-6">Message</p>
-            <button onclick="closeCustomAlert()" class="py-2 px-6 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">OK</button>
-        </div>
-    </div>
-
-    <footer class="sticky bottom-0 z-10 mt-12">
-        <div class="social-bar p-3">
-            <div class="max-w-4xl mx-auto flex justify-center items-center space-x-6">
-                <a href="#" class="social-icon social-fb"><i class="fab fa-facebook fa-2x"></i></a>
-                <a href="#" class="social-icon social-tk"><i class="fab fa-tiktok fa-2x"></i></a>
-                <a href="#" class="social-icon social-ig"><i class="fab fa-instagram fa-2x"></i></a>
-            </div>
-        </div>
-        <div class="news-ticker">
-            <div class="ticker-wrapper" id="tickerWrapper">
-                <div class="ticker-item"><strong>EDU-LEAGUE:</strong> Battle within Educators</div>
-            </div>
-        </div>
-    </footer>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, getDocs, doc, getDoc, where, orderBy } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // --- PASTE FIREBASE CONFIG HERE ---
-        const firebaseConfig = {
-           apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s",
-           authDomain: "sonic-verbena-239117.firebaseapp.com",
-           projectId: "sonic-verbena-239117",
-           storageBucket: "sonic-verbena-239117.firebasestorage.app",
-           messagingSenderId: "652544574249",
-           appId: "1:652544574249:web:6ff33771307e892e7f6d38",
-           measurementId: "G-TD780JGNED"
-        };
-        // ----------------------------------
+        const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
+        const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
 
-        let db;
-        let auth;
-        let registrationsCollection;
-        let newsCollection; 
-
-        // DOM Elements
-        const form = document.getElementById('registrationForm');
-        const submitButton = document.getElementById('submitButton');
-        const customAlertModal = document.getElementById('custom-alert-modal');
-        const customAlertTitle = document.getElementById('custom-alert-title');
-        const customAlertMessage = document.getElementById('custom-alert-message');
-        const resumeBanner = document.getElementById('resume-banner');
-        const resumeTeamSpan = document.getElementById('resume-team');
-
-        window.showCustomAlert = (title, message) => {
-            customAlertTitle.textContent = title;
-            customAlertMessage.textContent = message;
-            customAlertModal.classList.remove('opacity-0', 'pointer-events-none');
-        }
-        window.closeCustomAlert = () => customAlertModal.classList.add('opacity-0', 'pointer-events-none');
-
-        // --- HOMEPAGE NEWS WIDGET ---
-        async function loadHomepageNews() {
-            if (!newsCollection) return;
-            const q = query(newsCollection, orderBy("timestamp", "desc"));
+        document.getElementById('regForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn'); btn.disabled = true; btn.innerText = "Processing...";
             
-            // Get snapshot once to avoid flickering
-            const snapshot = await getDocs(q);
-            const list = document.getElementById('homepage-news-list');
-            list.innerHTML = '';
-            
-            const docs = snapshot.docs.slice(0, 3);
-            if (docs.length === 0) {
-                list.innerHTML = '<p class="text-sm text-gray-400 italic">No news posted yet.</p>';
-                return;
-            }
-
-            docs.forEach(doc => {
-                const n = doc.data();
-                const dateStr = n.timestamp ? new Date(n.timestamp.seconds * 1000).toLocaleDateString() : '';
-                list.innerHTML += `<a href="news.html" class="block bg-gray-50 hover:bg-purple-50 p-3 rounded-lg transition border border-gray-100 group"><div class="flex justify-between"><h4 class="text-sm font-bold text-gray-800 group-hover:text-edu-purple line-clamp-1">${n.title}</h4><span class="text-[10px] text-gray-400 shrink-0 ml-2">${dateStr}</span></div><p class="text-xs text-gray-500 line-clamp-1 mt-1">${n.content}</p></a>`;
-            });
-        }
-
-        // --- DUPLICATE & RESUME LOGIC ---
-        async function checkDuplicateRegistration(department, level) {
-            const q = query(registrationsCollection, where("department", "==", department), where("level", "==", level));
-            const querySnapshot = await getDocs(q);
-            return !querySnapshot.empty;
-        }
-
-        async function checkExistingSession() {
-            const savedTeamId = localStorage.getItem('eduLeagueTeamID');
-            if (savedTeamId) {
-                try {
-                    const docRef = doc(db, "registrations", savedTeamId);
-                    const docSnap = await getDoc(docRef);
-                    
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        if (data.registrationStatus === "Complete") {
-                            localStorage.removeItem('eduLeagueTeamID');
-                            return;
-                        }
-                        resumeTeamSpan.textContent = `${data.department} (${data.level})`;
-                        resumeBanner.classList.remove('hidden');
-                        resumeBanner.dataset.teamId = savedTeamId;
-                        resumeBanner.dataset.teamName = data.teamName;
-                        resumeBanner.dataset.level = data.level;
-                    } else {
-                        localStorage.removeItem('eduLeagueTeamID');
-                    }
-                } catch (error) { console.error("Error checking session:", error); }
-            }
-        }
-        
-        window.resumeRegistration = function() {
-            const teamId = resumeBanner.dataset.teamId;
-            const teamName = resumeBanner.dataset.teamName;
-            const level = resumeBanner.dataset.level;
-            const params = new URLSearchParams({ team: teamName, level: level, fee: "FREE", teamId: teamId });
-            window.location.assign(`./payment_page.html?${params.toString()}`);
-        }
-        
-        window.clearRegistration = function() {
-            localStorage.removeItem('eduLeagueTeamID');
-            resumeBanner.classList.add('hidden');
-        }
-
-        // --- FORM SUBMISSION ---
-        window.handleSubmit = async function(event) {
-            event.preventDefault(); 
-            if (!form.checkValidity()) { form.reportValidity(); return false; }
-            if (!registrationsCollection) { showCustomAlert("Error", "Database not connected."); return false; }
-            
-            submitButton.disabled = true; submitButton.textContent = "Checking...";
-
-            const department = document.getElementById('department').value;
-            const level = document.querySelector('input[name="level"]:checked').value;
+            const dept = document.getElementById('department').value;
+            const lvl = document.querySelector('input[name="level"]:checked').value;
             
             try {
-                // Check Duplicates FIRST
-                const isDuplicate = await checkDuplicateRegistration(department, level);
-                if (isDuplicate) {
-                    showCustomAlert("Duplicate Found", `The Department of ${department} is already registered for ${level}.`);
-                    submitButton.disabled = false; submitButton.textContent = "Register Team Now";
-                    return false;
-                }
-                
-                submitButton.textContent = "Saving...";
-
-                const registrationData = {
-                    teamName: department, 
-                    coachName: document.getElementById('coachName').value,
-                    email: document.getElementById('email').value, 
-                    phone: document.getElementById('phone').value,
-                    department: department, 
-                    level: level,
-                    registeredAt: new Date().toISOString(), 
-                    paymentStatus: "Pending", 
-                    registrationStatus: "Pending Payment", 
-                    players: [] 
-                };
-                
-                const docRef = await addDoc(registrationsCollection, registrationData);
-                
-                localStorage.setItem('eduLeagueTeamID', docRef.id);
-                form.reset();
-                
-                // Redirect to Payment/Access Verification Page
-                const params = new URLSearchParams({ team: department, level: level, fee: "FREE", teamId: docRef.id });
-                window.location.assign(`./payment_page.html?${params.toString()}`);
-
-            } catch (e) {
-                console.error("Error:", e);
-                showCustomAlert("Error", "Could not complete registration.");
-                submitButton.disabled = false; submitButton.textContent = "Register Team Now";
-            }
-            return false;
-        }
-
-        // --- INIT FIREBASE ---
-        async function initializeFirebase() {
-            try {
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
                 await signInAnonymously(auth);
+                const q = query(collection(db, "registrations"), where("department", "==", dept), where("level", "==", lvl));
+                const snap = await getDocs(q);
                 
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        registrationsCollection = collection(db, "registrations");
-                        newsCollection = collection(db, "news_posts"); 
-                        checkExistingSession(); 
-                        loadHomepageNews(); 
-                    }
+                if (!snap.empty) { alert("This Team is already registered!"); btn.disabled = false; btn.innerText = "Continue to Verification"; return; }
+
+                let divisionName = "Male";
+                if(lvl === "Female League") divisionName = "Female";
+
+                const docRef = await addDoc(collection(db, "registrations"), {
+                    department: dept, level: lvl, division: divisionName,
+                    teamName: `${dept} ${lvl}`,
+                    coachName: document.getElementById('coachName').value,
+                    phone: document.getElementById('phone').value,
+                    registrationStatus: "Pending Payment",
+                    registeredAt: serverTimestamp()
                 });
-            } catch (error) { console.error("Firebase Init Error:", error); }
-        }
 
-        initializeFirebase();
-        
-        // Slider Logic
-        (function() {
-            const slider = document.getElementById('logoSlider');
-            if (!slider) return;
-            const slides = slider.querySelectorAll('.slider-item');
-            if (slides.length <= 1) return; 
-            const totalSlides = slides.length;
-            let currentSlide = 0;
-            slides.forEach(slide => { slider.appendChild(slide.cloneNode(true)); });
-
-            function nextSlide() {
-                currentSlide++;
-                slider.style.transition = `transform 1000ms ease-in-out`;
-                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
-                if (currentSlide === totalSlides) {
-                    setTimeout(() => {
-                        slider.style.transition = 'none';
-                        slider.style.transform = 'translateX(0)';
-                        currentSlide = 0;
-                    }, 1000);
-                }
+                localStorage.setItem('eduLeagueTeamID', docRef.id);
+                window.location.href = `payment_page.html?teamId=${docRef.id}`;
+            } catch (error) {
+                console.error("Error:", error); alert("Connection Failed. Check internet."); btn.disabled = false; btn.innerText = "Try Again";
             }
-            setInterval(nextSlide, 8000); 
-        })();
+        });
     </script>
 </body>
 </html>
