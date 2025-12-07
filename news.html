@@ -10,6 +10,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .bg-edu-purple { background-color: #6d28d9; }
         .news-card { transition: all 0.3s ease; } .news-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1); }
         .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         .liked { color: #ef4444; animation: pop 0.3s ease; } @keyframes pop { 50% { transform: scale(1.2); } }
@@ -18,6 +19,18 @@
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
+
+    <div class="bg-edu-purple text-white py-2 px-4 flex justify-between items-center z-50 relative shadow-md">
+        <span class="text-[10px] md:text-xs font-bold tracking-widest opacity-90 hidden md:block">OFFICIAL NUESA SPORTS PLATFORM</span>
+        <span class="text-[10px] md:text-xs font-bold tracking-widest opacity-90 md:hidden">NUESA SPORTS</span>
+        <div class="flex space-x-4">
+            <a href="#" class="hover:text-pink-400 transition transform hover:scale-125"><i class="fa-brands fa-instagram text-sm md:text-base"></i></a>
+            <a href="#" class="hover:text-blue-500 transition transform hover:scale-125"><i class="fa-brands fa-facebook text-sm md:text-base"></i></a>
+            <a href="https://x.com/Ambassador30788?t=jMIhwr41PFXhuY2Q1gGWKg&s=09" target="_blank" class="hover:text-black transition transform hover:scale-125"><i class="fa-brands fa-x-twitter text-sm md:text-base"></i></a>
+            <a href="#" class="hover:text-red-500 transition transform hover:scale-125"><i class="fa-brands fa-youtube text-sm md:text-base"></i></a>
+            <a href="#" class="hover:text-green-400 transition transform hover:scale-125"><i class="fa-brands fa-whatsapp text-sm md:text-base"></i></a>
+        </div>
+    </div>
 
     <nav class="bg-white border-b sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
@@ -40,7 +53,7 @@
         </div>
 
         <div class="max-w-4xl mx-auto px-4 mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a href="stats.html" class="bg-gradient-to-r from-gray-900 to-black text-white p-6 rounded-xl shadow-lg flex justify-between items-center">
+            <a href="stats.html" class="bg-gradient-to-r from-gray-900 to-black text-white p-6 rounded-xl shadow-lg flex justify-between items-center transition transform hover:scale-[1.02]">
                 <div><h3 class="font-black text-xl text-yellow-500">STATS CENTER</h3><p class="text-xs text-gray-400">Golden Boot • Golden Glove</p></div><i class="fa-solid fa-trophy text-3xl text-gray-600"></i>
             </a>
             <div class="bg-white rounded-xl shadow p-5">
@@ -53,7 +66,7 @@
             <div class="bg-white rounded-xl shadow border overflow-hidden">
                 <div class="p-4 border-b flex justify-between items-center bg-gray-50">
                     <h3 class="font-bold text-gray-800">Standings</h3>
-                    <div class="flex space-x-1">
+                    <div class="flex space-x-1 overflow-x-auto">
                         <button onclick="loadTable('Finalist')" id="tab-Finalist" class="tab-active px-3 py-1 rounded text-xs font-bold">Finalist</button>
                         <button onclick="loadTable('Penultimate')" id="tab-Penultimate" class="tab-inactive px-3 py-1 rounded text-xs font-bold">Penultimate</button>
                         <button onclick="loadTable('Sophomore')" id="tab-Sophomore" class="tab-inactive px-3 py-1 rounded text-xs font-bold">Sophomore</button>
