@@ -173,7 +173,9 @@
         const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
         const CLOUD_NAME = "dxdxgrvvb"; const UPLOAD_PRESET = "edu_league"; 
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
-        const DEPARTMENTS = ["Adult Edu", "Art Edu", "Edu Found", "Edu Mgt", "HKHE", "Sci Edu", "Soc Sci Edu", "TVESA"];
+        
+        // --- UPDATED TEAMS (NICKNAMES) ---
+        const DEPARTMENTS = ["NAAES", "AESA", "EFSA", "EMSA", "HKHE", "ULSESA", "SESSA", "TVESA"];
         const ADMIN_PASS = "EDUADMIN2025"; let currentTableLevel = "Finalist"; 
 
         window.login = async () => {
@@ -216,40 +218,42 @@
         window.loadRegistrations = async () => { const s = await getDocs(query(collection(db, "registrations"), orderBy("registeredAt", "desc"))); document.getElementById('registrations-list').innerHTML = s.empty ? '<p class="text-center text-gray-400 text-xs">No teams yet.</p>' : s.docs.map(d=>`<div class="p-3 border-b flex justify-between text-sm"><div><span class="font-bold text-gray-800">${d.data().department}</span> <span class="text-xs text-gray-500">(${d.data().level})</span></div><span class="px-2 py-1 rounded bg-green-100 text-green-800 text-[10px] font-bold">${d.data().registrationStatus}</span></div>`).join(''); }
 
         function populateTeamSelects() { const ops = DEPARTMENTS.map(d=>`<option>${d}</option>`).join(''); document.querySelectorAll('#logoDeptSelect, .w-teamA, .w-teamB').forEach(s=>s.innerHTML+=ops); }
-        window.addWidgetMatchRow = (tA='',tB='',d='',t='',v='') => { const div=document.createElement('div'); div.className="grid grid-cols-6 gap-2 mb-2 widget-row bg-white p-2 rounded border"; div.innerHTML=`<select class="w-teamA col-span-2 border p-1 rounded text-xs font-bold"><option>Home</option>${DEPARTMENTS.map(o=>`<option ${o===tA?'selected':''}>${o}</option>`)}</select><select class="w-teamB col-span-2 border p-1 rounded text-xs font-bold"><option>Away</option>${DEPARTMENTS.map(o=>`<option ${o===tB?'selected':''}>${o}</option>`)}</select><input class="w-time col-span-1 border p-1 rounded text-xs text-center" value="${t}" placeholder="4PM"><button onclick="this.parentElement.remove()" class="text-red-500 font-bold text-center">X</button><div class="col-span-6 grid grid-cols-2 gap-2 mt-1"><input class="w-date border p-1 text-xs rounded" value="${d}" placeholder="Date (e.g. Mon 12)"><input class="w-venue border p-1 text-xs rounded" value="${v}" placeholder="Venue"></div>`; document.getElementById('widget-matches-container').appendChild(div); }
+        window.addWidgetMatchRow = (tA='',tB='',d='',t='',v='') => { 
+            const div=document.createElement('div'); div.className="grid grid-cols-6 gap-2 mb-2 widget-row bg-white p-2 rounded border"; 
+            div.innerHTML=`<select class="w-teamA col-span-2 border p-1 rounded text-xs font-bold"><option>Home</option>${DEPARTMENTS.map(o=>`<option ${o===tA?'selected':''}>${o}</option>`)}</select><select class="w-teamB col-span-2 border p-1 rounded text-xs font-bold"><option>Away</option>${DEPARTMENTS.map(o=>`<option ${o===tB?'selected':''}>${o}</option>`)}</select><input class="w-time col-span-1 border p-1 rounded text-xs text-center" value="${t}" placeholder="4PM"><button onclick="this.parentElement.remove()" class="text-red-500 font-bold text-center">X</button><div class="col-span-6 grid grid-cols-2 gap-2 mt-1"><input class="w-date border p-1 text-xs rounded" value="${d}" placeholder="Date (e.g. Mon 12)"><input class="w-venue border p-1 text-xs rounded" value="${v}" placeholder="Venue"></div>`; 
+            document.getElementById('widget-matches-container').appendChild(div); 
+        }
         window.saveSpotlightWidget = async () => { const m=[]; document.querySelectorAll('.widget-row').forEach(r=>{ const tA=r.querySelector('.w-teamA').value; const tB=r.querySelector('.w-teamB').value; if(tA!='Home'){ m.push({teamA:tA, teamB:tB, date:r.querySelector('.w-date').value, time:r.querySelector('.w-time').value, venue:r.querySelector('.w-venue').value}); } }); await setDoc(doc(db, "app_content", "current_fixture"), {matches:m}); alert("Widget Updated!"); }
 
-        // --- SCHEDULE (UPDATED FOR DIVISIONS) ---
-        window.addMatchInput = (tA='',tB='',t='',r='') => { document.getElementById('schedule-container').innerHTML += `<div class="grid grid-cols-4 gap-2 mb-2 match-row bg-gray-50 p-2 rounded"><input class="s-teamA border p-1 text-xs rounded font-bold" value="${tA}" placeholder="Team A"><input class="s-teamB border p-1 text-xs rounded font-bold" value="${tB}" placeholder="Team B"><input class="s-time border p-1 text-xs rounded text-center" value="${t}" placeholder="Time"><input class="s-res border p-1 text-xs rounded text-center" value="${r}" placeholder="VS"></div>`; }
+        window.addMatchInput = (tA='',tB='',t='',r='') => { 
+            let optionsA = `<option value="">Select Team</option>` + DEPARTMENTS.map(d => `<option value="${d}" ${d===tA?'selected':''}>${d}</option>`).join('');
+            let optionsB = `<option value="">Select Team</option>` + DEPARTMENTS.map(d => `<option value="${d}" ${d===tB?'selected':''}>${d}</option>`).join('');
+            document.getElementById('schedule-container').innerHTML += `<div class="grid grid-cols-4 gap-2 mb-2 match-row bg-gray-50 p-2 rounded"><select class="s-teamA border p-1 text-xs rounded font-bold">${optionsA}</select><select class="s-teamB border p-1 text-xs rounded font-bold">${optionsB}</select><input class="s-time border p-1 text-xs rounded text-center" value="${t}" placeholder="Time"><input class="s-res border p-1 text-xs rounded text-center" value="${r}" placeholder="VS"></div>`; 
+        }
         window.loadSchedule = async () => { 
-            const day = document.getElementById('matchDaySelect').value;
-            const lvl = document.getElementById('scheduleLevelSelect').value;
+            const day = document.getElementById('matchDaySelect').value; const lvl = document.getElementById('scheduleLevelSelect').value;
             const docId = `schedule_${day.replace(/\s+/g, '_')}_${lvl}`.toLowerCase();
             const s = await getDoc(doc(db, "schedules", docId)); 
             document.getElementById('schedule-container').innerHTML=''; 
             if(s.exists()&&s.data().matches) s.data().matches.forEach(m=>window.addMatchInput(m.teamA, m.teamB, m.time, m.result)); else window.addMatchInput(); 
         }
         window.saveSchedule = async () => { 
-            const day = document.getElementById('matchDaySelect').value;
-            const lvl = document.getElementById('scheduleLevelSelect').value;
+            const day = document.getElementById('matchDaySelect').value; const lvl = document.getElementById('scheduleLevelSelect').value;
             const docId = `schedule_${day.replace(/\s+/g, '_')}_${lvl}`.toLowerCase();
             const m=[]; document.querySelectorAll('.match-row').forEach(r=>m.push({teamA:r.querySelector('.s-teamA').value, teamB:r.querySelector('.s-teamB').value, time:r.querySelector('.s-time').value, result:r.querySelector('.s-res').value})); 
             await setDoc(doc(db, "schedules", docId), {matches:m}); alert("Schedule Saved"); 
         }
 
-        // --- TABLES ---
         window.changeTableLevel = (l) => { currentTableLevel=l; const logoMap = {'Finalist':'Finalist.png','Penultimate':'Penultimate.png','Sophomore':'Sophomore.png','Female':'Edu-Female.png'}; const img=document.getElementById('division-logo-display'); if(img) img.src=logoMap[l]||'edulogo.jpg'; document.getElementById('division-label').textContent=l; ['Finalist','Penultimate','Sophomore','Female'].forEach(t=>{ const b=document.getElementById('lvl-'+t); if(t===l){b.classList.add('sub-active');b.classList.remove('sub-inactive');}else{b.classList.remove('sub-active');b.classList.add('sub-inactive');}}); loadTableEditor(); }
         async function loadTableEditor() { const s = await getDoc(doc(db, "app_content", `league_table_${currentTableLevel.toLowerCase()}`)); let d=s.exists()?s.data():{}; document.getElementById('table-editor-body').innerHTML = DEPARTMENTS.map(dept => { const v=d[dept]||{mp:0,w:0,d:0,l:0,gd:0,pts:0}; return `<tr class="hover:bg-gray-50"><td class="p-2 font-bold text-gray-700">${dept}</td>${Object.keys(v).map(k=>`<td class="p-1"><input id="${dept}-${k}" value="${v[k]}" class="stat-input w-full text-xs font-bold text-gray-600 bg-white rounded border focus:border-blue-500"></td>`).join('')}</tr>`; }).join(''); }
         window.saveTable = async () => { const d={}; DEPARTMENTS.forEach(dept=>{ d[dept]={mp:parseInt(document.getElementById(`${dept}-mp`).value)||0, w:parseInt(document.getElementById(`${dept}-w`).value)||0, d:parseInt(document.getElementById(`${dept}-d`).value)||0, l:parseInt(document.getElementById(`${dept}-l`).value)||0, gd:parseInt(document.getElementById(`${dept}-gd`).value)||0, pts:parseInt(document.getElementById(`${dept}-pts`).value)||0}; }); await setDoc(doc(db, "app_content", `league_table_${currentTableLevel.toLowerCase()}`), d); alert("Table Updated!"); }
 
-        // --- STATS ---
         window.loadTeamsForStatsDropdown = async () => { const s = await getDocs(query(collection(db, "registrations"))); document.getElementById('statsTeamSelect').innerHTML = '<option>Select Team</option>' + s.docs.map(d=>`<option value="${d.id}">${d.data().department} (${d.data().level})</option>`).join(''); }
         window.loadPlayersForStats = async () => { const id = document.getElementById('statsTeamSelect').value; if(!id)return; const s = await getDoc(doc(db, "registrations", id)); if(s.exists() && s.data().players) document.getElementById('statsPlayerSelect').innerHTML = s.data().players.map(p=>`<option value="${p.name}">${p.name}</option>`).join(''); }
         window.fetchCurrentStats = async () => { const p = document.getElementById('statsPlayerSelect').value; const t = document.getElementById('statsTeamSelect').selectedOptions[0].text; if(!p)return; const s = await getDoc(doc(db, "player_stats", (t+p).replace(/\s/g,'').toLowerCase())); const d = s.exists()?s.data():{}; ['Goals','Assists','Yellow','Red','Saves'].forEach(k=>document.getElementById(`player${k}`).value = d[k.toLowerCase()]||(k=='Yellow'?d.yellowCards:k=='Red'?d.redCards:0)); }
         window.savePlayerStats = async () => { const p=document.getElementById('statsPlayerSelect').value; const t=document.getElementById('statsTeamSelect').selectedOptions[0].text; if(!p)return; await setDoc(doc(db, "player_stats", (t+p).replace(/\s/g,'').toLowerCase()), { name:p, team:t, goals:parseInt(document.getElementById('playerGoals').value)||0, assists:parseInt(document.getElementById('playerAssists').value)||0, yellowCards:parseInt(document.getElementById('playerYellow').value)||0, redCards:parseInt(document.getElementById('playerRed').value)||0, saves:parseInt(document.getElementById('playerSaves').value)||0 }); alert("Stats Saved"); }
         window.loadLeaderboard = async (t) => { const s = await getDocs(query(collection(db, "player_stats"), orderBy(t, "desc"))); document.getElementById('statsLeaderboard').innerHTML = s.docs.map(d=>`<div class="flex justify-between border-b p-2 hover:bg-gray-50"><span>${d.data().name} <span class="text-xs text-gray-400">(${d.data().team})</span></span><b class="text-green-600">${d.data()[t]}</b></div>`).join(''); }
 
-        // --- FAN ZONE ---
         window.createPoll = async () => {
             const q = document.getElementById('pollQuestion').value; const o1 = document.getElementById('pollOpt1').value; const o2 = document.getElementById('pollOpt2').value;
             if(!q || !o1 || !o2) return alert("Fill all fields");
