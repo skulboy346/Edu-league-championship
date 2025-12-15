@@ -25,14 +25,9 @@
 
             <div id="tab-news" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 p-6 max-w-4xl mx-auto"><div class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="space-y-4"><h3 class="font-bold text-gray-900 flex items-center gap-2"><i class="fa-solid fa-pen-nib text-green-600"></i> Create Post</h3><input id="newsTitle" class="w-full border p-3 rounded-lg font-bold text-gray-800" placeholder="Headline"><div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 relative group transition"><input id="newsFile" type="file" accept="image/*,video/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImage(event)"><div id="uploadPlaceholder" class="pointer-events-none"><i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-300 mb-2"></i><p class="text-xs font-bold text-gray-500">Upload Photo/Video</p></div><img id="imagePreview" class="hidden h-32 mx-auto object-cover rounded shadow"></div><div id="progressArea" class="hidden w-full bg-gray-200 rounded-full h-1.5"><div id="progressBar" class="bg-green-500 h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div></div><textarea id="newsContent" class="w-full border p-3 rounded-lg h-32 text-sm" placeholder="Write story..."></textarea><button onclick="postNews()" id="publishBtn" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition shadow">Publish</button></div><div class="border-l pl-8"><h3 class="font-bold text-gray-900 mb-4">Recent Posts</h3><div id="admin-news-list" class="space-y-3 max-h-[500px] overflow-y-auto pr-2"></div></div></div></div>
 
-            <div id="tab-widget" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 p-6 max-w-3xl mx-auto">
-                <div class="flex justify-between items-center mb-6"><h3 class="font-bold text-gray-900 text-lg">Homepage Match Slider</h3><button onclick="saveSpotlightWidget()" class="bg-black text-white px-6 py-2 rounded-full font-bold text-xs hover:bg-gray-800 transition">Save Changes</button></div>
-                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 mb-6"><h4 class="font-bold text-blue-800 text-xs uppercase mb-2">Import from Schedule</h4><div class="flex gap-2"><select id="importDiv" class="border rounded text-xs p-1"><option value="Finalist">Finalist</option><option value="Female">Female</option><option value="Penultimate">Penultimate</option><option value="Sophomore">Sophomore</option></select><select id="importDay" onchange="loadImportMatches()" class="border rounded text-xs p-1"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Semi-Finals</option><option>Finals</option></select><select id="importMatchList" class="border rounded text-xs p-1 flex-grow"><option>Select Match...</option></select><button onclick="importSelectedMatch()" class="bg-blue-600 text-white px-3 py-1 rounded text-xs font-bold hover:bg-blue-700">Import</button></div></div>
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-4"><div id="widget-matches-container" class="space-y-4"></div></div>
-                <button onclick="addWidgetMatchRow()" class="w-full py-3 border-2 border-dashed border-gray-300 text-gray-500 font-bold rounded-xl hover:border-gray-400 transition">+ Add Manual Row</button>
-            </div>
+            <div id="tab-widget" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 p-6 max-w-3xl mx-auto"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-gray-900 text-lg">Homepage Match Slider</h3><button onclick="saveSpotlightWidget()" class="bg-black text-white px-6 py-2 rounded-full font-bold text-xs hover:bg-gray-800 transition">Save Changes</button></div><div class="bg-blue-50 p-4 rounded-xl border border-blue-100 mb-6"><h4 class="font-bold text-blue-800 text-xs uppercase mb-2">Import from Schedule</h4><div class="flex gap-2"><select id="importDiv" class="border rounded text-xs p-1"><option value="Finalist">Finalist</option><option value="Female">Female</option><option value="Penultimate">Penultimate</option><option value="Sophomore">Sophomore</option></select><select id="importDay" onchange="loadImportMatches()" class="border rounded text-xs p-1"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Semi-Finals</option><option>Finals</option></select><select id="importMatchList" class="border rounded text-xs p-1 flex-grow"><option>Select Match...</option></select><button onclick="importSelectedMatch()" class="bg-blue-600 text-white px-3 py-1 rounded text-xs font-bold hover:bg-blue-700">Import</button></div></div><div class="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-4"><div id="widget-matches-container" class="space-y-4"></div></div><button onclick="addWidgetMatchRow()" class="w-full py-3 border-2 border-dashed border-gray-300 text-gray-500 font-bold rounded-xl hover:border-gray-400 transition">+ Add Manual Row</button></div>
 
-            <div id="tab-schedule" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 p-6 max-w-4xl mx-auto"><div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b pb-4 gap-4"><h3 class="font-bold text-gray-900">Match Schedule</h3><div class="flex gap-2 w-full md:w-auto"><select id="scheduleLevelSelect" onchange="loadSchedule()" class="border-2 border-gray-200 rounded-lg p-2 font-bold text-gray-700 text-sm bg-white flex-1"><option value="Finalist">Finalist</option><option value="Penultimate">Penultimate</option><option value="Sophomore">Sophomore</option><option value="Female">Female League</option></select><select id="matchDaySelect" onchange="loadSchedule()" class="border-2 border-gray-200 rounded-lg p-2 font-bold text-gray-700 text-sm bg-white flex-1"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option><option>Semi-Finals</option><option>Finals</option></select></div></div><div id="schedule-container" class="space-y-2 mb-6 min-h-[100px]"></div><div class="flex gap-3 justify-between"><button onclick="addMatchInput()" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-bold text-xs hover:bg-gray-200">+ Add Row</button><div class="flex gap-2"><button onclick="downloadSchedulePDF()" class="bg-red-600 text-white px-5 py-2 rounded-lg font-bold text-xs hover:bg-red-700 flex items-center gap-2"><i class="fa-solid fa-file-pdf"></i> Download PDF</button><button onclick="saveSchedule()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold text-xs hover:bg-green-700">Save Schedule</button></div></div></div>
+            <div id="tab-schedule" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 p-6 max-w-4xl mx-auto"><div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b pb-4 gap-4"><h3 class="font-bold text-gray-900">Match Schedule</h3><div class="flex gap-2 w-full md:w-auto"><select id="scheduleLevelSelect" onchange="loadSchedule()" class="border-2 border-gray-200 rounded-lg p-2 font-bold text-gray-700 text-sm bg-white flex-1"><option value="Finalist">Finalist</option><option value="Penultimate">Penultimate</option><option value="Sophomore">Sophomore</option><option value="Female">Female League</option></select><select id="matchDaySelect" onchange="loadSchedule()" class="border-2 border-gray-200 rounded-lg p-2 font-bold text-gray-700 text-sm bg-white flex-1"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option><option>Semi-Finals</option><option>Finals</option></select></div></div><div id="schedule-container" class="space-y-2 mb-6 min-h-[100px]"></div><div class="flex gap-3 justify-between"><button onclick="addMatchInput()" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-bold text-xs hover:bg-gray-200">+ Add Row</button><div class="flex gap-2"><button onclick="downloadSchedulePDF()" class="bg-red-600 text-white px-5 py-2 rounded-lg font-bold text-xs hover:bg-red-700 flex items-center gap-2"><i class="fa-solid fa-file-pdf"></i> Download Schedule</button><button onclick="saveSchedule()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold text-xs hover:bg-green-700">Save Schedule</button></div></div></div>
 
             <div id="tab-league" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 p-6 max-w-4xl mx-auto"><div class="flex flex-col md:flex-row justify-between items-center mb-6 bg-gray-50 p-4 rounded-xl border"><div class="flex items-center gap-3 mb-4 md:mb-0"><img id="division-logo-display" src="Finalist.png" class="w-12 h-12 object-contain bg-white rounded-full p-1 shadow-sm" onerror="this.src='edulogo.jpg'"><div><p class="text-[10px] font-bold text-gray-400 uppercase">Editing Table</p><h3 id="division-label" class="font-black text-gray-900 text-lg leading-none">Finalist</h3></div></div><div class="flex gap-2"><button onclick="changeTableLevel('Finalist')" id="lvl-Finalist" class="sub-active px-3 py-1.5 rounded-md text-xs font-bold transition">Finalist</button><button onclick="changeTableLevel('Penultimate')" id="lvl-Penultimate" class="sub-inactive px-3 py-1.5 rounded-md text-xs font-bold transition">Penultimate</button><button onclick="changeTableLevel('Sophomore')" id="lvl-Sophomore" class="sub-inactive px-3 py-1.5 rounded-md text-xs font-bold transition">Sophomore</button><button onclick="changeTableLevel('Female')" id="lvl-Female" class="sub-inactive px-3 py-1.5 rounded-md text-xs font-bold bg-pink-50 text-pink-600 border border-pink-200 hover:bg-pink-100">Female</button></div></div><div class="overflow-x-auto rounded-lg border border-gray-200"><table class="w-full text-sm"><thead class="bg-gray-100 text-gray-500 uppercase text-xs"><tr><th class="p-3 text-left">Dept</th><th class="p-3 text-center">MP</th><th class="p-3 text-center">W</th><th class="p-3 text-center">D</th><th class="p-3 text-center">L</th><th class="p-3 text-center">GD</th><th class="p-3 text-center">Pts</th></tr></thead><tbody id="table-editor-body" class="divide-y divide-gray-100"></tbody></table></div><button onclick="saveTable()" class="w-full bg-gray-900 text-white py-3 mt-4 rounded-lg font-bold hover:bg-black transition">Update Standings</button></div>
 
@@ -57,15 +52,31 @@
             const pin = document.getElementById('adminPin').value; const btn = document.getElementById('loginBtn');
             if(pin === ADMIN_PASS) {
                 btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Accessing...';
-                try { await signInAnonymously(auth); document.getElementById('login-section').classList.add('hidden'); document.getElementById('dashboard-section').classList.remove('hidden'); document.getElementById('logoutBtn').classList.remove('hidden'); initDashboard(); } 
-                catch(e) { alert("Connection Error"); btn.innerText="Enter Dashboard"; }
+                try { 
+                    await signInAnonymously(auth); 
+                    document.getElementById('login-section').classList.add('hidden'); 
+                    document.getElementById('dashboard-section').classList.remove('hidden'); 
+                    document.getElementById('logoutBtn').classList.remove('hidden'); 
+                    initDashboard(); 
+                } 
+                catch(e) { 
+                    console.error(e); 
+                    alert("Authentication Error: " + e.message + "\n\n(Did you enable Anonymous Sign-in in Firebase Console?)"); 
+                    btn.innerText="Enter Dashboard"; 
+                }
             } else { document.getElementById('loginError').classList.remove('hidden'); }
         }
         window.logout = () => window.location.reload();
         window.switchTab = (t) => { ['registrations','news','widget','schedule','league','stats','polls'].forEach(tab=>{ const el=document.getElementById(`tab-${tab}`); const btn=document.getElementById(`btn-${tab}`); if(el){ if(tab===t){el.classList.remove('hidden'); el.classList.add('fade-in'); btn.classList.replace('inactive','active');} else{el.classList.add('hidden'); el.classList.remove('fade-in'); btn.classList.replace('active','inactive');} } }); }
         function initDashboard() { loadRegistrations(); loadNewsHistory(); loadTableEditor(); populateTeamSelects(); loadSchedule(); loadTeamsForStatsDropdown(); loadLeaderboard('goals'); addWidgetMatchRow(); loadActivePolls(); loadTeamLogos(); }
 
-        // --- IMPORT LOGIC ---
+        window.loadTeamLogos = async () => {
+            const gallery = document.getElementById('logo-gallery'); gallery.innerHTML = '<p class="text-xs text-gray-400 col-span-full text-center">Fetching...</p>';
+            const snap = await getDocs(collection(db, "team_assets")); gallery.innerHTML = '';
+            if(snap.empty) { gallery.innerHTML = '<p class="text-xs text-gray-400 col-span-full text-center">No logos found.</p>'; return; }
+            snap.forEach(doc => { const d = doc.data(); gallery.innerHTML += `<div class="border rounded-lg p-2 text-center bg-gray-50 flex flex-col items-center"><img src="${d.logoUrl}" class="w-10 h-10 object-contain mb-1"><span class="text-[10px] font-bold text-gray-700 leading-tight block">${doc.id}</span><span class="text-[9px] text-gray-400 block">${d.levelUpdated || '-'}</span></div>`; });
+        }
+        
         window.loadImportMatches = async () => {
             const day = document.getElementById('importDay').value; const lvl = document.getElementById('importDiv').value; const select = document.getElementById('importMatchList'); select.innerHTML = '<option>Loading...</option>';
             const s = await getDoc(doc(db, "schedules", `schedule_${day.replace(/\s+/g, '_')}_${lvl}`.toLowerCase()));
@@ -86,40 +97,88 @@
             const s = await getDocs(query(collection(db, "registrations"), orderBy("registeredAt", "desc"))); 
             document.getElementById('registrations-list').innerHTML = s.empty ? '<p class="text-center text-gray-400 text-xs">No teams yet.</p>' : s.docs.map(d=>`
             <div class="p-3 border-b flex justify-between items-center text-sm">
-                <div><span class="font-bold text-gray-800">${d.data().department}</span> <span class="text-xs text-gray-500">(${d.data().level})</span></div>
-                <div class="flex gap-2 items-center"><span class="px-2 py-1 rounded bg-green-100 text-green-800 text-[10px] font-bold">${d.data().registrationStatus}</span><button onclick="downloadTeamRoster('${d.id}')" class="text-red-600 hover:text-red-800 p-1 bg-red-50 rounded border border-red-200" title="Download Roster"><i class="fa-solid fa-file-pdf"></i></button></div>
+                <div>
+                    <span class="font-bold text-gray-800">${d.data().department}</span> 
+                    <span class="text-xs text-gray-500">(${d.data().level})</span>
+                </div>
+                <div class="flex gap-2 items-center">
+                    <span class="px-2 py-1 rounded bg-green-100 text-green-800 text-[10px] font-bold">${d.data().registrationStatus}</span>
+                    <button onclick="downloadTeamRoster('${d.id}')" class="text-red-600 hover:text-red-800 p-1 bg-red-50 rounded border border-red-200" title="Download Roster"><i class="fa-solid fa-file-pdf"></i></button>
+                </div>
             </div>`).join(''); 
         }
 
         window.downloadTeamRoster = async (teamId) => {
             try {
+                // Fetch data
                 const teamDoc = await getDoc(doc(db, "registrations", teamId));
                 if (!teamDoc.exists()) return alert("Team not found");
                 const team = teamDoc.data();
                 const players = team.players || [];
+
+                // Fetch Logos
                 const getBase64 = async (url) => { try { const r = await fetch(url); const b = await r.blob(); return new Promise(res => { const reader = new FileReader(); reader.onloadend = () => res(reader.result); reader.readAsDataURL(b); }); } catch(e){return null;} };
                 const leagueLogo = await getBase64('edulogo.jpg');
-                let divLogoUrl = 'Finalist.png'; if(team.level.includes('Female')) divLogoUrl = 'Edu-Female.png'; else if(team.level.includes('Penultimate')) divLogoUrl = 'Penultimate.png'; else if(team.level.includes('Sophomore')) divLogoUrl = 'Sophomore.png';
+                
+                // Get Division Logo
+                let divLogoUrl = 'Finalist.png';
+                if(team.level.includes('Female')) divLogoUrl = 'Edu-Female.png';
+                else if(team.level.includes('Penultimate')) divLogoUrl = 'Penultimate.png';
+                else if(team.level.includes('Sophomore')) divLogoUrl = 'Sophomore.png';
                 const divLogo = await getBase64(divLogoUrl);
-                const assetDoc = await getDoc(doc(db, "team_assets", team.department));
-                let teamLogo = null; if(assetDoc.exists()) teamLogo = await getBase64(assetDoc.data().logoUrl);
 
-                const { jsPDF } = window.jspdf; const pdf = new jsPDF();
+                // Get Team Logo from Assets
+                const assetDoc = await getDoc(doc(db, "team_assets", team.department));
+                let teamLogo = null;
+                if(assetDoc.exists()) {
+                    teamLogo = await getBase64(assetDoc.data().logoUrl); 
+                }
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF();
+
+                // Header Logos
                 if(leagueLogo) pdf.addImage(leagueLogo, 'JPEG', 15, 10, 25, 25);
                 if(divLogo) pdf.addImage(divLogo, 'PNG', 170, 10, 25, 25);
-                pdf.setFontSize(18); pdf.setTextColor(76, 29, 149); pdf.text("EDU-LEAGUE 2025/26", 105, 20, null, null, "center");
-                pdf.setFontSize(14); pdf.setTextColor(0, 0, 0); pdf.text("OFFICIAL SQUAD LIST", 105, 30, null, null, "center");
+
+                // Header Text
+                pdf.setFontSize(18); pdf.setTextColor(76, 29, 149);
+                pdf.text("EDU-LEAGUE 2025/26", 105, 20, null, null, "center");
+                pdf.setFontSize(14); pdf.setTextColor(0, 0, 0);
+                pdf.text("OFFICIAL SQUAD LIST", 105, 30, null, null, "center");
+
+                // Team Info Section
                 if(teamLogo) pdf.addImage(teamLogo, 'JPEG', 95, 35, 20, 20);
-                pdf.setFontSize(16); pdf.setFont(undefined, 'bold'); pdf.text(team.department.toUpperCase(), 105, 60, null, null, "center");
-                pdf.setFontSize(10); pdf.setFont(undefined, 'normal'); pdf.text(`Division: ${team.level}`, 105, 66, null, null, "center"); pdf.text(`Coach: ${team.coachName}  |  Phone: ${team.phone}`, 105, 71, null, null, "center");
+                pdf.setFontSize(16); pdf.setFont(undefined, 'bold');
+                pdf.text(team.department.toUpperCase(), 105, 60, null, null, "center");
+                
+                pdf.setFontSize(10); pdf.setFont(undefined, 'normal');
+                pdf.text(`Division: ${team.level}`, 105, 66, null, null, "center");
+                pdf.text(`Coach: ${team.coachName}  |  Phone: ${team.phone}`, 105, 71, null, null, "center");
+
+                // Player Table
                 const rows = players.map((p, i) => [i + 1, p.name, p.position]);
-                pdf.autoTable({ head: [['S/N', 'Player Name', 'Position']], body: rows, startY: 80, theme: 'grid', headStyles: { fillColor: [76, 29, 149], halign: 'center' }, columnStyles: { 0: { halign: 'center', cellWidth: 20 }, 2: { halign: 'center', cellWidth: 40 } }, });
+                pdf.autoTable({
+                    head: [['S/N', 'Player Name', 'Position']],
+                    body: rows,
+                    startY: 80,
+                    theme: 'grid',
+                    headStyles: { fillColor: [76, 29, 149], halign: 'center' },
+                    columnStyles: { 0: { halign: 'center', cellWidth: 20 }, 2: { halign: 'center', cellWidth: 40 } },
+                });
+
+                // Footer
+                const pageHeight = pdf.internal.pageSize.height;
+                pdf.setFontSize(8); pdf.setTextColor(150);
+                pdf.text(`Generated on ${new Date().toLocaleDateString()}`, 15, pageHeight - 10);
+                pdf.text("NUESA Sports Committee", 195, pageHeight - 10, null, null, "right");
+
                 pdf.save(`${team.department}_Roster.pdf`);
+
             } catch (e) { console.error(e); alert("Error generating PDF: " + e.message); }
         }
 
         function populateTeamSelects() { const ops = DEPARTMENTS.map(d=>`<option>${d}</option>`).join(''); document.querySelectorAll('#logoDeptSelect, .w-teamA, .w-teamB').forEach(s=>s.innerHTML+=ops); }
-        
         window.addWidgetMatchRow = (tA='',tB='',d='',t='',v='', cat='Finalist') => { 
             const div=document.createElement('div'); div.className="grid grid-cols-6 gap-2 mb-2 widget-row bg-white p-2 rounded border"; 
             div.innerHTML=`
@@ -168,7 +227,7 @@
         window.startMOTM = async () => { await setDoc(doc(db, "app_content", "fan_zone"), { motm: { nominees: [document.getElementById('motm1').value, document.getElementById('motm2').value, document.getElementById('motm3').value], votes: [0,0,0], active: true } }, { merge: true }); alert("Voting Started!"); }
         window.resetFanStats = async () => { if(confirm("Reset Stats?")) await setDoc(doc(db, "app_content", "fan_zone"), { cheer_battle: {}, prediction: { home:0, draw:0, away:0 } }, { merge: true }); alert("Reset Done!"); }
         
-        // --- PDF GENERATION (SCHEDULE) ---
+        // --- PDF GENERATION ---
         window.downloadSchedulePDF = async () => {
             const { jsPDF } = window.jspdf; const doc = new jsPDF(); const day = document.getElementById('matchDaySelect').value; const lvl = document.getElementById('scheduleLevelSelect').value;
             const getBase64 = async (url) => { try { const r = await fetch(url); const b = await r.blob(); return new Promise(res => { const reader = new FileReader(); reader.onloadend = () => res(reader.result); reader.readAsDataURL(b); }); } catch(e){return null;} };
