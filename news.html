@@ -111,56 +111,138 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"; import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"; import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, increment, addDoc, serverTimestamp, getDoc, where, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, increment, addDoc, serverTimestamp, getDoc, where, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
         const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
-        const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app); signInAnonymously(auth);
+        const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
+        signInAnonymously(auth);
         let currentPostId = null; let commentsUnsubscribe = null; let matchInterval = null;
 
+        // --- 1. MATCH SPOTLIGHT (SAFELY HANDLED) ---
         onSnapshot(doc(db, "app_content", "current_fixture"), (docSnap) => {
             if(docSnap.exists()) {
                 const data = docSnap.data();
                 if(matchInterval) clearInterval(matchInterval);
+                
+                // Safety check for empty data
                 if (data.matches && Array.isArray(data.matches) && data.matches.length > 0) {
                     let idx = 0;
                     document.getElementById('slider-dots').innerHTML = data.matches.map((_, i) => `<div class="h-2 w-2 rounded-full bg-gray-500 opacity-50 transition-all" id="dot-${i}"></div>`).join('');
+                    
                     const updateDisplay = () => {
                         const m = data.matches[idx];
                         const widget = document.getElementById('match-widget');
+                        
+                        // FADE OUT
                         widget.style.opacity = 0;
+                        
                         setTimeout(() => {
-                            document.getElementById('teamA_name').textContent = m.teamA; document.getElementById('teamB_name').textContent = m.teamB;
+                            document.getElementById('teamA_name').textContent = m.teamA;
+                            document.getElementById('teamB_name').textContent = m.teamB;
                             document.getElementById('match_details').textContent = `${m.date} • ${m.time} • ${m.venue}`;
-                            if(m.category) document.getElementById('match_category').innerText = m.category.toUpperCase();
-                            document.getElementById('teamA_img').src = m.teamALogo || 'edulogo.jpg'; document.getElementById('teamB_img').src = m.teamBLogo || 'edulogo.jpg';
-                            for(let i=0; i<data.matches.length; i++) { const dot = document.getElementById(`dot-${i}`); if(i===idx) { dot.classList.add('bg-white'); dot.classList.remove('bg-gray-500'); } else { dot.classList.remove('bg-white'); dot.classList.add('bg-gray-500'); } }
+                            
+                            // SAFE CATEGORY DISPLAY
+                            const catEl = document.getElementById('match_category');
+                            if(catEl) catEl.innerText = (m.category || 'LEAGUE').toUpperCase();
+
+                            document.getElementById('teamA_img').src = m.teamALogo || 'edulogo.jpg';
+                            document.getElementById('teamB_img').src = m.teamBLogo || 'edulogo.jpg';
+                            
+                            for(let i=0; i<data.matches.length; i++) {
+                                const dot = document.getElementById(`dot-${i}`);
+                                if(dot) dot.className = i===idx ? "h-2 w-2 rounded-full bg-white" : "h-2 w-2 rounded-full bg-gray-500";
+                            }
+                            // FADE IN
                             widget.style.opacity = 1;
                         }, 250);
+                        
                         idx = (idx + 1) % data.matches.length;
                     };
                     updateDisplay();
                     if(data.matches.length > 1) matchInterval = setInterval(updateDisplay, 5000); 
+                } else {
+                    document.getElementById('teamA_name').textContent = "No Matches";
+                    document.getElementById('teamB_name').textContent = "Scheduled";
                 }
             }
         });
 
+        // --- 2. NEWS FEED (FIXED) ---
         onSnapshot(query(collection(db, "news_posts"), orderBy("timestamp", "desc")), (snapshot) => {
-            const grid = document.getElementById('news-grid'); document.getElementById('loading').classList.add('hidden'); grid.classList.remove('hidden'); grid.innerHTML = '';
+            const grid = document.getElementById('news-grid');
+            document.getElementById('loading').classList.add('hidden');
+            grid.classList.remove('hidden');
+            grid.innerHTML = '';
+            
             if (snapshot.empty) { grid.innerHTML = '<p class="text-center col-span-full text-gray-400">No news updates available.</p>'; return; }
+
             snapshot.forEach(doc => {
-                const data = doc.data(); const pid = doc.id; const mediaUrl = data.imageUrl || 'https://placehold.co/600x400/16a34a/ffffff?text=EDU-LEAGUE+NEWS'; const likes = data.likes || 0; const commentsCount = data.commentsCount || 0; const isLiked = localStorage.getItem(`liked_${pid}`) ? 'liked' : 'text-gray-400'; const heartIcon = localStorage.getItem(`liked_${pid}`) ? 'fa-solid' : 'fa-regular'; let dateStr = "Recent"; if(data.timestamp) dateStr = data.timestamp.toDate().toLocaleDateString('en-US', {month:'short', day:'numeric'});
+                const data = doc.data(); const pid = doc.id;
+                const mediaUrl = data.imageUrl || 'https://placehold.co/600x400/16a34a/ffffff?text=EDU-LEAGUE+NEWS';
+                const likes = data.likes || 0; const commentsCount = data.commentsCount || 0;
+                const isLiked = localStorage.getItem(`liked_${pid}`) ? 'liked' : 'text-gray-400';
+                const heartIcon = localStorage.getItem(`liked_${pid}`) ? 'fa-solid' : 'fa-regular';
+                
+                let dateStr = "Recent";
+                if(data.timestamp) dateStr = data.timestamp.toDate().toLocaleDateString('en-US', {month:'short', day:'numeric'});
+
                 const isVideo = mediaUrl.includes('.mp4') || mediaUrl.includes('.mov') || mediaUrl.includes('.webm') || mediaUrl.includes('/video/upload/');
                 let mediaHtml = isVideo ? `<video src="${mediaUrl}" class="w-full h-full object-cover" muted></video>` : `<img src="${mediaUrl}" class="w-full h-full object-cover">`;
-                const card = document.createElement('div'); card.className = 'bg-white rounded-xl shadow-sm overflow-hidden news-card border border-gray-100 h-full flex flex-col'; card.id = `card-${pid}`; card.dataset.title = data.title; card.dataset.content = data.content; card.dataset.media = mediaUrl; card.dataset.isvideo = isVideo; card.dataset.date = dateStr;
-                card.innerHTML = `<div class="relative h-48 bg-gray-100">${mediaHtml}<div class="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm uppercase">${dateStr}</div></div><div class="p-5 flex flex-col flex-grow"><h3 class="text-lg font-bold text-gray-900 mb-2 leading-snug cursor-pointer hover:text-green-600 transition" onclick="openModal('${pid}')">${data.title}</h3><p class="text-sm text-gray-500 line-clamp-3 mb-4 flex-grow">${data.content}</p><button onclick="openModal('${pid}')" class="text-green-600 font-bold text-xs mb-4 hover:underline self-start">READ FULL STORY &rarr;</button><div class="pt-3 mt-auto border-t border-gray-100 flex justify-between items-center text-sm"><div class="flex space-x-4"><button onclick="handleLike('${pid}')" class="flex items-center space-x-1 interaction-btn ${isLiked}" id="like-btn-${pid}"><i class="${heartIcon} fa-heart"></i><span id="like-count-${pid}" class="text-xs font-bold">${likes}</span></button><button onclick="openModal('${pid}')" class="flex items-center space-x-1 interaction-btn text-gray-400 hover:text-blue-500"><i class="fa-regular fa-comment"></i><span class="text-xs font-bold">${commentsCount}</span></button></div><button onclick="handleShare('${data.title}')" class="text-gray-400 hover:text-green-600 interaction-btn"><i class="fa-solid fa-share-nodes"></i></button></div></div>`;
+
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl shadow-sm overflow-hidden news-card border border-gray-100 h-full flex flex-col';
+                card.id = `card-${pid}`; 
+                
+                card.dataset.title = data.title; card.dataset.content = data.content; card.dataset.media = mediaUrl; card.dataset.isvideo = isVideo; card.dataset.date = dateStr;
+
+                card.innerHTML = `
+                    <div class="relative h-48 bg-gray-100">
+                        ${mediaHtml}
+                        <div class="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm uppercase">${dateStr}</div>
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 leading-snug cursor-pointer hover:text-green-600 transition" onclick="openModal('${pid}')">${data.title}</h3>
+                        <p class="text-sm text-gray-500 line-clamp-3 mb-4 flex-grow">${data.content}</p>
+                        <button onclick="openModal('${pid}')" class="text-green-600 font-bold text-xs mb-4 hover:underline self-start">READ FULL STORY &rarr;</button>
+                        <div class="pt-3 mt-auto border-t border-gray-100 flex justify-between items-center text-sm">
+                            <div class="flex space-x-4">
+                                <button onclick="handleLike('${pid}')" class="flex items-center space-x-1 interaction-btn ${isLiked}" id="like-btn-${pid}"><i class="${heartIcon} fa-heart"></i><span id="like-count-${pid}" class="text-xs font-bold">${likes}</span></button>
+                                <button onclick="openModal('${pid}')" class="flex items-center space-x-1 interaction-btn text-gray-400 hover:text-blue-500"><i class="fa-regular fa-comment"></i><span class="text-xs font-bold">${commentsCount}</span></button>
+                            </div>
+                            <button onclick="handleShare('${data.title}')" class="text-gray-400 hover:text-green-600 interaction-btn"><i class="fa-solid fa-share-nodes"></i></button>
+                        </div>
+                    </div>
+                `;
                 grid.appendChild(card);
             });
         });
 
-        window.handleLike = async (id) => { const isLiked = localStorage.getItem(`liked_${id}`); const btn = document.getElementById(`like-btn-${id}`); const countSpan = document.getElementById(`like-count-${id}`); const icon = btn.querySelector('i'); let newCount = parseInt(countSpan.innerText); if (isLiked) { newCount--; localStorage.removeItem(`liked_${id}`); btn.classList.remove('liked'); icon.classList.replace('fa-solid', 'fa-regular'); } else { newCount++; localStorage.setItem(`liked_${id}`, 'true'); btn.classList.add('liked'); icon.classList.replace('fa-regular', 'fa-solid'); } countSpan.innerText = newCount; await updateDoc(doc(db, "news_posts", id), { likes: increment(isLiked ? -1 : 1) }); }
+        window.handleLike = async (id) => {
+            const isLiked = localStorage.getItem(`liked_${id}`); const btn = document.getElementById(`like-btn-${id}`); const countSpan = document.getElementById(`like-count-${id}`); const icon = btn.querySelector('i');
+            let newCount = parseInt(countSpan.innerText);
+            if (isLiked) { newCount--; localStorage.removeItem(`liked_${id}`); btn.classList.remove('liked'); icon.classList.replace('fa-solid', 'fa-regular'); } 
+            else { newCount++; localStorage.setItem(`liked_${id}`, 'true'); btn.classList.add('liked'); icon.classList.replace('fa-regular', 'fa-solid'); }
+            countSpan.innerText = newCount; await updateDoc(doc(db, "news_posts", id), { likes: increment(isLiked ? -1 : 1) });
+        }
         window.handleShare = (title) => { if (navigator.share) navigator.share({ title: 'EDU-LEAGUE Update', text: title, url: window.location.href }); else { navigator.clipboard.writeText(window.location.href); alert("Link copied!"); } }
-        window.openModal = (pid) => { currentPostId = pid; const cardEl = document.getElementById(`card-${pid}`); if(!cardEl) return; document.getElementById('modalTitle').innerText = cardEl.dataset.title; document.getElementById('modalBody').innerText = cardEl.dataset.content; document.getElementById('modalDate').innerText = cardEl.dataset.date; const imgEl = document.getElementById('modalImg'); const container = document.getElementById('media-container'); const existingVideo = container.querySelector('video'); if(existingVideo) existingVideo.remove(); imgEl.classList.add('hidden'); if (cardEl.dataset.isvideo === 'true') { const video = document.createElement('video'); video.src = cardEl.dataset.media; video.controls = true; video.autoplay = true; video.className = "w-full max-h-96 object-contain"; container.appendChild(video); } else { imgEl.src = cardEl.dataset.media; imgEl.classList.remove('hidden'); } document.getElementById('newsModal').classList.remove('hidden'); document.body.style.overflow = 'hidden'; const list = document.getElementById('comments-list'); list.innerHTML = '<p class="text-xs text-gray-400">Loading comments...</p>'; commentsUnsubscribe = onSnapshot(query(collection(db, "news_posts", pid, "comments"), orderBy("timestamp", "asc")), (snap) => { list.innerHTML = ''; snap.forEach(d => { const c = d.data(); list.innerHTML += `<div class="bg-gray-50 p-2 rounded-lg border text-sm"><p class="font-bold text-green-700 text-xs">${c.user}</p><p class="text-gray-700">${c.text}</p></div>`; }); }); }
+
+        window.openModal = (pid) => {
+            currentPostId = pid; const cardEl = document.getElementById(`card-${pid}`); if(!cardEl) return;
+            document.getElementById('modalTitle').innerText = cardEl.dataset.title; document.getElementById('modalBody').innerText = cardEl.dataset.content; document.getElementById('modalDate').innerText = cardEl.dataset.date;
+            const imgEl = document.getElementById('modalImg'); const container = document.getElementById('media-container'); const existingVideo = container.querySelector('video'); if(existingVideo) existingVideo.remove(); imgEl.classList.add('hidden');
+            if (cardEl.dataset.isvideo === 'true') { const video = document.createElement('video'); video.src = cardEl.dataset.media; video.controls = true; video.autoplay = true; video.className = "w-full max-h-96 object-contain"; container.appendChild(video); } 
+            else { imgEl.src = cardEl.dataset.media; imgEl.classList.remove('hidden'); }
+            document.getElementById('newsModal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
+            const list = document.getElementById('comments-list'); list.innerHTML = '<p class="text-xs text-gray-400">Loading comments...</p>';
+            commentsUnsubscribe = onSnapshot(query(collection(db, "news_posts", pid, "comments"), orderBy("timestamp", "asc")), (snap) => {
+                list.innerHTML = ''; snap.forEach(d => { const c = d.data(); list.innerHTML += `<div class="bg-gray-50 p-2 rounded-lg border text-sm"><p class="font-bold text-green-700 text-xs">${c.user}</p><p class="text-gray-700">${c.text}</p></div>`; });
+            });
+        }
         window.closeModal = () => { document.getElementById('newsModal').classList.add('hidden'); document.body.style.overflow = 'auto'; if(commentsUnsubscribe) commentsUnsubscribe(); }
         window.postComment = async (e) => { e.preventDefault(); if(!currentPostId) return; const t = document.getElementById('commentInput').value; const u = document.getElementById('commentName').value || "Fan"; if(!t)return; document.getElementById('commentInput').value=''; await addDoc(collection(db, "news_posts", currentPostId, "comments"), { user:u, text:t, timestamp: serverTimestamp() }); await updateDoc(doc(db, "news_posts", currentPostId), { commentsCount: increment(1) }); }
+
         window.loadTable = (lvl) => { ['Finalist','Penultimate','Sophomore','Female'].forEach(l => { const b=document.getElementById(`tab-${l}`); b.className = l===lvl ? "tab-active px-3 py-1 rounded text-xs font-bold" : "tab-inactive px-3 py-1 rounded text-xs font-bold"; }); onSnapshot(doc(db, "app_content", `league_table_${lvl.toLowerCase()}`), (s) => { const b = document.getElementById('league-table-body'); b.innerHTML = ''; if(!s.exists()) return; const d = s.data(); const teams = Object.keys(d).map(k=>({name:k, ...d[k]})).sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)); teams.forEach((t,i) => { b.innerHTML += `<tr class="border-b"><td class="p-3 font-bold ${i<4?'text-green-700':''}">${i+1}</td><td class="p-3 font-semibold text-blue-700 cursor-pointer hover:underline" onclick="openTeam('${t.name}')">${t.name}</td><td class="p-3 text-center">${t.mp}</td><td class="p-3 text-center">${t.gd}</td><td class="p-3 text-center font-black">${t.pts}</td></tr>`; }); }); }
         loadTable('Finalist');
         window.openTeam = async (name) => { const q = query(collection(db, "registrations"), where("department", "==", name)); const snap = await getDocs(q); if(!snap.empty) { const d = snap.docs[0].data(); document.getElementById('tm-name').textContent=d.department; document.getElementById('tm-coach').textContent="Coach: "+d.coachName; const asset = await getDoc(doc(db, "team_assets", name)); document.getElementById('tm-logo').src = asset.exists()?asset.data().logoUrl : 'edulogo.jpg'; document.getElementById('tm-roster').innerHTML = (d.players||[]).map(p=>`<li class="flex justify-between border-b pb-1"><span>${p.name}</span><span class="text-gray-400 text-xs">${p.position||''}</span></li>`).join('') || '<li>No players.</li>'; document.getElementById('teamModal').classList.remove('hidden'); } else alert("Team details not found."); }

@@ -65,13 +65,7 @@
         window.switchTab = (t) => { ['registrations','news','widget','schedule','league','stats','polls'].forEach(tab=>{ const el=document.getElementById(`tab-${tab}`); const btn=document.getElementById(`btn-${tab}`); if(el){ if(tab===t){el.classList.remove('hidden'); el.classList.add('fade-in'); btn.classList.replace('inactive','active');} else{el.classList.add('hidden'); el.classList.remove('fade-in'); btn.classList.replace('active','inactive');} } }); }
         function initDashboard() { loadRegistrations(); loadNewsHistory(); loadTableEditor(); populateTeamSelects(); loadSchedule(); loadTeamsForStatsDropdown(); loadLeaderboard('goals'); addWidgetMatchRow(); loadActivePolls(); loadTeamLogos(); }
 
-        window.loadTeamLogos = async () => {
-            const gallery = document.getElementById('logo-gallery'); gallery.innerHTML = '<p class="text-xs text-gray-400 col-span-full text-center">Fetching...</p>';
-            const snap = await getDocs(collection(db, "team_assets")); gallery.innerHTML = '';
-            if(snap.empty) { gallery.innerHTML = '<p class="text-xs text-gray-400 col-span-full text-center">No logos found.</p>'; return; }
-            snap.forEach(doc => { const d = doc.data(); gallery.innerHTML += `<div class="border rounded-lg p-2 text-center bg-gray-50 flex flex-col items-center"><img src="${d.logoUrl}" class="w-10 h-10 object-contain mb-1"><span class="text-[10px] font-bold text-gray-700 leading-tight block">${doc.id}</span><span class="text-[9px] text-gray-400 block">${d.levelUpdated || '-'}</span></div>`; });
-        }
-        
+        // --- IMPORT LOGIC ---
         window.loadImportMatches = async () => {
             const day = document.getElementById('importDay').value; const lvl = document.getElementById('importDiv').value; const select = document.getElementById('importMatchList'); select.innerHTML = '<option>Loading...</option>';
             const s = await getDoc(doc(db, "schedules", `schedule_${day.replace(/\s+/g, '_')}_${lvl}`.toLowerCase()));
@@ -126,7 +120,6 @@
 
         function populateTeamSelects() { const ops = DEPARTMENTS.map(d=>`<option>${d}</option>`).join(''); document.querySelectorAll('#logoDeptSelect, .w-teamA, .w-teamB').forEach(s=>s.innerHTML+=ops); }
         
-        // --- SPOTLIGHT WIDGET (FIXED) ---
         window.addWidgetMatchRow = (tA='',tB='',d='',t='',v='', cat='Finalist') => { 
             const div=document.createElement('div'); div.className="grid grid-cols-6 gap-2 mb-2 widget-row bg-white p-2 rounded border"; 
             div.innerHTML=`
