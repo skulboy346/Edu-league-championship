@@ -3,559 +3,414 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDU-LEAGUE Championship - Admin Panel</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <title>Admin Portal - EDU-LEAGUE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="edulogo.jpg" type="image/jpeg">
     <style>
-        /* =========================================
-           1. CSS STYLES (The Look & Feel)
-           ========================================= */
-        :root {
-            --primary-color: #1a1a2e;  /* Dark Blue/Black */
-            --secondary-color: #16213e; /* Lighter Dark Blue */
-            --accent-color: #e94560;    /* Red/Pink Accent */
-            --text-color: #333;
-            --light-bg: #f4f7f6;
-            --white: #ffffff;
-            --success: #27ae60;
-            --danger: #c0392b;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--light-bg);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* SIDEBAR NAVIGATION */
-        .sidebar {
-            width: 260px;
-            background-color: var(--primary-color);
-            color: var(--white);
-            display: flex;
-            flex-direction: column;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-        }
-
-        .brand-logo {
-            padding: 20px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            color: var(--accent-color);
-            letter-spacing: 1px;
-        }
-
-        .nav-links {
-            list-style: none;
-            padding: 0;
-            margin-top: 20px;
-        }
-
-        .nav-links li {
-            padding: 15px 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            color: #b0b0b0;
-            font-size: 1rem;
-        }
-
-        .nav-links li i { margin-right: 15px; width: 20px; text-align: center; }
-
-        .nav-links li:hover, .nav-links li.active {
-            background-color: var(--secondary-color);
-            color: var(--white);
-            border-left: 5px solid var(--accent-color);
-        }
-
-        /* MAIN CONTENT AREA */
-        .main-content {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto; /* Allows scrolling */
-        }
-
-        .header {
-            margin-bottom: 30px;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 15px;
-        }
-
-        h2 { color: var(--primary-color); margin: 0; }
-        p.subtitle { color: #777; margin-top: 5px; }
-
-        /* SECTIONS (Tabs) */
-        .section { display: none; animation: fadeIn 0.3s ease-in-out; }
-        .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* FORMS & CARDS */
-        .card {
-            background: var(--white);
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        input, select, textarea {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        button.btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            color: white;
-            transition: 0.2s;
-        }
-
-        .btn-primary { background-color: var(--secondary-color); }
-        .btn-accent { background-color: var(--accent-color); }
-        .btn-primary:hover { opacity: 0.9; }
-
-        /* TEAMS GRID LAYOUT */
-        .teams-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .team-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            text-align: center;
-            border-top: 4px solid var(--secondary-color);
-            position: relative;
-        }
-
-        .logo-display {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 10px;
-            border-radius: 50%;
-            border: 2px solid #eee;
-            overflow: hidden;
-            background: #fafafa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .logo-display img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* Upload Button Styles */
-        .upload-label {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 5px 15px;
-            background: #ddd;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            color: #333;
-        }
-        .upload-label:hover { background: #ccc; }
-        input[type="file"] { display: none; }
-
-        /* TABLES (For Matches) */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #ddd; }
-        th { background-color: #f8f9fa; color: var(--primary-color); }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .bg-edu-purple { background-color: #6d28d9; }
+        .text-edu-purple { color: #6d28d9; }
         
-        .status-live { color: red; font-weight: bold; }
-        .status-finished { color: green; }
-
-        /* UTILITIES */
-        .delete-btn { color: red; cursor: pointer; border: none; background: none; font-size: 1.1rem; }
-        .status-msg { font-size: 0.8rem; font-weight: bold; min-height: 20px; margin-top:5px;}
-        .text-orange { color: orange; }
-        .text-green { color: green; }
-        .text-red { color: red; }
-
+        /* Sidebar Active State */
+        .nav-item.active { background-color: #6d28d9; color: white; border-right: 4px solid #a78bfa; }
+        .nav-item { transition: all 0.3s; }
+        .nav-item:hover:not(.active) { background-color: #e5e7eb; color: #6d28d9; }
+        
+        /* Hide scrollbar for cleaner look */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Loader */
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #6d28d9; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
+<body class="flex h-screen overflow-hidden">
 
-    <div class="sidebar">
-        <div class="brand-logo">EDU-LEAGUE</div>
-        <ul class="nav-links">
-            <li class="active" onclick="switchTab('dashboard', this)">
-                <i class="fas fa-chart-pie"></i> Dashboard
-            </li>
-            <li onclick="switchTab('teams', this)">
-                <i class="fas fa-users"></i> Manage Teams
-            </li>
-            <li onclick="switchTab('matches', this)">
-                <i class="fas fa-futbol"></i> Manage Matches
-            </li>
-            <li onclick="switchTab('news', this)">
-                <i class="fas fa-newspaper"></i> News Updates
-            </li>
-        </ul>
-    </div>
-
-    <div class="main-content">
+    <aside class="w-64 bg-white shadow-xl z-20 flex flex-col hidden md:flex">
+        <div class="p-6 border-b flex items-center gap-3">
+            <img src="edulogo.jpg" class="h-10 w-10 rounded-full border-2 border-edu-purple">
+            <div>
+                <h1 class="font-black text-lg tracking-tighter text-gray-800">EDU-<span class="text-edu-purple">ADMIN</span></h1>
+                <p class="text-[10px] text-gray-400 font-bold tracking-widest">CONTROL PANEL</p>
+            </div>
+        </div>
         
-        <div id="dashboard" class="section active">
-            <div class="header">
-                <h2>Admin Dashboard</h2>
-                <p class="subtitle">Welcome to the EDU-LEAGUE Control Center</p>
-            </div>
-            <div class="card">
-                <h3>System Status</h3>
-                <p>Firebase Connection: <span id="connection-status" style="color:orange">Checking...</span></p>
-                <p>Select a tab from the left sidebar to manage your content.</p>
-            </div>
+        <nav class="flex-grow py-6 space-y-1">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active w-full flex items-center px-6 py-3 text-sm font-bold text-gray-600">
+                <i class="fa-solid fa-chart-pie w-6"></i> Dashboard
+            </button>
+            <button onclick="switchTab('matches')" id="nav-matches" class="nav-item w-full flex items-center px-6 py-3 text-sm font-bold text-gray-600">
+                <i class="fa-solid fa-futbol w-6"></i> Matches & Scores
+            </button>
+            <button onclick="switchTab('teams')" id="nav-teams" class="nav-item w-full flex items-center px-6 py-3 text-sm font-bold text-gray-600">
+                <i class="fa-solid fa-users-gear w-6"></i> Teams & Logos
+            </button>
+            <button onclick="switchTab('news')" id="nav-news" class="nav-item w-full flex items-center px-6 py-3 text-sm font-bold text-gray-600">
+                <i class="fa-solid fa-newspaper w-6"></i> News Center
+            </button>
+        </nav>
+
+        <div class="p-4 border-t bg-gray-50">
+            <a href="index.html" class="flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-red-500 transition">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout / Home
+            </a>
         </div>
+    </aside>
 
-        <div id="teams" class="section">
-            <div class="header">
-                <h2>Team Management</h2>
-                <p class="subtitle">Add teams and update individual logos (Saved in 'team_assets')</p>
-            </div>
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        <header class="md:hidden bg-white h-16 shadow flex items-center justify-between px-4 z-20">
+            <span class="font-black text-edu-purple">EDU-ADMIN</span>
+            <button onclick="document.querySelector('aside').classList.toggle('hidden'); document.querySelector('aside').classList.add('absolute', 'h-full');" class="text-gray-600"><i class="fa-solid fa-bars text-xl"></i></button>
+        </header>
 
-            <div class="card">
-                <h3>Add New Team</h3>
-                <div class="form-row">
-                    <input type="text" id="teamName" placeholder="Team Name (e.g. Science FC)">
-                    <input type="text" id="teamDivision" placeholder="Division (e.g. Group A)">
-                    <button class="btn btn-primary" onclick="addTeam()">+ Add Team</button>
-                </div>
-            </div>
-
-            <h3>Current Teams</h3>
-            <div id="teams-grid" class="teams-grid">
-                <p>Loading teams...</p>
-            </div>
-        </div>
-
-        <div id="matches" class="section">
-            <div class="header">
-                <h2>Match Management</h2>
-                <p class="subtitle">Schedule and update scores</p>
-            </div>
-
-            <div class="card">
-                <h3>Create Match</h3>
-                <div class="form-row">
-                    <input type="text" id="homeTeam" placeholder="Home Team">
-                    <input type="number" id="homeScore" placeholder="0">
-                    <span style="align-self:center; font-weight:bold;">VS</span>
-                    <input type="number" id="awayScore" placeholder="0">
-                    <input type="text" id="awayTeam" placeholder="Away Team">
-                </div>
-                <div class="form-row">
-                    <input type="date" id="matchDate">
-                    <select id="matchStatus">
-                        <option value="Scheduled">Scheduled</option>
-                        <option value="Live">Live</option>
-                        <option value="Finished">Finished</option>
-                    </select>
-                    <button class="btn btn-accent" onclick="addMatch()">Save Match</button>
-                </div>
-            </div>
-
-            <h3>Match List</h3>
-            <div class="card">
-                <table id="matches-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Home</th>
-                            <th>Score</th>
-                            <th>Away</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="matches-body">
-                        </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="news" class="section">
-            <div class="header">
-                <h2>News Updates</h2>
-                <p class="subtitle">Post announcements to the main site</p>
-            </div>
-
-            <div class="card">
-                <h3>Post News</h3>
-                <input type="text" id="newsTitle" placeholder="Headline Title" style="margin-bottom:10px; width:100%; box-sizing:border-box;">
-                <textarea id="newsContent" rows="5" placeholder="Write your article here..." style="margin-bottom:10px; width:100%; box-sizing:border-box;"></textarea>
-                <input type="text" id="newsImage" placeholder="Image URL (Optional)" style="margin-bottom:10px; width:100%; box-sizing:border-box;">
-                <button class="btn btn-primary" onclick="addNews()">Publish News</button>
-            </div>
-
-            <h3>Recent Posts</h3>
-            <div id="news-list">
-                </div>
-        </div>
-
-    </div>
-
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
-
-    <script>
-        // ----------------------------------------
-        // A. FIREBASE CONFIGURATION
-        // ----------------------------------------
-        const firebaseConfig = {
-            // !!! PASTE YOUR API KEYS HERE !!!
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Initialize
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.firestore();
-        const storage = firebase.storage();
-
-        // Check Connection
-        document.getElementById('connection-status').innerText = "Connected";
-        document.getElementById('connection-status').style.color = "green";
-
-        // Collection Names
-        const TEAMS_COLLECTION = "team_assets";
-        const MATCHES_COLLECTION = "matches";
-        const NEWS_COLLECTION = "news";
-
-        // ----------------------------------------
-        // B. TAB SWITCHING LOGIC
-        // ----------------------------------------
-        function switchTab(sectionId, navItem) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-            // Show target section
-            document.getElementById(sectionId).classList.add('active');
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50 no-scrollbar">
             
-            // Update sidebar active state
-            document.querySelectorAll('.nav-links li').forEach(li => li.classList.remove('active'));
-            navItem.classList.add('active');
-        }
-
-        // ----------------------------------------
-        // C. TEAM LOGIC (With Logo Fix)
-        // ----------------------------------------
-        function addTeam() {
-            const name = document.getElementById('teamName').value;
-            const div = document.getElementById('teamDivision').value;
-            if(!name) return alert("Please enter a team name");
-
-            db.collection(TEAMS_COLLECTION).add({
-                name: name,
-                division: div || "General",
-                logo: "", // Empty default
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                document.getElementById('teamName').value = "";
-                document.getElementById('teamDivision').value = "";
-                alert("Team Added Successfully!");
-            });
-        }
-
-        // Real-time Listener for Teams
-        db.collection(TEAMS_COLLECTION).onSnapshot(snapshot => {
-            const container = document.getElementById('teams-grid');
-            container.innerHTML = "";
-
-            if(snapshot.empty) {
-                container.innerHTML = "<p>No teams found. Add one above.</p>";
-                return;
-            }
-
-            snapshot.forEach(doc => {
-                const team = doc.data();
-                const id = doc.id;
-                const logoUrl = team.logo ? team.logo : "https://via.placeholder.com/150?text=No+Logo";
-
-                container.innerHTML += `
-                    <div class="team-card">
-                        <div class="logo-display">
-                            <img src="${logoUrl}" alt="Logo">
+            <div id="dashboard" class="section">
+                <h2 class="text-2xl font-black text-gray-800 mb-6">Overview</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-start">
+                            <div><p class="text-xs font-bold text-gray-400 uppercase">Total Teams</p><h3 class="text-3xl font-black text-gray-800 mt-1" id="stat-teams">...</h3></div>
+                            <div class="p-3 bg-purple-100 text-purple-600 rounded-lg"><i class="fa-solid fa-users"></i></div>
                         </div>
-                        <h4>${team.name}</h4>
-                        <p style="color:#666; font-size:0.9rem;">${team.division}</p>
-                        
-                        <div id="status-${id}" class="status-msg"></div>
-                        <label for="file-${id}" class="upload-label">
-                            <i class="fas fa-camera"></i> Change Logo
-                        </label>
-                        <input id="file-${id}" type="file" onchange="uploadLogo(event, '${id}')" accept="image/*">
-                        
-                        <div style="margin-top:10px;">
-                            <button onclick="deleteDoc('${TEAMS_COLLECTION}', '${id}')" class="delete-btn">
-                                <i class="fas fa-trash"></i>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-start">
+                            <div><p class="text-xs font-bold text-gray-400 uppercase">News Posts</p><h3 class="text-3xl font-black text-gray-800 mt-1" id="stat-news">...</h3></div>
+                            <div class="p-3 bg-green-100 text-green-600 rounded-lg"><i class="fa-solid fa-newspaper"></i></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-start">
+                            <div><p class="text-xs font-bold text-gray-400 uppercase">System Status</p><h3 class="text-lg font-bold text-green-600 mt-1">Online</h3></div>
+                            <div class="p-3 bg-blue-100 text-blue-600 rounded-lg"><i class="fa-solid fa-wifi"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="teams" class="section hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-black text-gray-800">Team Management</h2>
+                        <p class="text-sm text-gray-500">Manage registrations and upload official logos.</p>
+                    </div>
+                    <button onclick="loadTeams()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-rotate mr-1"></i> Refresh</button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-600">
+                            <thead class="bg-gray-50 text-xs uppercase font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-4">Logo</th>
+                                    <th class="p-4">Department / Team</th>
+                                    <th class="p-4">Coach</th>
+                                    <th class="p-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teams-table-body" class="divide-y divide-gray-100">
+                                <tr><td colspan="4" class="p-6 text-center text-gray-400">Loading teams from database...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="matches" class="section hidden">
+                <h2 class="text-2xl font-black text-gray-800 mb-2">Match Control</h2>
+                <p class="text-sm text-gray-500 mb-6">Update the 'Matchday Center' on the News page.</p>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 max-w-2xl">
+                    <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">Set Current Fixture</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 mb-1">Team A (Home)</label>
+                            <input type="text" id="match-teamA" class="w-full bg-gray-50 border rounded p-2 text-sm font-bold" placeholder="e.g. HKHE">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 mb-1">Team B (Away)</label>
+                            <input type="text" id="match-teamB" class="w-full bg-gray-50 border rounded p-2 text-sm font-bold" placeholder="e.g. NAAE">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 mb-1">Date</label>
+                            <input type="date" id="match-date" class="w-full bg-gray-50 border rounded p-2 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 mb-1">Time</label>
+                            <input type="text" id="match-time" class="w-full bg-gray-50 border rounded p-2 text-sm" placeholder="12:00 PM">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 mb-1">Venue</label>
+                            <input type="text" id="match-venue" class="w-full bg-gray-50 border rounded p-2 text-sm" placeholder="Sports Center">
+                        </div>
+                    </div>
+                    <button onclick="updateFixture()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg shadow transition">
+                        Update Matchday Center
+                    </button>
+                </div>
+            </div>
+
+            <div id="news" class="section hidden">
+                <h2 class="text-2xl font-black text-gray-800 mb-2">Newsroom</h2>
+                <p class="text-sm text-gray-500 mb-6">Publish updates to the community.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-fit">
+                        <h3 class="font-bold text-gray-800 mb-4">Draft New Post</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 mb-1">Headline</label>
+                                <input type="text" id="news-title" class="w-full bg-gray-50 border rounded-lg p-3 text-sm font-bold focus:ring-2 focus:ring-edu-purple outline-none" placeholder="Enter title...">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 mb-1">Content</label>
+                                <textarea id="news-content" rows="5" class="w-full bg-gray-50 border rounded-lg p-3 text-sm focus:ring-2 focus:ring-edu-purple outline-none" placeholder="Write your article..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 mb-1">Image/Video URL</label>
+                                <input type="text" id="news-image" class="w-full bg-gray-50 border rounded-lg p-3 text-sm" placeholder="https://...">
+                                <p class="text-[10px] text-gray-400 mt-1">Paste a link to an image or video.</p>
+                            </div>
+                            <button onclick="postNews()" class="w-full bg-edu-purple hover:bg-purple-800 text-white font-bold py-3 rounded-lg shadow transition flex justify-center items-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i> Publish Post
                             </button>
                         </div>
                     </div>
-                `;
-            });
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-800">Recent Posts</h3>
+                            <button onclick="loadNewsList()" class="text-xs text-edu-purple font-bold">Refresh</button>
+                        </div>
+                        <div id="admin-news-list" class="space-y-3 max-h-[500px] overflow-y-auto no-scrollbar">
+                            <p class="text-center text-xs text-gray-400 py-4">Loading posts...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+        // CONFIG FROM YOUR INDEX.HTML
+        const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
+        
+        // Auto-login for admin operations
+        signInAnonymously(auth).then(() => {
+            console.log("Admin Connected");
+            loadStats();
+            loadTeams(); // Load teams on start
+            loadNewsList();
         });
 
-        // UPLOAD FUNCTION (The Specific Fix)
-        function uploadLogo(event, teamId) {
+        // --- NAVIGATION ---
+        window.switchTab = (tabId) => {
+            document.querySelectorAll('.section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('nav-'+tabId).classList.add('active');
+        };
+
+        // --- DASHBOARD STATS ---
+        async function loadStats() {
+            const teamSnap = await getDocs(collection(db, "registrations"));
+            document.getElementById('stat-teams').innerText = teamSnap.size;
+            
+            const newsSnap = await getDocs(collection(db, "news_posts"));
+            document.getElementById('stat-news').innerText = newsSnap.size;
+        }
+
+        // --- TEAM & LOGO MANAGER (CRITICAL: SYNCED WITH NEWS.HTML) ---
+        window.loadTeams = async () => {
+            const tbody = document.getElementById('teams-table-body');
+            tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center"><div class="loader mx-auto"></div></td></tr>';
+
+            try {
+                // 1. Get all registrations (Index.html writes here)
+                const q = query(collection(db, "registrations"), orderBy("department"));
+                const querySnapshot = await getDocs(q);
+
+                if(querySnapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-gray-400">No teams registered yet.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                
+                for (const docSnap of querySnapshot.docs) {
+                    const data = docSnap.data();
+                    const deptName = data.department; // Used as ID for assets
+                    
+                    // 2. Fetch Logo from team_assets (News.html reads from here)
+                    let logoUrl = "edulogo.jpg";
+                    try {
+                        const assetSnap = await getDoc(doc(db, "team_assets", deptName));
+                        if (assetSnap.exists() && assetSnap.data().logoUrl) {
+                            logoUrl = assetSnap.data().logoUrl;
+                        }
+                    } catch (e) { console.log("No logo asset for", deptName); }
+
+                    // 3. Render Row
+                    const row = `
+                        <tr class="hover:bg-gray-50 transition border-b border-gray-50">
+                            <td class="p-4">
+                                <img src="${logoUrl}" class="h-10 w-10 rounded-full border border-gray-200 object-cover bg-white">
+                            </td>
+                            <td class="p-4">
+                                <p class="font-bold text-gray-800">${deptName}</p>
+                                <p class="text-xs text-gray-400">${data.level}</p>
+                            </td>
+                            <td class="p-4 text-sm font-semibold">${data.coachName}</td>
+                            <td class="p-4 flex gap-2">
+                                <label class="cursor-pointer bg-purple-100 hover:bg-purple-200 text-edu-purple px-3 py-1 rounded text-xs font-bold transition">
+                                    <i class="fa-solid fa-upload"></i> Logo
+                                    <input type="file" class="hidden" onchange="uploadLogo(event, '${deptName}')" accept="image/*">
+                                </label>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                }
+            } catch (error) {
+                console.error("Error loading teams:", error);
+                tbody.innerHTML = '<tr><td colspan="4" class="text-red-500 p-4 text-center">Error loading data. Check console.</td></tr>';
+            }
+        };
+
+        window.uploadLogo = async (event, deptName) => {
             const file = event.target.files[0];
             if (!file) return;
 
-            const statusEl = document.getElementById(`status-${teamId}`);
-            statusEl.innerText = "Uploading...";
-            statusEl.className = "status-msg text-orange";
+            const btn = event.target.parentElement;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
-            // Save to unique path: team_logos/TEAM_ID/filename
-            const ref = storage.ref(`team_logos/${teamId}/${Date.now()}_${file.name}`);
+            try {
+                // Upload to Firebase Storage
+                const storageRef = ref(storage, `logos/${deptName}_${Date.now()}`);
+                const snapshot = await uploadBytes(storageRef, file);
+                const url = await getDownloadURL(snapshot.ref);
+
+                // Write to Firestore 'team_assets' (Matches News.html logic)
+                await setDoc(doc(db, "team_assets", deptName), {
+                    logoUrl: url,
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+
+                alert(`Logo updated for ${deptName}!`);
+                loadTeams(); // Refresh list to show new logo
+
+            } catch (error) {
+                console.error("Upload failed", error);
+                alert("Upload failed. See console.");
+                btn.innerHTML = originalText;
+            }
+        };
+
+        // --- MATCHES MANAGER ---
+        window.updateFixture = async () => {
+            const fixture = {
+                teamA: document.getElementById('match-teamA').value,
+                teamB: document.getElementById('match-teamB').value,
+                date: document.getElementById('match-date').value,
+                time: document.getElementById('match-time').value,
+                venue: document.getElementById('match-venue').value,
+                category: "LEAGUE MATCH",
+                // Attempt to find logos or default
+                teamALogo: "edulogo.jpg", 
+                teamBLogo: "edulogo.jpg" 
+            };
             
-            ref.put(file).then(snapshot => {
-                return snapshot.ref.getDownloadURL();
-            }).then(url => {
-                // Update ONLY this team
-                db.collection(TEAMS_COLLECTION).doc(teamId).update({
-                    logo: url
-                }).then(() => {
-                    statusEl.innerText = "Success!";
-                    statusEl.className = "status-msg text-green";
-                    setTimeout(() => statusEl.innerText = "", 3000);
+            // Logic to fetch logo URLs for selected teams could go here, 
+            // but for simplicity, we update the text data which News.html reads.
+            
+            try {
+                // News.html reads app_content/current_fixture -> matches array
+                await setDoc(doc(db, "app_content", "current_fixture"), {
+                    matches: [fixture] // Replacing with single fixture for spotlight
+                }, { merge: true });
+                alert("Matchday Center Updated!");
+            } catch(e) {
+                console.error(e);
+                alert("Error updating match.");
+            }
+        };
+
+        // --- NEWS MANAGER ---
+        window.postNews = async () => {
+            const title = document.getElementById('news-title').value;
+            const content = document.getElementById('news-content').value;
+            const img = document.getElementById('news-image').value;
+
+            if(!title || !content) return alert("Title and Content required.");
+
+            try {
+                await addDoc(collection(db, "news_posts"), {
+                    title: title,
+                    content: content,
+                    imageUrl: img || "edulogo.jpg",
+                    timestamp: serverTimestamp(),
+                    likes: 0,
+                    commentsCount: 0
                 });
-            }).catch(err => {
-                console.error(err);
-                statusEl.innerText = "Error!";
-                statusEl.className = "status-msg text-red";
-            });
-        }
+                alert("News Published!");
+                document.getElementById('news-title').value = "";
+                document.getElementById('news-content').value = "";
+                document.getElementById('news-image').value = "";
+                loadNewsList();
+            } catch (e) {
+                console.error(e);
+                alert("Error posting news.");
+            }
+        };
 
-        // ----------------------------------------
-        // D. MATCH LOGIC
-        // ----------------------------------------
-        function addMatch() {
-            const home = document.getElementById('homeTeam').value;
-            const away = document.getElementById('awayTeam').value;
+        window.loadNewsList = async () => {
+            const list = document.getElementById('admin-news-list');
+            list.innerHTML = '<p class="text-xs text-gray-400 text-center">Loading...</p>';
             
-            if(!home || !away) return alert("Enter team names");
-
-            db.collection(MATCHES_COLLECTION).add({
-                homeTeam: home,
-                awayTeam: away,
-                homeScore: document.getElementById('homeScore').value || 0,
-                awayScore: document.getElementById('awayScore').value || 0,
-                date: document.getElementById('matchDate').value,
-                status: document.getElementById('matchStatus').value,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                alert("Match Created!");
-                // Clear form if needed
-            });
-        }
-
-        db.collection(MATCHES_COLLECTION).orderBy('timestamp', 'desc').onSnapshot(snapshot => {
-            const tbody = document.getElementById('matches-body');
-            tbody.innerHTML = "";
-
-            snapshot.forEach(doc => {
-                const match = doc.data();
-                const id = doc.id;
-                
-                // Color code status
-                let statusClass = "";
-                if(match.status === "Live") statusClass = "status-live";
-                if(match.status === "Finished") statusClass = "status-finished";
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${match.date || "TBD"}</td>
-                        <td>${match.homeTeam}</td>
-                        <td style="font-weight:bold;">${match.homeScore} - ${match.awayScore}</td>
-                        <td>${match.awayTeam}</td>
-                        <td class="${statusClass}">${match.status}</td>
-                        <td>
-                            <button onclick="deleteDoc('${MATCHES_COLLECTION}', '${id}')" class="delete-btn">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-        });
-
-        // ----------------------------------------
-        // E. NEWS LOGIC
-        // ----------------------------------------
-        function addNews() {
-            const title = document.getElementById('newsTitle').value;
-            const content = document.getElementById('newsContent').value;
-
-            if(!title) return alert("Title is required");
-
-            db.collection(NEWS_COLLECTION).add({
-                title: title,
-                content: content,
-                image: document.getElementById('newsImage').value,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => alert("News Published!"));
-        }
-
-        db.collection(NEWS_COLLECTION).orderBy('timestamp', 'desc').onSnapshot(snapshot => {
-            const list = document.getElementById('news-list');
-            list.innerHTML = "";
-
-            snapshot.forEach(doc => {
-                const news = doc.data();
-                const id = doc.id;
-
+            const q = query(collection(db, "news_posts"), orderBy("timestamp", "desc"));
+            const snap = await getDocs(q);
+            
+            list.innerHTML = '';
+            snap.forEach(doc => {
+                const d = doc.data();
                 list.innerHTML += `
-                    <div style="border-bottom:1px solid #ddd; padding:10px 0; display:flex; justify-content:space-between;">
-                        <div>
-                            <strong>${news.title}</strong>
-                            <p style="margin:5px 0; color:#666; font-size:0.9rem;">${news.content.substring(0, 50)}...</p>
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded border mb-2">
+                        <div class="truncate pr-2">
+                            <p class="font-bold text-sm text-gray-800 truncate">${d.title}</p>
+                            <p class="text-[10px] text-gray-500">${d.timestamp ? d.timestamp.toDate().toLocaleDateString() : 'Just now'}</p>
                         </div>
-                        <button onclick="deleteDoc('${NEWS_COLLECTION}', '${id}')" class="delete-btn">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <button onclick="deletePost('${doc.id}')" class="text-red-500 hover:text-red-700 text-xs font-bold"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
             });
-        });
+        };
 
-        // ----------------------------------------
-        // F. GENERAL UTILITIES
-        // ----------------------------------------
-        function deleteDoc(collection, id) {
-            if(confirm("Are you sure you want to delete this item?")) {
-                db.collection(collection).doc(id).delete().then(() => {
-                    // console.log("Deleted");
-                }).catch(err => alert("Error deleting: " + err.message));
+        window.deletePost = async (id) => {
+            if(confirm("Delete this post?")) {
+                await deleteDoc(doc(db, "news_posts", id));
+                loadNewsList();
             }
-        }
+        };
+
     </script>
 </body>
 </html>
