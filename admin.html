@@ -3,64 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDU-LEAGUE Team Logo Manager</title>
+    <title>Admin - Team Logo Manager</title>
     
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --accent-color: #3498db;
-            --bg-color: #f0f2f5;
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #3498db;
+            --success: #27ae60;
+            --bg: #f4f6f8;
         }
 
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: var(--bg-color); 
+            background-color: var(--bg); 
             margin: 0;
             padding: 20px;
         }
 
-        h1 { 
-            text-align: center; 
-            color: var(--primary-color);
-            margin-bottom: 30px;
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ddd;
         }
+
+        h1 { color: var(--primary); margin: 0; }
+        p.subtitle { color: #7f8c8d; margin-top: 5px; }
         
+        /* Grid Layout */
         .teams-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 25px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
+        /* Card Styling */
         .team-card {
             background: white;
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             text-align: center;
-            transition: transform 0.2s;
             border: 1px solid #e1e1e1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .team-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-        }
-
-        .logo-wrapper {
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 15px;
+        .logo-preview {
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             overflow: hidden;
-            border: 4px solid #f8f9fa;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 3px solid #ecf0f1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             background-color: #fff;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
         }
 
         .team-logo {
@@ -69,35 +73,43 @@
             object-fit: cover;
         }
 
-        h3 { margin: 10px 0 5px; color: var(--primary-color); }
-        p { color: #666; margin: 0 0 15px; font-size: 0.9em; }
+        h3 { margin: 5px 0; color: var(--secondary); font-size: 1.1rem; }
+        .division-badge { 
+            background: #ecf0f1; 
+            color: #7f8c8d; 
+            padding: 4px 10px; 
+            border-radius: 15px; 
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
 
-        /* Custom File Upload Button */
-        .upload-container {
-            position: relative;
-            margin-top: 15px;
+        /* Upload Button Styling */
+        .upload-area {
+            width: 100%;
+            margin-top: auto; /* Pushes button to bottom */
         }
 
         .custom-file-upload {
-            display: inline-block;
-            padding: 8px 20px;
+            display: block;
+            width: 100%;
+            padding: 10px 0;
             cursor: pointer;
-            background-color: var(--accent-color);
+            background-color: var(--accent);
             color: white;
-            border-radius: 20px;
+            border-radius: 8px;
             font-size: 14px;
             font-weight: 600;
-            transition: background 0.3s;
+            transition: background 0.2s;
+            text-align: center;
+            box-sizing: border-box;
         }
 
-        .custom-file-upload:hover {
-            background-color: #2980b9;
-        }
+        .custom-file-upload:hover { background-color: #2980b9; }
 
-        input[type="file"] {
-            display: none; /* Hide default ugly input */
-        }
+        input[type="file"] { display: none; }
 
+        /* Status Messages */
         .status-msg { 
             font-size: 0.85em; 
             margin-top: 8px; 
@@ -105,16 +117,21 @@
             font-weight: bold;
         }
         .text-uploading { color: #e67e22; }
-        .text-success { color: #27ae60; }
+        .text-success { color: var(--success); }
         .text-error { color: #c0392b; }
     </style>
 </head>
 <body>
 
-    <h1>Team Logo Management</h1>
+    <div class="header">
+        <h1>Admin Dashboard</h1>
+        <p class="subtitle">Manage Team Logos</p>
+    </div>
     
     <div id="teams-container" class="teams-grid">
-        <p style="text-align:center; width:100%; font-size:1.2em; color:#666;">Loading teams from database...</p>
+        <p style="text-align:center; width:100%; color:#666;">
+            Loading data from <strong>team_assets</strong>...
+        </p>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -123,10 +140,10 @@
 
     <script>
         // ==========================================
-        // 1. CONFIGURATION SECTION
+        // 1. CONFIGURATION
         // ==========================================
         
-        // PASTE YOUR KEYS INSIDE THE QUOTES BELOW
+        // --- IMPORTANT: PASTE YOUR FIREBASE KEYS HERE ---
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -143,20 +160,24 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
 
-        // DEFAULT LOGO: Change this URL to your general Department/League Logo
-        const DEFAULT_LOGO = "https://via.placeholder.com/150?text=EDU-LEAGUE"; 
+        // Fallback image if no logo is uploaded yet
+        const DEFAULT_LOGO = "https://via.placeholder.com/150?text=No+Logo"; 
 
         // ==========================================
-        // 2. RENDER LOGIC
+        // 2. RENDER LOGIC (Correct Collection)
         // ==========================================
         const teamsContainer = document.getElementById('teams-container');
 
-        // Listen to "teams" collection in real-time
-        db.collection("teams").onSnapshot((snapshot) => {
-            teamsContainer.innerHTML = ""; // Clear existing cards
+        // We listen to "team_assets" because that is where your data is
+        db.collection("team_assets").onSnapshot((snapshot) => {
+            teamsContainer.innerHTML = ""; 
             
             if(snapshot.empty) {
-                teamsContainer.innerHTML = "<p>No teams found in database.</p>";
+                teamsContainer.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; color: red;">
+                        <h3>No teams found!</h3>
+                        <p>Database connected, but 'team_assets' collection is empty.</p>
+                    </div>`;
                 return;
             }
 
@@ -164,33 +185,36 @@
                 const team = doc.data();
                 const teamId = doc.id;
                 
-                // DECISION: Use Custom Logo if exists, otherwise use Default
+                // Logic: Use uploaded logo OR default
                 const displayLogo = team.logo ? team.logo : DEFAULT_LOGO;
 
                 const cardHtml = `
                     <div class="team-card">
-                        <div class="logo-wrapper">
+                        <div class="logo-preview">
                             <img src="${displayLogo}" alt="${team.name}" class="team-logo">
                         </div>
                         <h3>${team.name || "Unnamed Team"}</h3>
-                        <p>${team.division || "No Division"}</p>
+                        <span class="division-badge">${team.division || "General"}</span>
 
-                        <div class="upload-container">
+                        <div class="upload-area">
                             <label for="file-${teamId}" class="custom-file-upload">
-                                Update Logo
+                                📷 Change Logo
                             </label>
                             <input id="file-${teamId}" type="file" onchange="uploadLogo(event, '${teamId}')" accept="image/*">
+                            <div id="status-${teamId}" class="status-msg"></div>
                         </div>
-                        <div id="status-${teamId}" class="status-msg"></div>
                     </div>
                 `;
                 
                 teamsContainer.innerHTML += cardHtml;
             });
+        }, (error) => {
+            console.error("Error getting documents: ", error);
+            teamsContainer.innerHTML = `<p style="color:red">Error loading teams. Check console (F12).</p>`;
         });
 
         // ==========================================
-        // 3. UPLOAD FUNCTION
+        // 3. UPLOAD LOGIC
         // ==========================================
         function uploadLogo(event, teamId) {
             const file = event.target.files[0];
@@ -201,15 +225,16 @@
             statusDiv.textContent = "Uploading...";
             statusDiv.className = "status-msg text-uploading";
 
-            // 1. Create Storage Reference: teams/TEAM_ID/filename
-            const storagePath = `teams/${teamId}/${Date.now()}_${file.name}`;
+            // Create Storage Reference
+            // Path: team_logos/TEAM_ID/filename
+            const storagePath = `team_logos/${teamId}/${Date.now()}_${file.name}`;
             const storageRef = storage.ref(storagePath);
             const uploadTask = storageRef.put(file);
 
-            // 2. Monitor Upload
+            // Monitor Upload
             uploadTask.on('state_changed', 
                 (snapshot) => {
-                    // Optional: Calculate progress % here if needed
+                    // Optional progress logic
                 }, 
                 (error) => {
                     console.error("Upload Error:", error);
@@ -217,17 +242,17 @@
                     statusDiv.className = "status-msg text-error";
                 }, 
                 () => {
-                    // 3. Upload Complete - Get URL
+                    // Success! Get URL and Update Database
                     uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                         
-                        // 4. Update Firestore for THIS team only
-                        db.collection("teams").doc(teamId).update({
+                        // Update 'team_assets' collection
+                        db.collection("team_assets").doc(teamId).update({
                             logo: downloadURL
                         }).then(() => {
-                            statusDiv.textContent = "Success! Logo Updated.";
+                            statusDiv.textContent = "Saved Successfully!";
                             statusDiv.className = "status-msg text-success";
                             
-                            // Reset message after 3 seconds
+                            // Clear message after 3 seconds
                             setTimeout(() => {
                                 statusDiv.textContent = "";
                             }, 3000);
