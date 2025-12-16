@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDU-LEAGUE Master Admin</title>
+    <title>EDU-LEAGUE Master Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-    
     <link rel="icon" href="edulogo.jpg" type="image/jpeg">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
         .bg-edu-purple { background-color: #6d28d9; }
         .text-edu-purple { color: #6d28d9; }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #c7c7c7; border-radius: 10px; }
         .tab-active { background: #ede9fe; color: #6d28d9; border-right: 4px solid #6d28d9; }
+        /* Loader */
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #6d28d9; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="bg-gray-100 h-screen flex overflow-hidden">
@@ -27,46 +25,45 @@
     <div id="login-modal" class="fixed inset-0 bg-gray-900/95 z-[100] flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-2xl p-8 max-w-sm w-full text-center">
             <div class="h-16 w-16 bg-edu-purple rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl font-black">E</div>
-            <h2 class="text-2xl font-black text-gray-800">Master Control</h2>
+            <h2 class="text-2xl font-black text-gray-800">Admin Access</h2>
             <form id="login-form" class="mt-6 space-y-4">
                 <input type="email" id="adm-email" placeholder="Email" class="w-full p-3 border rounded bg-gray-50 font-bold outline-none focus:border-edu-purple" required>
                 <input type="password" id="adm-pass" placeholder="Password" class="w-full p-3 border rounded bg-gray-50 font-bold outline-none focus:border-edu-purple" required>
-                <button type="submit" class="w-full bg-edu-purple text-white font-bold py-3 rounded hover:bg-purple-800 transition shadow-lg">AUTHENTICATE</button>
+                <button type="submit" class="w-full bg-edu-purple text-white font-bold py-3 rounded hover:bg-purple-800 transition shadow-lg">LOGIN</button>
             </form>
-            <p id="login-msg" class="text-red-500 text-xs font-bold mt-2 hidden">Invalid Credentials</p>
+            <p id="login-msg" class="text-red-500 text-xs font-bold mt-2 hidden">Access Denied</p>
         </div>
     </div>
 
     <aside class="w-64 bg-white border-r hidden md:flex flex-col z-20 shadow-xl">
         <div class="p-6 border-b flex items-center gap-3">
-            <img src="edulogo.jpg" class="h-8 w-8 rounded-full border border-gray-300">
             <h1 class="font-black text-xl text-gray-800 tracking-tighter">EDU-<span class="text-edu-purple">ADMIN</span></h1>
         </div>
         
         <nav class="flex-1 overflow-y-auto py-4 space-y-1">
-            <button onclick="nav('dashboard')" id="btn-dashboard" class="tab-active w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50 transition"><i class="fa-solid fa-gauge w-6"></i> Dashboard</button>
+            <button onclick="nav('dashboard')" id="btn-dashboard" class="tab-active w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50"><i class="fa-solid fa-gauge w-6"></i> Dashboard</button>
             
-            <div class="px-6 py-2 text-[10px] font-black text-gray-400 uppercase mt-2 tracking-widest">Team Management</div>
-            <button onclick="nav('verification')" id="btn-verification" class="w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50 transition"><i class="fa-solid fa-file-shield w-6"></i> Verification & PDF</button>
-            <button onclick="nav('teams')" id="btn-teams" class="w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50 transition"><i class="fa-solid fa-shirt w-6"></i> Assets (Logos)</button>
+            <div class="px-6 py-2 text-[10px] font-black text-gray-400 uppercase mt-2">Teams & Data</div>
+            <button onclick="nav('verification')" id="btn-verification" class="w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50"><i class="fa-solid fa-file-shield w-6"></i> Verification & PDF</button>
+            <button onclick="nav('teams')" id="btn-teams" class="w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50"><i class="fa-solid fa-shirt w-6"></i> Assets (Logos)</button>
+            <button onclick="nav('stats')" id="btn-stats" class="w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50"><i class="fa-solid fa-person-running w-6"></i> Player Stats</button>
+
+            <div class="px-6 py-2 text-[10px] font-black text-gray-400 uppercase mt-2">Competition</div>
+            <button onclick="nav('tables')" id="btn-tables" class="w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50"><i class="fa-solid fa-table-list w-6"></i> League Tables</button>
+            <button onclick="nav('schedule')" id="btn-schedule" class="w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50"><i class="fa-regular fa-calendar-days w-6"></i> Schedule & Live</button>
             
-            <div class="px-6 py-2 text-[10px] font-black text-gray-400 uppercase mt-2 tracking-widest">Competition</div>
-            <button onclick="nav('tables')" id="btn-tables" class="w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50 transition"><i class="fa-solid fa-table-list w-6"></i> League Tables</button>
-            <button onclick="nav('schedule')" id="btn-schedule" class="w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50 transition"><i class="fa-regular fa-calendar-days w-6"></i> Schedule & Live</button>
-            
-            <div class="px-6 py-2 text-[10px] font-black text-gray-400 uppercase mt-2 tracking-widest">Fan Engagement</div>
-            <button onclick="nav('news')" id="btn-news" class="w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50 transition"><i class="fa-solid fa-newspaper w-6"></i> News & Spotlight</button>
-            <button onclick="nav('fanz')" id="btn-fanz" class="w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50 transition"><i class="fa-solid fa-users-rays w-6"></i> Fan Zone (Polls)</button>
+            <div class="px-6 py-2 text-[10px] font-black text-gray-400 uppercase mt-2">News</div>
+            <button onclick="nav('news')" id="btn-news" class="w-full text-left px-6 py-3 font-bold text-sm text-gray-600 hover:bg-gray-50"><i class="fa-solid fa-newspaper w-6"></i> News & Spotlight</button>
         </nav>
         
         <div class="p-4 border-t bg-gray-50">
-            <button onclick="logout()" class="w-full flex items-center gap-2 text-xs font-bold text-red-500 hover:text-red-700 transition"><i class="fa-solid fa-power-off"></i> Secure Logout</button>
+            <button onclick="logout()" class="w-full flex items-center gap-2 text-xs font-bold text-red-500 hover:text-red-700"><i class="fa-solid fa-power-off"></i> Secure Logout</button>
         </div>
     </aside>
 
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
         <header class="h-16 bg-white border-b flex items-center justify-between px-6 md:hidden z-10">
-            <span class="font-black text-edu-purple">ADMIN PANEL</span>
+            <span class="font-black text-edu-purple">EDU-LEAGUE</span>
             <button onclick="document.querySelector('aside').classList.toggle('hidden'); document.querySelector('aside').classList.add('absolute', 'h-full', 'shadow-2xl');"><i class="fa-solid fa-bars text-xl"></i></button>
         </header>
 
@@ -74,23 +71,18 @@
 
             <div id="dashboard" class="section">
                 <h2 class="text-3xl font-black text-gray-800 mb-2">Dashboard</h2>
-                <p class="text-gray-500 mb-8">System Overview</p>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                        <div class="text-xs font-bold text-gray-400 uppercase">Registered Teams</div>
-                        <div class="text-4xl font-black text-edu-purple mt-2" id="dash-teams">0</div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-l-edu-purple">
+                        <div class="text-xs font-bold text-gray-400 uppercase">Registered</div>
+                        <div class="text-4xl font-black text-gray-800 mt-2" id="dash-teams">0</div>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                        <div class="text-xs font-bold text-gray-400 uppercase">Verified Teams</div>
-                        <div class="text-4xl font-black text-green-600 mt-2" id="dash-verified">0</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-l-green-500">
+                        <div class="text-xs font-bold text-gray-400 uppercase">Verified</div>
+                        <div class="text-4xl font-black text-gray-800 mt-2" id="dash-verified">0</div>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                        <div class="text-xs font-bold text-gray-400 uppercase">Matches Scheduled</div>
-                        <div class="text-4xl font-black text-blue-600 mt-2" id="dash-matches">0</div>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                        <div class="text-xs font-bold text-gray-400 uppercase">News Posts</div>
-                        <div class="text-4xl font-black text-orange-500 mt-2" id="dash-news">0</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-l-blue-500">
+                        <div class="text-xs font-bold text-gray-400 uppercase">Matches</div>
+                        <div class="text-4xl font-black text-gray-800 mt-2" id="dash-matches">0</div>
                     </div>
                 </div>
             </div>
@@ -100,17 +92,12 @@
                 <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
                     <div class="p-4 border-b bg-gray-50 flex justify-between items-center">
                         <span class="text-xs font-bold text-gray-500 uppercase">Team Roster</span>
-                        <button onclick="loadVerifications()" class="text-xs font-bold text-blue-600"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                        <button onclick="loadVerifications()" class="text-xs font-bold text-blue-600">Refresh</button>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left">
                             <thead class="bg-gray-100 text-xs uppercase font-bold text-gray-500">
-                                <tr>
-                                    <th class="p-4">Team</th>
-                                    <th class="p-4">Division</th>
-                                    <th class="p-4">Status</th>
-                                    <th class="p-4 text-right">Actions</th>
-                                </tr>
+                                <tr><th class="p-4">Team</th><th class="p-4">Division</th><th class="p-4">Status</th><th class="p-4 text-right">Actions</th></tr>
                             </thead>
                             <tbody id="verify-list" class="divide-y divide-gray-100"></tbody>
                         </table>
@@ -118,57 +105,71 @@
                 </div>
             </div>
 
-            <div id="tables" class="section hidden">
-                <h2 class="text-2xl font-black text-gray-800 mb-6">League Tables Manager</h2>
-                
-                <div class="flex space-x-2 mb-6 overflow-x-auto pb-2">
-                    <button onclick="loadTableData('Finalist')" class="bg-white border px-4 py-2 rounded-lg font-bold text-sm hover:border-edu-purple focus:ring-2 focus:ring-edu-purple">Finalist (400L)</button>
-                    <button onclick="loadTableData('Penultimate')" class="bg-white border px-4 py-2 rounded-lg font-bold text-sm hover:border-edu-purple focus:ring-2 focus:ring-edu-purple">Penultimate (300L)</button>
-                    <button onclick="loadTableData('Sophomore')" class="bg-white border px-4 py-2 rounded-lg font-bold text-sm hover:border-edu-purple focus:ring-2 focus:ring-edu-purple">Sophomore (200L)</button>
-                    <button onclick="loadTableData('Female')" class="bg-pink-50 border border-pink-200 text-pink-700 px-4 py-2 rounded-lg font-bold text-sm hover:bg-pink-100">Female League</button>
+            <div id="teams" class="section hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-black text-gray-800">Team Assets</h2>
+                    <button onclick="loadTeams()" class="text-xs bg-gray-200 px-3 py-1 rounded font-bold">Refresh</button>
                 </div>
+                <div id="assets-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
 
-                <div class="bg-white rounded-xl shadow-sm border p-6">
-                    <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <span id="current-table-title" class="text-edu-purple uppercase">Select a Division</span>
-                        <span class="text-xs text-gray-400 font-normal">(Editing Mode)</span>
-                    </h3>
-                    
-                    <div id="table-editor-container" class="space-y-3">
-                        <p class="text-gray-400 text-sm">Click a division button above to load team standings.</p>
+            <div id="stats" class="section hidden">
+                <h2 class="text-2xl font-black text-gray-800 mb-6">Player Stats Manager</h2>
+                <div class="bg-white p-6 rounded-xl shadow-sm border">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <select id="stat-team-select" class="p-3 border rounded font-bold bg-gray-50" onchange="loadTeamPlayers()">
+                            <option value="">Select Team...</option>
+                            </select>
+                        <select id="stat-player-select" class="p-3 border rounded bg-gray-50">
+                            <option value="">Select Player...</option>
+                        </select>
+                        <select id="stat-type" class="p-3 border rounded font-bold bg-gray-50">
+                            <option value="goals">Goal (+1)</option>
+                            <option value="assists">Assist (+1)</option>
+                            <option value="yellow_cards">Yellow Card</option>
+                            <option value="red_cards">Red Card</option>
+                            <option value="saves">Save (+1)</option>
+                        </select>
                     </div>
-                    
-                    <button onclick="saveTableUpdates()" id="save-table-btn" class="mt-6 w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition hidden">
-                        <i class="fa-solid fa-save mr-2"></i> SAVE STANDINGS
-                    </button>
+                    <button onclick="updateStat()" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700">UPDATE PLAYER STAT</button>
+                    <p id="stat-msg" class="text-center text-xs font-bold text-green-600 mt-2"></p>
                 </div>
             </div>
 
-            <div id="teams" class="section hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-black text-gray-800">Team Logos</h2>
-                    <button onclick="loadTeams()" class="text-xs bg-gray-200 px-3 py-1 rounded font-bold">Refresh</button>
+            <div id="tables" class="section hidden">
+                <h2 class="text-2xl font-black text-gray-800 mb-6">League Tables</h2>
+                <div class="flex space-x-2 mb-6 overflow-x-auto pb-2">
+                    <button onclick="loadTableData('Finalist (400Lvl)', 'Finalist')" class="bg-white border px-4 py-2 rounded-lg font-bold text-sm hover:border-edu-purple">Finalist</button>
+                    <button onclick="loadTableData('Penultimate (300Lvl)', 'Penultimate')" class="bg-white border px-4 py-2 rounded-lg font-bold text-sm hover:border-edu-purple">Penultimate</button>
+                    <button onclick="loadTableData('Sophomore (200Lvl)', 'Sophomore')" class="bg-white border px-4 py-2 rounded-lg font-bold text-sm hover:border-edu-purple">Sophomore</button>
+                    <button onclick="loadTableData('Female League', 'Female')" class="bg-pink-50 border border-pink-200 text-pink-700 px-4 py-2 rounded-lg font-bold text-sm">Female</button>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm border overflow-hidden p-4">
-                    <div id="assets-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+                <div class="bg-white rounded-xl shadow-sm border p-6">
+                    <h3 id="table-title" class="font-bold text-gray-800 mb-4 border-b pb-2 uppercase text-xs">Select Division</h3>
+                    <div id="table-editor-container" class="space-y-2"></div>
+                    <button onclick="saveTableUpdates()" id="save-table-btn" class="mt-6 w-full bg-green-600 text-white font-bold py-3 rounded-lg hidden">UPDATE STANDINGS</button>
                 </div>
             </div>
 
             <div id="schedule" class="section hidden">
-                <h2 class="text-2xl font-black text-gray-800 mb-6">Fixture Scheduler</h2>
+                <h2 class="text-2xl font-black text-gray-800 mb-6">Fixture Schedule</h2>
                 <div class="bg-white p-6 rounded-xl shadow-sm border mb-8">
+                    <h3 class="font-bold text-gray-700 mb-4 text-xs uppercase">Add New Fixture</h3>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                        <select id="fix-div" class="p-3 border rounded bg-gray-50 font-bold text-sm" onchange="filterTeamsByDiv()"><option value="">Select Division...</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-                        <select id="fix-day" class="p-3 border rounded bg-gray-50 font-bold text-sm"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Semi-Final</option><option>Final</option></select>
-                        <input type="date" id="fix-date" class="p-3 border rounded bg-gray-50 text-sm">
-                        <input type="time" id="fix-time" class="p-3 border rounded bg-gray-50 text-sm">
+                        <select id="fix-div" class="p-3 border rounded bg-gray-50 text-sm" onchange="filterTeamsByDiv()"><option value="">Division...</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
+                        <select id="fix-day" class="p-3 border rounded bg-gray-50 text-sm"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option><option>Semi-Final</option><option>Final</option></select>
+                        <select id="fix-home" class="p-3 border rounded bg-gray-50 font-bold text-sm"><option>Home</option></select>
+                        <select id="fix-away" class="p-3 border rounded bg-gray-50 font-bold text-sm"><option>Away</option></select>
                     </div>
                     <div class="grid grid-cols-2 gap-4 mb-4">
-                        <select id="fix-home" class="p-3 border rounded bg-gray-50 font-bold text-sm"><option>Home Team</option></select>
-                        <select id="fix-away" class="p-3 border rounded bg-gray-50 font-bold text-sm"><option>Away Team</option></select>
+                        <input type="date" id="fix-date" class="p-3 border rounded text-sm">
+                        <input type="time" id="fix-time" class="p-3 border rounded text-sm">
                     </div>
                     <button onclick="saveFixture()" class="w-full bg-edu-purple text-white font-bold py-3 rounded hover:bg-purple-800 transition">ADD FIXTURE</button>
                 </div>
+                
+                <h3 class="font-bold text-gray-700 mb-4 text-xs uppercase">Existing Schedule (Matchday 1-7)</h3>
                 <div id="active-fixtures" class="space-y-3"></div>
             </div>
 
@@ -189,32 +190,13 @@
                 </div>
             </div>
 
-            <div id="fanz" class="section hidden">
-                <h2 class="text-2xl font-black text-gray-800 mb-6">Fan Zone</h2>
-                <div class="bg-white p-6 rounded-xl shadow-sm border mb-6">
-                    <h3 class="font-bold text-purple-700 mb-4">Man of the Match Nominees</h3>
-                    <div class="grid grid-cols-3 gap-2 mb-4">
-                        <input id="motm-1" placeholder="Player 1" class="border p-2 rounded text-sm">
-                        <input id="motm-2" placeholder="Player 2" class="border p-2 rounded text-sm">
-                        <input id="motm-3" placeholder="Player 3" class="border p-2 rounded text-sm">
-                    </div>
-                    <div class="flex gap-2"><button onclick="setMOTM(true)" class="flex-1 bg-green-600 text-white py-2 rounded font-bold text-xs">OPEN VOTING</button><button onclick="setMOTM(false)" class="flex-1 bg-red-500 text-white py-2 rounded font-bold text-xs">CLOSE</button></div>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border">
-                    <h3 class="font-bold text-blue-700 mb-4">Create Poll</h3>
-                    <input id="poll-q" placeholder="Question" class="w-full border p-2 rounded mb-2 text-sm font-bold">
-                    <div class="grid grid-cols-2 gap-2 mb-4"><input id="poll-o1" placeholder="Option 1" class="border p-2 rounded text-sm"><input id="poll-o2" placeholder="Option 2" class="border p-2 rounded text-sm"></div>
-                    <button onclick="createPoll()" class="w-full bg-blue-600 text-white py-2 rounded font-bold text-xs">POST POLL</button>
-                </div>
-            </div>
-
         </div>
     </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, serverTimestamp, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, serverTimestamp, query, orderBy, where, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
         // CONFIG
@@ -224,7 +206,7 @@
         const auth = getAuth(app);
         const storage = getStorage(app);
 
-        // --- AUTH ---
+        // --- AUTH & INIT ---
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
             signInWithEmailAndPassword(auth, document.getElementById('adm-email').value, document.getElementById('adm-pass').value)
@@ -236,7 +218,6 @@
         });
         window.logout = () => signOut(auth);
 
-        // --- NAVIGATION ---
         window.nav = (id) => {
             document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
@@ -245,18 +226,28 @@
         }
 
         async function initData() {
-            loadVerifications();
-            loadTeams();
-            loadSchedule();
-            loadNews();
-            // Stats
+            // Dashboard Counts
             const t = await getDocs(collection(db, "registrations"));
             document.getElementById('dash-teams').innerText = t.size;
             document.getElementById('dash-verified').innerText = t.docs.filter(d => d.data().registrationStatus === "Verified").length;
             const m = await getDocs(collection(db, "matches"));
             document.getElementById('dash-matches').innerText = m.size;
-            const n = await getDocs(collection(db, "news_posts"));
-            document.getElementById('dash-news').innerText = n.size;
+            
+            // Populate Stats Team Dropdown
+            const teamSelect = document.getElementById('stat-team-select');
+            teamSelect.innerHTML = '<option value="">Select Team...</option>';
+            t.forEach(doc => {
+                const data = doc.data();
+                const opt = document.createElement('option');
+                opt.value = doc.id; // Use doc ID to fetch roster later
+                opt.textContent = `${data.department} (${data.level})`;
+                teamSelect.appendChild(opt);
+            });
+
+            loadVerifications();
+            loadTeams();
+            loadSchedule();
+            loadNews();
         }
 
         // --- 1. VERIFICATION & PDF ---
@@ -267,193 +258,209 @@
             list.innerHTML = '';
             s.forEach(docSnap => {
                 const d = docSnap.data();
-                const id = docSnap.id;
                 const statusColor = d.registrationStatus === "Verified" ? "text-green-600 bg-green-100" : "text-yellow-600 bg-yellow-100";
-                
                 list.innerHTML += `
                     <tr class="border-b hover:bg-gray-50">
-                        <td class="p-4">
-                            <div class="font-bold text-gray-800">${d.department}</div>
-                            <div class="text-xs text-gray-500">${d.teamName}</div>
-                        </td>
+                        <td class="p-4"><div class="font-bold text-gray-800">${d.department}</div></td>
                         <td class="p-4 text-xs font-bold text-gray-500">${d.level}</td>
                         <td class="p-4"><span class="${statusColor} px-2 py-1 rounded text-xs font-black uppercase">${d.registrationStatus || 'Pending'}</span></td>
                         <td class="p-4 text-right flex justify-end gap-2">
-                            <button onclick="verifyTeam('${id}')" class="bg-blue-600 text-white px-3 py-1 rounded text-xs font-bold hover:bg-blue-700">VERIFY</button>
-                            <button onclick="downloadPDF('${id}')" class="bg-gray-800 text-white px-3 py-1 rounded text-xs font-bold hover:bg-black"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                            <button onclick="verifyTeam('${docSnap.id}')" class="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">VERIFY</button>
+                            <button onclick="downloadPDF('${docSnap.id}')" class="bg-gray-800 text-white px-2 py-1 rounded text-xs font-bold">PDF</button>
                         </td>
-                    </tr>
-                `;
+                    </tr>`;
             });
         };
-
-        window.verifyTeam = async (id) => {
-            if(confirm("Mark this team as verified (Paid)?")) {
-                await updateDoc(doc(db, "registrations", id), { registrationStatus: "Verified" });
-                loadVerifications();
-            }
-        };
-
+        window.verifyTeam = async (id) => { if(confirm("Mark verified?")) { await updateDoc(doc(db,"registrations",id), {registrationStatus:"Verified"}); loadVerifications(); }};
         window.downloadPDF = async (id) => {
-            const { jsPDF } = window.jspdf;
-            const docSnap = await getDoc(doc(db, "registrations", id));
-            const data = docSnap.data();
-            
-            const pdf = new jsPDF();
-            pdf.setFontSize(22); pdf.setTextColor(109, 40, 217); pdf.text("EDU-LEAGUE TEAM DATA", 20, 20);
-            
-            pdf.setFontSize(12); pdf.setTextColor(0, 0, 0);
-            pdf.text(`Department: ${data.department}`, 20, 40);
-            pdf.text(`Level/Division: ${data.level}`, 20, 50);
-            pdf.text(`Coach Name: ${data.coachName}`, 20, 60);
-            pdf.text(`Contact: ${data.phone}`, 20, 70);
-            pdf.text(`Status: ${data.registrationStatus}`, 20, 80);
-            
-            pdf.text("Registered Players:", 20, 100);
-            const rows = (data.players || []).map(p => [p.name, p.position, p.level]);
-            pdf.autoTable({
-                head: [['Name', 'Position', 'Level']],
-                body: rows,
-                startY: 110,
-                theme: 'grid'
-            });
-            
-            pdf.save(`${data.department}_Details.pdf`);
+            const { jsPDF } = window.jspdf; const docSnap = await getDoc(doc(db,"registrations",id)); const data = docSnap.data();
+            const pdf = new jsPDF(); pdf.setFontSize(22); pdf.setTextColor(109,40,217); pdf.text("EDU-LEAGUE TEAM DATA",20,20);
+            pdf.setFontSize(12); pdf.setTextColor(0); pdf.text(`Dept: ${data.department} | Level: ${data.level}`,20,40); pdf.text(`Coach: ${data.coachName} | Contact: ${data.phone}`,20,50);
+            pdf.autoTable({ head:[['Name','Position','Level']], body:(data.players||[]).map(p=>[p.name,p.position,p.level]), startY:60 });
+            pdf.save(`${data.department}_Roster.pdf`);
         };
 
-        // --- 2. LEAGUE TABLES ---
-        let currentDiv = '';
-        window.loadTableData = async (division) => {
-            currentDiv = division;
-            document.getElementById('current-table-title').innerText = division + " Division Table";
-            document.getElementById('save-table-btn').classList.remove('hidden');
-            const container = document.getElementById('table-editor-container');
-            container.innerHTML = '<p class="text-center text-gray-400">Loading data...</p>';
-
-            // 1. Get all registered teams in this division
-            const q = query(collection(db, "registrations"), where("division", "==", division === "Female" ? "Female" : "Male"));
-            // Note: Adjust query based on your exact field names. Assuming user selects 'Finalist (400Lvl)' etc.
-            // Simplified: We fetch the stored table first.
-            
-            const tableDoc = await getDoc(doc(db, "app_content", `league_table_${division}`));
-            let tableData = tableDoc.exists() ? tableDoc.data() : {};
-            
-            container.innerHTML = `
-                <div class="grid grid-cols-12 gap-2 text-xs font-bold text-gray-500 uppercase mb-2 border-b pb-2">
-                    <div class="col-span-4">Team</div>
-                    <div class="col-span-2 text-center">Played</div>
-                    <div class="col-span-2 text-center">GD</div>
-                    <div class="col-span-2 text-center">Points</div>
-                    <div class="col-span-2"></div>
-                </div>
-            `;
-
-            // If table is empty, maybe try to populate from registrations (Optional advanced feature)
-            // For now, we list existing entries in the table object.
-            
-            Object.keys(tableData).forEach(teamName => {
-                const t = tableData[teamName];
-                container.innerHTML += `
-                    <div class="grid grid-cols-12 gap-2 items-center mb-2 team-row" data-name="${teamName}">
-                        <div class="col-span-4 font-bold text-gray-800">${teamName}</div>
-                        <input type="number" class="col-span-2 border p-1 rounded text-center inp-mp" value="${t.mp || 0}">
-                        <input type="number" class="col-span-2 border p-1 rounded text-center inp-gd" value="${t.gd || 0}">
-                        <input type="number" class="col-span-2 border p-1 rounded text-center font-black inp-pts" value="${t.pts || 0}">
-                        <button onclick="this.parentElement.remove()" class="col-span-2 text-red-500 text-xs font-bold">Remove</button>
-                    </div>
-                `;
-            });
-            
-            // Add New Team Row
-            container.innerHTML += `
-                <div class="mt-4 pt-4 border-t">
-                    <input id="new-team-name" placeholder="Add Team Name" class="border p-2 rounded text-sm w-1/2">
-                    <button onclick="addTeamToTable()" class="bg-blue-600 text-white px-3 py-2 rounded text-xs font-bold">ADD TEAM</button>
-                </div>
-            `;
-        };
-
-        window.addTeamToTable = () => {
-            const name = document.getElementById('new-team-name').value;
-            if(!name) return;
-            const container = document.querySelector('#table-editor-container .mt-4'); // Insert before input
-            const row = document.createElement('div');
-            row.className = "grid grid-cols-12 gap-2 items-center mb-2 team-row";
-            row.dataset.name = name;
-            row.innerHTML = `
-                <div class="col-span-4 font-bold text-gray-800">${name}</div>
-                <input type="number" class="col-span-2 border p-1 rounded text-center inp-mp" value="0">
-                <input type="number" class="col-span-2 border p-1 rounded text-center inp-gd" value="0">
-                <input type="number" class="col-span-2 border p-1 rounded text-center font-black inp-pts" value="0">
-                <button onclick="this.parentElement.remove()" class="col-span-2 text-red-500 text-xs font-bold">Remove</button>
-            `;
-            document.getElementById('table-editor-container').insertBefore(row, container);
-            document.getElementById('new-team-name').value = "";
-        };
-
-        window.saveTableUpdates = async () => {
-            const rows = document.querySelectorAll('.team-row');
-            let newData = {};
-            rows.forEach(r => {
-                newData[r.dataset.name] = {
-                    mp: parseInt(r.querySelector('.inp-mp').value) || 0,
-                    gd: parseInt(r.querySelector('.inp-gd').value) || 0,
-                    pts: parseInt(r.querySelector('.inp-pts').value) || 0
-                };
-            });
-            await setDoc(doc(db, "app_content", `league_table_${currentDiv}`), newData);
-            alert("Table Updated Successfully!");
-        };
-
-        // --- 3. TEAMS & LOGOS ---
-        let allTeamsCache = [];
+        // --- 2. ASSETS (WITH DIVISIONS) ---
         window.loadTeams = async () => {
-            const grid = document.getElementById('assets-grid');
-            grid.innerHTML = '<p>Loading...</p>';
-            const q = query(collection(db, "registrations"), orderBy("department"));
-            const snap = await getDocs(q);
+            const grid = document.getElementById('assets-grid'); grid.innerHTML = '<p>Loading...</p>';
+            const s = await getDocs(query(collection(db,"registrations"), orderBy("department")));
             grid.innerHTML = '';
-            allTeamsCache = [];
-            
-            for(const d of snap.docs) {
+            for(const d of s.docs) {
                 const data = d.data();
-                allTeamsCache.push(data);
-                const dept = data.department;
                 let logo = "edulogo.jpg";
-                try { const a = await getDoc(doc(db, "team_assets", dept)); if(a.exists()) logo = a.data().logoUrl; } catch(e){}
-                
+                try { const a = await getDoc(doc(db,"team_assets",data.department)); if(a.exists()) logo = a.data().logoUrl; } catch(e){}
                 grid.innerHTML += `
-                    <div class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50">
-                        <img src="${logo}" class="h-10 w-10 rounded-full bg-white object-cover border">
+                    <div class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 bg-white">
+                        <img src="${logo}" class="h-12 w-12 rounded-full border bg-white object-cover">
                         <div class="flex-1">
-                            <h4 class="font-bold text-sm text-gray-800">${dept}</h4>
-                            <label class="text-xs text-blue-600 cursor-pointer font-bold hover:underline">
-                                Change Logo <input type="file" class="hidden" onchange="upLogo(event, '${dept}')">
+                            <h4 class="font-bold text-sm text-gray-800">${data.department}</h4>
+                            <p class="text-[10px] text-gray-500 font-bold uppercase">${data.level}</p> <label class="text-xs text-blue-600 cursor-pointer font-bold hover:underline">
+                                Change Logo <input type="file" class="hidden" onchange="upLogo(event, '${data.department}')">
                             </label>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
         };
         window.upLogo = async (e, id) => {
             const f = e.target.files[0]; if(!f) return;
             const r = ref(storage, `logos/${id}_${Date.now()}`);
-            await uploadBytes(r, f);
-            const u = await getDownloadURL(r);
-            await setDoc(doc(db, "team_assets", id), { logoUrl: u }, { merge: true });
-            alert("Saved"); loadTeams();
+            await uploadBytes(r, f); const u = await getDownloadURL(r);
+            await setDoc(doc(db,"team_assets",id), { logoUrl: u }, { merge: true });
+            alert("Logo Updated"); loadTeams();
         };
 
-        // --- 4. SCHEDULE ---
+        // --- 3. PLAYER STATS (NEW) ---
+        window.loadTeamPlayers = async () => {
+            const teamId = document.getElementById('stat-team-select').value;
+            const pSelect = document.getElementById('stat-player-select');
+            pSelect.innerHTML = '<option value="">Loading...</option>';
+            if(!teamId) { pSelect.innerHTML = '<option value="">Select Team First</option>'; return; }
+            
+            const d = await getDoc(doc(db, "registrations", teamId));
+            const players = d.data().players || [];
+            
+            pSelect.innerHTML = '<option value="">Select Player...</option>';
+            players.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.name; 
+                opt.textContent = `${p.name} (${p.position})`;
+                pSelect.appendChild(opt);
+            });
+        };
+        window.updateStat = async () => {
+            const teamId = document.getElementById('stat-team-select').value;
+            const playerName = document.getElementById('stat-player-select').value;
+            const statType = document.getElementById('stat-type').value;
+            
+            if(!teamId || !playerName) return alert("Select team and player");
+            
+            // We update a specific stats collection or the team document
+            // Assuming we update a global stats collection for the "Stats Center"
+            // Document ID structure: TEAMID_PLAYERNAME
+            const statId = `${teamId}_${playerName.replace(/\s+/g, '')}`;
+            
+            await setDoc(doc(db, "player_stats", statId), {
+                name: playerName,
+                teamId: teamId,
+                [statType]: increment(1)
+            }, { merge: true });
+            
+            const msg = document.getElementById('stat-msg');
+            msg.textContent = `${statType.toUpperCase()} added for ${playerName}`;
+            setTimeout(() => msg.textContent = '', 3000);
+        };
+
+        // --- 4. LEAGUE TABLES (AUTO-FILL) ---
+        let curDivCode = '';
+        window.loadTableData = async (regLevel, shortCode) => {
+            curDivCode = shortCode;
+            document.getElementById('table-title').textContent = `${shortCode} TABLE (EDIT MODE)`;
+            const container = document.getElementById('table-editor-container');
+            container.innerHTML = '<p class="text-center text-gray-400">Fetching Teams...</p>';
+            
+            // 1. Get Existing Table Data
+            const tableDoc = await getDoc(doc(db, "app_content", `league_table_${shortCode}`));
+            const existingData = tableDoc.exists() ? tableDoc.data() : {};
+            
+            // 2. Get All Registered Teams for this Division
+            // Note: Adjust the 'where' clause if your registration levels are different strings
+            // You provided: "Finalist (400Lvl)", "Female League", etc.
+            let levelQuery = regLevel;
+            // Handle generic "Male" division case if specific levels aren't used for queries, but typically exact match:
+            const q = query(collection(db, "registrations"), where("level", "==", regLevel));
+            const regSnap = await getDocs(q);
+            
+            container.innerHTML = `
+                <div class="grid grid-cols-12 gap-1 text-[10px] font-bold text-gray-500 uppercase mb-2 border-b pb-1">
+                    <div class="col-span-4">Team</div><div class="col-span-2 text-center">PL</div><div class="col-span-2 text-center">GD</div><div class="col-span-2 text-center">PTS</div>
+                </div>`;
+            
+            // Merge Data
+            const teamsMap = {};
+            // First, load from existing table to keep scores
+            Object.keys(existingData).forEach(name => teamsMap[name] = existingData[name]);
+            // Then, ensure all registered teams are present
+            regSnap.forEach(d => {
+                const name = d.data().department;
+                if(!teamsMap[name]) teamsMap[name] = { mp:0, gd:0, pts:0 };
+            });
+
+            // Convert to array and sort
+            const sortedTeams = Object.keys(teamsMap).map(k => ({name:k, ...teamsMap[k]}))
+                                      .sort((a,b) => b.pts - a.pts || b.gd - a.gd);
+
+            sortedTeams.forEach(t => {
+                container.innerHTML += `
+                    <div class="grid grid-cols-12 gap-1 items-center mb-2 team-row" data-name="${t.name}">
+                        <div class="col-span-4 font-bold text-gray-800 text-xs truncate">${t.name}</div>
+                        <input type="number" class="col-span-2 border rounded text-center text-xs inp-mp" value="${t.mp}">
+                        <input type="number" class="col-span-2 border rounded text-center text-xs inp-gd" value="${t.gd}">
+                        <input type="number" class="col-span-2 border rounded text-center text-xs font-black inp-pts" value="${t.pts}">
+                    </div>`;
+            });
+            document.getElementById('save-table-btn').classList.remove('hidden');
+        };
+
+        window.saveTableUpdates = async () => {
+            const rows = document.querySelectorAll('.team-row');
+            let data = {};
+            rows.forEach(r => {
+                data[r.dataset.name] = {
+                    mp: parseInt(r.querySelector('.inp-mp').value)||0,
+                    gd: parseInt(r.querySelector('.inp-gd').value)||0,
+                    pts: parseInt(r.querySelector('.inp-pts').value)||0
+                };
+            });
+            await setDoc(doc(db, "app_content", `league_table_${curDivCode}`), data);
+            alert("Table Updated!");
+        };
+
+        // --- 5. SCHEDULE (FETCH EXISTING) ---
+        let teamCache = [];
+        window.loadSchedule = async () => {
+            // Populate Dropdowns
+            if(teamCache.length === 0) {
+                const s = await getDocs(collection(db,"registrations"));
+                s.forEach(d => teamCache.push(d.data()));
+            }
+
+            const el = document.getElementById('active-fixtures');
+            el.innerHTML='<p class="text-center text-gray-400">Loading Schedule...</p>';
+            
+            // FETCH EXISTING MATCHES
+            const q = query(collection(db, "matches"), orderBy("date", "asc"));
+            const snap = await getDocs(q);
+            
+            el.innerHTML = '';
+            if(snap.empty) { el.innerHTML = '<p class="text-center text-gray-400">No matches found.</p>'; return; }
+
+            snap.forEach(d => {
+                const m = d.data();
+                el.innerHTML += `
+                    <div class="bg-white p-3 border-l-4 border-edu-purple shadow-sm flex justify-between items-center rounded">
+                        <div>
+                            <p class="text-[10px] font-black text-gray-400 uppercase">${m.div || 'League'} • ${m.day || 'Matchday'}</p>
+                            <p class="font-bold text-sm">${m.home} <span class="text-gray-400 text-xs">VS</span> ${m.away}</p>
+                            <p class="text-xs text-gray-500">${m.date} @ ${m.time}</p>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <button onclick="setLive('${m.home}','${m.away}')" class="text-[10px] bg-red-100 text-red-600 px-2 py-1 rounded font-bold">LIVE</button>
+                            <button onclick="deleteMatch('${d.id}')" class="text-[10px] text-gray-400">DEL</button>
+                        </div>
+                    </div>`;
+            });
+        };
+
         window.filterTeamsByDiv = () => {
             const div = document.getElementById('fix-div').value;
             const h = document.getElementById('fix-home'); const a = document.getElementById('fix-away');
             h.innerHTML='<option>Home</option>'; a.innerHTML='<option>Away</option>';
-            allTeamsCache.filter(t => t.level === div || (div==="Female League" && t.division==="Female")).forEach(t => {
+            teamCache.filter(t => t.level === div || (div==="Female League" && t.division==="Female")).forEach(t => {
                 h.innerHTML+=`<option value="${t.department}">${t.department}</option>`;
                 a.innerHTML+=`<option value="${t.department}">${t.department}</option>`;
             });
         };
+
         window.saveFixture = async () => {
             const f = {
                 div: document.getElementById('fix-div').value, day: document.getElementById('fix-day').value,
@@ -465,22 +472,7 @@
             await addDoc(collection(db, "matches"), f);
             alert("Added"); loadSchedule();
         };
-        window.loadSchedule = async () => {
-            const el = document.getElementById('active-fixtures'); el.innerHTML='Loading...';
-            const s = await getDocs(query(collection(db, "matches"), orderBy("date", "desc")));
-            el.innerHTML='';
-            s.forEach(d => {
-                const m = d.data();
-                el.innerHTML += `
-                    <div class="bg-white p-3 border-l-4 border-edu-purple shadow-sm flex justify-between items-center rounded">
-                        <div><p class="text-[10px] font-black text-gray-400 uppercase">${m.div} • ${m.day}</p><p class="font-bold text-sm">${m.home} vs ${m.away}</p><p class="text-xs text-gray-500">${m.date} @ ${m.time}</p></div>
-                        <div class="flex flex-col gap-1">
-                            <button onclick="setLive('${m.home}','${m.away}')" class="text-[10px] bg-red-100 text-red-600 px-2 py-1 rounded font-bold">SET LIVE</button>
-                            <button onclick="deleteDoc(doc(db,'matches','${d.id}'));loadSchedule()" class="text-[10px] text-gray-400">DELETE</button>
-                        </div>
-                    </div>`;
-            });
-        };
+
         window.setLive = async (h, a) => {
             let l1="edulogo.jpg", l2="edulogo.jpg";
             try{ const a1=await getDoc(doc(db,"team_assets",h)); if(a1.exists())l1=a1.data().logoUrl;
@@ -488,25 +480,14 @@
             await setDoc(doc(db, "app_content", "current_fixture"), { matches: [{teamA:h, teamB:a, teamALogo:l1, teamBLogo:l2, category:"LIVE", date:"TODAY", time:"NOW", venue:"MAIN BOWL"}] });
             alert("Updated Matchday Widget");
         };
+        window.deleteMatch = async(id) => { if(confirm("Delete?")) { await deleteDoc(doc(db,"matches",id)); loadSchedule(); }};
 
-        // --- 5. FAN ZONE & NEWS ---
-        window.setMOTM = async (a) => {
-            const n = [document.getElementById('motm-1').value, document.getElementById('motm-2').value, document.getElementById('motm-3').value];
-            await setDoc(doc(db, "app_content", "fan_zone"), { motm: {active:a, nominees:n, votes:[0,0,0]} }, {merge:true});
-            alert(a?"Voting Open":"Voting Closed");
-        };
-        window.createPoll = async () => {
-            const q=document.getElementById('poll-q').value, o1=document.getElementById('poll-o1').value, o2=document.getElementById('poll-o2').value;
-            if(!q)return;
-            await addDoc(collection(db,"polls"), {question:q, opt1:o1, opt2:o2, votes1:0, votes2:0, active:true, timestamp:serverTimestamp()});
-            alert("Poll Posted");
-        };
+        // --- 6. NEWS ---
         window.publishNews = async () => {
             await addDoc(collection(db,"news_posts"), {
                 title:document.getElementById('news-title').value, content:document.getElementById('news-body').value,
                 imageUrl:document.getElementById('news-img').value, timestamp:serverTimestamp(), likes:0, commentsCount:0
-            });
-            alert("Published"); loadNews();
+            }); alert("Published"); loadNews();
         };
         window.loadNews = async () => {
             const c=document.getElementById('news-feed'); c.innerHTML='';
