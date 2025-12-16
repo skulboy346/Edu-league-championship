@@ -3,221 +3,559 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - EDU-LEAGUE</title>
+    <title>EDU-LEAGUE Championship - Admin Panel</title>
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
+        /* =========================================
+           1. CSS STYLES (The Look & Feel)
+           ========================================= */
         :root {
-            --primary: #2c3e50;
-            --accent: #3498db;
-            --danger: #e74c3c;
+            --primary-color: #1a1a2e;  /* Dark Blue/Black */
+            --secondary-color: #16213e; /* Lighter Dark Blue */
+            --accent-color: #e94560;    /* Red/Pink Accent */
+            --text-color: #333;
+            --light-bg: #f4f7f6;
+            --white: #ffffff;
             --success: #27ae60;
-            --bg: #f4f7f6;
+            --danger: #c0392b;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        
-        .container { max-width: 1200px; margin: 0 auto; }
-        
-        header { text-align: center; margin-bottom: 30px; }
-        h1 { color: var(--primary); }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-        /* ADD TEAM FORM */
-        .admin-panel {
+        /* SIDEBAR NAVIGATION */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .brand-logo {
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: var(--accent-color);
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .nav-links li {
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            color: #b0b0b0;
+            font-size: 1rem;
+        }
+
+        .nav-links li i { margin-right: 15px; width: 20px; text-align: center; }
+
+        .nav-links li:hover, .nav-links li.active {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            border-left: 5px solid var(--accent-color);
+        }
+
+        /* MAIN CONTENT AREA */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto; /* Allows scrolling */
+        }
+
+        .header {
+            margin-bottom: 30px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 15px;
+        }
+
+        h2 { color: var(--primary-color); margin: 0; }
+        p.subtitle { color: #777; margin-top: 5px; }
+
+        /* SECTIONS (Tabs) */
+        .section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* FORMS & CARDS */
+        .card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        input, select, textarea {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button.btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            transition: 0.2s;
+        }
+
+        .btn-primary { background-color: var(--secondary-color); }
+        .btn-accent { background-color: var(--accent-color); }
+        .btn-primary:hover { opacity: 0.9; }
+
+        /* TEAMS GRID LAYOUT */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .team-card {
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            display: flex;
-            gap: 10px;
-            align-items: flex-end;
-            flex-wrap: wrap;
-        }
-
-        .form-group { flex: 1; min-width: 200px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
-        .form-group input { 
-            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; 
-        }
-
-        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; }
-        .btn-add { background: var(--success); }
-        .btn-del { background: var(--danger); font-size: 0.8em; margin-top: 10px; }
-        .btn-upload { background: var(--accent); display: block; width: 100%; margin-top: 10px; text-align: center; }
-
-        /* TEAM GRID */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             text-align: center;
-            border-top: 5px solid var(--accent);
+            border-top: 4px solid var(--secondary-color);
             position: relative;
         }
 
-        .logo-box {
-            width: 80px;
-            height: 80px;
+        .logo-display {
+            width: 100px;
+            height: 100px;
             margin: 0 auto 10px;
             border-radius: 50%;
-            background: #eee;
+            border: 2px solid #eee;
             overflow: hidden;
-            border: 2px solid #ddd;
+            background: #fafafa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .logo-box img { width: 100%; height: 100%; object-fit: cover; }
+        .logo-display img { width: 100%; height: 100%; object-fit: cover; }
 
-        h3 { margin: 10px 0 5px; color: var(--primary); }
-        p { color: #777; margin: 0 0 15px; font-size: 0.9em; }
-
+        /* Upload Button Styles */
+        .upload-label {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 15px;
+            background: #ddd;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: #333;
+        }
+        .upload-label:hover { background: #ccc; }
         input[type="file"] { display: none; }
+
+        /* TABLES (For Matches) */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #ddd; }
+        th { background-color: #f8f9fa; color: var(--primary-color); }
         
-        .loading { text-align: center; width: 100%; color: #666; font-size: 1.2em; margin-top: 50px; }
+        .status-live { color: red; font-weight: bold; }
+        .status-finished { color: green; }
+
+        /* UTILITIES */
+        .delete-btn { color: red; cursor: pointer; border: none; background: none; font-size: 1.1rem; }
+        .status-msg { font-size: 0.8rem; font-weight: bold; min-height: 20px; margin-top:5px;}
+        .text-orange { color: orange; }
+        .text-green { color: green; }
+        .text-red { color: red; }
+
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>🏆 Admin Dashboard</h1>
-        <p>Manage Teams, Divisions, and Logos</p>
-    </header>
-
-    <div class="admin-panel">
-        <div class="form-group">
-            <label>Team Name</label>
-            <input type="text" id="newTeamName" placeholder="e.g. Lions FC">
-        </div>
-        <div class="form-group">
-            <label>Division</label>
-            <input type="text" id="newTeamDiv" placeholder="e.g. Division A">
-        </div>
-        <button onclick="addTeam()" class="btn btn-add">+ Add Team</button>
+    <div class="sidebar">
+        <div class="brand-logo">EDU-LEAGUE</div>
+        <ul class="nav-links">
+            <li class="active" onclick="switchTab('dashboard', this)">
+                <i class="fas fa-chart-pie"></i> Dashboard
+            </li>
+            <li onclick="switchTab('teams', this)">
+                <i class="fas fa-users"></i> Manage Teams
+            </li>
+            <li onclick="switchTab('matches', this)">
+                <i class="fas fa-futbol"></i> Manage Matches
+            </li>
+            <li onclick="switchTab('news', this)">
+                <i class="fas fa-newspaper"></i> News Updates
+            </li>
+        </ul>
     </div>
 
-    <div id="team-grid" class="grid">
-        <div class="loading">Loading database...</div>
-    </div>
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
-
-<script>
-    // ==========================================
-    // CONFIGURATION
-    // ==========================================
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT_ID.appspot.com",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
-
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-    const COLLECTION_NAME = "team_assets"; // Your collection name
-
-    // ==========================================
-    // 1. READ TEAMS
-    // ==========================================
-    const grid = document.getElementById('team-grid');
-
-    db.collection(COLLECTION_NAME).onSnapshot(snapshot => {
-        grid.innerHTML = "";
+    <div class="main-content">
         
-        if(snapshot.empty) {
-            grid.innerHTML = "<p style='width:100%; text-align:center'>No teams found. Add one above!</p>";
-            return;
-        }
+        <div id="dashboard" class="section active">
+            <div class="header">
+                <h2>Admin Dashboard</h2>
+                <p class="subtitle">Welcome to the EDU-LEAGUE Control Center</p>
+            </div>
+            <div class="card">
+                <h3>System Status</h3>
+                <p>Firebase Connection: <span id="connection-status" style="color:orange">Checking...</span></p>
+                <p>Select a tab from the left sidebar to manage your content.</p>
+            </div>
+        </div>
 
-        snapshot.forEach(doc => {
-            const team = doc.data();
-            const id = doc.id;
-            const logo = team.logo || "https://via.placeholder.com/150?text=No+Logo";
+        <div id="teams" class="section">
+            <div class="header">
+                <h2>Team Management</h2>
+                <p class="subtitle">Add teams and update individual logos (Saved in 'team_assets')</p>
+            </div>
 
-            grid.innerHTML += `
-                <div class="card">
-                    <div class="logo-box">
-                        <img src="${logo}" alt="Logo">
-                    </div>
-                    <h3>${team.name}</h3>
-                    <p>${team.division}</p>
-                    
-                    <label for="file-${id}" class="btn btn-upload" style="cursor:pointer">
-                        📷 Update Logo
-                    </label>
-                    <input type="file" id="file-${id}" onchange="uploadLogo(event, '${id}')">
-                    
-                    <button onclick="deleteTeam('${id}')" class="btn btn-del">Delete Team</button>
+            <div class="card">
+                <h3>Add New Team</h3>
+                <div class="form-row">
+                    <input type="text" id="teamName" placeholder="Team Name (e.g. Science FC)">
+                    <input type="text" id="teamDivision" placeholder="Division (e.g. Group A)">
+                    <button class="btn btn-primary" onclick="addTeam()">+ Add Team</button>
                 </div>
-            `;
-        });
-    });
+            </div>
 
-    // ==========================================
-    // 2. ADD TEAM
-    // ==========================================
-    function addTeam() {
-        const name = document.getElementById('newTeamName').value;
-        const div = document.getElementById('newTeamDiv').value;
+            <h3>Current Teams</h3>
+            <div id="teams-grid" class="teams-grid">
+                <p>Loading teams...</p>
+            </div>
+        </div>
 
-        if(!name) return alert("Please enter a team name!");
+        <div id="matches" class="section">
+            <div class="header">
+                <h2>Match Management</h2>
+                <p class="subtitle">Schedule and update scores</p>
+            </div>
 
-        db.collection(COLLECTION_NAME).add({
-            name: name,
-            division: div || "General",
-            logo: "", // Empty start
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
-            // Clear inputs
-            document.getElementById('newTeamName').value = "";
-            document.getElementById('newTeamDiv').value = "";
-            alert("Team Added!");
-        }).catch(err => console.error(err));
-    }
+            <div class="card">
+                <h3>Create Match</h3>
+                <div class="form-row">
+                    <input type="text" id="homeTeam" placeholder="Home Team">
+                    <input type="number" id="homeScore" placeholder="0">
+                    <span style="align-self:center; font-weight:bold;">VS</span>
+                    <input type="number" id="awayScore" placeholder="0">
+                    <input type="text" id="awayTeam" placeholder="Away Team">
+                </div>
+                <div class="form-row">
+                    <input type="date" id="matchDate">
+                    <select id="matchStatus">
+                        <option value="Scheduled">Scheduled</option>
+                        <option value="Live">Live</option>
+                        <option value="Finished">Finished</option>
+                    </select>
+                    <button class="btn btn-accent" onclick="addMatch()">Save Match</button>
+                </div>
+            </div>
 
-    // ==========================================
-    // 3. DELETE TEAM
-    // ==========================================
-    function deleteTeam(id) {
-        if(confirm("Are you sure you want to delete this team?")) {
-            db.collection(COLLECTION_NAME).doc(id).delete()
-                .then(() => alert("Team Deleted"))
-                .catch(err => alert("Error: " + err.message));
+            <h3>Match List</h3>
+            <div class="card">
+                <table id="matches-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Home</th>
+                            <th>Score</th>
+                            <th>Away</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="matches-body">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="news" class="section">
+            <div class="header">
+                <h2>News Updates</h2>
+                <p class="subtitle">Post announcements to the main site</p>
+            </div>
+
+            <div class="card">
+                <h3>Post News</h3>
+                <input type="text" id="newsTitle" placeholder="Headline Title" style="margin-bottom:10px; width:100%; box-sizing:border-box;">
+                <textarea id="newsContent" rows="5" placeholder="Write your article here..." style="margin-bottom:10px; width:100%; box-sizing:border-box;"></textarea>
+                <input type="text" id="newsImage" placeholder="Image URL (Optional)" style="margin-bottom:10px; width:100%; box-sizing:border-box;">
+                <button class="btn btn-primary" onclick="addNews()">Publish News</button>
+            </div>
+
+            <h3>Recent Posts</h3>
+            <div id="news-list">
+                </div>
+        </div>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+
+    <script>
+        // ----------------------------------------
+        // A. FIREBASE CONFIGURATION
+        // ----------------------------------------
+        const firebaseConfig = {
+            // !!! PASTE YOUR API KEYS HERE !!!
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
         }
-    }
+        const db = firebase.firestore();
+        const storage = firebase.storage();
 
-    // ==========================================
-    // 4. UPLOAD LOGO (The fix from today)
-    // ==========================================
-    function uploadLogo(event, id) {
-        const file = event.target.files[0];
-        if(!file) return;
+        // Check Connection
+        document.getElementById('connection-status').innerText = "Connected";
+        document.getElementById('connection-status').style.color = "green";
 
-        const ref = storage.ref(`team_logos/${id}/${file.name}`);
-        
-        alert("Uploading... Please wait."); // Simple alert for feedback
+        // Collection Names
+        const TEAMS_COLLECTION = "team_assets";
+        const MATCHES_COLLECTION = "matches";
+        const NEWS_COLLECTION = "news";
 
-        ref.put(file).then(snapshot => {
-            return snapshot.ref.getDownloadURL();
-        }).then(url => {
-            db.collection(COLLECTION_NAME).doc(id).update({
-                logo: url
+        // ----------------------------------------
+        // B. TAB SWITCHING LOGIC
+        // ----------------------------------------
+        function switchTab(sectionId, navItem) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            // Show target section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update sidebar active state
+            document.querySelectorAll('.nav-links li').forEach(li => li.classList.remove('active'));
+            navItem.classList.add('active');
+        }
+
+        // ----------------------------------------
+        // C. TEAM LOGIC (With Logo Fix)
+        // ----------------------------------------
+        function addTeam() {
+            const name = document.getElementById('teamName').value;
+            const div = document.getElementById('teamDivision').value;
+            if(!name) return alert("Please enter a team name");
+
+            db.collection(TEAMS_COLLECTION).add({
+                name: name,
+                division: div || "General",
+                logo: "", // Empty default
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                document.getElementById('teamName').value = "";
+                document.getElementById('teamDivision').value = "";
+                alert("Team Added Successfully!");
             });
-            alert("Logo Updated!");
-        }).catch(err => {
-            console.error(err);
-            alert("Upload Failed");
-        });
-    }
-</script>
+        }
 
+        // Real-time Listener for Teams
+        db.collection(TEAMS_COLLECTION).onSnapshot(snapshot => {
+            const container = document.getElementById('teams-grid');
+            container.innerHTML = "";
+
+            if(snapshot.empty) {
+                container.innerHTML = "<p>No teams found. Add one above.</p>";
+                return;
+            }
+
+            snapshot.forEach(doc => {
+                const team = doc.data();
+                const id = doc.id;
+                const logoUrl = team.logo ? team.logo : "https://via.placeholder.com/150?text=No+Logo";
+
+                container.innerHTML += `
+                    <div class="team-card">
+                        <div class="logo-display">
+                            <img src="${logoUrl}" alt="Logo">
+                        </div>
+                        <h4>${team.name}</h4>
+                        <p style="color:#666; font-size:0.9rem;">${team.division}</p>
+                        
+                        <div id="status-${id}" class="status-msg"></div>
+                        <label for="file-${id}" class="upload-label">
+                            <i class="fas fa-camera"></i> Change Logo
+                        </label>
+                        <input id="file-${id}" type="file" onchange="uploadLogo(event, '${id}')" accept="image/*">
+                        
+                        <div style="margin-top:10px;">
+                            <button onclick="deleteDoc('${TEAMS_COLLECTION}', '${id}')" class="delete-btn">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+
+        // UPLOAD FUNCTION (The Specific Fix)
+        function uploadLogo(event, teamId) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const statusEl = document.getElementById(`status-${teamId}`);
+            statusEl.innerText = "Uploading...";
+            statusEl.className = "status-msg text-orange";
+
+            // Save to unique path: team_logos/TEAM_ID/filename
+            const ref = storage.ref(`team_logos/${teamId}/${Date.now()}_${file.name}`);
+            
+            ref.put(file).then(snapshot => {
+                return snapshot.ref.getDownloadURL();
+            }).then(url => {
+                // Update ONLY this team
+                db.collection(TEAMS_COLLECTION).doc(teamId).update({
+                    logo: url
+                }).then(() => {
+                    statusEl.innerText = "Success!";
+                    statusEl.className = "status-msg text-green";
+                    setTimeout(() => statusEl.innerText = "", 3000);
+                });
+            }).catch(err => {
+                console.error(err);
+                statusEl.innerText = "Error!";
+                statusEl.className = "status-msg text-red";
+            });
+        }
+
+        // ----------------------------------------
+        // D. MATCH LOGIC
+        // ----------------------------------------
+        function addMatch() {
+            const home = document.getElementById('homeTeam').value;
+            const away = document.getElementById('awayTeam').value;
+            
+            if(!home || !away) return alert("Enter team names");
+
+            db.collection(MATCHES_COLLECTION).add({
+                homeTeam: home,
+                awayTeam: away,
+                homeScore: document.getElementById('homeScore').value || 0,
+                awayScore: document.getElementById('awayScore').value || 0,
+                date: document.getElementById('matchDate').value,
+                status: document.getElementById('matchStatus').value,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                alert("Match Created!");
+                // Clear form if needed
+            });
+        }
+
+        db.collection(MATCHES_COLLECTION).orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+            const tbody = document.getElementById('matches-body');
+            tbody.innerHTML = "";
+
+            snapshot.forEach(doc => {
+                const match = doc.data();
+                const id = doc.id;
+                
+                // Color code status
+                let statusClass = "";
+                if(match.status === "Live") statusClass = "status-live";
+                if(match.status === "Finished") statusClass = "status-finished";
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${match.date || "TBD"}</td>
+                        <td>${match.homeTeam}</td>
+                        <td style="font-weight:bold;">${match.homeScore} - ${match.awayScore}</td>
+                        <td>${match.awayTeam}</td>
+                        <td class="${statusClass}">${match.status}</td>
+                        <td>
+                            <button onclick="deleteDoc('${MATCHES_COLLECTION}', '${id}')" class="delete-btn">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+
+        // ----------------------------------------
+        // E. NEWS LOGIC
+        // ----------------------------------------
+        function addNews() {
+            const title = document.getElementById('newsTitle').value;
+            const content = document.getElementById('newsContent').value;
+
+            if(!title) return alert("Title is required");
+
+            db.collection(NEWS_COLLECTION).add({
+                title: title,
+                content: content,
+                image: document.getElementById('newsImage').value,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => alert("News Published!"));
+        }
+
+        db.collection(NEWS_COLLECTION).orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+            const list = document.getElementById('news-list');
+            list.innerHTML = "";
+
+            snapshot.forEach(doc => {
+                const news = doc.data();
+                const id = doc.id;
+
+                list.innerHTML += `
+                    <div style="border-bottom:1px solid #ddd; padding:10px 0; display:flex; justify-content:space-between;">
+                        <div>
+                            <strong>${news.title}</strong>
+                            <p style="margin:5px 0; color:#666; font-size:0.9rem;">${news.content.substring(0, 50)}...</p>
+                        </div>
+                        <button onclick="deleteDoc('${NEWS_COLLECTION}', '${id}')" class="delete-btn">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            });
+        });
+
+        // ----------------------------------------
+        // F. GENERAL UTILITIES
+        // ----------------------------------------
+        function deleteDoc(collection, id) {
+            if(confirm("Are you sure you want to delete this item?")) {
+                db.collection(collection).doc(id).delete().then(() => {
+                    // console.log("Deleted");
+                }).catch(err => alert("Error deleting: " + err.message));
+            }
+        }
+    </script>
 </body>
 </html>
