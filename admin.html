@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>EDU-LEAGUE | Admin Console</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -13,257 +13,250 @@
     <link rel="icon" href="edulogo.jpg" type="image/jpeg">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f3f4f6; color: #1f2937; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         
-        /* Sidebar Styling */
-        .sidebar-link { 
-            display: flex; align-items: center; gap: 12px; padding: 14px 20px; 
-            border-radius: 12px; font-size: 0.9rem; font-weight: 600; 
-            color: #9ca3af; transition: all 0.3s ease; margin-bottom: 4px;
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #f8fafc; 
+            color: #0f172a; 
+            -webkit-tap-highlight-color: transparent;
         }
-        .sidebar-link:hover { background-color: #1f2937; color: white; transform: translateX(5px); }
-        .sidebar-link.active { background-color: #7c3aed; color: white; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4); }
-        
-        /* Card Styling */
-        .admin-card { 
-            background: white; border-radius: 16px; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); 
-            border: 1px solid #e5e7eb; transition: transform 0.2s;
+
+        /* Desktop Sidebar */
+        .sidebar-link {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px; margin-bottom: 4px;
+            border-radius: 10px; font-weight: 600; font-size: 0.9rem;
+            color: #64748b; transition: all 0.2s ease;
         }
-        .admin-card:hover { border-color: #d1d5db; }
+        .sidebar-link:hover { background-color: #f1f5f9; color: #334155; }
+        .sidebar-link.active { 
+            background-color: #4f46e5; 
+            color: white; 
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
 
-        /* Inputs */
-        .input-std { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #e5e7eb; background: #f9fafb; font-size: 0.9rem; outline: none; transition: all 0.2s; }
-        .input-std:focus { border-color: #7c3aed; background: white; ring: 2px solid #ddd6fe; }
+        /* Mobile Bottom Nav */
+        .mobile-nav-item {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 8px 0; color: #94a3b8; font-size: 0.65rem; font-weight: 700;
+        }
+        .mobile-nav-item.active { color: #4f46e5; }
+        .mobile-nav-item i { font-size: 1.2rem; margin-bottom: 2px; }
 
-        /* Table Inputs */
-        .tbl-inp { background: transparent; text-align: center; font-weight: 800; width: 100%; outline: none; padding: 4px; border-radius: 4px; }
-        .tbl-inp:focus { background: #eff6ff; ring: 2px solid #7c3aed; }
+        /* Card & Inputs */
+        .smart-card {
+            background: white; border: 1px solid #e2e8f0; border-radius: 16px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); overflow: hidden;
+        }
         
-        .loader { width: 24px; height: 24px; border: 3px solid #fff; border-bottom-color: transparent; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
+        .input-smart {
+            width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px;
+            font-size: 0.9rem; font-weight: 500; outline: none; transition: border 0.2s; background: #fff;
+        }
+        .input-smart:focus { border-color: #4f46e5; ring: 2px solid #e0e7ff; }
+
+        .tbl-inp { 
+            background: transparent; text-align: center; font-weight: 800; width: 100%; 
+            outline: none; padding: 6px; border-radius: 6px; font-size: 0.85rem;
+        }
+        .tbl-inp:focus { background: #e0e7ff; color: #4338ca; }
+
+        .loader { width: 18px; height: 18px; border: 2px solid #fff; border-bottom-color: transparent; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="h-screen flex overflow-hidden">
+<body class="h-screen flex flex-col md:flex-row overflow-hidden">
 
-    <div id="edit-match-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-gray-900/90 backdrop-blur-sm hidden">
-        <div class="bg-white p-8 rounded-2xl w-full max-w-md shadow-2xl relative">
-            <button onclick="closeEditModal()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500"><i class="fa-solid fa-times text-xl"></i></button>
-            <h3 class="text-xl font-bold text-gray-800 mb-1">Reschedule Match</h3>
-            <p class="text-sm text-gray-500 mb-6" id="edit-match-teams">Home vs Away</p>
+    <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/95 backdrop-blur-sm p-4">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center">
+            <div class="h-16 w-16 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-indigo-200">
+                <i class="fa-solid fa-user-shield text-2xl text-white"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900">Admin Access</h2>
+            <form id="login-form" class="space-y-4 mt-6">
+                <input type="email" id="adm-email" placeholder="Email" class="input-smart" required>
+                <input type="password" id="adm-pass" placeholder="Password" class="input-smart" required>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-lg">Authenticate</button>
+            </form>
+            <p id="login-msg" class="text-red-500 text-xs font-bold mt-4 hidden bg-red-50 p-2 rounded">Access Denied</p>
+        </div>
+    </div>
+
+    <div id="edit-match-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-slate-900/80 backdrop-blur-sm hidden p-4">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-sm shadow-xl transform transition-all">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-slate-800">Edit Fixture</h3>
+                <button onclick="closeEditModal()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
             <input type="hidden" id="edit-match-id">
-            
-            <div class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <div><label class="text-xs font-bold text-gray-400 uppercase mb-1 block">New Date</label><input type="date" id="edit-match-date" class="input-std font-bold"></div>
-                    <div><label class="text-xs font-bold text-gray-400 uppercase mb-1 block">New Time</label><input type="time" id="edit-match-time" class="input-std font-bold"></div>
+            <div class="bg-slate-50 p-3 rounded-lg mb-4 text-center">
+                <p class="text-sm font-bold text-slate-700" id="edit-match-teams">...</p>
+            </div>
+            <div class="space-y-3">
+                <div><label class="text-[10px] font-bold text-slate-400 uppercase">New Date</label><input type="date" id="edit-match-date" class="input-smart"></div>
+                <div><label class="text-[10px] font-bold text-slate-400 uppercase">New Time</label>
+                    <select id="edit-match-time" class="input-smart">
+                        <option value="TBD">TBD</option>
+                        <option value="08:00">08:00 AM</option><option value="10:00">10:00 AM</option>
+                        <option value="12:00">12:00 PM</option><option value="14:00">02:00 PM</option>
+                        <option value="16:00">04:00 PM</option><option value="18:00">06:00 PM</option>
+                    </select>
                 </div>
-                <button onclick="confirmEditMatch()" class="w-full py-4 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 shadow-lg shadow-purple-200 transition">SAVE CHANGES</button>
+                <button onclick="confirmEditMatch()" class="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl mt-2">Save Changes</button>
             </div>
         </div>
     </div>
 
-    <aside class="w-72 bg-[#111827] flex-col hidden md:flex z-20 text-gray-300">
-        <div class="h-20 flex items-center px-8 border-b border-gray-800">
-            <div class="h-10 w-10 bg-purple-600 rounded-lg flex items-center justify-center text-white font-black text-xl mr-3">E</div>
-            <span class="text-xl font-bold text-white tracking-tight">EDU<span class="text-purple-500">ADMIN</span></span>
+    <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-20">
+        <div class="h-20 flex items-center px-6 border-b border-slate-100">
+            <img src="edulogo.jpg" class="h-8 w-8 rounded-full border border-slate-200 mr-3">
+            <div><h1 class="text-base font-black text-slate-800 leading-tight">EDU-ADMIN</h1><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pro Console</p></div>
         </div>
-        
-        <nav class="flex-1 overflow-y-auto p-4 space-y-6">
-            <div>
-                <p class="px-4 text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3">Main</p>
-                <button onclick="nav('dashboard')" id="btn-dashboard" class="sidebar-link active w-full"><i class="fa-solid fa-layer-group w-5"></i> Dashboard</button>
-            </div>
-            
-            <div>
-                <p class="px-4 text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3">Competition</p>
-                <button onclick="nav('tables')" id="btn-tables" class="sidebar-link w-full"><i class="fa-solid fa-ranking-star w-5"></i> League Tables</button>
-                <button onclick="nav('schedule')" id="btn-schedule" class="sidebar-link w-full"><i class="fa-solid fa-calendar-days w-5"></i> Match Schedule</button>
-            </div>
-
-            <div>
-                <p class="px-4 text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3">Management</p>
-                <button onclick="nav('verification')" id="btn-verification" class="sidebar-link w-full"><i class="fa-solid fa-users-gear w-5"></i> Verification</button>
-                <button onclick="nav('teams')" id="btn-teams" class="sidebar-link w-full"><i class="fa-solid fa-shield-cat w-5"></i> Team Logos</button>
-                <button onclick="nav('stats')" id="btn-stats" class="sidebar-link w-full"><i class="fa-solid fa-chart-pie w-5"></i> Player Stats</button>
-            </div>
-
-            <div>
-                <p class="px-4 text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3">Content</p>
-                <button onclick="nav('news')" id="btn-news" class="sidebar-link w-full"><i class="fa-solid fa-newspaper w-5"></i> News Feed</button>
-                <button onclick="nav('fanz')" id="btn-fanz" class="sidebar-link w-full"><i class="fa-solid fa-fire w-5"></i> Fan Zone</button>
-            </div>
+        <nav class="flex-1 overflow-y-auto p-4 space-y-1 py-4">
+            <button onclick="nav('dashboard')" id="btn-d-dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-pie w-5"></i> Dashboard</button>
+            <div class="px-4 py-3 mt-4 text-[10px] font-black text-gray-400 uppercase tracking-widest opacity-70">Competition</div>
+            <button onclick="nav('tables')" id="btn-d-tables" class="sidebar-link"><i class="fa-solid fa-table-list w-5"></i> Tables</button>
+            <button onclick="nav('schedule')" id="btn-d-schedule" class="sidebar-link"><i class="fa-solid fa-calendar-days w-5"></i> Schedule</button>
+            <div class="px-4 py-3 mt-4 text-[10px] font-black text-gray-400 uppercase tracking-widest opacity-70">Management</div>
+            <button onclick="nav('verification')" id="btn-d-verification" class="sidebar-link"><i class="fa-solid fa-check-double w-5"></i> Verify</button>
+            <button onclick="nav('teams')" id="btn-d-teams" class="sidebar-link"><i class="fa-solid fa-shield-halved w-5"></i> Logos</button>
+            <button onclick="nav('stats')" id="btn-d-stats" class="sidebar-link"><i class="fa-solid fa-chart-simple w-5"></i> Stats</button>
+            <div class="px-4 py-3 mt-4 text-[10px] font-black text-gray-400 uppercase tracking-widest opacity-70">Engage</div>
+            <button onclick="nav('news')" id="btn-d-news" class="sidebar-link"><i class="fa-solid fa-newspaper w-5"></i> News & Spotlight</button>
+            <button onclick="nav('fanz')" id="btn-d-fanz" class="sidebar-link"><i class="fa-solid fa-bolt w-5"></i> Fan Zone</button>
         </nav>
-        
-        <div class="p-4 border-t border-gray-800">
-            <button onclick="logout()" class="w-full flex items-center justify-center gap-2 text-xs font-bold text-red-400 hover:text-white hover:bg-red-500/20 py-3 rounded-lg transition"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>
-        </div>
+        <div class="p-4 border-t border-gray-100"><button onclick="logout()" class="w-full flex items-center justify-center gap-2 text-xs font-bold text-white bg-red-500 hover:bg-red-600 py-3 rounded-xl transition shadow-md">Logout</button></div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f3f4f6]">
-        <header class="h-16 bg-white border-b md:hidden flex items-center justify-between px-4 z-10 shadow-sm">
-            <span class="font-black text-purple-600 text-lg">EDU-LEAGUE</span>
-            <button onclick="document.querySelector('aside').classList.toggle('hidden'); document.querySelector('aside').classList.add('absolute', 'h-full', 'shadow-2xl');" class="text-gray-600"><i class="fa-solid fa-bars text-xl"></i></button>
+    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 flex justify-around items-center z-50 h-16 pb-safe shadow-lg">
+        <button onclick="nav('dashboard')" id="btn-m-dashboard" class="mobile-nav-item active"><i class="fa-solid fa-chart-pie"></i><span>Home</span></button>
+        <button onclick="nav('schedule')" id="btn-m-schedule" class="mobile-nav-item"><i class="fa-solid fa-calendar"></i><span>Games</span></button>
+        <button onclick="nav('tables')" id="btn-m-tables" class="mobile-nav-item"><i class="fa-solid fa-table"></i><span>Tables</span></button>
+        <button onclick="nav('news')" id="btn-m-news" class="mobile-nav-item"><i class="fa-solid fa-star"></i><span>News</span></button>
+        <button onclick="nav('teams')" id="btn-m-teams" class="mobile-nav-item"><i class="fa-solid fa-shield"></i><span>Logos</span></button>
+    </nav>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative pb-16 md:pb-0">
+        <header class="h-14 bg-white border-b border-slate-100 md:hidden flex items-center justify-between px-4 sticky top-0 z-30">
+            <span class="font-black text-slate-800 text-lg">EDU-LEAGUE</span>
+            <button onclick="logout()" class="text-red-500 text-xs font-bold bg-red-50 px-3 py-1.5 rounded-lg">Logout</button>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-6 md:p-10 scroll-smooth">
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
 
-            <div id="dashboard" class="section animate-fade">
-                <h1 class="text-3xl font-bold text-gray-900 mb-8">Dashboard Overview</h1>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="admin-card p-6 border-l-4 border-purple-600">
-                        <div class="flex justify-between items-start">
-                            <div><p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Teams</p><h3 class="text-4xl font-black text-gray-800 mt-2" id="dash-teams">0</h3></div>
-                            <div class="p-3 bg-purple-50 text-purple-600 rounded-lg"><i class="fa-solid fa-users"></i></div>
-                        </div>
-                    </div>
-                    <div class="admin-card p-6 border-l-4 border-green-500">
-                        <div class="flex justify-between items-start">
-                            <div><p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Verified</p><h3 class="text-4xl font-black text-gray-800 mt-2" id="dash-verified">0</h3></div>
-                            <div class="p-3 bg-green-50 text-green-600 rounded-lg"><i class="fa-solid fa-check-circle"></i></div>
-                        </div>
-                    </div>
-                    <div class="admin-card p-6 border-l-4 border-blue-500">
-                        <div class="flex justify-between items-start">
-                            <div><p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Matches</p><h3 class="text-4xl font-black text-gray-800 mt-2" id="dash-matches">0</h3></div>
-                            <div class="p-3 bg-blue-50 text-blue-600 rounded-lg"><i class="fa-solid fa-calendar"></i></div>
-                        </div>
-                    </div>
-                    <div class="admin-card p-6 border-l-4 border-orange-500">
-                        <div class="flex justify-between items-start">
-                            <div><p class="text-xs font-bold text-gray-400 uppercase tracking-wider">News Posts</p><h3 class="text-4xl font-black text-gray-800 mt-2" id="dash-news">0</h3></div>
-                            <div class="p-3 bg-orange-50 text-orange-600 rounded-lg"><i class="fa-solid fa-newspaper"></i></div>
-                        </div>
-                    </div>
+            <div id="dashboard" class="section">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6">Overview</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="smart-card p-5 border-l-4 border-indigo-500"><div class="text-[10px] font-bold text-slate-400 uppercase">Teams</div><div class="text-3xl font-black text-slate-800 mt-1" id="dash-teams">0</div></div>
+                    <div class="smart-card p-5 border-l-4 border-green-500"><div class="text-[10px] font-bold text-slate-400 uppercase">Verified</div><div class="text-3xl font-black text-slate-800 mt-1" id="dash-verified">0</div></div>
+                    <div class="smart-card p-5 border-l-4 border-blue-500"><div class="text-[10px] font-bold text-slate-400 uppercase">Fixtures</div><div class="text-3xl font-black text-slate-800 mt-1" id="dash-matches">0</div></div>
+                    <div class="smart-card p-5 border-l-4 border-orange-500"><div class="text-[10px] font-bold text-slate-400 uppercase">News</div><div class="text-3xl font-black text-slate-800 mt-1" id="dash-news">0</div></div>
                 </div>
             </div>
 
             <div id="tables" class="section hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <h1 class="text-3xl font-bold text-gray-900">League Tables</h1>
-                    <button onclick="downloadTablePDF()" class="bg-gray-900 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg hover:bg-black transition flex items-center gap-2"><i class="fa-solid fa-download"></i> Download PDF</button>
+                <div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-slate-800">Standings</h2><button onclick="downloadTablePDF()" class="bg-slate-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow"><i class="fa-solid fa-file-pdf mr-1"></i> PDF</button></div>
+                <div class="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar">
+                    <button onclick="loadTableData('Finalist (400Lvl)','Finalist')" class="whitespace-nowrap px-4 py-2 bg-white border rounded-full text-xs font-bold hover:border-indigo-500 hover:text-indigo-600 transition">Finalist</button>
+                    <button onclick="loadTableData('Penultimate (300Lvl)','Penultimate')" class="whitespace-nowrap px-4 py-2 bg-white border rounded-full text-xs font-bold hover:border-indigo-500 hover:text-indigo-600 transition">Penultimate</button>
+                    <button onclick="loadTableData('Sophomore (200Lvl)','Sophomore')" class="whitespace-nowrap px-4 py-2 bg-white border rounded-full text-xs font-bold hover:border-indigo-500 hover:text-indigo-600 transition">Sophomore</button>
+                    <button onclick="loadTableData('Female League','Female')" class="whitespace-nowrap px-4 py-2 bg-pink-50 border border-pink-200 rounded-full text-xs font-bold text-pink-600 hover:bg-pink-100 transition">Female</button>
                 </div>
-
-                <div class="admin-card p-2 mb-8 inline-flex bg-gray-100/50 p-1 rounded-xl">
-                    <button onclick="loadTableData('Finalist (400Lvl)','Finalist')" class="px-6 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-white hover:shadow-sm transition">Finalist</button>
-                    <button onclick="loadTableData('Penultimate (300Lvl)','Penultimate')" class="px-6 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-white hover:shadow-sm transition">Penultimate</button>
-                    <button onclick="loadTableData('Sophomore (200Lvl)','Sophomore')" class="px-6 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-white hover:shadow-sm transition">Sophomore</button>
-                    <button onclick="loadTableData('Female League','Female')" class="px-6 py-2.5 rounded-lg font-bold text-sm text-pink-600 bg-pink-50 hover:bg-pink-100 transition">Female</button>
-                </div>
-
-                <div id="table-logos" class="hidden mb-6 flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border w-fit mx-auto md:mx-0">
-                    <div class="text-center"><img src="edulogo.jpg" class="h-12 w-12 rounded-full object-contain"><p class="text-[9px] font-bold mt-1 text-gray-400">LEAGUE</p></div>
-                    <div class="text-gray-300"><i class="fa-solid fa-xmark"></i></div>
-                    <div class="text-center"><img id="division-logo-display" src="" class="h-12 w-12 rounded-full object-contain bg-gray-50"><p class="text-[9px] font-bold mt-1 text-gray-400">DIVISION</p></div>
-                </div>
-
-                <div class="admin-card p-6">
-                    <h3 id="table-title" class="font-bold text-gray-800 mb-6 uppercase text-xs tracking-wider border-b pb-4">Select a Division</h3>
+                
+                <div id="table-logos" class="hidden mb-4 flex justify-center items-center gap-6"><img src="edulogo.jpg" class="h-10 w-10 object-contain"><span class="text-slate-300 font-black">X</span><img id="division-logo-display" src="" class="h-10 w-10 object-contain"></div>
+                <div class="smart-card p-4">
+                    <h3 id="table-title" class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 text-center">Select Division</h3>
                     <div id="table-editor-container" class="space-y-2"></div>
-                    <button onclick="saveTableUpdates()" id="save-table-btn" class="mt-8 w-full py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl shadow-lg shadow-green-200 transition hidden">UPDATE STANDINGS</button>
+                    <button onclick="saveTableUpdates()" id="save-table-btn" class="mt-6 w-full bg-green-500 text-white font-bold py-3 rounded-xl shadow-lg hidden">Update Standings</button>
                 </div>
             </div>
 
             <div id="schedule" class="section hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <h1 class="text-3xl font-bold text-gray-900">Match Schedule</h1>
-                    <button onclick="downloadSchedulePDF()" class="bg-gray-900 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg hover:bg-black transition flex items-center gap-2"><i class="fa-solid fa-download"></i> Download PDF</button>
-                </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <div class="lg:col-span-4 admin-card p-6 h-fit">
-                        <h3 class="font-bold text-gray-800 mb-6 text-lg">Add New Fixture</h3>
-                        <div class="space-y-4">
-                            <select id="fix-div" class="input-std font-bold" onchange="filterTeamsByDiv()"><option value="">Select Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-                            <div class="grid grid-cols-2 gap-3">
-                                <select id="fix-day" class="input-std"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option><option>Semis</option><option>Final</option></select>
-                                <input type="date" id="fix-date" class="input-std">
-                            </div>
-                            <select id="fix-time" class="input-std font-bold text-gray-700">
-                                <option value="TBD">⏰ TBD (To Be Determined)</option>
-                                <option value="08:00">08:00 AM</option><option value="10:00">10:00 AM</option><option value="12:00">12:00 PM</option><option value="14:00">02:00 PM</option><option value="16:00">04:00 PM</option>
-                            </select>
-                            <div class="grid grid-cols-2 gap-3">
-                                <select id="fix-home" class="input-std font-bold"><option>Home</option></select>
-                                <select id="fix-away" class="input-std font-bold"><option>Away</option></select>
-                            </div>
-                            <button onclick="saveFixture()" class="w-full py-3 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 shadow-md mt-2">ADD FIXTURE</button>
+                <div class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold text-slate-800">Schedule</h2><button onclick="downloadSchedulePDF()" class="bg-slate-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow"><i class="fa-solid fa-file-pdf mr-1"></i> PDF</button></div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div class="lg:col-span-8 order-2 lg:order-1">
+                        <div class="flex gap-2 mb-4">
+                            <select id="filter-div" onchange="loadSchedule()" class="input-smart text-xs font-bold"><option value="All">All Divisions</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
+                            <select id="filter-day" onchange="loadSchedule()" class="input-smart text-xs font-bold"><option value="All">All Matchdays</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select>
+                        </div>
+                        <div id="active-fixtures" class="space-y-3 max-h-[600px] overflow-y-auto pr-1"></div>
+                    </div>
+                    <div class="lg:col-span-4 order-1 lg:order-2 smart-card p-5 h-fit">
+                        <h3 class="font-bold text-slate-700 mb-4 text-sm">Add New Fixture</h3>
+                        <div class="space-y-3">
+                            <select id="fix-div" class="input-smart text-xs" onchange="filterTeamsByDiv()"><option value="">Division...</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
+                            <div class="grid grid-cols-2 gap-2"><select id="fix-day" class="input-smart text-xs"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select><input type="date" id="fix-date" class="input-smart text-xs"></div>
+                            <select id="fix-time" class="input-smart text-xs font-bold"><option value="TBD">⏰ TBD</option><option value="08:00">08:00 AM</option><option value="10:00">10:00 AM</option><option value="12:00">12:00 PM</option><option value="14:00">02:00 PM</option><option value="16:00">04:00 PM</option></select>
+                            <div class="grid grid-cols-2 gap-2"><select id="fix-home" class="input-smart text-xs"><option>Home</option></select><select id="fix-away" class="input-smart text-xs"><option>Away</option></select></div>
+                            <button onclick="saveFixture()" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-lg text-xs shadow hover:bg-indigo-700">Add Match</button>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <div class="lg:col-span-8">
-                        <div class="flex gap-4 mb-4">
-                            <select id="filter-div" onchange="loadSchedule()" class="input-std font-bold text-xs"><option value="All">All Divisions</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-                            <select id="filter-day" onchange="loadSchedule()" class="input-std font-bold text-xs"><option value="All">All Matchdays</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select>
+            <div id="teams" class="section hidden">
+                <div class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold text-slate-800">Team Logos</h2><button onclick="loadTeams()" class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg">Refresh</button></div>
+                <div id="assets-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <div id="news" class="section hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="smart-card p-5 h-fit border-l-4 border-yellow-400">
+                        <h3 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><i class="fa-solid fa-star text-yellow-500"></i> Match Spotlight</h3>
+                        <p class="text-[10px] text-gray-400 mb-4">Select the match to feature on the News Page.</p>
+                        <select id="spotlight-select" class="input-smart text-xs font-bold mb-3"><option>Loading matches...</option></select>
+                        <button onclick="setSpotlightFromDropdown()" class="w-full bg-yellow-500 text-white font-bold py-2 rounded-lg text-xs shadow">SET AS MAIN EVENT</button>
+                    </div>
+
+                    <div class="smart-card p-5 h-fit">
+                        <h3 class="font-bold text-slate-700 mb-4 text-sm">New Post</h3>
+                        <div class="space-y-3">
+                            <input id="news-title" placeholder="Title" class="input-smart font-bold">
+                            <textarea id="news-body" rows="4" placeholder="Content..." class="input-smart"></textarea>
+                            <label class="block border border-dashed border-slate-300 rounded-lg p-3 text-center cursor-pointer hover:bg-slate-50"><input type="file" id="news-file" class="hidden" onchange="document.getElementById('f-name').innerText=this.files[0].name"><i class="fa-solid fa-image text-slate-400"></i> <span id="f-name" class="text-xs text-slate-500 font-bold ml-1">Add Image</span></label>
+                            <button onclick="publishNews()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg text-xs shadow">Publish</button>
                         </div>
-                        <div id="active-fixtures" class="space-y-3 max-h-[600px] overflow-y-auto pr-2"></div>
+                    </div>
+                    
+                    <div class="smart-card p-5 h-[400px] flex flex-col">
+                        <div class="flex justify-between mb-3"><h3 class="font-bold text-sm">Feed</h3><button onclick="loadNews()" class="text-xs font-bold text-indigo-600">Refresh</button></div>
+                        <div id="news-feed" class="flex-1 overflow-y-auto space-y-2 pr-1"></div>
                     </div>
                 </div>
             </div>
 
             <div id="verification" class="section hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <h1 class="text-3xl font-bold text-gray-900">Verification</h1>
-                    <button onclick="loadVerifications()" class="text-sm font-bold text-purple-600 bg-purple-50 px-4 py-2 rounded-lg hover:bg-purple-100">Refresh</button>
-                </div>
-                <div class="admin-card overflow-hidden">
-                    <table class="w-full text-sm text-left"><thead class="bg-gray-50 text-xs font-bold text-gray-500 uppercase"><tr><th class="p-4 pl-6">Team</th><th class="p-4">Division</th><th class="p-4">Status</th><th class="p-4 text-right pr-6">Action</th></tr></thead><tbody id="verify-list" class="divide-y divide-gray-100"></tbody></table>
-                </div>
+                <div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-slate-800">Verification</h2><button onclick="loadVerifications()" class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg">Refresh</button></div>
+                <div class="smart-card overflow-hidden"><table class="w-full text-xs text-left"><thead class="bg-slate-50 font-bold text-slate-500 uppercase"><tr><th class="p-4">Team</th><th class="p-4 hidden md:table-cell">Div</th><th class="p-4">Status</th><th class="p-4 text-right">Act</th></tr></thead><tbody id="verify-list" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody></table></div>
             </div>
-
-            <div id="teams" class="section hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <h1 class="text-3xl font-bold text-gray-900">Team Logos</h1>
-                    <button onclick="loadTeams()" class="text-sm font-bold text-purple-600 bg-purple-50 px-4 py-2 rounded-lg">Refresh</button>
-                </div>
-                <div id="assets-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-            </div>
-
+            
             <div id="stats" class="section hidden">
-                <h1 class="text-3xl font-bold text-gray-900 mb-8">Player Stats</h1>
-                <div class="admin-card p-8 max-w-5xl mx-auto">
-                    <div class="flex flex-col md:flex-row gap-6 mb-8 border-b pb-8">
-                        <div class="flex-1"><label class="text-xs font-bold text-gray-400 uppercase mb-2 block">1. Team</label><select id="stat-team-select" class="input-std font-bold" onchange="loadTeamPlayers()"><option value="">Select Team</option></select></div>
-                        <div class="flex-1"><label class="text-xs font-bold text-gray-400 uppercase mb-2 block">2. Player</label><select id="stat-player-select" class="input-std font-bold" onchange="fetchPlayerCurrentStats()"><option value="">Select Player</option></select></div>
+                <h2 class="text-xl font-bold text-slate-800 mb-6">Stats Manager</h2>
+                <div class="smart-card p-6 max-w-4xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 pb-6 border-b border-slate-100">
+                        <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">1. Team</label><select id="stat-team-select" class="input-smart" onchange="loadTeamPlayers()"><option value="">Select...</option></select></div>
+                        <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">2. Player</label><select id="stat-player-select" class="input-smart" onchange="fetchPlayerCurrentStats()"><option value="">Select...</option></select></div>
                     </div>
                     <div id="stats-editor" class="hidden">
-                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-                            <div class="bg-gray-50 p-4 rounded-xl text-center"><div class="text-[10px] font-black text-gray-400 uppercase mb-2">Goals ⚽</div><input type="number" id="p-goals" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div>
-                            <div class="bg-gray-50 p-4 rounded-xl text-center"><div class="text-[10px] font-black text-gray-400 uppercase mb-2">Assists 👟</div><input type="number" id="p-assists" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div>
-                            <div class="bg-gray-50 p-4 rounded-xl text-center"><div class="text-[10px] font-black text-gray-400 uppercase mb-2">Yellows 🟨</div><input type="number" id="p-yellow" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div>
-                            <div class="bg-gray-50 p-4 rounded-xl text-center"><div class="text-[10px] font-black text-gray-400 uppercase mb-2">Reds 🟥</div><input type="number" id="p-red" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div>
-                            <div class="bg-gray-50 p-4 rounded-xl text-center"><div class="text-[10px] font-black text-gray-400 uppercase mb-2">Saves 🧤</div><input type="number" id="p-saves" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div>
+                        <div class="grid grid-cols-3 md:grid-cols-5 gap-3 mb-6">
+                            <div class="bg-slate-50 p-2 rounded-lg text-center"><div class="text-[9px] font-black text-green-600 uppercase">Goals</div><input type="number" id="p-goals" min="0" class="bg-transparent text-xl font-black w-full text-center outline-none"></div>
+                            <div class="bg-slate-50 p-2 rounded-lg text-center"><div class="text-[9px] font-black text-blue-600 uppercase">Assists</div><input type="number" id="p-assists" min="0" class="bg-transparent text-xl font-black w-full text-center outline-none"></div>
+                            <div class="bg-slate-50 p-2 rounded-lg text-center"><div class="text-[9px] font-black text-yellow-600 uppercase">Yel</div><input type="number" id="p-yellow" min="0" class="bg-transparent text-xl font-black w-full text-center outline-none"></div>
+                            <div class="bg-slate-50 p-2 rounded-lg text-center"><div class="text-[9px] font-black text-red-600 uppercase">Red</div><input type="number" id="p-red" min="0" class="bg-transparent text-xl font-black w-full text-center outline-none"></div>
+                            <div class="bg-slate-50 p-2 rounded-lg text-center"><div class="text-[9px] font-black text-orange-600 uppercase">Saves</div><input type="number" id="p-saves" min="0" class="bg-transparent text-xl font-black w-full text-center outline-none"></div>
                         </div>
-                        <button onclick="savePlayerStats()" class="w-full py-4 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 shadow-md">SAVE STATS</button>
+                        <button onclick="savePlayerStats()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl text-sm shadow">Save Stats</button>
                     </div>
-                </div>
-            </div>
-
-            <div id="news" class="section hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="admin-card p-6 h-fit">
-                        <h3 class="font-bold text-gray-800 mb-6">Create Post</h3>
-                        <div class="space-y-4">
-                            <input id="news-title" placeholder="Headline" class="input-std font-bold">
-                            <textarea id="news-body" rows="6" placeholder="Content..." class="input-std"></textarea>
-                            <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:bg-gray-50 relative">
-                                <input type="file" id="news-file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('file-label').innerText=this.files[0].name">
-                                <i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400 mb-2"></i><p id="file-label" class="text-xs font-bold text-gray-500">Upload Media</p>
-                            </div>
-                            <button onclick="publishNews()" class="w-full py-3 bg-purple-600 text-white font-bold rounded-xl shadow-md">PUBLISH</button>
-                        </div>
-                    </div>
-                    <div class="lg:col-span-2 admin-card p-6 h-[600px] flex flex-col"><div class="flex justify-between mb-4"><h3 class="font-bold text-gray-800">Live Feed</h3><button onclick="loadNews()" class="text-xs font-bold text-purple-600">Refresh</button></div><div id="news-feed" class="flex-1 overflow-y-auto space-y-3 pr-2"></div></div>
                 </div>
             </div>
 
             <div id="fanz" class="section hidden">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="admin-card p-6"><h3 class="font-bold mb-4">Man of the Match</h3><div class="space-y-3 mb-6"><input id="motm-1" placeholder="Nominee 1" class="input-std"><input id="motm-2" placeholder="Nominee 2" class="input-std"><input id="motm-3" placeholder="Nominee 3" class="input-std"></div><div class="grid grid-cols-2 gap-3"><button onclick="setMOTM(true)" class="bg-green-600 text-white py-3 rounded-xl font-bold text-sm">Start Vote</button><button onclick="setMOTM(false)" class="bg-red-500 text-white py-3 rounded-xl font-bold text-sm">End Vote</button></div></div>
-                    <div class="admin-card p-6"><h3 class="font-bold mb-4">Polls</h3><input id="poll-q" placeholder="Question" class="input-std font-bold mb-3"><div class="grid grid-cols-2 gap-3 mb-6"><input id="poll-o1" placeholder="Opt A" class="input-std"><input id="poll-o2" placeholder="Opt B" class="input-std"></div><button onclick="createPoll()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm">Launch Poll</button></div>
+                    <div class="smart-card p-5"><h3 class="font-bold text-sm mb-3">MOTM Voting</h3><div class="space-y-2 mb-4"><input id="motm-1" placeholder="Nominee 1" class="input-smart text-xs"><input id="motm-2" placeholder="Nominee 2" class="input-smart text-xs"><input id="motm-3" placeholder="Nominee 3" class="input-smart text-xs"></div><div class="flex gap-2"><button onclick="setMOTM(true)" class="flex-1 bg-green-500 text-white py-2 rounded-lg text-xs font-bold">Start</button><button onclick="setMOTM(false)" class="flex-1 bg-red-500 text-white py-2 rounded-lg text-xs font-bold">Stop</button></div></div>
+                    <div class="smart-card p-5"><h3 class="font-bold text-sm mb-3">Create Poll</h3><input id="poll-q" placeholder="Question" class="input-smart text-xs font-bold mb-2"><div class="flex gap-2 mb-4"><input id="poll-o1" placeholder="Opt A" class="input-smart text-xs"><input id="poll-o2" placeholder="Opt B" class="input-smart text-xs"></div><button onclick="createPoll()" class="w-full bg-indigo-600 text-white py-2 rounded-lg text-xs font-bold">Launch</button></div>
                 </div>
             </div>
 
@@ -272,27 +265,29 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, serverTimestamp, query, orderBy, where, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
         const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app); const storage = getStorage(app);
 
-        // --- DIVISION LOGOS ---
+        // CONFIG
         const mainLogoUrl = "edulogo.jpg";
-        const divisionLogos = {
-            'Finalist': 'edulogo.jpg', // Replace with real URL
-            'Penultimate': 'edulogo.jpg',
-            'Sophomore': 'edulogo.jpg',
-            'Female': 'edulogo.jpg'
-        };
+        const divisionLogos = { 'Finalist': 'edulogo.jpg', 'Penultimate': 'edulogo.jpg', 'Sophomore': 'edulogo.jpg', 'Female': 'edulogo.jpg' };
 
-        // --- AUTH ---
-        document.getElementById('login-form').addEventListener('submit', (e) => { e.preventDefault(); const btn = e.target.querySelector('button'); btn.innerHTML = '<span class="loader"></span>'; signInWithEmailAndPassword(auth, document.getElementById('adm-email').value, document.getElementById('adm-pass').value).catch(()=>{ document.getElementById('login-msg').classList.remove('hidden'); btn.innerText='AUTHENTICATE'; }); });
+        // AUTH & NAV
+        document.getElementById('login-form').addEventListener('submit', (e) => { e.preventDefault(); const btn=e.target.querySelector('button'); btn.innerText='...'; signInAnonymously(auth).catch(()=>{document.getElementById('login-msg').classList.remove('hidden'); btn.innerText='Authenticate';}); });
         onAuthStateChanged(auth, (u) => { if(u) { document.getElementById('login-modal').classList.add('hidden'); initData(); } else { document.getElementById('login-modal').classList.remove('hidden'); } });
         window.logout = () => signOut(auth);
-        window.nav = (id) => { document.querySelectorAll('.section').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); document.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('active')); document.getElementById('btn-'+id).classList.add('active'); }
+        
+        window.nav = (id) => {
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden');
+            document.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
+            const dBtn = document.getElementById('btn-d-'+id); if(dBtn) dBtn.classList.add('active');
+            const mBtn = document.getElementById('btn-m-'+id); if(mBtn) mBtn.classList.add('active');
+        }
 
         async function initData() {
             const t = await getDocs(collection(db, "registrations"));
@@ -300,71 +295,93 @@
             document.getElementById('dash-verified').innerText = t.docs.filter(d => d.data().registrationStatus === "Verified").length;
             document.getElementById('dash-matches').innerText = (await getDocs(collection(db, "matches"))).size;
             document.getElementById('dash-news').innerText = (await getDocs(collection(db, "news_posts"))).size;
+            
             const ts = document.getElementById('stat-team-select'); ts.innerHTML = '<option value="">Select Team...</option>';
             t.forEach(doc => { const d=doc.data(); const o=document.createElement('option'); o.value=doc.id; o.textContent=`${d.department} (${d.level})`; ts.appendChild(o); });
-            loadTableData('Finalist (400Lvl)','Finalist');
-            loadSchedule(); loadNews(); loadTeams();
+            
+            loadTableData('Finalist (400Lvl)','Finalist'); loadSchedule(); loadNews(); loadTeams(); loadSpotlightOptions();
         }
 
-        async function getTeamLogo(deptName) { try { const s = await getDoc(doc(db,"team_assets",deptName)); if(s.exists() && s.data().logoUrl) return s.data().logoUrl; } catch(e){} return mainLogoUrl; }
-        async function getBase64Image(url) { try { const r=await fetch(url); const b=await r.blob(); return new Promise(res=>{ const rdr=new FileReader(); rdr.onloadend=()=>res(rdr.result); rdr.readAsDataURL(b); }); } catch(e){return null;} }
+        async function getTeamLogo(n) { try { const s = await getDoc(doc(db,"team_assets",n)); if(s.exists()&&s.data().logoUrl) return s.data().logoUrl; } catch(e){} return mainLogoUrl; }
+        async function getBase64Image(u) { try { const r=await fetch(u); const b=await r.blob(); return new Promise(res=>{ const rdr=new FileReader(); rdr.onloadend=()=>res(rdr.result); rdr.readAsDataURL(b); }); } catch(e){return null;} }
 
-        // --- TABLES ---
-        let curDivCode = '';
+        // TABLES (W-D-L & LOGOS)
+        let curDivCode = '', curDivFull = '';
         window.loadTableData = async (regLevel, shortCode) => {
-            curDivCode = shortCode; document.getElementById('table-title').textContent = `${shortCode} Table`;
-            document.getElementById('table-logos').classList.remove('hidden'); document.getElementById('division-logo-display').src = divisionLogos[shortCode] || mainLogoUrl;
-            const container = document.getElementById('table-editor-container'); container.innerHTML = '<span class="loader"></span> Loading...';
-            const tableDoc = await getDoc(doc(db, "app_content", `league_table_${shortCode}`)); const existing = tableDoc.exists() ? tableDoc.data() : {};
-            const q = query(collection(db, "registrations"), where("level", "==", regLevel)); const regSnap = await getDocs(q);
-            container.innerHTML = `<div class="grid grid-cols-12 gap-1 text-[10px] font-bold text-gray-400 uppercase mb-3 px-2"><div class="col-span-3">Team</div><div class="col-span-1">PL</div><div class="col-span-1">W</div><div class="col-span-1">D</div><div class="col-span-1">L</div><div class="col-span-1">GD</div><div class="col-span-2 text-center">PTS</div></div>`;
-            const map = {}; Object.keys(existing).forEach(k => map[k] = existing[k]); regSnap.forEach(d => { const name = d.data().department; if(!map[name]) map[name] = { mp:0, w:0, d:0, l:0, gd:0, pts:0 }; });
-            const teamNames = Object.keys(map); const logoPromises = teamNames.map(name => getTeamLogo(name)); const logos = await Promise.all(logoPromises);
-            teamNames.map((name, i) => ({name, logo: logos[i], ...map[name]})).sort((a,b) => b.pts-a.pts || b.gd-a.gd).forEach(t => {
-                container.innerHTML += `<div class="grid grid-cols-12 gap-1 items-center mb-2 team-row bg-gray-50 p-2 rounded-lg border border-gray-100" data-name="${t.name}"><div class="col-span-3 flex items-center gap-2"><img src="${t.logo}" class="h-6 w-6 rounded-full border"><span class="font-bold text-gray-800 text-xs truncate">${t.name}</span></div><input type="number" class="col-span-1 tbl-inp inp-mp" value="${t.mp||0}"><input type="number" class="col-span-1 tbl-inp inp-w bg-green-50 text-green-700" value="${t.w||0}"><input type="number" class="col-span-1 tbl-inp inp-d bg-white" value="${t.d||0}"><input type="number" class="col-span-1 tbl-inp inp-l bg-red-50 text-red-700" value="${t.l||0}"><input type="number" class="col-span-1 tbl-inp inp-gd" value="${t.gd||0}"><input type="number" class="col-span-2 tbl-inp inp-pts bg-purple-50 text-purple-700" value="${t.pts||0}"></div>`;
+            curDivCode = shortCode; curDivFull = regLevel; document.getElementById('table-title').textContent = `${shortCode}`;
+            const ld = document.getElementById('table-logos'); ld.classList.remove('hidden'); document.getElementById('division-logo-display').src = divisionLogos[shortCode] || mainLogoUrl;
+            const container = document.getElementById('table-editor-container'); container.innerHTML = '<span class="loader"></span>';
+            const existing = (await getDoc(doc(db, "app_content", `league_table_${shortCode}`))).data() || {};
+            const regSnap = await getDocs(query(collection(db, "registrations"), where("level", "==", regLevel)));
+            
+            container.innerHTML = `<div class="grid grid-cols-12 gap-1 text-[9px] font-bold text-slate-400 uppercase mb-2 px-1"><div class="col-span-3">Team</div><div class="col-span-1 text-center">PL</div><div class="col-span-1 text-center">W</div><div class="col-span-1 text-center">D</div><div class="col-span-1 text-center">L</div><div class="col-span-1 text-center">GD</div><div class="col-span-2 text-center">PTS</div></div>`;
+            const map = {}; Object.keys(existing).forEach(k => map[k] = existing[k]);
+            regSnap.forEach(d => { const n = d.data().department; if(!map[n]) map[n] = { mp:0, w:0, d:0, l:0, gd:0, pts:0 }; });
+            const names = Object.keys(map); const logos = await Promise.all(names.map(n => getTeamLogo(n)));
+            names.map((n, i) => ({name:n, logo: logos[i], ...map[n]})).sort((a,b) => b.pts-a.pts || b.gd-a.gd).forEach(t => {
+                container.innerHTML += `<div class="grid grid-cols-12 gap-1 items-center mb-2 team-row bg-slate-50 p-2 rounded-lg border border-slate-100" data-name="${t.name}"><div class="col-span-3 flex items-center gap-1.5"><img src="${t.logo}" class="h-5 w-5 rounded-full object-cover"><span class="font-bold text-xs truncate">${t.name}</span></div><input type="number" class="col-span-1 tbl-inp inp-mp" value="${t.mp||0}"><input type="number" class="col-span-1 tbl-inp inp-w text-green-600" value="${t.w||0}"><input type="number" class="col-span-1 tbl-inp inp-d" value="${t.d||0}"><input type="number" class="col-span-1 tbl-inp inp-l text-red-500" value="${t.l||0}"><input type="number" class="col-span-1 tbl-inp inp-gd" value="${t.gd||0}"><input type="number" class="col-span-2 tbl-inp inp-pts bg-indigo-50 text-indigo-700" value="${t.pts||0}"></div>`;
             });
             document.getElementById('save-table-btn').classList.remove('hidden');
         };
-        window.saveTableUpdates = async () => { const rows = document.querySelectorAll('.team-row'); let d = {}; rows.forEach(r => { d[r.dataset.name] = { mp: parseInt(r.querySelector('.inp-mp').value)||0, w: parseInt(r.querySelector('.inp-w').value)||0, d: parseInt(r.querySelector('.inp-d').value)||0, l: parseInt(r.querySelector('.inp-l').value)||0, gd: parseInt(r.querySelector('.inp-gd').value)||0, pts: parseInt(r.querySelector('.inp-pts').value)||0 }; }); await setDoc(doc(db, "app_content", `league_table_${curDivCode}`), d); alert("Saved!"); };
-        window.downloadTablePDF = async () => { const { jsPDF } = window.jspdf; const pdf = new jsPDF(); const mImg = await getBase64Image(mainLogoUrl); const dImg = await getBase64Image(divisionLogos[curDivCode] || mainLogoUrl); if(mImg) pdf.addImage(mImg,'JPEG',15,10,15,15); if(dImg) pdf.addImage(dImg,'JPEG',180,10,15,15); pdf.setFontSize(16); pdf.setTextColor(109,40,217); pdf.text(`${curDivCode.toUpperCase()} STANDINGS`, 105, 20, {align:'center'}); const rows = []; document.querySelectorAll('.team-row').forEach((r,i) => rows.push([i+1, r.dataset.name, r.querySelector('.inp-mp').value, r.querySelector('.inp-w').value, r.querySelector('.inp-d').value, r.querySelector('.inp-l').value, r.querySelector('.inp-gd').value, r.querySelector('.inp-pts').value])); pdf.autoTable({ head:[['#','Team','P','W','D','L','GD','Pts']], body:rows, startY:30, theme:'grid', headStyles:{fillColor:[109,40,217]} }); pdf.save("Table.pdf"); };
+        window.saveTableUpdates = async () => { const rows = document.querySelectorAll('.team-row'); let d = {}; rows.forEach(r => d[r.dataset.name] = { mp: parseInt(r.querySelector('.inp-mp').value)||0, w: parseInt(r.querySelector('.inp-w').value)||0, d: parseInt(r.querySelector('.inp-d').value)||0, l: parseInt(r.querySelector('.inp-l').value)||0, gd: parseInt(r.querySelector('.inp-gd').value)||0, pts: parseInt(r.querySelector('.inp-pts').value)||0 }); await setDoc(doc(db, "app_content", `league_table_${curDivCode}`), d); alert("Saved!"); };
+        window.downloadTablePDF = async () => { const { jsPDF } = window.jspdf; const pdf = new jsPDF(); const mImg = await getBase64Image(mainLogoUrl); const dImg = await getBase64Image(divisionLogos[curDivCode] || mainLogoUrl); if(mImg) pdf.addImage(mImg,'JPEG',15,10,15,15); if(dImg) pdf.addImage(dImg,'JPEG',180,10,15,15); pdf.setFontSize(16); pdf.setTextColor(79,70,229); pdf.text(`${curDivCode.toUpperCase()} TABLE`, 105, 20, {align:'center'}); const rows=[]; document.querySelectorAll('.team-row').forEach((r,i) => rows.push([i+1, r.dataset.name, r.querySelector('.inp-mp').value, r.querySelector('.inp-w').value, r.querySelector('.inp-d').value, r.querySelector('.inp-l').value, r.querySelector('.inp-gd').value, r.querySelector('.inp-pts').value])); pdf.autoTable({ head:[['#','Team','P','W','D','L','GD','Pts']], body:rows, startY:35, theme:'grid', headStyles:{fillColor:[79,70,229]} }); pdf.save("Table.pdf"); };
 
-        // --- SCHEDULE ---
+        // SCHEDULE (FAIL-SAFE + FILTER + EDIT)
         let allMatches=[], allTeams=[];
         window.loadSchedule = async () => {
             if(allTeams.length === 0) (await getDocs(collection(db,"registrations"))).forEach(d => allTeams.push(d.data()));
             const el = document.getElementById('active-fixtures'); el.innerHTML='Loading...';
-            const snap = await getDocs(collection(db,"matches")); allMatches = snap.docs.map(doc => ({id:doc.id, ...doc.data()})); renderMatches();
+            allMatches = (await getDocs(collection(db,"matches"))).docs.map(d => ({id:d.id, ...d.data()}));
+            // Update Spotlight Dropdown too
+            loadSpotlightOptions();
+            renderMatches();
         };
         function renderMatches() {
             const el = document.getElementById('active-fixtures'); el.innerHTML = '';
             const fDiv = document.getElementById('filter-div').value, fDay = document.getElementById('filter-day').value;
-            let filtered = allMatches; if(fDiv !== 'All') filtered = filtered.filter(m => m.div === fDiv); if(fDay !== 'All') filtered = filtered.filter(m => m.day === fDay);
-            if(filtered.length === 0) { el.innerHTML = '<p class="text-center text-gray-400">No matches found.</p>'; return; }
+            let filtered = allMatches; if(fDiv!=='All') filtered=filtered.filter(m=>m.div===fDiv); if(fDay!=='All') filtered=filtered.filter(m=>m.day===fDay);
+            if(filtered.length===0) { el.innerHTML='<p class="text-center text-slate-400 text-xs">No matches.</p>'; return; }
             filtered.forEach(m => {
-                const isTBD = m.time === 'TBD' || !m.time;
-                el.innerHTML += `<div class="admin-card p-4 flex justify-between items-center group mb-2 hover:border-purple-200 transition"><div><div class="flex items-center gap-2 mb-1"><span class="text-[10px] font-black bg-purple-50 text-purple-600 px-2 py-0.5 rounded uppercase">${(m.div||'').split(' ')[0]}</span><span class="text-[10px] font-bold text-gray-400 uppercase">${m.day||''}</span></div><div class="font-black text-gray-800 text-sm">${m.home} <span class="text-gray-400 font-normal mx-1">vs</span> ${m.away}</div><div class="text-[10px] font-bold text-gray-500 mt-1 flex items-center gap-2"><i class="fa-regular fa-clock"></i> ${isTBD && !m.date ? 'Date Pending' : m.date} • ${isTBD ? '<span class="text-yellow-600">TBD</span>' : m.time}</div></div><div class="flex gap-2"><button onclick="openEditMatch('${m.id}', '${m.home}', '${m.away}')" class="text-blue-500 bg-blue-50 p-2 rounded hover:bg-blue-100"><i class="fa-solid fa-pen"></i></button><button onclick="setLive('${m.home}','${m.away}')" class="text-red-500 bg-red-50 p-2 rounded hover:bg-red-100 font-bold text-xs">LIVE</button><button onclick="deleteMatch('${m.id}')" class="text-gray-400 hover:text-red-600 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`;
+                const isTBD = m.time === 'TBD' || !m.time; const timeDisplay = isTBD ? '<span class="text-yellow-600 font-bold">TBD</span>' : m.time;
+                el.innerHTML += `<div class="smart-card p-3 flex justify-between items-center mb-2 hover:border-indigo-200 transition"><div><div class="flex items-center gap-2 mb-1"><span class="text-[9px] font-black bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded uppercase">${(m.div||'').split(' ')[0]}</span><span class="text-[9px] font-bold text-slate-400 uppercase">${m.day||''}</span></div><div class="font-bold text-slate-800 text-xs">${m.home} <span class="text-slate-400 mx-1">vs</span> ${m.away}</div><div class="text-[9px] font-bold text-slate-500 mt-1">${isTBD && !m.date ? 'Pending Date' : m.date} • ${timeDisplay}</div></div><div class="flex gap-1"><button onclick="openEditMatch('${m.id}','${m.home}','${m.away}')" class="text-blue-500 bg-blue-50 p-1.5 rounded hover:bg-blue-100"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="deleteMatch('${m.id}')" class="text-slate-400 hover:text-red-600 p-1.5"><i class="fa-solid fa-trash text-xs"></i></button></div></div>`;
             });
         }
         window.openEditMatch = (id,h,a) => { document.getElementById('edit-match-id').value=id; document.getElementById('edit-match-teams').innerText=`${h} vs ${a}`; document.getElementById('edit-match-modal').classList.remove('hidden'); };
         window.closeEditModal = () => document.getElementById('edit-match-modal').classList.add('hidden');
-        window.confirmEditMatch = async () => { const id=document.getElementById('edit-match-id').value, d=document.getElementById('edit-match-date').value, t=document.getElementById('edit-match-time').value; if(!d||!t)return alert("Select Date/Time"); await updateDoc(doc(db,"matches",id),{date:d,time:t}); closeEditModal(); loadSchedule(); };
-        window.downloadSchedulePDF = async () => { const { jsPDF } = window.jspdf; const pdf = new jsPDF(); const fDiv = document.getElementById('filter-div').value; const title = fDiv === 'All' ? "FULL SCHEDULE" : `${fDiv.split(' ')[0].toUpperCase()} SCHEDULE`; const divShort = fDiv === 'All' ? 'Finalist' : fDiv.split(' ')[0]; const mImg = await getBase64Image(mainLogoUrl); const dImg = await getBase64Image(divisionLogos[divShort] || mainLogoUrl); if(mImg) pdf.addImage(mImg,'JPEG',15,10,20,20); if(fDiv !== 'All' && dImg) pdf.addImage(dImg,'JPEG',175,10,20,20); pdf.setFontSize(18); pdf.setTextColor(109,40,217); pdf.text(title, 105, 25, {align:'center'}); let matches = allMatches; if(fDiv !== 'All') matches = matches.filter(m => m.div === fDiv); matches.sort((a,b) => (a.date > b.date) ? 1 : -1); const rows = []; matches.forEach(m => rows.push([m.date, m.time, m.div.split(' ')[0], `${m.home} vs ${m.away}`, m.day])); pdf.autoTable({ head:[['Date','Time','Div','Fixture','Day']], body:rows, startY:40 }); pdf.save("Schedule.pdf"); };
+        window.confirmEditMatch = async () => { const id=document.getElementById('edit-match-id').value, d=document.getElementById('edit-match-date').value, t=document.getElementById('edit-match-time').value; if(!d||!t)return; await updateDoc(doc(db,"matches",id),{date:d,time:t}); closeEditModal(); loadSchedule(); };
+        window.downloadSchedulePDF = async () => { const { jsPDF } = window.jspdf; const pdf = new jsPDF(); const fDiv = document.getElementById('filter-div').value; const title = fDiv === 'All' ? "FULL SCHEDULE" : `${fDiv.split(' ')[0].toUpperCase()} SCHEDULE`; const divShort = fDiv === 'All' ? 'Finalist' : fDiv.split(' ')[0]; const mImg = await getBase64Image(mainLogoUrl); const dImg = await getBase64Image(divisionLogos[divShort] || mainLogoUrl); if(mImg) pdf.addImage(mImg,'JPEG',15,10,15,15); if(fDiv!=='All' && dImg) pdf.addImage(dImg,'JPEG',175,10,15,15); pdf.setFontSize(16); pdf.setTextColor(79,70,229); pdf.text(title, 105, 20, {align:'center'}); let matches = allMatches; if(fDiv!=='All') matches=matches.filter(m=>m.div===fDiv); matches.sort((a,b)=>(a.date>b.date)?1:-1); const rows=[]; matches.forEach(m => rows.push([m.date, m.time, m.div.split(' ')[0], `${m.home} vs ${m.away}`, m.day])); pdf.autoTable({ head:[['Date','Time','Div','Fixture','Day']], body:rows, startY:35, theme:'grid' }); pdf.save("Schedule.pdf"); };
         window.filterTeamsByDiv = () => { const div=document.getElementById('fix-div').value, h=document.getElementById('fix-home'), a=document.getElementById('fix-away'); h.innerHTML='<option>Home</option>'; a.innerHTML='<option>Away</option>'; allTeams.filter(t=>t.level===div || (div==="Female League"&&t.division==="Female")).forEach(t=>{ const o=`<option value="${t.department}">${t.department}</option>`; h.innerHTML+=o; a.innerHTML+=o; }); };
         window.saveFixture = async () => { const f={div:document.getElementById('fix-div').value, day:document.getElementById('fix-day').value, date:document.getElementById('fix-date').value, time:document.getElementById('fix-time').value, home:document.getElementById('fix-home').value, away:document.getElementById('fix-away').value, timestamp:serverTimestamp()}; if(!f.home) return; await addDoc(collection(db,"matches"), f); loadSchedule(); };
-        window.setLive = async (h, a) => { let l1=await getTeamLogo(h), l2=await getTeamLogo(a); await setDoc(doc(db,"app_content","current_fixture"), { matches:[{teamA:h, teamB:a, teamALogo:l1, teamBLogo:l2, category:"LIVE", date:"TODAY", time:"NOW", venue:"MAIN BOWL"}] }); alert("Set Live"); };
         window.deleteMatch = async(id) => { if(confirm("Delete?")) { await deleteDoc(doc(db,"matches",id)); loadSchedule(); }};
 
-        // --- VERIFY, ASSETS, STATS, NEWS (Standard) ---
-        window.loadVerifications = async () => { const list = document.getElementById('verify-list'); list.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-gray-400">Loading...</td></tr>'; const s = await getDocs(collection(db, "registrations")); list.innerHTML = ''; s.forEach(d => { const data = d.data(); const clr = data.registrationStatus === "Verified" ? "text-green-600 bg-green-100" : "text-amber-600 bg-amber-100"; list.innerHTML += `<tr class="border-b border-gray-100 hover:bg-gray-50"><td class="p-4 pl-6"><div class="font-bold text-gray-800">${data.department}</div><div class="text-xs text-gray-400">${data.teamName}</div></td><td class="p-4 text-xs font-bold text-gray-500">${data.level}</td><td class="p-4"><span class="${clr} px-2.5 py-1 rounded-md text-[10px] font-bold uppercase">${data.registrationStatus||'Pending'}</span></td><td class="p-4 pr-6 text-right"><button onclick="verifyTeam('${d.id}')" class="text-blue-600 bg-blue-50 hover:bg-blue-100 p-2 rounded-md mr-2"><i class="fa-solid fa-check"></i></button><button onclick="downloadPDF('${d.id}')" class="text-gray-600 bg-gray-100 hover:bg-gray-200 p-2 rounded-md"><i class="fa-solid fa-download"></i></button></td></tr>`; }); };
-        window.verifyTeam = async (id) => { if(confirm("Confirm?")) { await updateDoc(doc(db,"registrations",id), {registrationStatus:"Verified"}); loadVerifications(); }};
-        window.downloadPDF = async (id) => { const { jsPDF } = window.jspdf; const snap = await getDoc(doc(db,"registrations",id)); const data = snap.data(); const pdf = new jsPDF(); pdf.setFillColor(109,40,217); pdf.rect(0,0,210,20,'F'); pdf.setFontSize(16); pdf.setTextColor(255); pdf.text("TEAM ROSTER",10,13); pdf.setFontSize(10); pdf.setTextColor(0); pdf.text(`Dept: ${data.department}\nLevel: ${data.level}\nCoach: ${data.coachName}`,10,30); pdf.autoTable({head:[['Name','Position']], body:(data.players||[]).map(p=>[p.name,p.position]), startY:50, theme:'grid'}); pdf.save(`${data.department}_Data.pdf`); };
-        window.loadTeams = async () => { const grid = document.getElementById('assets-grid'); grid.innerHTML = '<p>Loading...</p>'; const s = await getDocs(query(collection(db,"registrations"), orderBy("department"))); grid.innerHTML = ''; for(const d of s.docs) { const data = d.data(); let logo = await getTeamLogo(data.department); grid.innerHTML += `<div class="admin-card p-4 flex items-center gap-4 hover:shadow-md transition"><img src="${logo}" class="h-14 w-14 rounded-xl bg-gray-50 object-cover border"><div class="flex-1 min-w-0"><h4 class="font-bold text-gray-800 text-sm truncate">${data.department}</h4><p class="text-[10px] font-bold text-gray-400 uppercase mb-2">${data.level}</p><label class="cursor-pointer text-[10px] font-bold bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-purple-600 hover:text-white transition">Change Logo <input type="file" class="hidden" onchange="upLogo(event, '${data.department}')" accept="image/*"></label></div></div>`; } };
+        // --- SPOTLIGHT MANAGER (NEW) ---
+        window.loadSpotlightOptions = () => {
+            const sel = document.getElementById('spotlight-select'); sel.innerHTML = '<option value="">Select a Fixture...</option>';
+            allMatches.forEach(m => {
+                const opt = document.createElement('option'); opt.value = JSON.stringify(m);
+                opt.textContent = `${m.div.split(' ')[0]} | ${m.home} vs ${m.away}`; sel.appendChild(opt);
+            });
+        };
+        window.setSpotlightFromDropdown = async () => {
+            const val = document.getElementById('spotlight-select').value; if(!val) return;
+            const m = JSON.parse(val);
+            let l1=await getTeamLogo(m.home), l2=await getTeamLogo(m.away);
+            await setDoc(doc(db,"app_content","current_fixture"), { matches:[{teamA:m.home, teamB:m.away, teamALogo:l1, teamBLogo:l2, category:"SPOTLIGHT", date:m.date||'Coming Soon', time:m.time||'TBD', venue:"MAIN BOWL"}] }); alert("Spotlight Updated!");
+        };
+
+        // ASSETS, STATS, NEWS, ETC. (Standard)
+        window.loadTeams = async () => { const grid = document.getElementById('assets-grid'); grid.innerHTML = '<p>Loading...</p>'; const s = await getDocs(query(collection(db,"registrations"), orderBy("department"))); grid.innerHTML = ''; for(const d of s.docs) { const data = d.data(); let logo = await getTeamLogo(data.department); grid.innerHTML += `<div class="smart-card p-3 flex items-center gap-3 hover:shadow-md transition"><img src="${logo}" class="h-10 w-10 rounded-full bg-slate-50 object-cover border"><div class="flex-1 min-w-0"><h4 class="font-bold text-slate-800 text-sm truncate">${data.department}</h4><p class="text-[9px] font-bold text-slate-400 uppercase mb-2">${data.level}</p><label class="cursor-pointer text-[9px] font-bold bg-slate-100 text-slate-600 px-3 py-1.5 rounded-lg hover:bg-indigo-600 hover:text-white transition">Upload <input type="file" class="hidden" onchange="upLogo(event, '${data.department}')" accept="image/*"></label></div></div>`; } };
         window.upLogo = async (e, id) => { const f = e.target.files[0]; if(!f) return; const r = ref(storage, `logos/${id}_${Date.now()}`); await uploadBytes(r, f); const u = await getDownloadURL(r); await setDoc(doc(db,"team_assets",id), { logoUrl: u }, { merge: true }); loadTeams(); };
         window.loadTeamPlayers = async () => { const tid = document.getElementById('stat-team-select').value; const ps = document.getElementById('stat-player-select'); ps.innerHTML = '<option>Loading...</option>'; if(!tid) return; const d = await getDoc(doc(db, "registrations", tid)); ps.innerHTML = '<option value="">Select Player...</option>'; (d.data().players||[]).forEach(p => { const o = document.createElement('option'); o.value=p.name; o.textContent=`${p.name} (${p.position})`; ps.appendChild(o); }); };
         window.fetchPlayerCurrentStats = async () => { const teamId = document.getElementById('stat-team-select').value; const playerName = document.getElementById('stat-player-select').value; if(!teamId || !playerName) return; document.getElementById('stats-editor').classList.remove('hidden'); const snap = await getDoc(doc(db, "player_stats", `${teamId}_${playerName.replace(/\s+/g,'')}`)); const stats = snap.exists() ? snap.data() : {}; document.getElementById('p-goals').value = stats.goals || 0; document.getElementById('p-assists').value = stats.assists || 0; document.getElementById('p-yellow').value = stats.yellow_cards || 0; document.getElementById('p-red').value = stats.red_cards || 0; document.getElementById('p-saves').value = stats.saves || 0; };
         window.savePlayerStats = async () => { const t=document.getElementById('stat-team-select').value, p=document.getElementById('stat-player-select').value; if(!t || !p) return; const newData = { name: p, teamId: t, goals: parseInt(document.getElementById('p-goals').value)||0, assists: parseInt(document.getElementById('p-assists').value)||0, yellow_cards: parseInt(document.getElementById('p-yellow').value)||0, red_cards: parseInt(document.getElementById('p-red').value)||0, saves: parseInt(document.getElementById('p-saves').value)||0 }; await setDoc(doc(db, "player_stats", `${t}_${p.replace(/\s+/g,'')}`), newData, { merge: true }); alert("Stats Saved"); };
+        window.loadVerifications = async () => { const list = document.getElementById('verify-list'); list.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-slate-400">Loading...</td></tr>'; const s = await getDocs(collection(db, "registrations")); list.innerHTML = ''; s.forEach(d => { const data = d.data(); const clr = data.registrationStatus === "Verified" ? "text-green-600 bg-green-50" : "text-amber-600 bg-amber-50"; list.innerHTML += `<tr class="border-b border-slate-50 hover:bg-slate-50/50"><td class="p-3 pl-6"><div class="font-bold text-slate-800 text-xs">${data.department}</div><div class="text-[10px] text-slate-400">${data.teamName}</div></td><td class="p-3 text-[10px] font-bold text-slate-500 hidden md:table-cell">${data.level}</td><td class="p-3"><span class="${clr} px-2 py-0.5 rounded text-[9px] font-black uppercase">${data.registrationStatus||'Pending'}</span></td><td class="p-3 pr-6 text-right"><button onclick="verifyTeam('${d.id}')" class="text-indigo-600 bg-indigo-50 p-1.5 rounded hover:bg-indigo-100 mr-2"><i class="fa-solid fa-check text-xs"></i></button><button onclick="downloadPDF('${d.id}')" class="text-slate-600 bg-slate-100 hover:bg-slate-200 p-1.5 rounded"><i class="fa-solid fa-download text-xs"></i></button></td></tr>`; }); };
+        window.verifyTeam = async (id) => { if(confirm("Confirm?")) { await updateDoc(doc(db,"registrations",id), {registrationStatus:"Verified"}); loadVerifications(); }};
+        window.downloadPDF = async (id) => { const { jsPDF } = window.jspdf; const snap = await getDoc(doc(db,"registrations",id)); const data = snap.data(); const pdf = new jsPDF(); pdf.setFillColor(79,70,229); pdf.rect(0,0,210,15,'F'); pdf.setFontSize(14); pdf.setTextColor(255); pdf.text("TEAM ROSTER",10,10); pdf.setFontSize(10); pdf.setTextColor(0); pdf.text(`Dept: ${data.department}\nLevel: ${data.level}\nCoach: ${data.coachName}`,10,25); pdf.autoTable({head:[['Name','Position']], body:(data.players||[]).map(p=>[p.name,p.position]), startY:40, theme:'grid'}); pdf.save(`${data.department}.pdf`); };
         window.publishNews = async () => { const file = document.getElementById('news-file').files[0]; let mediaUrl = ""; if(file) { const r = ref(storage, `news/${Date.now()}_${file.name}`); await uploadBytes(r, file); mediaUrl = await getDownloadURL(r); } await addDoc(collection(db,"news_posts"), { title:document.getElementById('news-title').value, content:document.getElementById('news-body').value, imageUrl: mediaUrl, timestamp:serverTimestamp(), likes:0, commentsCount:0 }); alert("Published"); loadNews(); };
-        window.loadNews = async () => { const c=document.getElementById('news-feed'); c.innerHTML=''; (await getDocs(query(collection(db,"news_posts"), orderBy("timestamp","desc")))).forEach(d => { c.innerHTML += `<div class="p-3 bg-gray-50 rounded-lg mb-2 flex justify-between items-center"><span class="text-xs font-bold text-gray-700 truncate w-32">${d.data().title}</span><button onclick="deleteDoc(doc(db,'news_posts','${d.id}'));loadNews()" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-trash"></i></button></div>`; }); };
+        window.loadNews = async () => { const c=document.getElementById('news-feed'); c.innerHTML=''; (await getDocs(query(collection(db,"news_posts"), orderBy("timestamp","desc")))).forEach(d => { c.innerHTML += `<div class="p-3 bg-slate-50 rounded-lg mb-2 flex justify-between items-center"><span class="text-xs font-bold text-slate-700 truncate w-32">${d.data().title}</span><button onclick="deleteDoc(doc(db,'news_posts','${d.id}'));loadNews()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-trash text-xs"></i></button></div>`; }); };
+        window.setMOTM = async (a) => { const n=[document.getElementById('motm-1').value,document.getElementById('motm-2').value,document.getElementById('motm-3').value]; await setDoc(doc(db,"app_content","fan_zone"),{motm:{active:a,nominees:n,votes:[0,0,0]}},{merge:true}); alert(a?"Voting On":"Voting Off"); };
+        window.createPoll = async () => { const q=document.getElementById('poll-q').value, o1=document.getElementById('poll-o1').value, o2=document.getElementById('poll-o2').value; if(!q)return; await addDoc(collection(db,"polls"),{question:q,opt1:o1,opt2:o2,votes1:0,votes2:0,active:true,timestamp:serverTimestamp()}); alert("Poll Launched"); };
     </script>
 </body>
 </html>
