@@ -82,13 +82,15 @@
     <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center login-bg p-4">
         <div class="bg-white/80 backdrop-blur-xl p-10 rounded-[32px] max-w-sm w-full text-center shadow-2xl border border-white">
             <div class="h-20 w-20 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg text-white text-3xl font-black">E</div>
-            <h2 class="text-2xl font-black text-slate-800 mb-2">Welcome Back</h2>
-            <p class="text-sm text-slate-500 mb-8">Enter your access code.</p>
+            <h2 class="text-2xl font-black text-slate-800 mb-2">Admin Portal</h2>
+            <p class="text-sm text-slate-500 mb-8">Sign in to manage league.</p>
+            
             <form id="login-form" class="space-y-4">
-                <input type="password" id="adm-pass" placeholder="Access Code" class="w-full px-6 py-4 bg-white border-none rounded-2xl font-bold text-lg shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none" required>
-                <button type="submit" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-black transition shadow-lg">Unlock Dashboard</button>
+                <input type="email" id="adm-email" placeholder="Email Address" class="input-love" required>
+                <input type="password" id="adm-pass" placeholder="Password" class="input-love" required>
+                <button type="submit" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-black transition shadow-lg">Login Dashboard</button>
             </form>
-            <p id="login-msg" class="text-red-500 text-xs font-bold mt-4 hidden">Incorrect Code</p>
+            <p id="login-msg" class="text-red-500 text-xs font-bold mt-4 hidden">Invalid Credentials</p>
         </div>
     </div>
 
@@ -142,7 +144,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div class="love-card p-6 border-b-4 border-indigo-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Teams</p><h3 class="text-4xl font-black text-slate-800 mt-2" id="dash-teams">0</h3></div>
                 <div class="love-card p-6 border-b-4 border-green-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Verified</p><h3 class="text-4xl font-black text-slate-800 mt-2" id="dash-verified">0</h3></div>
-                <div class="love-card p-6 border-b-4 border-blue-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Fixtures</p><h3 class="text-4xl font-black text-slate-800 mt-2" id="dash-matches">0</h3></div>
+                <div class="love-card p-6 border-b-4 border-blue-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Matches</p><h3 class="text-4xl font-black text-slate-800 mt-2" id="dash-matches">0</h3></div>
                 <div class="love-card p-6 border-b-4 border-purple-500"><p class="text-[10px] font-bold text-slate-400 uppercase">News</p><h3 class="text-4xl font-black text-slate-800 mt-2" id="dash-news">0</h3></div>
             </div>
         </div>
@@ -164,7 +166,7 @@
                         <div class="grid grid-cols-2 gap-2"><select id="fix-day" class="input-love"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select><input type="date" id="fix-date" class="input-love"></div>
                         <select id="fix-time" class="input-love"><option value="TBD">⏰ TBD</option><option value="08:00">08:00 AM</option><option value="10:00">10:00 AM</option><option value="12:00">12:00 PM</option><option value="14:00">02:00 PM</option><option value="16:00">04:00 PM</option></select>
                         <div class="grid grid-cols-2 gap-2"><select id="fix-home" class="input-love"><option>Home</option></select><select id="fix-away" class="input-love"><option>Away</option></select></div>
-                        <button onclick="saveFixture()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-indigo-700">Add Match</button>
+                        <button onclick="saveFixture()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-indigo-700 transition">Add Match</button>
                     </div>
                 </div>
             </div>
@@ -173,39 +175,24 @@
         <div id="tables" class="section hidden">
             <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800">Standings</h2><button onclick="downloadTablePDF()" class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg">PDF Export</button></div>
             <div class="flex gap-3 mb-8 overflow-x-auto pb-2 no-scrollbar">
-                <button onclick="loadTableData('Finalist (400Lvl)','Finalist')" class="px-5 py-2.5 bg-white border border-slate-200 rounded-full text-xs font-bold hover:text-indigo-600 shadow-sm whitespace-nowrap">Finalist</button>
-                <button onclick="loadTableData('Penultimate (300Lvl)','Penultimate')" class="px-5 py-2.5 bg-white border border-slate-200 rounded-full text-xs font-bold hover:text-indigo-600 shadow-sm whitespace-nowrap">Penultimate</button>
-                <button onclick="loadTableData('Sophomore (200Lvl)','Sophomore')" class="px-5 py-2.5 bg-white border border-slate-200 rounded-full text-xs font-bold hover:text-indigo-600 shadow-sm whitespace-nowrap">Sophomore</button>
-                <button onclick="loadTableData('Female League','Female')" class="px-5 py-2.5 bg-pink-50 border border-pink-200 rounded-full text-xs font-bold text-pink-600 whitespace-nowrap">Female</button>
+                <button onclick="loadTableData('Finalist (400Lvl)','Finalist')" class="px-5 py-2.5 bg-white border border-slate-200 rounded-full text-xs font-bold hover:text-indigo-600 shadow-sm whitespace-nowrap transition">Finalist</button>
+                <button onclick="loadTableData('Penultimate (300Lvl)','Penultimate')" class="px-5 py-2.5 bg-white border border-slate-200 rounded-full text-xs font-bold hover:text-indigo-600 shadow-sm whitespace-nowrap transition">Penultimate</button>
+                <button onclick="loadTableData('Sophomore (200Lvl)','Sophomore')" class="px-5 py-2.5 bg-white border border-slate-200 rounded-full text-xs font-bold hover:text-indigo-600 shadow-sm whitespace-nowrap transition">Sophomore</button>
+                <button onclick="loadTableData('Female League','Female')" class="px-5 py-2.5 bg-pink-50 border border-pink-200 rounded-full text-xs font-bold text-pink-600 whitespace-nowrap transition">Female</button>
             </div>
-            <div id="table-logos" class="hidden mb-6 flex justify-center items-center gap-8 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 w-fit mx-auto">
-                <div class="text-center"><img src="edulogo.jpg" class="h-12 w-12 rounded-full border shadow-sm object-cover"><p class="text-[9px] font-black mt-1 text-slate-400">LEAGUE</p></div>
-                <div class="text-slate-300 font-black text-xl">X</div>
-                <div class="text-center"><img id="div-logo-display" src="" class="h-12 w-12 rounded-full border shadow-sm object-contain"><p class="text-[9px] font-black mt-1 text-slate-400">DIVISION</p></div>
-            </div>
-            <div class="love-card p-6">
-                <div id="table-container" class="space-y-2"></div>
-                <button onclick="saveTableUpdates()" id="save-table-btn" class="mt-6 w-full bg-green-500 text-white font-bold py-3 rounded-xl shadow-lg hidden">Update Table</button>
-            </div>
+            <div id="table-logos" class="hidden mb-6 flex justify-center items-center gap-8 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 w-fit mx-auto"><div class="text-center"><img src="edulogo.jpg" class="h-12 w-12 rounded-full border shadow-sm object-cover"><p class="text-[9px] font-black mt-1 text-slate-400">LEAGUE</p></div><div class="text-slate-300 font-black text-xl">X</div><div class="text-center"><img id="div-logo-display" src="" class="h-12 w-12 rounded-full border shadow-sm object-contain"><p class="text-[9px] font-black mt-1 text-slate-400">DIVISION</p></div></div>
+            <div class="love-card p-6"><div id="table-container" class="space-y-2"></div><button onclick="saveTableUpdates()" id="save-table-btn" class="mt-6 w-full bg-green-500 text-white font-bold py-3 rounded-xl shadow-lg hidden">Update Table</button></div>
         </div>
 
         <div id="spotlight" class="section hidden">
             <h1 class="text-2xl font-black text-slate-800 mb-2">Spotlight Manager</h1>
-            <p class="text-sm text-slate-500 mb-6">Feature up to 3 matches on the News Page.</p>
+            <p class="text-sm text-slate-500 mb-6">Select up to 3 matches.</p>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="love-card p-6 h-fit border-l-4 border-yellow-400">
-                    <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">1. Find Matches</h3>
-                    <div class="grid grid-cols-2 gap-3 mb-4">
-                        <select id="spot-div" class="input-love" onchange="loadSpotlightCandidates()"><option value="">Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-                        <select id="spot-day" class="input-love" onchange="loadSpotlightCandidates()"><option value="">Day</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select>
-                    </div>
-                    <div id="spot-candidates" class="space-y-2 max-h-[300px] overflow-y-auto bg-slate-50 p-2 rounded-xl"></div>
+                    <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">1. Find Match</h3>
+                    <div class="grid grid-cols-2 gap-3 mb-4"><select id="spot-div" class="input-love" onchange="loadSpotlightCandidates()"><option value="">Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="spot-day" class="input-love" onchange="loadSpotlightCandidates()"><option value="">Day</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select></div><div id="spot-candidates" class="space-y-2 max-h-[300px] overflow-y-auto bg-slate-50 p-2 rounded-xl"></div>
                 </div>
-                <div class="love-card p-6">
-                    <h3 class="font-bold text-slate-700 mb-4 border-b pb-2 flex justify-between"><span>2. Selected (Max 3)</span><button onclick="clearSpotlights()" class="text-xs text-red-500 font-bold">Clear</button></h3>
-                    <div id="active-spotlights" class="space-y-4 min-h-[100px] bg-slate-50 rounded-xl p-4"></div>
-                    <button onclick="publishSpotlights()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg mt-6">PUBLISH TO WEBSITE</button>
-                </div>
+                <div class="love-card p-6"><h3 class="font-bold text-slate-700 mb-4 border-b pb-2 flex justify-between"><span>2. Selected (Max 3)</span><button onclick="clearSpotlights()" class="text-xs text-red-500 font-bold">Clear All</button></h3><div id="active-spotlights" class="space-y-4"></div><button onclick="publishSpotlights()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg mt-6">UPDATE NEWS PAGE</button></div>
             </div>
         </div>
 
@@ -264,20 +251,33 @@
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
         // ==========================================
-        // 1. SET YOUR EMAIL HERE FOR PASSWORD-ONLY LOGIN
+        // 1. FIREBASE CONFIGURATION
         // ==========================================
-        const HIDDEN_ADMIN_EMAIL = "your-email@example.com"; 
-
-        const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
+        const firebaseConfig = { 
+            apiKey: "YOUR_API_KEY", 
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com", 
+            projectId: "YOUR_PROJECT_ID", 
+            storageBucket: "YOUR_PROJECT_ID.appspot.com", 
+            messagingSenderId: "YOUR_SENDER_ID", 
+            appId: "YOUR_APP_ID" 
+        };
+        
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app); const storage = getStorage(app);
         const notify = (msg, type="success") => Toastify({ text: msg, duration: 3000, gravity: "top", position: "right", backgroundColor: type==="success"?"#4f46e5":"#ef4444", style: { borderRadius: "12px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" } }).showToast();
         const mainLogoUrl = "edulogo.jpg";
         const divisionLogos = { 'Finalist': 'edulogo.jpg', 'Penultimate': 'edulogo.jpg', 'Sophomore': 'edulogo.jpg', 'Female': 'edulogo.jpg' };
 
-        // AUTH & NAV
+        // AUTH & NAV (RESTORED TO EMAIL & PASSWORD)
         document.getElementById('login-form').addEventListener('submit', (e) => { 
-            e.preventDefault(); const pass = document.getElementById('adm-pass').value; const btn=e.target.querySelector('button'); btn.innerText='...'; 
-            signInWithEmailAndPassword(auth, HIDDEN_ADMIN_EMAIL, pass).catch(()=>{document.getElementById('login-msg').classList.remove('hidden'); btn.innerText='Unlock Dashboard';}); 
+            e.preventDefault(); 
+            const email = document.getElementById('adm-email').value;
+            const pass = document.getElementById('adm-pass').value;
+            const btn = e.target.querySelector('button'); btn.innerText='...'; 
+            signInWithEmailAndPassword(auth, email, pass).catch((err)=>{
+                document.getElementById('login-msg').classList.remove('hidden'); 
+                btn.innerText='Login Dashboard';
+                console.error(err);
+            }); 
         });
         onAuthStateChanged(auth, (u) => { if(u) { document.getElementById('login-modal').classList.add('hidden'); initData(); } });
         window.logout = () => signOut(auth);
@@ -292,19 +292,19 @@
             document.getElementById('dash-verified').innerText = t.docs.filter(d => d.data().registrationStatus === "Verified").length;
             document.getElementById('dash-matches').innerText = (await getDocs(collection(db, "schedules"))).size;
             document.getElementById('dash-news').innerText = (await getDocs(collection(db, "news_posts"))).size;
+            loadVerifications(); loadTeams(); loadSchedule(); loadNews(); loadActivePolls();
             const ts = document.getElementById('stat-team-select'); ts.innerHTML = '<option value="">Select Team...</option>';
             t.forEach(doc => { const d=doc.data(); const o=document.createElement('option'); o.value=doc.id; o.textContent=`${d.department} (${d.level})`; ts.appendChild(o); });
-            loadVerifications(); loadTeams(); loadSchedule(); loadNews(); loadActivePolls();
         }
 
-        // 1. SCHEDULE
+        // 1. SCHEDULE (schedules collection + undefined fix)
         let allSchedules = [], allRegTeams = [];
         window.loadSchedule = async () => {
             if(allRegTeams.length===0) (await getDocs(collection(db,"registrations"))).forEach(d=>allRegTeams.push(d.data()));
             const el = document.getElementById('active-fixtures'); el.innerHTML='Loading...';
             const snap = await getDocs(collection(db,"schedules"));
             allSchedules = snap.docs.map(d => ({id:d.id, ...d.data()}));
-            loadSpotlightCandidates(); // update spotlight too
+            loadSpotlightCandidates(); // Update spotlight too
             renderMatches();
         };
         function renderMatches() {
@@ -374,15 +374,16 @@
             for(const d of s.docs) {
                 const data = d.data();
                 let logo = "edulogo.jpg"; try { const a = await getDoc(doc(db,"team_assets",data.department)); if(a.exists()) logo = a.data().logoUrl + '?t=' + new Date().getTime(); } catch(e){}
-                grid.innerHTML += `<div class="love-card p-3 flex items-center gap-3 hover:shadow-lg transition"><img src="${logo}" class="h-10 w-10 rounded-full bg-slate-50 object-cover border"><div class="flex-1 min-w-0"><h4 class="font-bold text-slate-800 text-sm truncate">${data.department}</h4><p class="text-[9px] font-bold text-slate-400 uppercase mb-2">${data.level}</p><label class="cursor-pointer text-[9px] font-bold bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-600 hover:text-white transition">Upload <input type="file" class="hidden" onchange="upLogo(event, '${data.department}')" accept="image/*"></label></div></div>`;
+                grid.innerHTML += `<div class="love-card p-3 flex items-center gap-3 hover:shadow-lg transition"><img src="${logo}" id="img-${d.id}" class="h-10 w-10 rounded-full bg-slate-50 object-cover border"><div class="flex-1 min-w-0"><h4 class="font-bold text-slate-800 text-sm truncate">${data.department}</h4><p class="text-[9px] font-bold text-slate-400 uppercase mb-2">${data.level}</p><label class="cursor-pointer text-[9px] font-bold bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-600 hover:text-white transition">Upload <input type="file" class="hidden" onchange="upLogo(event, '${data.department}', '${d.id}')" accept="image/*"></label></div></div>`;
             }
         };
-        window.upLogo = async (e, id) => {
+        window.upLogo = async (e, id, elId) => {
             const f = e.target.files[0]; if(!f) return;
             const r = ref(storage, `logos/${id}_${Date.now()}`); notify("Uploading Logo...", "info");
             await uploadBytes(r, f); const u = await getDownloadURL(r);
             await setDoc(doc(db,"team_assets",id), { logoUrl: u }, { merge: true });
-            notify("Logo Updated Successfully!"); loadTeams();
+            const img = document.getElementById('img-'+elId); if(img) img.src = u;
+            notify("Logo Updated Successfully!");
         };
 
         // 5. PLAYER STATS
