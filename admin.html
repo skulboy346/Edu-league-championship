@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EDU-LEAGUE | Command Center</title>
+    <title>EDU-LEAGUE | Admin</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
@@ -22,21 +22,20 @@
             color: #1e293b;
         }
 
-        /* --- CUSTOM NOTIFICATION TOAST --- */
-        #custom-toast {
-            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
-            background: white; padding: 16px 24px; border-radius: 16px;
-            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.25);
-            z-index: 9999; transition: top 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            display: flex; align-items: center; gap: 12px; font-weight: 700;
-            border: 1px solid #f1f5f9; min-width: 320px; justify-content: center;
+        /* --- 100% WORKING NOTIFICATION --- */
+        #notify-bar {
+            position: fixed; top: -100px; left: 0; right: 0;
+            background: #10b981; color: white;
+            padding: 16px; text-align: center; font-weight: 800; font-size: 1rem;
+            z-index: 10000; transition: top 0.4s ease-in-out;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            display: flex; justify-content: center; align-items: center; gap: 10px;
         }
-        #custom-toast.show { top: 30px; }
-        #custom-toast.success { border-left: 6px solid #10b981; color: #064e3b; }
-        #custom-toast.error { border-left: 6px solid #ef4444; color: #7f1d1d; }
-        #custom-toast.info { border-left: 6px solid #3b82f6; color: #1e3a8a; }
+        #notify-bar.show { top: 0; }
+        #notify-bar.error { background: #ef4444; }
+        #notify-bar.info { background: #3b82f6; }
 
-        /* --- CARDS & UI --- */
+        /* --- UI ELEMENTS --- */
         .love-card {
             background: white; border-radius: 24px;
             border: 1px solid #f1f5f9;
@@ -57,7 +56,6 @@
             font-size: 0.85rem; font-weight: 600; color: #64748b;
             transition: all 0.2s ease; white-space: nowrap; border: 1px solid transparent;
         }
-        .nav-btn:hover { background: #f1f5f9; color: #4f46e5; transform: translateY(-1px); }
         .nav-btn.active {
             background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
             color: white; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
@@ -70,8 +68,7 @@
             border: 1px solid transparent; transition: 0.2s; margin-bottom: 4px;
         }
         .badge-item:hover { background: #f1f5f9; }
-        .badge-item.active { background: #eef2ff; border-color: #6366f1; }
-        .badge-item .status-icon { font-size: 1.2rem; }
+        .badge-item.active { background: #eef2ff; border-color: #6366f1; box-shadow: 0 0 0 2px #e0e7ff; }
 
         .tbl-input { background: transparent; text-align: center; font-weight: 800; width: 100%; outline: none; padding: 4px; font-size: 0.8rem; }
         .tbl-input:focus { background: #eef2ff; border-radius: 6px; color: #4338ca; }
@@ -83,15 +80,15 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <div id="custom-toast" class="">
-        <i id="toast-icon" class="fa-solid fa-check-circle text-2xl"></i>
-        <span id="toast-msg" class="text-sm">Notification</span>
+    <div id="notify-bar">
+        <i id="notify-icon" class="fa-solid fa-check-circle"></i>
+        <span id="notify-msg">Action Successful</span>
     </div>
 
     <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/95 backdrop-blur-sm p-4">
         <div class="bg-white p-10 rounded-[32px] max-w-sm w-full text-center shadow-2xl">
             <div class="h-16 w-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg text-white text-2xl font-black">E</div>
-            <h2 class="text-2xl font-black text-slate-800 mb-2">Restricted Access</h2>
+            <h2 class="text-2xl font-black text-slate-800 mb-2">Restricted Area</h2>
             <p class="text-sm text-slate-500 mb-8">Authorized Personnel Only</p>
             <form id="login-form" class="space-y-4">
                 <input type="password" id="adm-pass" placeholder="••••••••" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-lg text-center outline-none focus:ring-2 focus:ring-indigo-500 tracking-widest transition" required>
@@ -136,8 +133,8 @@
                 
                 <div class="love-card flex flex-col h-full col-span-1 border-r border-gray-100">
                     <div class="p-6 border-b border-gray-100 bg-gray-50/50">
-                        <h3 class="font-bold text-slate-800 text-xs uppercase tracking-wider">Select Team</h3>
-                        <p class="text-[10px] text-slate-400 mt-1">Green = Uploaded | Grey = Pending</p>
+                        <h3 class="font-bold text-slate-800 text-xs uppercase tracking-wider">1. Select Team</h3>
+                        <p class="text-[10px] text-slate-400 mt-1">Status: <span class="text-green-500 font-bold">● Uploaded</span> | <span class="text-gray-400 font-bold">● Pending</span></p>
                     </div>
                     <div id="badge-tracker-list" class="flex-1 overflow-y-auto p-4"></div>
                 </div>
@@ -150,8 +147,8 @@
                             
                             <div class="space-y-6">
                                 <div>
-                                    <label class="text-xs font-bold text-slate-400 uppercase block mb-2">Selected Team</label>
-                                    <input id="logo-team-name-display" class="w-full p-4 bg-slate-50 border-none rounded-xl font-bold text-slate-700 outline-none" readonly placeholder="Click a team on the left ->">
+                                    <label class="text-xs font-bold text-slate-400 uppercase block mb-2">2. Team Selected</label>
+                                    <input id="logo-team-name-display" class="w-full p-4 bg-slate-50 border-none rounded-xl font-bold text-slate-700 outline-none" readonly placeholder="<< Click a team on the left">
                                     <input type="hidden" id="logo-team-name">
                                     <input type="hidden" id="logo-team-div">
                                 </div>
@@ -159,20 +156,21 @@
                                     <input type="file" id="logo-file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="previewFile(this)">
                                     <div class="border-2 border-dashed border-indigo-200 rounded-2xl p-8 text-center group-hover:bg-indigo-50 transition bg-white">
                                         <i class="fa-solid fa-cloud-arrow-up text-3xl text-indigo-400 mb-2"></i>
-                                        <p class="text-xs font-bold text-slate-500" id="logo-file-label">Click to Select Image</p>
+                                        <p class="text-xs font-bold text-slate-500" id="logo-file-label">3. Choose Badge File</p>
                                     </div>
                                 </div>
                                 <button onclick="uploadBadge()" id="btn-upload-badge" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-indigo-700 transition transform active:scale-95">
-                                    <i class="fa-solid fa-floppy-disk mr-2"></i> SAVE BADGE
+                                    <i class="fa-solid fa-floppy-disk mr-2"></i> 4. UPLOAD & SAVE
                                 </button>
                             </div>
 
                             <div class="flex flex-col items-center justify-center">
-                                <div class="w-48 h-48 bg-white rounded-full flex items-center justify-center shadow-xl border-4 border-slate-50 p-4 mb-6 relative">
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Result Preview</p>
+                                <div class="w-48 h-48 bg-white rounded-full flex items-center justify-center shadow-xl border-4 border-slate-50 p-4 mb-2 relative">
                                     <img id="logo-preview" src="edulogo.jpg" class="w-full h-full object-contain rounded-full">
-                                    <div class="absolute bottom-0 right-0 bg-green-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow hidden" id="preview-badge">LIVE</div>
+                                    <div class="absolute bottom-0 right-0 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow hidden" id="preview-badge">SAVED</div>
                                 </div>
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Preview</p>
+                                <p class="text-[10px] text-gray-300">This image will appear on the site</p>
                             </div>
 
                         </div>
@@ -221,28 +219,30 @@
         import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, serverTimestamp, query, orderBy, where, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
+        // ==========================================
         // CONFIG
+        // ==========================================
         const HIDDEN_ADMIN_EMAIL = "admin@eduleague.com"; 
         const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app); const storage = getStorage(app);
         const mainLogoUrl = "edulogo.jpg";
         const divisionLogos = { 'Finalist': 'edulogo.jpg', 'Penultimate': 'edulogo.jpg', 'Sophomore': 'edulogo.jpg', 'Female': 'edulogo.jpg' };
 
-        // CUSTOM TOAST (GUARANTEED)
-        const notify = (msg, type="success") => {
-            const toast = document.getElementById('custom-toast');
-            const icon = document.getElementById('toast-icon');
-            const txt = document.getElementById('toast-msg');
+        // GUARANTEED NOTIFICATION
+        const showNotify = (msg, type="success") => {
+            const bar = document.getElementById('notify-bar');
+            const icon = document.getElementById('notify-icon');
+            const text = document.getElementById('notify-msg');
             
-            toast.className = type; 
-            txt.innerText = msg;
+            bar.className = type; // success, error, info
+            text.innerText = msg;
             
-            if(type === 'success') icon.className = "fa-solid fa-circle-check text-2xl text-green-600";
-            if(type === 'error') icon.className = "fa-solid fa-circle-xmark text-2xl text-red-600";
-            if(type === 'info') icon.className = "fa-solid fa-circle-info text-2xl text-blue-600";
+            if(type === 'success') icon.className = "fa-solid fa-circle-check";
+            if(type === 'error') icon.className = "fa-solid fa-triangle-exclamation";
+            if(type === 'info') icon.className = "fa-solid fa-circle-info";
 
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            bar.classList.add('show');
+            setTimeout(() => bar.classList.remove('show'), 3000);
         };
 
         // AUTH & AUTO-CREATE
@@ -252,19 +252,19 @@
             const btn = e.target.querySelector('button'); btn.innerText='Verifying...'; 
             
             signInWithEmailAndPassword(auth, HIDDEN_ADMIN_EMAIL, pass)
-                .then(() => { notify("Welcome Back!", "success"); })
+                .then(() => { showNotify("Welcome Back!", "success"); })
                 .catch((err) => {
                     if((err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') && pass === 'EDUADMIN2025') {
                         createUserWithEmailAndPassword(auth, HIDDEN_ADMIN_EMAIL, pass)
-                            .then(() => notify("System Init Complete!", "success"))
+                            .then(() => showNotify("System Init Complete!", "success"))
                             .catch((e) => {
                                 document.getElementById('login-msg').classList.remove('hidden'); 
                                 document.getElementById('login-msg').innerText = "System Error: " + e.message;
-                                btn.innerText='Authenticate';
+                                btn.innerText='Verify Access';
                             });
                     } else {
                         document.getElementById('login-msg').classList.remove('hidden'); 
-                        btn.innerText='Authenticate';
+                        btn.innerText='Verify Access';
                     }
                 }); 
         });
@@ -307,7 +307,7 @@
             listEl.innerHTML = '';
             Object.keys(grouped).sort().forEach(div => {
                 const header = document.createElement('div');
-                header.className = "text-xs font-black text-slate-400 uppercase tracking-widest mt-4 mb-2";
+                header.className = "text-xs font-black text-slate-400 uppercase tracking-widest mt-6 mb-2 ml-1";
                 header.innerText = div;
                 listEl.appendChild(header);
 
@@ -317,10 +317,10 @@
                     
                     const item = document.createElement('div');
                     item.className = "badge-item";
-                    if(hasBadge) item.classList.add("bg-green-50", "border-green-100");
-                    item.onclick = () => selectTeamForUpload(t.department, t.level);
+                    if(hasBadge) item.classList.add("bg-green-50/50", "border-green-100");
+                    item.onclick = () => selectTeamForUpload(t.department, t.level, item);
                     item.innerHTML = `
-                        <span class="text-sm font-bold text-slate-700">${t.department}</span>
+                        <span class="text-sm font-bold text-slate-700 truncate">${t.department}</span>
                         ${hasBadge ? '<i class="fa-solid fa-circle-check text-green-500 status-icon"></i>' : '<i class="fa-solid fa-circle text-gray-200 status-icon"></i>'}
                     `;
                     listEl.appendChild(item);
@@ -328,7 +328,10 @@
             });
         };
 
-        window.selectTeamForUpload = (name, div) => {
+        window.selectTeamForUpload = (name, div, el) => {
+            document.querySelectorAll('.badge-item').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            
             document.getElementById('logo-team-name-display').value = `${name} (${div})`;
             document.getElementById('logo-team-name').value = name;
             document.getElementById('logo-team-div').value = div;
@@ -338,7 +341,6 @@
         window.previewTeamLogo = async (name, div) => {
             const preview = document.getElementById('logo-preview');
             const uniqueId = `${name}_${div.replace(/[^a-zA-Z0-9]/g, '')}`; 
-            
             try { 
                 const d = await getDoc(doc(db,"team_assets",uniqueId)); 
                 if(d.exists() && d.data().logoUrl) preview.src = d.data().logoUrl + '?t=' + new Date().getTime(); 
@@ -359,25 +361,32 @@
             const name = document.getElementById('logo-team-name').value;
             const div = document.getElementById('logo-team-div').value;
             const file = document.getElementById('logo-file').files[0];
+            const btn = document.getElementById('btn-upload-badge');
             
-            if(!name || !file) return notify("Select a team and file", "error");
+            if(!name || !file) return showNotify("Select a team and file", "error");
             
-            notify("Uploading...", "info");
+            btn.innerHTML = '<div class="loader"></div> Uploading...';
             const uniqueId = `${name}_${div.replace(/[^a-zA-Z0-9]/g, '')}`; 
             const r = ref(storage, `logos/${uniqueId}_${Date.now()}`);
             
             try {
                 await uploadBytes(r, file); const u = await getDownloadURL(r);
                 await setDoc(doc(db,"team_assets",uniqueId), { logoUrl: u }, { merge: true });
-                notify("Badge Saved Successfully!", "success");
-                loadTeams(); 
+                
+                showNotify("Badge Saved Successfully!", "success");
+                document.getElementById('logo-preview').src = u; // FORCE UPDATE PREVIEW
+                document.getElementById('preview-badge').classList.remove('hidden');
+                
+                loadTeams(); // Refresh list to show green check
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-2"></i> SAVE BADGE';
             } catch(err) {
                 console.error(err);
-                notify("Upload Failed", "error");
+                showNotify("Upload Failed", "error");
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-2"></i> SAVE BADGE';
             }
         };
 
-        // --- APP LOGIC ---
+        // --- REST OF APP LOGIC ---
         async function getTeamLogo(name, div) { 
             if(!div) return mainLogoUrl;
             const uniqueId = `${name}_${div.replace(/[^a-zA-Z0-9]/g, '')}`;
@@ -395,31 +404,31 @@
         function renderMatches() { const el=document.getElementById('active-fixtures'); el.innerHTML=''; const fDiv=document.getElementById('view-div').value, fDay=document.getElementById('view-day').value; let filtered=allSchedules; if(fDiv!=='All') filtered=filtered.filter(m=>m.div===fDiv); if(fDay!=='All') filtered=filtered.filter(m=>m.day===fDay); if(filtered.length===0) { el.innerHTML='<p class="text-center text-slate-400 text-sm">No matches found.</p>'; return; } filtered.forEach(m=>{ const home=m.home||m.homeTeam||"Unknown"; const away=m.away||m.awayTeam||"Unknown"; const isTBD=m.time==='TBD'||!m.time; el.innerHTML+=`<div class="love-card p-4 flex justify-between items-center mb-3"><div><div class="flex items-center gap-2 mb-1"><span class="text-[9px] font-black bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded uppercase">${(m.div||'').split(' ')[0]}</span><span class="text-[9px] font-bold text-slate-400 uppercase">${m.day||''}</span></div><div class="font-black text-slate-800 text-sm">${home} <span class="text-slate-400 font-normal mx-1">vs</span> ${away}</div><div class="text-[10px] font-bold text-slate-500 mt-1">${isTBD&&!m.date?'Pending':m.date} • ${isTBD?'TBD':m.time}</div></div><div class="flex gap-2"><button onclick="openEditMatch('${m.id}','${home}','${away}')" class="text-indigo-500 p-2"><i class="fa-solid fa-pen"></i></button><button onclick="deleteMatch('${m.id}')" class="text-slate-400 hover:text-red-500 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`; }); }
         window.openEditMatch = (id,h,a) => { document.getElementById('edit-match-id').value=id; document.getElementById('edit-match-teams').innerText=`${h} vs ${a}`; document.getElementById('edit-match-modal').classList.remove('hidden'); };
         window.closeEditModal = () => document.getElementById('edit-match-modal').classList.add('hidden');
-        window.confirmEditMatch = async () => { const id=document.getElementById('edit-match-id').value, d=document.getElementById('edit-match-date').value, t=document.getElementById('edit-match-time').value; if(!d||!t)return; await updateDoc(doc(db,"schedules",id),{date:d,time:t}); closeEditModal(); loadSchedule(); notify("Updated", "success"); };
-        window.saveFixture = async () => { const f={div:document.getElementById('fix-div').value, day:document.getElementById('fix-day').value, date:document.getElementById('fix-date').value, time:document.getElementById('fix-time').value, home:document.getElementById('fix-home').value, away:document.getElementById('fix-away').value, timestamp:serverTimestamp()}; if(!f.home) return notify("Select Teams!", "error"); await addDoc(collection(db,"schedules"), f); notify("Fixture Added", "success"); loadSchedule(); };
-        window.deleteMatch = async(id) => { if(confirm("Delete?")) { await deleteDoc(doc(db,"schedules",id)); notify("Deleted", "info"); loadSchedule(); }};
+        window.confirmEditMatch = async () => { const id=document.getElementById('edit-match-id').value, d=document.getElementById('edit-match-date').value, t=document.getElementById('edit-match-time').value; if(!d||!t)return; await updateDoc(doc(db,"schedules",id),{date:d,time:t}); closeEditModal(); loadSchedule(); showNotify("Updated", "success"); };
+        window.saveFixture = async () => { const f={div:document.getElementById('fix-div').value, day:document.getElementById('fix-day').value, date:document.getElementById('fix-date').value, time:document.getElementById('fix-time').value, home:document.getElementById('fix-home').value, away:document.getElementById('fix-away').value, timestamp:serverTimestamp()}; if(!f.home) return showNotify("Select Teams!", "error"); await addDoc(collection(db,"schedules"), f); showNotify("Fixture Added", "success"); loadSchedule(); };
+        window.deleteMatch = async(id) => { if(confirm("Delete?")) { await deleteDoc(doc(db,"schedules",id)); showNotify("Deleted", "info"); loadSchedule(); }};
         window.filterTeamsByDiv = () => { const div=document.getElementById('fix-div').value, h=document.getElementById('fix-home'), a=document.getElementById('fix-away'); h.innerHTML='<option>Home</option>'; a.innerHTML='<option>Away</option>'; allRegTeams.filter(t=>t.level===div || (div==="Female League"&&t.division==="Female")).forEach(t=>{ const o=`<option value="${t.department}">${t.department}</option>`; h.innerHTML+=o; a.innerHTML+=o; }); };
 
         let currentSpotlights=[]; window.loadSpotlightCandidates=()=>{ const div=document.getElementById('spot-div').value, day=document.getElementById('spot-day').value; const el=document.getElementById('spot-candidates'); if(!div||!day)return; const matches=allSchedules.filter(m=>m.div===div&&m.day===day); el.innerHTML=''; matches.forEach(m=>{ const home=m.home||m.homeTeam; const away=m.away||m.awayTeam; const btn=document.createElement('button'); btn.className="w-full text-left p-3 bg-white border rounded-lg text-xs font-bold text-slate-700 hover:bg-indigo-50 mb-2"; btn.innerHTML=`<span>${home} vs ${away}</span>`; btn.onclick=()=>addToSpotlight({home,away,...m}); el.appendChild(btn); }); };
-        function addToSpotlight(m) { if(currentSpotlights.length>=3) return notify("Max 3 Spotlights!", "error"); currentSpotlights.push(m); renderSpotlightUI(); }
+        function addToSpotlight(m) { if(currentSpotlights.length>=3) return showNotify("Max 3 Spotlights!", "error"); currentSpotlights.push(m); renderSpotlightUI(); }
         function renderSpotlightUI() { const el=document.getElementById('active-spotlights'); el.innerHTML=''; currentSpotlights.forEach((m,i)=>{ el.innerHTML+=`<div class="p-3 bg-indigo-50 border border-indigo-100 rounded-xl flex justify-between items-center"><div class="text-xs font-bold text-indigo-900">${m.home} vs ${m.away}<br><span class="text-[9px] text-indigo-400">${m.day}</span></div><button onclick="removeSpot(${i})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-times"></i></button></div>`; }); }
         window.removeSpot=(i)=>{ currentSpotlights.splice(i,1); renderSpotlightUI(); }; window.clearSpotlights=()=>{ currentSpotlights=[]; renderSpotlightUI(); };
-        window.publishSpotlights=async()=>{ if(currentSpotlights.length===0) return notify("No matches selected", "error"); const spotlightData=await Promise.all(currentSpotlights.map(async (m)=>{ let l1=await getTeamLogo(m.home, m.div), l2=await getTeamLogo(m.away, m.div); return { teamA:m.home, teamB:m.away, teamALogo:l1, teamBLogo:l2, date:m.date||'TBD', time:m.time||'TBD', venue:'Main Bowl', category:'SPOTLIGHT' }; })); await setDoc(doc(db,"app_content","current_fixture"),{matches:spotlightData}); notify("Spotlight Updated!", "success"); };
+        window.publishSpotlights=async()=>{ if(currentSpotlights.length===0) return showNotify("No matches selected", "error"); const spotlightData=await Promise.all(currentSpotlights.map(async (m)=>{ let l1=await getTeamLogo(m.home, m.div), l2=await getTeamLogo(m.away, m.div); return { teamA:m.home, teamB:m.away, teamALogo:l1, teamBLogo:l2, date:m.date||'TBD', time:m.time||'TBD', venue:'Main Bowl', category:'SPOTLIGHT' }; })); await setDoc(doc(db,"app_content","current_fixture"),{matches:spotlightData}); showNotify("Spotlight Updated!", "success"); };
 
         let curDivCode=''; window.loadTableData=async(regLevel,shortCode)=>{ curDivCode=shortCode; document.getElementById('table-logos').classList.remove('hidden'); document.getElementById('div-logo-display').src=divisionLogos[shortCode]||mainLogoUrl; const container=document.getElementById('table-container'); container.innerHTML='<span class="loader"></span>'; const existing=(await getDoc(doc(db,"app_content",`league_table_${shortCode}`))).data()||{}; const regSnap=await getDocs(query(collection(db,"registrations"),where("level","==",regLevel))); container.innerHTML=`<div class="grid grid-cols-12 gap-1 text-[9px] font-bold text-slate-400 uppercase mb-2 px-1"><div class="col-span-3">Team</div><div class="col-span-1 text-center">PL</div><div class="col-span-1 text-center">W</div><div class="col-span-1 text-center">D</div><div class="col-span-1 text-center">L</div><div class="col-span-1 text-center">GD</div><div class="col-span-2 text-center">PTS</div></div>`; const map={}; Object.keys(existing).forEach(k=>map[k]=existing[k]); regSnap.forEach(d=>{ const n=d.data().department; if(!map[n]) map[n]={mp:0,w:0,d:0,l:0,gd:0,pts:0}; }); const names=Object.keys(map); const logos=await Promise.all(names.map(n=>getTeamLogo(n,regLevel))); names.map((n,i)=>({name:n,logo:logos[i],...map[n]})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd).forEach(t=>{ container.innerHTML+=`<div class="grid grid-cols-12 gap-1 items-center mb-2 team-row bg-slate-50 p-2 rounded-lg border border-slate-100" data-name="${t.name}"><div class="col-span-3 flex items-center gap-1.5"><img src="${t.logo}" class="h-5 w-5 rounded-full object-cover"><span class="font-bold text-xs truncate text-slate-700">${t.name}</span></div><input type="number" class="col-span-1 tbl-input inp-mp" value="${t.mp||0}"><input type="number" class="col-span-1 tbl-input inp-w text-green-600" value="${t.w||0}"><input type="number" class="col-span-1 tbl-input inp-d" value="${t.d||0}"><input type="number" class="col-span-1 tbl-input inp-l text-red-500" value="${t.l||0}"><input type="number" class="col-span-1 tbl-input inp-gd" value="${t.gd||0}"><input type="number" class="col-span-2 tbl-input inp-pts bg-indigo-50 text-indigo-700" value="${t.pts||0}"></div>`; }); document.getElementById('save-table-btn').classList.remove('hidden'); };
-        window.saveTableUpdates=async()=>{ const rows=document.querySelectorAll('.team-row'); let d={}; rows.forEach(r=>d[r.dataset.name]={mp:parseInt(r.querySelector('.inp-mp').value)||0, w:parseInt(r.querySelector('.inp-w').value)||0, d:parseInt(r.querySelector('.inp-d').value)||0, l:parseInt(r.querySelector('.inp-l').value)||0, gd:parseInt(r.querySelector('.inp-gd').value)||0, pts:parseInt(r.querySelector('.inp-pts').value)||0}); await setDoc(doc(db,"app_content",`league_table_${curDivCode}`),d); notify("Standings Updated", "success"); };
+        window.saveTableUpdates=async()=>{ const rows=document.querySelectorAll('.team-row'); let d={}; rows.forEach(r=>d[r.dataset.name]={mp:parseInt(r.querySelector('.inp-mp').value)||0, w:parseInt(r.querySelector('.inp-w').value)||0, d:parseInt(r.querySelector('.inp-d').value)||0, l:parseInt(r.querySelector('.inp-l').value)||0, gd:parseInt(r.querySelector('.inp-gd').value)||0, pts:parseInt(r.querySelector('.inp-pts').value)||0}); await setDoc(doc(db,"app_content",`league_table_${curDivCode}`),d); showNotify("Standings Updated", "success"); };
         window.downloadTablePDF=async()=>{const{jsPDF}=window.jspdf;const pdf=new jsPDF();const mImg=await getBase64Image(mainLogoUrl);const dImg=await getBase64Image(divisionLogos[curDivCode]||mainLogoUrl);if(mImg)pdf.addImage(mImg,'JPEG',15,10,15,15);if(dImg)pdf.addImage(dImg,'JPEG',180,10,15,15);pdf.setFontSize(16);pdf.setTextColor(79,70,229);pdf.text(`${curDivCode.toUpperCase()} TABLE`,105,20,{align:'center'});const rows=[];document.querySelectorAll('.team-row').forEach((r,i)=>rows.push([i+1,r.dataset.name,r.querySelector('.inp-mp').value,r.querySelector('.inp-w').value,r.querySelector('.inp-d').value,r.querySelector('.inp-l').value,r.querySelector('.inp-gd').value,r.querySelector('.inp-pts').value]));pdf.autoTable({head:[['#','Team','P','W','D','L','GD','Pts']],body:rows,startY:35,theme:'grid',headStyles:{fillColor:[79,70,229]}});pdf.save("Table.pdf");};
 
         window.loadTeamPlayers=async()=>{const t=document.getElementById('stat-team-select').value;const p=document.getElementById('stat-player-select');p.innerHTML='<option>Loading...</option>';if(!t)return;const d=await getDoc(doc(db,"registrations",t));p.innerHTML='<option value="">Select Player...</option>';(d.data().players||[]).forEach(o=>{const e=document.createElement('option');e.value=o.name;e.textContent=`${o.name} (${o.position})`;p.appendChild(e);});};
         window.fetchPlayerCurrentStats=async()=>{const t=document.getElementById('stat-team-select').value,p=document.getElementById('stat-player-select').value;if(!t||!p)return;document.getElementById('stats-editor').classList.remove('hidden');const s=await getDoc(doc(db,"player_stats",`${t}_${p.replace(/\s+/g,'')}`));const d=s.exists()?s.data():{};document.getElementById('p-goals').value=d.goals||0;document.getElementById('p-assists').value=d.assists||0;document.getElementById('p-yellow').value=d.yellow_cards||0;document.getElementById('p-red').value=d.red_cards||0;document.getElementById('p-saves').value=d.saves||0;};
-        window.savePlayerStats=async()=>{const t=document.getElementById('stat-team-select').value,p=document.getElementById('stat-player-select').value;if(!t||!p)return;await setDoc(doc(db,"player_stats",`${t}_${p.replace(/\s+/g,'')}`),{name:p,teamId:t,goals:parseInt(document.getElementById('p-goals').value)||0,assists:parseInt(document.getElementById('p-assists').value)||0,yellow_cards:parseInt(document.getElementById('p-yellow').value)||0,red_cards:parseInt(document.getElementById('p-red').value)||0,saves:parseInt(document.getElementById('p-saves').value)||0},{merge:true});notify("Stats Saved", "success");};
-        window.publishNews=async()=>{const f=document.getElementById('news-file').files[0];let u="";if(f){const r=ref(storage,`news/${Date.now()}_${f.name}`);await uploadBytes(r,f);u=await getDownloadURL(r);}await addDoc(collection(db,"news_posts"),{title:document.getElementById('news-title').value,content:document.getElementById('news-body').value,imageUrl:u,timestamp:serverTimestamp(),likes:0,commentsCount:0});notify("Published", "success");loadNews();};
+        window.savePlayerStats=async()=>{const t=document.getElementById('stat-team-select').value,p=document.getElementById('stat-player-select').value;if(!t||!p)return;await setDoc(doc(db,"player_stats",`${t}_${p.replace(/\s+/g,'')}`),{name:p,teamId:t,goals:parseInt(document.getElementById('p-goals').value)||0,assists:parseInt(document.getElementById('p-assists').value)||0,yellow_cards:parseInt(document.getElementById('p-yellow').value)||0,red_cards:parseInt(document.getElementById('p-red').value)||0,saves:parseInt(document.getElementById('p-saves').value)||0},{merge:true});showNotify("Stats Saved", "success");};
+        window.publishNews=async()=>{const f=document.getElementById('news-file').files[0];let u="";if(f){const r=ref(storage,`news/${Date.now()}_${f.name}`);await uploadBytes(r,f);u=await getDownloadURL(r);}await addDoc(collection(db,"news_posts"),{title:document.getElementById('news-title').value,content:document.getElementById('news-body').value,imageUrl:u,timestamp:serverTimestamp(),likes:0,commentsCount:0});showNotify("Published", "success");loadNews();};
         window.loadNews=async()=>{const e=document.getElementById('news-feed');e.innerHTML='';(await getDocs(query(collection(db,"news_posts"),orderBy("timestamp","desc")))).forEach(d=>{e.innerHTML+=`<div class="love-card p-3 mb-2 flex justify-between items-center"><span class="text-xs font-bold text-slate-700 truncate w-32">${d.data().title}</span><button onclick="deleteDoc(doc(db,'news_posts','${d.id}'));loadNews()" class="text-red-400"><i class="fa-solid fa-trash"></i></button></div>`;});};
-        window.createPoll=async()=>{const q=document.getElementById('poll-q').value;if(!q)return;await addDoc(collection(db,"polls"),{question:q,opt1:document.getElementById('poll-o1').value,opt2:document.getElementById('poll-o2').value,votes1:0,votes2:0,active:true,timestamp:serverTimestamp()});notify("Poll Created", "success");loadActivePolls();};
+        window.createPoll=async()=>{const q=document.getElementById('poll-q').value;if(!q)return;await addDoc(collection(db,"polls"),{question:q,opt1:document.getElementById('poll-o1').value,opt2:document.getElementById('poll-o2').value,votes1:0,votes2:0,active:true,timestamp:serverTimestamp()});showNotify("Poll Created", "success");loadActivePolls();};
         window.loadActivePolls=async()=>{const e=document.getElementById('active-polls');e.innerHTML='';(await getDocs(query(collection(db,"polls"),orderBy("timestamp","desc")))).forEach(d=>{const p=d.data();e.innerHTML+=`<div class="love-card p-4 mb-2"><h4 class="font-bold text-sm text-slate-800">${p.question}</h4><div class="flex gap-2 justify-end mt-2"><button onclick="deleteDoc(doc(db,'polls','${d.id}'));loadActivePolls()" class="text-xs bg-slate-100 px-3 py-1 rounded font-bold">Delete</button></div></div>`;});};
         window.loadVerifications=async()=>{const l=document.getElementById('verify-list');l.innerHTML='';(await getDocs(collection(db,"registrations"))).forEach(d=>{l.innerHTML+=`<tr class="border-b"><td class="p-4">${d.data().department}</td><td class="p-4">${d.data().level}</td><td class="p-4">${d.data().registrationStatus||'Pending'}</td><td class="p-4"><button onclick="verifyTeam('${d.id}')" class="text-green-500"><i class="fa-solid fa-check"></i></button></td></tr>`;});};
-        window.verifyTeam=async(id)=>{if(confirm("Verify?")){await updateDoc(doc(db,"registrations",id),{registrationStatus:"Verified"});notify("Verified", "success");loadVerifications();}};
-        window.setMOTM=async(a)=>{const n=[document.getElementById('motm-1').value,document.getElementById('motm-2').value,document.getElementById('motm-3').value];await setDoc(doc(db,"app_content","fan_zone"),{motm:{active:a,nominees:n,votes:[0,0,0]}},{merge:true});notify(a?"Voting On":"Voting Off", "info");};
+        window.verifyTeam=async(id)=>{if(confirm("Verify?")){await updateDoc(doc(db,"registrations",id),{registrationStatus:"Verified"});showNotify("Verified", "success");loadVerifications();}};
+        window.setMOTM=async(a)=>{const n=[document.getElementById('motm-1').value,document.getElementById('motm-2').value,document.getElementById('motm-3').value];await setDoc(doc(db,"app_content","fan_zone"),{motm:{active:a,nominees:n,votes:[0,0,0]}},{merge:true});showNotify(a?"Voting On":"Voting Off", "info");};
         async function getBase64Image(u){try{const r=await fetch(u);const b=await r.blob();return new Promise(s=>{const a=new FileReader();a.onloadend=()=>s(a.result);a.readAsDataURL(b);});}catch(e){return null;}}
     </script>
 </body>
