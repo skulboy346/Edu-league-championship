@@ -45,7 +45,7 @@
             color: white; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
         }
 
-        /* --- CARDS --- */
+        /* --- CARDS & INPUTS --- */
         .love-card {
             background: white; border-radius: 24px;
             border: 1px solid #f1f5f9;
@@ -55,42 +55,40 @@
         }
         .love-card:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.1); }
 
-        /* --- INPUTS --- */
         .input-love {
-            width: 100%; padding: 10px 14px; background: #f8fafc;
+            width: 100%; padding: 12px 16px; background: #f8fafc;
             border: 1px solid #e2e8f0; border-radius: 12px;
             font-size: 0.9rem; font-weight: 600; color: #334155; outline: none;
             transition: all 0.2s;
         }
         .input-love:focus { background: white; border-color: #4f46e5; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
 
-        /* Table Inputs */
         .tbl-input { background: transparent; text-align: center; font-weight: 800; width: 100%; outline: none; padding: 4px; font-size: 0.8rem; }
         .tbl-input:focus { background: #eef2ff; border-radius: 6px; color: #4338ca; }
 
         /* --- LOGIN --- */
         .login-bg { background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%); }
-        
+        .login-card { background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); border: 1px solid white; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); }
+
         .loader { width: 18px; height: 18px; border: 2px solid #fff; border-bottom-color: transparent; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
     <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center login-bg p-4">
-        <div class="bg-white/80 backdrop-blur-xl p-10 rounded-[32px] max-w-sm w-full text-center shadow-2xl border border-white">
+        <div class="login-card p-10 rounded-[32px] max-w-sm w-full text-center">
             <div class="h-20 w-20 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg text-white text-3xl font-black">E</div>
             <h2 class="text-2xl font-black text-slate-800 mb-2">Admin Portal</h2>
-            <p class="text-sm text-slate-500 mb-8">Sign in to manage league.</p>
+            <p class="text-sm text-slate-500 mb-8">Secure Access Login</p>
             
             <form id="login-form" class="space-y-4">
-                <input type="email" id="adm-email" placeholder="admin@eduleague.com" class="input-love" required>
+                <input type="email" id="adm-email" placeholder="Email" class="input-love" required>
                 <input type="password" id="adm-pass" placeholder="Password" class="input-love" required>
-                <button type="submit" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-black transition shadow-lg">Login Dashboard</button>
+                <button type="submit" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-black transition shadow-lg">Authenticate</button>
             </form>
-            <p id="login-msg" class="text-red-500 text-xs font-bold mt-4 hidden">Invalid Credentials</p>
+            <p id="login-msg" class="text-red-500 text-xs font-bold mt-4 hidden p-2 bg-red-50 rounded-lg">Invalid Credentials</p>
         </div>
     </div>
 
@@ -251,7 +249,7 @@
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
         // ==========================================
-        // 1. FIREBASE CONFIGURATION
+        // 1. CONFIG
         // ==========================================
         const firebaseConfig = { 
             apiKey: "YOUR_API_KEY", 
@@ -401,7 +399,6 @@
         window.loadNews = async () => { const el = document.getElementById('news-feed'); el.innerHTML = ''; (await getDocs(query(collection(db,"news_posts"), orderBy("timestamp", "desc")))).forEach(d => { el.innerHTML += `<div class="love-card p-3 mb-2 flex justify-between items-center"><span class="text-xs font-bold text-slate-700 truncate w-32">${d.data().title}</span><button onclick="deleteDoc(doc(db,'news_posts','${d.id}'));loadNews()" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button></div>`; }); };
         window.setMOTM = async (a) => { const n=[document.getElementById('motm-1').value,document.getElementById('motm-2').value,document.getElementById('motm-3').value]; await setDoc(doc(db,"app_content","fan_zone"),{motm:{active:a,nominees:n,votes:[0,0,0]}},{merge:true}); notify(a?"Voting On":"Voting Off"); };
         window.downloadSchedulePDF = async () => { const { jsPDF } = window.jspdf; const pdf = new jsPDF(); const fDiv = document.getElementById('view-div').value; const title = fDiv === 'All' ? "FULL SCHEDULE" : `${fDiv.split(' ')[0].toUpperCase()} SCHEDULE`; const divShort = fDiv === 'All' ? 'Finalist' : fDiv.split(' ')[0]; const mImg = await getBase64Image(mainLogoUrl); const dImg = await getBase64Image(divisionLogos[divShort] || mainLogoUrl); if(mImg) pdf.addImage(mImg,'JPEG',15,10,15,15); if(fDiv!=='All' && dImg) pdf.addImage(dImg,'JPEG',175,10,15,15); pdf.setFontSize(16); pdf.setTextColor(79,70,229); pdf.text(title, 105, 20, {align:'center'}); let matches = allSchedules; if(fDiv!=='All') matches=matches.filter(m=>m.div===fDiv); matches.sort((a,b)=>(a.date>b.date)?1:-1); const rows=[]; matches.forEach(m => rows.push([m.date, m.time, m.div.split(' ')[0], `${m.home} vs ${m.away}`, m.day])); pdf.autoTable({ head:[['Date','Time','Div','Fixture','Day']], body:rows, startY:35, theme:'grid' }); pdf.save("Schedule.pdf"); };
-        window.downloadTablePDF = async () => { const { jsPDF } = window.jspdf; const pdf = new jsPDF(); const mImg = await getBase64Image(mainLogoUrl); const dImg = await getBase64Image(divisionLogos[curDivCode] || mainLogoUrl); if(mImg) pdf.addImage(mImg,'JPEG',15,10,15,15); if(dImg) pdf.addImage(dImg,'JPEG',180,10,15,15); pdf.setFontSize(16); pdf.setTextColor(79,70,229); pdf.text(`${curDivCode.toUpperCase()} TABLE`, 105, 20, {align:'center'}); const rows=[]; document.querySelectorAll('.team-row').forEach((r,i) => rows.push([i+1, r.dataset.name, r.querySelector('.inp-mp').value, r.querySelector('.inp-w').value, r.querySelector('.inp-d').value, r.querySelector('.inp-l').value, r.querySelector('.inp-gd').value, r.querySelector('.inp-pts').value])); pdf.autoTable({ head:[['#','Team','P','W','D','L','GD','Pts']], body:rows, startY:35, theme:'grid', headStyles:{fillColor:[79,70,229]} }); pdf.save("Table.pdf"); };
         async function getBase64Image(u) { try { const r=await fetch(u); const b=await r.blob(); return new Promise(res=>{ const rdr=new FileReader(); rdr.onloadend=()=>res(rdr.result); rdr.readAsDataURL(b); }); } catch(e){return null;} }
     </script>
 </body>
