@@ -86,7 +86,7 @@
             <p class="text-sm text-slate-500 mb-8">Sign in to manage league.</p>
             
             <form id="login-form" class="space-y-4">
-                <input type="email" id="adm-email" placeholder="Email Address" class="input-love" required>
+                <input type="email" id="adm-email" placeholder="admin@eduleague.com" class="input-love" required>
                 <input type="password" id="adm-pass" placeholder="Password" class="input-love" required>
                 <button type="submit" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-black transition shadow-lg">Login Dashboard</button>
             </form>
@@ -293,8 +293,7 @@
             document.getElementById('dash-matches').innerText = (await getDocs(collection(db, "schedules"))).size;
             document.getElementById('dash-news').innerText = (await getDocs(collection(db, "news_posts"))).size;
             loadVerifications(); loadTeams(); loadSchedule(); loadNews(); loadActivePolls();
-            const ts = document.getElementById('stat-team-select'); ts.innerHTML = '<option value="">Select Team...</option>';
-            t.forEach(doc => { const d=doc.data(); const o=document.createElement('option'); o.value=doc.id; o.textContent=`${d.department} (${d.level})`; ts.appendChild(o); });
+            const ts = document.getElementById('stat-team-select'); ts.innerHTML = '<option value="">Select Team...</option>'; t.forEach(doc => { const d=doc.data(); const o=document.createElement('option'); o.value=doc.id; o.textContent=`${d.department} (${d.level})`; ts.appendChild(o); });
         }
 
         // 1. SCHEDULE (schedules collection + undefined fix)
@@ -402,6 +401,7 @@
         window.loadNews = async () => { const el = document.getElementById('news-feed'); el.innerHTML = ''; (await getDocs(query(collection(db,"news_posts"), orderBy("timestamp", "desc")))).forEach(d => { el.innerHTML += `<div class="love-card p-3 mb-2 flex justify-between items-center"><span class="text-xs font-bold text-slate-700 truncate w-32">${d.data().title}</span><button onclick="deleteDoc(doc(db,'news_posts','${d.id}'));loadNews()" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button></div>`; }); };
         window.setMOTM = async (a) => { const n=[document.getElementById('motm-1').value,document.getElementById('motm-2').value,document.getElementById('motm-3').value]; await setDoc(doc(db,"app_content","fan_zone"),{motm:{active:a,nominees:n,votes:[0,0,0]}},{merge:true}); notify(a?"Voting On":"Voting Off"); };
         window.downloadSchedulePDF = async () => { const { jsPDF } = window.jspdf; const pdf = new jsPDF(); const fDiv = document.getElementById('view-div').value; const title = fDiv === 'All' ? "FULL SCHEDULE" : `${fDiv.split(' ')[0].toUpperCase()} SCHEDULE`; const divShort = fDiv === 'All' ? 'Finalist' : fDiv.split(' ')[0]; const mImg = await getBase64Image(mainLogoUrl); const dImg = await getBase64Image(divisionLogos[divShort] || mainLogoUrl); if(mImg) pdf.addImage(mImg,'JPEG',15,10,15,15); if(fDiv!=='All' && dImg) pdf.addImage(dImg,'JPEG',175,10,15,15); pdf.setFontSize(16); pdf.setTextColor(79,70,229); pdf.text(title, 105, 20, {align:'center'}); let matches = allSchedules; if(fDiv!=='All') matches=matches.filter(m=>m.div===fDiv); matches.sort((a,b)=>(a.date>b.date)?1:-1); const rows=[]; matches.forEach(m => rows.push([m.date, m.time, m.div.split(' ')[0], `${m.home} vs ${m.away}`, m.day])); pdf.autoTable({ head:[['Date','Time','Div','Fixture','Day']], body:rows, startY:35, theme:'grid' }); pdf.save("Schedule.pdf"); };
+        window.downloadTablePDF = async () => { const { jsPDF } = window.jspdf; const pdf = new jsPDF(); const mImg = await getBase64Image(mainLogoUrl); const dImg = await getBase64Image(divisionLogos[curDivCode] || mainLogoUrl); if(mImg) pdf.addImage(mImg,'JPEG',15,10,15,15); if(dImg) pdf.addImage(dImg,'JPEG',180,10,15,15); pdf.setFontSize(16); pdf.setTextColor(79,70,229); pdf.text(`${curDivCode.toUpperCase()} TABLE`, 105, 20, {align:'center'}); const rows=[]; document.querySelectorAll('.team-row').forEach((r,i) => rows.push([i+1, r.dataset.name, r.querySelector('.inp-mp').value, r.querySelector('.inp-w').value, r.querySelector('.inp-d').value, r.querySelector('.inp-l').value, r.querySelector('.inp-gd').value, r.querySelector('.inp-pts').value])); pdf.autoTable({ head:[['#','Team','P','W','D','L','GD','Pts']], body:rows, startY:35, theme:'grid', headStyles:{fillColor:[79,70,229]} }); pdf.save("Table.pdf"); };
         async function getBase64Image(u) { try { const r=await fetch(u); const b=await r.blob(); return new Promise(res=>{ const rdr=new FileReader(); rdr.onloadend=()=>res(rdr.result); rdr.readAsDataURL(b); }); } catch(e){return null;} }
     </script>
 </body>
