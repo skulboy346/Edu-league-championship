@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EDU-LEAGUE | Admin</title>
+    <title>EDU-LEAGUE | Command Center</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -22,7 +24,7 @@
             color: #1e293b;
         }
 
-        /* --- 100% WORKING NOTIFICATION --- */
+        /* --- NOTIFICATION BAR --- */
         #notify-bar {
             position: fixed; top: -100px; left: 0; right: 0;
             background: #10b981; color: white;
@@ -61,7 +63,6 @@
             color: white; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
         }
 
-        /* Badge List Item */
         .badge-item {
             padding: 12px; border-radius: 12px; cursor: pointer;
             display: flex; justify-content: space-between; align-items: center;
@@ -88,7 +89,7 @@
     <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/95 backdrop-blur-sm p-4">
         <div class="bg-white p-10 rounded-[32px] max-w-sm w-full text-center shadow-2xl">
             <div class="h-16 w-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg text-white text-2xl font-black">E</div>
-            <h2 class="text-2xl font-black text-slate-800 mb-2">Restricted Area</h2>
+            <h2 class="text-2xl font-black text-slate-800 mb-2">Restricted Access</h2>
             <p class="text-sm text-slate-500 mb-8">Authorized Personnel Only</p>
             <form id="login-form" class="space-y-4">
                 <input type="password" id="adm-pass" placeholder="••••••••" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-lg text-center outline-none focus:ring-2 focus:ring-indigo-500 tracking-widest transition" required>
@@ -120,15 +121,15 @@
 
         <div id="dashboard" class="section">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="love-card p-6 border-b-4 border-indigo-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Teams</p><h3 class="text-4xl font-black text-slate-800 mt-2" id="dash-teams">0</h3></div>
-                <div class="love-card p-6 border-b-4 border-green-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Verified</p><h3 class="text-4xl font-black text-slate-800 mt-2" id="dash-verified">0</h3></div>
-                <div class="love-card p-6 border-b-4 border-blue-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Matches</p><h3 class="text-4xl font-black text-slate-800 mt-2" id="dash-matches">0</h3></div>
-                <div class="love-card p-6 border-b-4 border-purple-500"><p class="text-[10px] font-bold text-slate-400 uppercase">News</p><h3 class="text-4xl font-black text-slate-800 mt-2" id="dash-news">0</h3></div>
+                <div class="love-card p-6 border-b-4 border-indigo-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Teams</p><h3 class="text-3xl font-black text-slate-800 mt-1" id="dash-teams">0</h3></div>
+                <div class="love-card p-6 border-b-4 border-green-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Verified</p><h3 class="text-3xl font-black text-slate-800 mt-1" id="dash-verified">0</h3></div>
+                <div class="love-card p-6 border-b-4 border-blue-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Matches</p><h3 class="text-3xl font-black text-slate-800 mt-1" id="dash-matches">0</h3></div>
+                <div class="love-card p-6 border-b-4 border-purple-500"><p class="text-[10px] font-bold text-slate-400 uppercase">News</p><h3 class="text-3xl font-black text-slate-800 mt-1" id="dash-news">0</h3></div>
             </div>
         </div>
 
         <div id="teams" class="section hidden">
-            <h2 class="text-2xl font-black text-slate-800 mb-6">Badge Manager</h2>
+            <h2 class="text-2xl font-black text-slate-800 mb-6">Badge Manager (Cloudinary)</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 h-[600px]">
                 
                 <div class="love-card flex flex-col h-full col-span-1 border-r border-gray-100">
@@ -147,20 +148,20 @@
                             
                             <div class="space-y-6">
                                 <div>
-                                    <label class="text-xs font-bold text-slate-400 uppercase block mb-2">2. Team Selected</label>
-                                    <input id="logo-team-name-display" class="w-full p-4 bg-slate-50 border-none rounded-xl font-bold text-slate-700 outline-none" readonly placeholder="<< Click a team on the left">
+                                    <label class="text-xs font-bold text-slate-400 uppercase block mb-2">2. Selected Team</label>
+                                    <input id="logo-team-name-display" class="w-full p-4 bg-slate-50 border-none rounded-xl font-bold text-slate-700 outline-none" readonly placeholder="<< Select a team on the left">
                                     <input type="hidden" id="logo-team-name">
                                     <input type="hidden" id="logo-team-div">
-                                </div>
-                                <div class="relative group cursor-pointer">
-                                    <input type="file" id="logo-file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="previewFile(this)">
-                                    <div class="border-2 border-dashed border-indigo-200 rounded-2xl p-8 text-center group-hover:bg-indigo-50 transition bg-white">
-                                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-indigo-400 mb-2"></i>
-                                        <p class="text-xs font-bold text-slate-500" id="logo-file-label">3. Choose Badge File</p>
-                                    </div>
-                                </div>
-                                <button onclick="uploadBadge()" id="btn-upload-badge" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-indigo-700 transition transform active:scale-95">
-                                    <i class="fa-solid fa-floppy-disk mr-2"></i> 4. UPLOAD & SAVE
+                                    <input type="hidden" id="uploaded-url"> </div>
+                                
+                                <button onclick="openCloudinaryBadgeWidget()" class="w-full border-2 border-dashed border-indigo-200 rounded-2xl p-8 text-center hover:bg-indigo-50 transition bg-white group">
+                                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-indigo-400 mb-2 group-hover:scale-110 transition"></i>
+                                    <p class="text-xs font-bold text-slate-500">3. Upload to Cloudinary</p>
+                                    <p class="text-[9px] text-slate-300 mt-1">Images or Videos</p>
+                                </button>
+
+                                <button onclick="saveBadgeToFirebase()" id="btn-save-badge" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-indigo-700 transition transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                    4. SAVE BADGE
                                 </button>
                             </div>
 
@@ -168,9 +169,9 @@
                                 <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Result Preview</p>
                                 <div class="w-48 h-48 bg-white rounded-full flex items-center justify-center shadow-xl border-4 border-slate-50 p-4 mb-2 relative">
                                     <img id="logo-preview" src="edulogo.jpg" class="w-full h-full object-contain rounded-full">
-                                    <div class="absolute bottom-0 right-0 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow hidden" id="preview-badge">SAVED</div>
+                                    <div class="absolute bottom-0 right-0 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow hidden" id="preview-badge">READY</div>
                                 </div>
-                                <p class="text-[10px] text-gray-300">This image will appear on the site</p>
+                                <p class="text-[10px] text-gray-300">Live Preview</p>
                             </div>
 
                         </div>
@@ -205,7 +206,12 @@
         </div>
 
         <div id="stats" class="section hidden"><div class="love-card p-8 max-w-4xl mx-auto"><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b pb-8"><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">1. Team</label><select id="stat-team-select" class="input-love" onchange="loadTeamPlayers()"><option value="">Select...</option></select></div><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">2. Player</label><select id="stat-player-select" class="input-love" onchange="fetchPlayerCurrentStats()"><option value="">Select...</option></select></div></div><div id="stats-editor" class="hidden"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-slate-800">Editing: <span id="current-player-name" class="text-indigo-600"></span></h3></div><div class="grid grid-cols-3 md:grid-cols-5 gap-4 mb-8"><div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[10px] font-bold text-green-600 uppercase mb-1">Goals</p><input type="number" id="p-goals" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div><div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Assists</p><input type="number" id="p-assists" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div><div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[10px] font-bold text-yellow-600 uppercase mb-1">Yellow</p><input type="number" id="p-yellow" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div><div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[10px] font-bold text-red-600 uppercase mb-1">Red</p><input type="number" id="p-red" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div><div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[10px] font-bold text-orange-600 uppercase mb-1">Saves</p><input type="number" id="p-saves" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div></div><button onclick="savePlayerStats()" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-700 transition">Save Changes</button></div></div></div>
-        <div id="news" class="section hidden"><div class="grid grid-cols-1 lg:grid-cols-3 gap-8"><div class="love-card p-6 h-fit"><h3 class="font-bold text-slate-800 mb-4">New Post</h3><div class="space-y-3"><input id="news-title" placeholder="Title" class="input-love"><textarea id="news-body" rows="4" placeholder="Content..." class="input-love"></textarea><label class="block border-2 border-dashed border-slate-300 rounded-xl p-4 text-center cursor-pointer hover:bg-slate-50"><input type="file" id="news-file" class="hidden" onchange="document.getElementById('f-news-name').innerText=this.files[0].name"><i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-400"></i><p id="f-news-name" class="text-xs font-bold text-slate-500 mt-1">Upload Media</p></label><button onclick="publishNews()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg">Publish</button></div></div><div class="lg:col-span-2 love-card p-6 h-[500px] flex flex-col"><div class="flex justify-between mb-4"><h3 class="font-bold text-slate-800">Feed</h3><button onclick="loadNews()" class="text-xs font-bold text-indigo-600">Refresh</button></div><div id="news-feed" class="flex-1 overflow-y-auto space-y-3 pr-2"></div></div></div></div>
+        
+        <div id="news" class="section hidden"><div class="grid grid-cols-1 lg:grid-cols-3 gap-8"><div class="love-card p-6 h-fit"><h3 class="font-bold text-slate-800 mb-4">New Post</h3><div class="space-y-3"><input id="news-title" placeholder="Title" class="input-love"><textarea id="news-body" rows="4" placeholder="Content..." class="input-love"></textarea>
+        <button onclick="openCloudinaryNewsWidget()" class="w-full border-2 border-dashed border-indigo-200 rounded-xl p-4 text-center hover:bg-indigo-50 transition"><i class="fa-solid fa-cloud-arrow-up text-xl text-indigo-400"></i><p class="text-xs font-bold text-slate-500">Upload Image/Video</p></button>
+        <input type="hidden" id="news-media-url">
+        <button onclick="publishNews()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg">Publish</button></div></div><div class="lg:col-span-2 love-card p-6 h-[500px] flex flex-col"><div class="flex justify-between mb-4"><h3 class="font-bold text-slate-800">Feed</h3><button onclick="loadNews()" class="text-xs font-bold text-indigo-600">Refresh</button></div><div id="news-feed" class="flex-1 overflow-y-auto space-y-3 pr-2"></div></div></div></div>
+        
         <div id="fanz" class="section hidden"><div class="grid grid-cols-1 lg:grid-cols-2 gap-8"><div class="love-card p-6"><h3 class="font-bold text-slate-800 mb-4">MOTM Voting</h3><div class="grid grid-cols-3 gap-2 mb-4"><input id="motm-1" placeholder="Nominee 1" class="input-love"><input id="motm-2" placeholder="Nominee 2" class="input-love"><input id="motm-3" placeholder="Nominee 3" class="input-love"></div><div class="flex gap-2"><button onclick="setMOTM(true)" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-bold">Start</button><button onclick="setMOTM(false)" class="flex-1 bg-red-500 text-white py-3 rounded-xl font-bold">Stop</button></div></div><div class="love-card p-6"><h3 class="font-bold text-slate-800 mb-4">Create Poll</h3><div class="space-y-3"><input id="poll-q" placeholder="Question" class="input-love"><input id="poll-o1" placeholder="Option 1" class="input-love"><input id="poll-o2" placeholder="Option 2" class="input-love"><button onclick="createPoll()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg">Launch</button></div></div></div><div id="active-polls" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6"></div></div>
         <div id="verification" class="section hidden"><div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800">Verification</h2><button onclick="loadVerifications()" class="text-xs font-bold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-lg">Refresh</button></div><div class="love-card overflow-hidden"><table class="w-full text-sm text-left"><thead class="bg-slate-50 text-xs font-bold text-slate-500 uppercase border-b"><tr><th class="p-4 pl-6">Team</th><th class="p-4 hidden md:table-cell">Div</th><th class="p-4">Status</th><th class="p-4 text-right pr-6">Act</th></tr></thead><tbody id="verify-list" class="divide-y divide-slate-100"></tbody></table></div></div>
 
@@ -217,14 +223,16 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, serverTimestamp, query, orderBy, where, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-        // ==========================================
-        // CONFIG
-        // ==========================================
         const HIDDEN_ADMIN_EMAIL = "admin@eduleague.com"; 
         const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
-        const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app); const storage = getStorage(app);
+        const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
+        
+        // --- CLOUDINARY CONFIG (UPDATED) ---
+        const CLOUD_NAME = "dxdxgrvvb"; 
+        const UPLOAD_PRESET = "ml_default"; 
+        // ------------------------------------
+
         const mainLogoUrl = "edulogo.jpg";
         const divisionLogos = { 'Finalist': 'edulogo.jpg', 'Penultimate': 'edulogo.jpg', 'Sophomore': 'edulogo.jpg', 'Female': 'edulogo.jpg' };
 
@@ -234,12 +242,11 @@
             const icon = document.getElementById('notify-icon');
             const text = document.getElementById('notify-msg');
             
-            bar.className = type; // success, error, info
-            text.innerText = msg;
+            bar.className = type; text.innerText = msg;
             
             if(type === 'success') icon.className = "fa-solid fa-circle-check";
-            if(type === 'error') icon.className = "fa-solid fa-triangle-exclamation";
-            if(type === 'info') icon.className = "fa-solid fa-circle-info";
+            else if(type === 'error') icon.className = "fa-solid fa-triangle-exclamation";
+            else icon.className = "fa-solid fa-circle-info";
 
             bar.classList.add('show');
             setTimeout(() => bar.classList.remove('show'), 3000);
@@ -290,39 +297,30 @@
             } catch(e) { console.error(e); }
         }
 
-        // --- BADGE MANAGER ---
+        // --- BADGE MANAGER (CLOUDINARY) ---
         window.loadTeams = async () => {
             const listEl = document.getElementById('badge-tracker-list'); listEl.innerHTML = '<div class="loader mx-auto"></div>';
-            
             const teamsSnap = await getDocs(collection(db, "registrations"));
             const teams = []; teamsSnap.forEach(d => teams.push(d.data()));
-
             const assetsSnap = await getDocs(collection(db, "team_assets"));
             const uploadedMap = new Set();
             assetsSnap.forEach(d => { if(d.data().logoUrl) uploadedMap.add(d.id); });
-
             const grouped = {};
             teams.forEach(t => { if(!grouped[t.level]) grouped[t.level] = []; grouped[t.level].push(t); });
-
             listEl.innerHTML = '';
             Object.keys(grouped).sort().forEach(div => {
                 const header = document.createElement('div');
                 header.className = "text-xs font-black text-slate-400 uppercase tracking-widest mt-6 mb-2 ml-1";
                 header.innerText = div;
                 listEl.appendChild(header);
-
                 grouped[div].forEach(t => {
                     const uniqueId = `${t.department}_${t.level.replace(/[^a-zA-Z0-9]/g, '')}`; 
                     const hasBadge = uploadedMap.has(uniqueId);
-                    
                     const item = document.createElement('div');
                     item.className = "badge-item";
                     if(hasBadge) item.classList.add("bg-green-50/50", "border-green-100");
                     item.onclick = () => selectTeamForUpload(t.department, t.level, item);
-                    item.innerHTML = `
-                        <span class="text-sm font-bold text-slate-700 truncate">${t.department}</span>
-                        ${hasBadge ? '<i class="fa-solid fa-circle-check text-green-500 status-icon"></i>' : '<i class="fa-solid fa-circle text-gray-200 status-icon"></i>'}
-                    `;
+                    item.innerHTML = `<span class="text-sm font-bold text-slate-700 truncate">${t.department}</span>${hasBadge ? '<i class="fa-solid fa-circle-check text-green-500 text-lg"></i>' : '<i class="fa-solid fa-circle text-gray-200 text-lg"></i>'}`;
                     listEl.appendChild(item);
                 });
             });
@@ -331,7 +329,6 @@
         window.selectTeamForUpload = (name, div, el) => {
             document.querySelectorAll('.badge-item').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
-            
             document.getElementById('logo-team-name-display').value = `${name} (${div})`;
             document.getElementById('logo-team-name').value = name;
             document.getElementById('logo-team-div').value = div;
@@ -343,47 +340,71 @@
             const uniqueId = `${name}_${div.replace(/[^a-zA-Z0-9]/g, '')}`; 
             try { 
                 const d = await getDoc(doc(db,"team_assets",uniqueId)); 
-                if(d.exists() && d.data().logoUrl) preview.src = d.data().logoUrl + '?t=' + new Date().getTime(); 
+                if(d.exists() && d.data().logoUrl) preview.src = d.data().logoUrl; 
                 else preview.src = "edulogo.jpg"; 
             } catch(e){ preview.src = "edulogo.jpg"; }
         };
 
-        window.previewFile = (input) => {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) { document.getElementById('logo-preview').src = e.target.result; };
-                reader.readAsDataURL(input.files[0]);
-                document.getElementById('logo-file-label').innerText = input.files[0].name;
+        // OPEN CLOUDINARY WIDGET
+        window.openCloudinaryBadgeWidget = () => {
+            if(!CLOUD_NAME || CLOUD_NAME === "YOUR_CLOUD_NAME_HERE") { alert("Please set your Cloud Name in code."); return; }
+            
+            const myWidget = cloudinary.createUploadWidget({
+                cloudName: CLOUD_NAME, 
+                uploadPreset: UPLOAD_PRESET,
+                sources: ['local', 'url', 'camera'],
+                multiple: false
+            }, (error, result) => { 
+                if (!error && result && result.event === "success") { 
+                    document.getElementById('uploaded-url').value = result.info.secure_url;
+                    document.getElementById('logo-preview').src = result.info.secure_url; // Update preview
+                    document.getElementById('preview-badge').classList.remove('hidden');
+                    document.getElementById('btn-save-badge').disabled = false; // Enable save button
+                    showNotify("Image Uploaded! Click 'Save Badge'", "info");
+                }
+            });
+            myWidget.open();
+        };
+
+        window.saveBadgeToFirebase = async () => {
+            const name = document.getElementById('logo-team-name').value;
+            const div = document.getElementById('logo-team-div').value;
+            const url = document.getElementById('uploaded-url').value;
+            
+            if(!url) return showNotify("Please upload an image first", "error");
+            
+            const uniqueId = `${name}_${div.replace(/[^a-zA-Z0-9]/g, '')}`; 
+            
+            try {
+                await setDoc(doc(db,"team_assets",uniqueId), { logoUrl: url }, { merge: true });
+                showNotify("Badge Saved Successfully!", "success");
+                loadTeams(); 
+                document.getElementById('btn-save-badge').disabled = true;
+            } catch(err) {
+                console.error(err);
+                showNotify("Save Failed", "error");
             }
         };
 
-        window.uploadBadge = async () => {
-            const name = document.getElementById('logo-team-name').value;
-            const div = document.getElementById('logo-team-div').value;
-            const file = document.getElementById('logo-file').files[0];
-            const btn = document.getElementById('btn-upload-badge');
-            
-            if(!name || !file) return showNotify("Select a team and file", "error");
-            
-            btn.innerHTML = '<div class="loader"></div> Uploading...';
-            const uniqueId = `${name}_${div.replace(/[^a-zA-Z0-9]/g, '')}`; 
-            const r = ref(storage, `logos/${uniqueId}_${Date.now()}`);
-            
-            try {
-                await uploadBytes(r, file); const u = await getDownloadURL(r);
-                await setDoc(doc(db,"team_assets",uniqueId), { logoUrl: u }, { merge: true });
-                
-                showNotify("Badge Saved Successfully!", "success");
-                document.getElementById('logo-preview').src = u; // FORCE UPDATE PREVIEW
-                document.getElementById('preview-badge').classList.remove('hidden');
-                
-                loadTeams(); // Refresh list to show green check
-                btn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-2"></i> SAVE BADGE';
-            } catch(err) {
-                console.error(err);
-                showNotify("Upload Failed", "error");
-                btn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-2"></i> SAVE BADGE';
-            }
+        // NEWS WIDGET
+        window.openCloudinaryNewsWidget = () => {
+            if(!CLOUD_NAME || CLOUD_NAME === "YOUR_CLOUD_NAME_HERE") { alert("Please set your Cloud Name."); return; }
+            const myWidget = cloudinary.createUploadWidget({
+                cloudName: CLOUD_NAME, uploadPreset: UPLOAD_PRESET,
+                sources: ['local', 'url', 'camera'], resourceType: 'auto'
+            }, (error, result) => { 
+                if (!error && result && result.event === "success") { 
+                    document.getElementById('news-media-url').value = result.info.secure_url;
+                    showNotify("Media Uploaded!", "success");
+                }
+            });
+            myWidget.open();
+        };
+
+        window.publishNews=async()=>{
+            const u = document.getElementById('news-media-url').value;
+            await addDoc(collection(db,"news_posts"),{title:document.getElementById('news-title').value,content:document.getElementById('news-body').value,imageUrl:u,timestamp:serverTimestamp(),likes:0,commentsCount:0});
+            showNotify("Published", "success"); loadNews();
         };
 
         // --- REST OF APP LOGIC ---
@@ -422,7 +443,6 @@
         window.loadTeamPlayers=async()=>{const t=document.getElementById('stat-team-select').value;const p=document.getElementById('stat-player-select');p.innerHTML='<option>Loading...</option>';if(!t)return;const d=await getDoc(doc(db,"registrations",t));p.innerHTML='<option value="">Select Player...</option>';(d.data().players||[]).forEach(o=>{const e=document.createElement('option');e.value=o.name;e.textContent=`${o.name} (${o.position})`;p.appendChild(e);});};
         window.fetchPlayerCurrentStats=async()=>{const t=document.getElementById('stat-team-select').value,p=document.getElementById('stat-player-select').value;if(!t||!p)return;document.getElementById('stats-editor').classList.remove('hidden');const s=await getDoc(doc(db,"player_stats",`${t}_${p.replace(/\s+/g,'')}`));const d=s.exists()?s.data():{};document.getElementById('p-goals').value=d.goals||0;document.getElementById('p-assists').value=d.assists||0;document.getElementById('p-yellow').value=d.yellow_cards||0;document.getElementById('p-red').value=d.red_cards||0;document.getElementById('p-saves').value=d.saves||0;};
         window.savePlayerStats=async()=>{const t=document.getElementById('stat-team-select').value,p=document.getElementById('stat-player-select').value;if(!t||!p)return;await setDoc(doc(db,"player_stats",`${t}_${p.replace(/\s+/g,'')}`),{name:p,teamId:t,goals:parseInt(document.getElementById('p-goals').value)||0,assists:parseInt(document.getElementById('p-assists').value)||0,yellow_cards:parseInt(document.getElementById('p-yellow').value)||0,red_cards:parseInt(document.getElementById('p-red').value)||0,saves:parseInt(document.getElementById('p-saves').value)||0},{merge:true});showNotify("Stats Saved", "success");};
-        window.publishNews=async()=>{const f=document.getElementById('news-file').files[0];let u="";if(f){const r=ref(storage,`news/${Date.now()}_${f.name}`);await uploadBytes(r,f);u=await getDownloadURL(r);}await addDoc(collection(db,"news_posts"),{title:document.getElementById('news-title').value,content:document.getElementById('news-body').value,imageUrl:u,timestamp:serverTimestamp(),likes:0,commentsCount:0});showNotify("Published", "success");loadNews();};
         window.loadNews=async()=>{const e=document.getElementById('news-feed');e.innerHTML='';(await getDocs(query(collection(db,"news_posts"),orderBy("timestamp","desc")))).forEach(d=>{e.innerHTML+=`<div class="love-card p-3 mb-2 flex justify-between items-center"><span class="text-xs font-bold text-slate-700 truncate w-32">${d.data().title}</span><button onclick="deleteDoc(doc(db,'news_posts','${d.id}'));loadNews()" class="text-red-400"><i class="fa-solid fa-trash"></i></button></div>`;});};
         window.createPoll=async()=>{const q=document.getElementById('poll-q').value;if(!q)return;await addDoc(collection(db,"polls"),{question:q,opt1:document.getElementById('poll-o1').value,opt2:document.getElementById('poll-o2').value,votes1:0,votes2:0,active:true,timestamp:serverTimestamp()});showNotify("Poll Created", "success");loadActivePolls();};
         window.loadActivePolls=async()=>{const e=document.getElementById('active-polls');e.innerHTML='';(await getDocs(query(collection(db,"polls"),orderBy("timestamp","desc")))).forEach(d=>{const p=d.data();e.innerHTML+=`<div class="love-card p-4 mb-2"><h4 class="font-bold text-sm text-slate-800">${p.question}</h4><div class="flex gap-2 justify-end mt-2"><button onclick="deleteDoc(doc(db,'polls','${d.id}'));loadActivePolls()" class="text-xs bg-slate-100 px-3 py-1 rounded font-bold">Delete</button></div></div>`;});};
