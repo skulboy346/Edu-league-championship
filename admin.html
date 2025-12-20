@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EDU-LEAGUE | Admin Portal</title>
+    <title>EDU-LEAGUE | Manager</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
@@ -19,92 +20,106 @@
     <style>
         body { 
             font-family: 'Outfit', sans-serif; 
-            background: #f8fafc;
-            background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,0.03) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,0.03) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,0.03) 0, transparent 50%);
+            background: #0f172a; /* Dark Slate Background */
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
             background-attachment: fixed;
-            color: #1e293b;
+            color: #f8fafc;
         }
 
-        /* --- TOP NAV --- */
-        .top-nav {
-            background: rgba(255, 255, 255, 0.9);
+        /* --- GLASSMOPHISM CARDS --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* --- TOP NAVIGATION --- */
+        .top-nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: sticky; top: 0; z-index: 50;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
         }
         .nav-btn {
             display: flex; align-items: center; gap: 8px;
             padding: 8px 16px; border-radius: 99px;
-            font-size: 0.85rem; font-weight: 600; color: #64748b;
+            font-size: 0.85rem; font-weight: 600; color: #94a3b8;
             transition: all 0.2s ease; white-space: nowrap; border: 1px solid transparent;
         }
-        .nav-btn:hover { background: #f1f5f9; color: #4f46e5; transform: translateY(-1px); }
+        .nav-btn:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
         .nav-btn.active {
-            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-            color: white; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            color: white; box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        /* --- CARDS & INPUTS --- */
-        .love-card {
-            background: white; border-radius: 24px;
-            border: 1px solid #f1f5f9;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            overflow: hidden;
-        }
-        .love-card:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.1); }
-
-        .input-love {
-            width: 100%; padding: 12px 16px; background: #f8fafc;
-            border: 1px solid #e2e8f0; border-radius: 12px;
-            font-size: 0.9rem; font-weight: 600; color: #334155; outline: none;
+        /* --- INPUTS --- */
+        .input-glass {
+            width: 100%; padding: 12px 16px; 
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            font-size: 0.9rem; font-weight: 500; color: #fff; outline: none;
             transition: all 0.2s;
         }
-        .input-love:focus { background: white; border-color: #4f46e5; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+        .input-glass:focus { border-color: #818cf8; background: rgba(0, 0, 0, 0.5); }
 
-        .tbl-input { background: transparent; text-align: center; font-weight: 800; width: 100%; outline: none; padding: 4px; font-size: 0.8rem; }
-        .tbl-input:focus { background: #eef2ff; border-radius: 6px; color: #4338ca; }
+        /* Table Inputs */
+        .tbl-input { background: transparent; text-align: center; font-weight: 700; width: 100%; outline: none; padding: 4px; font-size: 0.85rem; color: #fff; }
+        .tbl-input:focus { background: rgba(255,255,255,0.1); border-radius: 6px; }
 
-        /* --- LOGIN --- */
-        .login-bg { background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%); }
-        .login-card { background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); border: 1px solid white; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); }
+        /* --- LOGIN SCREEN --- */
+        .login-bg { background: #020617; }
+        .login-glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.1);
+        }
 
-        .loader { width: 18px; height: 18px; border: 2px solid #fff; border-bottom-color: transparent; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
+        .loader { width: 20px; height: 20px; border: 3px solid #fff; border-bottom-color: transparent; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
     <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center login-bg p-4">
-        <div class="login-card p-10 rounded-[32px] max-w-sm w-full text-center">
-            <div class="h-20 w-20 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg text-white text-3xl font-black">E</div>
-            <h2 class="text-2xl font-black text-slate-800 mb-2">Admin Portal</h2>
-            <p class="text-sm text-slate-500 mb-8">Secure Access Login</p>
-            
+        <div class="login-glass p-10 rounded-[32px] max-w-sm w-full text-center">
+            <div class="h-20 w-20 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-indigo-500/30 text-white text-3xl font-black">E</div>
+            <h2 class="text-3xl font-bold text-white mb-2">Admin Portal</h2>
+            <p class="text-sm text-slate-400 mb-8">System Secured</p>
             <form id="login-form" class="space-y-4">
-                <input type="email" id="adm-email" placeholder="Email" class="input-love" required>
-                <input type="password" id="adm-pass" placeholder="Password" class="input-love" required>
-                <button type="submit" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-black transition shadow-lg">Authenticate</button>
+                <input type="password" id="adm-pass" placeholder="Enter Access Code" class="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl font-bold text-lg text-white text-center focus:ring-2 focus:ring-indigo-500 outline-none transition" required>
+                <button type="submit" class="w-full bg-white text-slate-900 font-bold py-4 rounded-2xl hover:bg-indigo-50 transition shadow-lg transform active:scale-95">Unlock</button>
             </form>
-            <p id="login-msg" class="text-red-500 text-xs font-bold mt-4 hidden p-2 bg-red-50 rounded-lg">Invalid Credentials</p>
+            <p id="login-msg" class="text-red-400 text-xs font-bold mt-4 hidden">Incorrect Password</p>
         </div>
     </div>
 
-    <div id="edit-match-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-slate-900/80 backdrop-blur-sm hidden p-4">
-        <div class="bg-white p-6 rounded-2xl w-full max-w-sm shadow-2xl transform transition-all">
-            <div class="flex justify-between items-center mb-4"><h3 class="text-lg font-bold text-slate-800">Edit Fixture</h3><button onclick="closeEditModal()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button></div>
+    <div id="edit-match-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-black/90 backdrop-blur-sm hidden p-4">
+        <div class="bg-slate-900 border border-slate-700 p-6 rounded-2xl w-full max-w-sm shadow-2xl">
+            <div class="flex justify-between items-center mb-4"><h3 class="text-lg font-bold text-white">Edit Fixture</h3><button onclick="closeEditModal()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button></div>
             <input type="hidden" id="edit-match-id">
-            <div class="bg-slate-50 p-3 rounded-lg mb-4 text-center"><p class="text-sm font-bold text-slate-700" id="edit-match-teams">...</p></div>
+            <div class="bg-slate-800 p-3 rounded-lg mb-4 text-center"><p class="text-sm font-bold text-indigo-300" id="edit-match-teams">...</p></div>
             <div class="space-y-3">
-                <div><label class="text-[10px] font-bold text-slate-400 uppercase">Date</label><input type="date" id="edit-match-date" class="input-love"></div>
+                <div><label class="text-[10px] font-bold text-slate-400 uppercase">Date</label><input type="date" id="edit-match-date" class="input-glass"></div>
                 <div><label class="text-[10px] font-bold text-slate-400 uppercase">Time</label>
-                    <select id="edit-match-time" class="input-love">
+                    <select id="edit-match-time" class="input-glass">
                         <option value="TBD">⏰ TBD</option><option value="08:00">08:00 AM</option><option value="10:00">10:00 AM</option><option value="12:00">12:00 PM</option><option value="14:00">02:00 PM</option><option value="16:00">04:00 PM</option>
                     </select>
                 </div>
-                <button onclick="confirmEditMatch()" class="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl mt-2 hover:bg-indigo-700">Save Changes</button>
+                <button onclick="confirmEditMatch()" class="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl mt-2 hover:bg-indigo-500">Save Changes</button>
             </div>
         </div>
     </div>
@@ -113,8 +128,8 @@
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3 w-full md:w-auto justify-between">
                 <div class="flex items-center gap-2">
-                    <div class="h-8 w-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-black">E</div>
-                    <span class="font-black text-slate-800 text-lg tracking-tight">EDU-LEAGUE</span>
+                    <img src="edulogo.jpg" class="h-8 w-8 rounded-lg border border-white/20">
+                    <span class="font-black text-white text-lg tracking-tight">EDU-LEAGUE</span>
                 </div>
                 <button onclick="logout()" class="md:hidden text-slate-400"><i class="fa-solid fa-power-off"></i></button>
             </div>
@@ -131,125 +146,136 @@
                     <button onclick="nav('verification')" id="nav-verification" class="nav-btn"><i class="fa-solid fa-check-double"></i> Verify</button>
                 </div>
             </div>
-            <button onclick="logout()" class="hidden md:flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-red-500 px-3 py-1"><i class="fa-solid fa-power-off"></i> Logout</button>
+            <button onclick="logout()" class="hidden md:flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-red-400 px-3 py-1"><i class="fa-solid fa-power-off"></i> Logout</button>
         </div>
     </nav>
 
     <main class="flex-1 overflow-y-auto p-4 md:p-8 max-w-7xl mx-auto w-full">
 
         <div id="dashboard" class="section animate-fade">
-            <h2 class="text-2xl font-black text-slate-800 mb-6">Overview</h2>
+            <h2 class="text-2xl font-bold text-white mb-6">Overview</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="love-card p-6 border-b-4 border-indigo-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Teams</p><h3 class="text-4xl font-black text-slate-800 mt-2" id="dash-teams">0</h3></div>
-                <div class="love-card p-6 border-b-4 border-green-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Verified</p><h3 class="text-4xl font-black text-slate-800 mt-2" id="dash-verified">0</h3></div>
-                <div class="love-card p-6 border-b-4 border-blue-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Matches</p><h3 class="text-4xl font-black text-slate-800 mt-2" id="dash-matches">0</h3></div>
-                <div class="love-card p-6 border-b-4 border-purple-500"><p class="text-[10px] font-bold text-slate-400 uppercase">News</p><h3 class="text-4xl font-black text-slate-800 mt-2" id="dash-news">0</h3></div>
+                <div class="glass-card p-6 border-b-4 border-indigo-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Teams</p><h3 class="text-4xl font-black text-white mt-2" id="dash-teams">0</h3></div>
+                <div class="glass-card p-6 border-b-4 border-green-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Verified</p><h3 class="text-4xl font-black text-white mt-2" id="dash-verified">0</h3></div>
+                <div class="glass-card p-6 border-b-4 border-blue-500"><p class="text-[10px] font-bold text-slate-400 uppercase">Matches</p><h3 class="text-4xl font-black text-white mt-2" id="dash-matches">0</h3></div>
+                <div class="glass-card p-6 border-b-4 border-purple-500"><p class="text-[10px] font-bold text-slate-400 uppercase">News</p><h3 class="text-4xl font-black text-white mt-2" id="dash-news">0</h3></div>
             </div>
         </div>
 
         <div id="schedule" class="section hidden">
-            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800">Match Schedule</h2><button onclick="downloadSchedulePDF()" class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg">PDF Export</button></div>
+            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-white">Match Schedule</h2><button onclick="downloadSchedulePDF()" class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg hover:bg-indigo-500">PDF Export</button></div>
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-8">
                     <div class="flex gap-4 mb-4">
-                        <select id="view-div" onchange="loadSchedule()" class="input-love"><option value="All">All Divisions</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-                        <select id="view-day" onchange="loadSchedule()" class="input-love"><option value="All">All Days</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select>
+                        <select id="view-div" onchange="loadSchedule()" class="input-glass"><option value="All">All Divisions</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
+                        <select id="view-day" onchange="loadSchedule()" class="input-glass"><option value="All">All Days</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select>
                     </div>
                     <div id="active-fixtures" class="space-y-3"></div>
                 </div>
-                <div class="lg:col-span-4 love-card p-6 h-fit">
-                    <h3 class="font-bold text-slate-800 mb-4">New Fixture</h3>
+                <div class="lg:col-span-4 glass-card p-6 h-fit">
+                    <h3 class="font-bold text-white mb-4">New Fixture</h3>
                     <div class="space-y-3">
-                        <select id="fix-div" class="input-love" onchange="filterTeamsByDiv()"><option value="">Division...</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-                        <div class="grid grid-cols-2 gap-2"><select id="fix-day" class="input-love"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select><input type="date" id="fix-date" class="input-love"></div>
-                        <select id="fix-time" class="input-love"><option value="TBD">⏰ TBD</option><option value="08:00">08:00 AM</option><option value="10:00">10:00 AM</option><option value="12:00">12:00 PM</option><option value="14:00">02:00 PM</option><option value="16:00">04:00 PM</option></select>
-                        <div class="grid grid-cols-2 gap-2"><select id="fix-home" class="input-love"><option>Home</option></select><select id="fix-away" class="input-love"><option>Away</option></select></div>
-                        <button onclick="saveFixture()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-indigo-700 transition">Add Match</button>
+                        <select id="fix-div" class="input-glass" onchange="filterTeamsByDiv()"><option value="">Division...</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
+                        <div class="grid grid-cols-2 gap-2"><select id="fix-day" class="input-glass"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select><input type="date" id="fix-date" class="input-glass"></div>
+                        <select id="fix-time" class="input-glass"><option value="TBD">⏰ TBD</option><option value="08:00">08:00 AM</option><option value="10:00">10:00 AM</option><option value="12:00">12:00 PM</option><option value="14:00">02:00 PM</option><option value="16:00">04:00 PM</option></select>
+                        <div class="grid grid-cols-2 gap-2"><select id="fix-home" class="input-glass"><option>Home</option></select><select id="fix-away" class="input-glass"><option>Away</option></select></div>
+                        <button onclick="saveFixture()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-indigo-500 transition">Add Match</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="tables" class="section hidden">
-            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800">Standings</h2><button onclick="downloadTablePDF()" class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg">PDF Export</button></div>
+            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-white">Standings</h2><button onclick="downloadTablePDF()" class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg hover:bg-indigo-500">PDF Export</button></div>
             <div class="flex gap-3 mb-8 overflow-x-auto pb-2 no-scrollbar">
-                <button onclick="loadTableData('Finalist (400Lvl)','Finalist')" class="px-5 py-2.5 bg-white border border-slate-200 rounded-full text-xs font-bold hover:text-indigo-600 shadow-sm whitespace-nowrap transition">Finalist</button>
-                <button onclick="loadTableData('Penultimate (300Lvl)','Penultimate')" class="px-5 py-2.5 bg-white border border-slate-200 rounded-full text-xs font-bold hover:text-indigo-600 shadow-sm whitespace-nowrap transition">Penultimate</button>
-                <button onclick="loadTableData('Sophomore (200Lvl)','Sophomore')" class="px-5 py-2.5 bg-white border border-slate-200 rounded-full text-xs font-bold hover:text-indigo-600 shadow-sm whitespace-nowrap transition">Sophomore</button>
-                <button onclick="loadTableData('Female League','Female')" class="px-5 py-2.5 bg-pink-50 border border-pink-200 rounded-full text-xs font-bold text-pink-600 whitespace-nowrap transition">Female</button>
+                <button onclick="loadTableData('Finalist (400Lvl)','Finalist')" class="px-5 py-2.5 bg-white/10 border border-white/10 rounded-full text-xs font-bold text-white hover:bg-white/20 transition whitespace-nowrap">Finalist</button>
+                <button onclick="loadTableData('Penultimate (300Lvl)','Penultimate')" class="px-5 py-2.5 bg-white/10 border border-white/10 rounded-full text-xs font-bold text-white hover:bg-white/20 transition whitespace-nowrap">Penultimate</button>
+                <button onclick="loadTableData('Sophomore (200Lvl)','Sophomore')" class="px-5 py-2.5 bg-white/10 border border-white/10 rounded-full text-xs font-bold text-white hover:bg-white/20 transition whitespace-nowrap">Sophomore</button>
+                <button onclick="loadTableData('Female League','Female')" class="px-5 py-2.5 bg-pink-500/20 border border-pink-500/30 text-pink-300 rounded-full text-xs font-bold whitespace-nowrap hover:bg-pink-500/30 transition">Female</button>
             </div>
-            <div id="table-logos" class="hidden mb-6 flex justify-center items-center gap-8 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 w-fit mx-auto"><div class="text-center"><img src="edulogo.jpg" class="h-12 w-12 rounded-full border shadow-sm object-cover"><p class="text-[9px] font-black mt-1 text-slate-400">LEAGUE</p></div><div class="text-slate-300 font-black text-xl">X</div><div class="text-center"><img id="div-logo-display" src="" class="h-12 w-12 rounded-full border shadow-sm object-contain"><p class="text-[9px] font-black mt-1 text-slate-400">DIVISION</p></div></div>
-            <div class="love-card p-6"><div id="table-container" class="space-y-2"></div><button onclick="saveTableUpdates()" id="save-table-btn" class="mt-6 w-full bg-green-500 text-white font-bold py-3 rounded-xl shadow-lg hidden">Update Table</button></div>
+            <div id="table-logos" class="hidden mb-6 flex justify-center items-center gap-8 bg-white/5 p-4 rounded-2xl shadow-sm border border-white/10 w-fit mx-auto">
+                <div class="text-center"><img src="edulogo.jpg" class="h-12 w-12 rounded-full border border-white/20 object-cover"><p class="text-[9px] font-black mt-1 text-slate-400">LEAGUE</p></div>
+                <div class="text-white/20 font-black text-xl">X</div>
+                <div class="text-center"><img id="div-logo-display" src="" class="h-12 w-12 rounded-full border border-white/20 object-contain"><p class="text-[9px] font-black mt-1 text-slate-400">DIVISION</p></div>
+            </div>
+            <div class="glass-card p-6">
+                <div id="table-container" class="space-y-2"></div>
+                <button onclick="saveTableUpdates()" id="save-table-btn" class="mt-6 w-full bg-green-500 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-green-600 hidden">Update Table</button>
+            </div>
         </div>
 
         <div id="spotlight" class="section hidden">
-            <h1 class="text-2xl font-black text-slate-800 mb-2">Spotlight Manager</h1>
-            <p class="text-sm text-slate-500 mb-6">Select up to 3 matches.</p>
+            <h1 class="text-2xl font-bold text-white mb-2">Spotlight Manager</h1>
+            <p class="text-sm text-slate-400 mb-6">Select up to 3 matches.</p>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="love-card p-6 h-fit border-l-4 border-yellow-400">
-                    <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">1. Find Match</h3>
-                    <div class="grid grid-cols-2 gap-3 mb-4"><select id="spot-div" class="input-love" onchange="loadSpotlightCandidates()"><option value="">Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="spot-day" class="input-love" onchange="loadSpotlightCandidates()"><option value="">Day</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select></div><div id="spot-candidates" class="space-y-2 max-h-[300px] overflow-y-auto bg-slate-50 p-2 rounded-xl"></div>
+                <div class="glass-card p-6 h-fit border-l-4 border-yellow-400">
+                    <h3 class="font-bold text-white mb-4 border-b border-white/10 pb-2">1. Find Match</h3>
+                    <div class="grid grid-cols-2 gap-3 mb-4"><select id="spot-div" class="input-glass" onchange="loadSpotlightCandidates()"><option value="">Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="spot-day" class="input-glass" onchange="loadSpotlightCandidates()"><option value="">Day</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select></div><div id="spot-candidates" class="space-y-2 max-h-[300px] overflow-y-auto bg-black/20 p-2 rounded-xl"></div>
                 </div>
-                <div class="love-card p-6"><h3 class="font-bold text-slate-700 mb-4 border-b pb-2 flex justify-between"><span>2. Selected (Max 3)</span><button onclick="clearSpotlights()" class="text-xs text-red-500 font-bold">Clear All</button></h3><div id="active-spotlights" class="space-y-4"></div><button onclick="publishSpotlights()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg mt-6">UPDATE NEWS PAGE</button></div>
+                <div class="glass-card p-6">
+                    <h3 class="font-bold text-white mb-4 border-b border-white/10 pb-2 flex justify-between"><span>2. Selected (Max 3)</span><button onclick="clearSpotlights()" class="text-xs text-red-400 font-bold hover:text-red-300">Clear</button></h3>
+                    <div id="active-spotlights" class="space-y-4 min-h-[100px] bg-black/20 rounded-xl p-4"></div>
+                    <button onclick="publishSpotlights()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg mt-6 hover:bg-indigo-500">PUBLISH TO WEBSITE</button>
+                </div>
             </div>
         </div>
 
         <div id="stats" class="section hidden">
-            <h2 class="text-2xl font-black text-slate-800 mb-6">Player Performance</h2>
-            <div class="love-card p-8 max-w-4xl mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b pb-8">
-                    <div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">1. Team</label><select id="stat-team-select" class="input-love" onchange="loadTeamPlayers()"><option value="">Select...</option></select></div>
-                    <div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">2. Player</label><select id="stat-player-select" class="input-love" onchange="fetchPlayerCurrentStats()"><option value="">Select...</option></select></div>
+            <h2 class="text-2xl font-bold text-white mb-6">Player Performance</h2>
+            <div class="glass-card p-8 max-w-4xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b border-white/10 pb-8">
+                    <div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">1. Team</label><select id="stat-team-select" class="input-glass" onchange="loadTeamPlayers()"><option value="">Select...</option></select></div>
+                    <div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">2. Player</label><select id="stat-player-select" class="input-glass" onchange="fetchPlayerCurrentStats()"><option value="">Select...</option></select></div>
                 </div>
                 <div id="stats-editor" class="hidden">
-                    <div class="flex justify-between items-center mb-6"><h3 class="font-bold text-slate-800">Editing: <span id="current-player-name" class="text-indigo-600"></span></h3></div>
+                    <div class="flex justify-between items-center mb-6"><h3 class="font-bold text-white">Editing: <span id="current-player-name" class="text-indigo-400"></span></h3></div>
                     <div class="grid grid-cols-3 md:grid-cols-5 gap-4 mb-8">
-                        <div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[10px] font-bold text-green-600 uppercase mb-1">Goals</p><input type="number" id="p-goals" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div>
-                        <div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Assists</p><input type="number" id="p-assists" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div>
-                        <div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[10px] font-bold text-yellow-600 uppercase mb-1">Yellow</p><input type="number" id="p-yellow" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div>
-                        <div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[10px] font-bold text-red-600 uppercase mb-1">Red</p><input type="number" id="p-red" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div>
-                        <div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[10px] font-bold text-orange-600 uppercase mb-1">Saves</p><input type="number" id="p-saves" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div>
+                        <div class="bg-black/20 p-3 rounded-xl text-center border border-white/5"><p class="text-[10px] font-bold text-green-400 uppercase mb-1">Goals</p><input type="number" id="p-goals" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none text-white"></div>
+                        <div class="bg-black/20 p-3 rounded-xl text-center border border-white/5"><p class="text-[10px] font-bold text-blue-400 uppercase mb-1">Assists</p><input type="number" id="p-assists" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none text-white"></div>
+                        <div class="bg-black/20 p-3 rounded-xl text-center border border-white/5"><p class="text-[10px] font-bold text-yellow-400 uppercase mb-1">Yellow</p><input type="number" id="p-yellow" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none text-white"></div>
+                        <div class="bg-black/20 p-3 rounded-xl text-center border border-white/5"><p class="text-[10px] font-bold text-red-400 uppercase mb-1">Red</p><input type="number" id="p-red" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none text-white"></div>
+                        <div class="bg-black/20 p-3 rounded-xl text-center border border-white/5"><p class="text-[10px] font-bold text-orange-400 uppercase mb-1">Saves</p><input type="number" id="p-saves" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none text-white"></div>
                     </div>
-                    <button onclick="savePlayerStats()" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-700 transition">Save Changes</button>
+                    <button onclick="savePlayerStats()" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-500 transition">Save Changes</button>
                 </div>
             </div>
         </div>
 
         <div id="teams" class="section hidden">
-            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800">Team Logos</h2><button onclick="loadTeams()" class="text-xs font-bold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-lg">Refresh</button></div>
+            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-white">Team Logos</h2><button onclick="loadTeams()" class="text-xs font-bold text-indigo-400 bg-indigo-500/10 px-4 py-2 rounded-lg">Refresh</button></div>
             <div id="assets-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
         <div id="news" class="section hidden">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="love-card p-6 h-fit"><h3 class="font-bold text-slate-800 mb-4">New Post</h3><div class="space-y-3"><input id="news-title" placeholder="Title" class="input-love"><textarea id="news-body" rows="4" placeholder="Content..." class="input-love"></textarea><label class="block border-2 border-dashed border-slate-300 rounded-xl p-4 text-center cursor-pointer hover:bg-slate-50"><input type="file" id="news-file" class="hidden" onchange="document.getElementById('f-news-name').innerText=this.files[0].name"><i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-400"></i><p id="f-news-name" class="text-xs font-bold text-slate-500 mt-1">Upload Media</p></label><button onclick="publishNews()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg">Publish</button></div></div>
-                <div class="lg:col-span-2 love-card p-6 h-[500px] flex flex-col"><div class="flex justify-between mb-4"><h3 class="font-bold text-slate-800">Feed</h3><button onclick="loadNews()" class="text-xs font-bold text-indigo-600">Refresh</button></div><div id="news-feed" class="flex-1 overflow-y-auto space-y-3 pr-2"></div></div>
+                <div class="glass-card p-6 h-fit"><h3 class="font-bold text-white mb-4">New Post</h3><div class="space-y-3"><input id="news-title" placeholder="Title" class="input-glass"><textarea id="news-body" rows="4" placeholder="Content..." class="input-glass"></textarea><label class="block border-2 border-dashed border-slate-600 rounded-xl p-4 text-center cursor-pointer hover:bg-white/5"><input type="file" id="news-file" class="hidden" onchange="document.getElementById('f-news-name').innerText=this.files[0].name"><i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-400"></i><p id="f-news-name" class="text-xs font-bold text-slate-500 mt-1">Upload Media</p></label><button onclick="publishNews()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-indigo-500">Publish</button></div></div>
+                <div class="lg:col-span-2 glass-card p-6 h-[500px] flex flex-col"><div class="flex justify-between mb-4"><h3 class="font-bold text-white">Feed</h3><button onclick="loadNews()" class="text-xs font-bold text-indigo-400">Refresh</button></div><div id="news-feed" class="flex-1 overflow-y-auto space-y-3 pr-2"></div></div>
             </div>
         </div>
 
         <div id="fanz" class="section hidden">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="love-card p-6"><h3 class="font-bold text-slate-800 mb-4">MOTM Voting</h3><div class="grid grid-cols-3 gap-2 mb-4"><input id="motm-1" placeholder="Nominee 1" class="input-love"><input id="motm-2" placeholder="Nominee 2" class="input-love"><input id="motm-3" placeholder="Nominee 3" class="input-love"></div><div class="flex gap-2"><button onclick="setMOTM(true)" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-bold">Start</button><button onclick="setMOTM(false)" class="flex-1 bg-red-500 text-white py-3 rounded-xl font-bold">Stop</button></div></div>
-                <div class="love-card p-6"><h3 class="font-bold text-slate-800 mb-4">Create Poll</h3><div class="space-y-3"><input id="poll-q" placeholder="Question" class="input-love"><input id="poll-o1" placeholder="Option 1" class="input-love"><input id="poll-o2" placeholder="Option 2" class="input-love"><button onclick="createPoll()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg">Launch</button></div></div>
+                <div class="glass-card p-6"><h3 class="font-bold text-white mb-4">MOTM Voting</h3><div class="grid grid-cols-3 gap-2 mb-4"><input id="motm-1" placeholder="Nominee 1" class="input-glass"><input id="motm-2" placeholder="Nominee 2" class="input-glass"><input id="motm-3" placeholder="Nominee 3" class="input-glass"></div><div class="flex gap-2"><button onclick="setMOTM(true)" class="flex-1 bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-500">Start</button><button onclick="setMOTM(false)" class="flex-1 bg-red-600 text-white py-3 rounded-xl font-bold hover:bg-red-500">Stop</button></div></div>
+                <div class="glass-card p-6"><h3 class="font-bold text-white mb-4">Create Poll</h3><div class="space-y-3"><input id="poll-q" placeholder="Question" class="input-glass"><input id="poll-o1" placeholder="Option 1" class="input-glass"><input id="poll-o2" placeholder="Option 2" class="input-glass"><button onclick="createPoll()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-indigo-500">Launch</button></div></div>
             </div>
             <div id="active-polls" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </div>
 
         <div id="verification" class="section hidden">
-            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800">Verification</h2><button onclick="loadVerifications()" class="text-xs font-bold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-lg">Refresh</button></div>
-            <div class="love-card overflow-hidden"><table class="w-full text-sm text-left"><thead class="bg-slate-50 text-xs font-bold text-slate-500 uppercase border-b"><tr><th class="p-4 pl-6">Team</th><th class="p-4 hidden md:table-cell">Div</th><th class="p-4">Status</th><th class="p-4 text-right pr-6">Act</th></tr></thead><tbody id="verify-list" class="divide-y divide-slate-100"></tbody></table></div>
+            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-white">Verification</h2><button onclick="loadVerifications()" class="text-xs font-bold text-indigo-400 bg-indigo-500/10 px-4 py-2 rounded-lg">Refresh</button></div>
+            <div class="glass-card overflow-hidden"><table class="w-full text-sm text-left text-slate-300"><thead class="bg-white/5 text-xs font-bold text-slate-400 uppercase border-b border-white/10"><tr><th class="p-4 pl-6">Team</th><th class="p-4 hidden md:table-cell">Div</th><th class="p-4">Status</th><th class="p-4 text-right pr-6">Act</th></tr></thead><tbody id="verify-list" class="divide-y divide-white/5"></tbody></table></div>
         </div>
 
     </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, serverTimestamp, query, orderBy, where, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
         // ==========================================
-        // 1. CONFIG
+        // 1. CONFIGURATION
         // ==========================================
         const firebaseConfig = { 
             apiKey: "YOUR_API_KEY", 
@@ -265,18 +291,26 @@
         const mainLogoUrl = "edulogo.jpg";
         const divisionLogos = { 'Finalist': 'edulogo.jpg', 'Penultimate': 'edulogo.jpg', 'Sophomore': 'edulogo.jpg', 'Female': 'edulogo.jpg' };
 
-        // AUTH & NAV (RESTORED TO EMAIL & PASSWORD)
+        // AUTH (PASSWORD CHECK + ANONYMOUS LOGIN)
         document.getElementById('login-form').addEventListener('submit', (e) => { 
             e.preventDefault(); 
-            const email = document.getElementById('adm-email').value;
             const pass = document.getElementById('adm-pass').value;
             const btn = e.target.querySelector('button'); btn.innerText='...'; 
-            signInWithEmailAndPassword(auth, email, pass).catch((err)=>{
-                document.getElementById('login-msg').classList.remove('hidden'); 
-                btn.innerText='Login Dashboard';
-                console.error(err);
-            }); 
+            
+            if(pass === "EDUADMIN2025") {
+                signInAnonymously(auth).catch((error) => {
+                    console.error("Auth Error:", error);
+                    document.getElementById('login-msg').innerText = "Database Error";
+                    document.getElementById('login-msg').classList.remove('hidden');
+                    btn.innerText = 'Unlock Dashboard';
+                });
+            } else {
+                document.getElementById('login-msg').innerText = "Incorrect Code";
+                document.getElementById('login-msg').classList.remove('hidden');
+                btn.innerText = 'Unlock Dashboard';
+            }
         });
+
         onAuthStateChanged(auth, (u) => { if(u) { document.getElementById('login-modal').classList.add('hidden'); initData(); } });
         window.logout = () => signOut(auth);
         window.nav = (id) => {
@@ -291,14 +325,16 @@
             document.getElementById('dash-matches').innerText = (await getDocs(collection(db, "schedules"))).size;
             document.getElementById('dash-news').innerText = (await getDocs(collection(db, "news_posts"))).size;
             loadVerifications(); loadTeams(); loadSchedule(); loadNews(); loadActivePolls();
-            const ts = document.getElementById('stat-team-select'); ts.innerHTML = '<option value="">Select Team...</option>'; t.forEach(doc => { const d=doc.data(); const o=document.createElement('option'); o.value=doc.id; o.textContent=`${d.department} (${d.level})`; ts.appendChild(o); });
+            const ts = document.getElementById('stat-team-select'); ts.innerHTML = '<option value="">Select Team...</option>';
+            t.forEach(doc => { const d=doc.data(); const o=document.createElement('option'); o.value=doc.id; o.textContent=`${d.department} (${d.level})`; ts.appendChild(o); });
         }
 
-        // 1. SCHEDULE (schedules collection + undefined fix)
+        // 1. SCHEDULE
         let allSchedules = [], allRegTeams = [];
         window.loadSchedule = async () => {
             if(allRegTeams.length===0) (await getDocs(collection(db,"registrations"))).forEach(d=>allRegTeams.push(d.data()));
             const el = document.getElementById('active-fixtures'); el.innerHTML='Loading...';
+            // Use 'schedules' collection
             const snap = await getDocs(collection(db,"schedules"));
             allSchedules = snap.docs.map(d => ({id:d.id, ...d.data()}));
             loadSpotlightCandidates(); // Update spotlight too
@@ -335,12 +371,12 @@
             matches.forEach(m => {
                 const home = m.home || m.homeTeam; const away = m.away || m.awayTeam;
                 const btn = document.createElement('button');
-                btn.className = "w-full text-left p-3 bg-white border rounded-lg text-xs font-bold text-slate-700 hover:bg-indigo-50 mb-2";
+                btn.className = "w-full text-left p-3 bg-white/5 border border-white/10 rounded-lg text-xs font-bold text-slate-300 hover:bg-white/10 mb-2";
                 btn.innerHTML = `<span>${home} vs ${away}</span>`; btn.onclick = () => addToSpotlight({home, away, ...m}); el.appendChild(btn);
             });
         };
         function addToSpotlight(m) { if(currentSpotlights.length >= 3) return notify("Max 3 Spotlights!", "error"); currentSpotlights.push(m); renderSpotlightUI(); }
-        function renderSpotlightUI() { const el = document.getElementById('active-spotlights'); el.innerHTML = ''; currentSpotlights.forEach((m, i) => { el.innerHTML += `<div class="p-3 bg-indigo-50 border border-indigo-100 rounded-xl flex justify-between items-center"><div class="text-xs font-bold text-indigo-900">${m.home} vs ${m.away}<br><span class="text-[9px] text-indigo-400">${m.day}</span></div><button onclick="removeSpot(${i})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-times"></i></button></div>`; }); }
+        function renderSpotlightUI() { const el = document.getElementById('active-spotlights'); el.innerHTML = ''; currentSpotlights.forEach((m, i) => { el.innerHTML += `<div class="p-3 bg-indigo-500/20 border border-indigo-500/30 rounded-xl flex justify-between items-center"><div class="text-xs font-bold text-indigo-200">${m.home} vs ${m.away}<br><span class="text-[9px] text-white/50">${m.day}</span></div><button onclick="removeSpot(${i})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-times"></i></button></div>`; }); }
         window.removeSpot = (i) => { currentSpotlights.splice(i, 1); renderSpotlightUI(); }; window.clearSpotlights = () => { currentSpotlights = []; renderSpotlightUI(); };
         window.publishSpotlights = async () => { if(currentSpotlights.length === 0) return notify("No matches selected", "error"); const spotlightData = await Promise.all(currentSpotlights.map(async (m) => { let l1 = "edulogo.jpg", l2 = "edulogo.jpg"; try { const s1 = await getDoc(doc(db,"team_assets",m.home)); if(s1.exists()) l1 = s1.data().logoUrl; const s2 = await getDoc(doc(db,"team_assets",m.away)); if(s2.exists()) l2 = s2.data().logoUrl; } catch(e) {} return { teamA: m.home, teamB: m.away, teamALogo: l1, teamBLogo: l2, date: m.date || 'TBD', time: m.time || 'TBD', venue: 'Main Bowl', category: 'SPOTLIGHT' }; })); await setDoc(doc(db, "app_content", "current_fixture"), { matches: spotlightData }); notify("Spotlight Updated!"); };
 
@@ -357,7 +393,7 @@
             const map = {}; Object.keys(existing).forEach(k => map[k] = existing[k]); regSnap.forEach(d => { const n = d.data().department; if(!map[n]) map[n] = { mp:0, w:0, d:0, l:0, gd:0, pts:0 }; });
             const names = Object.keys(map); const logos = await Promise.all(names.map(n => getTeamLogo(n)));
             names.map((n, i) => ({name:n, logo: logos[i], ...map[n]})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd).forEach(t => {
-                container.innerHTML += `<div class="grid grid-cols-12 gap-1 items-center mb-2 team-row bg-slate-50 p-2 rounded-lg border border-slate-100" data-name="${t.name}"><div class="col-span-3 flex items-center gap-1.5"><img src="${t.logo}" class="h-5 w-5 rounded-full object-cover"><span class="font-bold text-xs truncate text-slate-700">${t.name}</span></div><input type="number" class="col-span-1 tbl-input inp-mp" value="${t.mp||0}"><input type="number" class="col-span-1 tbl-input inp-w text-green-600" value="${t.w||0}"><input type="number" class="col-span-1 tbl-input inp-d" value="${t.d||0}"><input type="number" class="col-span-1 tbl-input inp-l text-red-500" value="${t.l||0}"><input type="number" class="col-span-1 tbl-input inp-gd" value="${t.gd||0}"><input type="number" class="col-span-2 tbl-input inp-pts bg-indigo-50 text-indigo-700" value="${t.pts||0}"></div>`;
+                container.innerHTML += `<div class="grid grid-cols-12 gap-1 items-center mb-2 team-row bg-white/5 p-2 rounded-lg border border-white/10" data-name="${t.name}"><div class="col-span-3 flex items-center gap-1.5"><img src="${t.logo}" class="h-5 w-5 rounded-full object-cover"><span class="font-bold text-xs truncate text-slate-200">${t.name}</span></div><input type="number" class="col-span-1 tbl-input inp-mp" value="${t.mp||0}"><input type="number" class="col-span-1 tbl-input inp-w text-green-400" value="${t.w||0}"><input type="number" class="col-span-1 tbl-input inp-d text-white" value="${t.d||0}"><input type="number" class="col-span-1 tbl-input inp-l text-red-400" value="${t.l||0}"><input type="number" class="col-span-1 tbl-input inp-gd text-white" value="${t.gd||0}"><input type="number" class="col-span-2 tbl-input inp-pts bg-indigo-500/20 text-indigo-300" value="${t.pts||0}"></div>`;
             });
             document.getElementById('save-table-btn').classList.remove('hidden');
         };
