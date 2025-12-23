@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EDU-LEAGUE | Command Center</title>
+    <title>EDU-LEAGUE | Admin Console</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
     <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
     
@@ -17,230 +18,236 @@
     <link rel="icon" href="edulogo.jpg" type="image/jpeg">
 
     <style>
-        /* --- ANIMATED BACKGROUND --- */
+        /* --- SPORTS THEME SETUP --- */
+        :root {
+            --navy: #0f172a;
+            --blue: #2563eb;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --surface: #ffffff;
+            --bg: #f1f5f9;
+        }
+
         body { 
-            font-family: 'Outfit', sans-serif; 
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg);
+            /* Tactical Mesh Background Pattern */
+            background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
             color: #1e293b;
-            min-height: 100vh;
-            -webkit-tap-highlight-color: transparent; /* Mobile polish */
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        h1, h2, h3, h4, .score-font {
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        /* --- GLASSMORPHISM --- */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            border-radius: 24px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* --- SPORTS CARDS --- */
+        .sport-card {
+            background: var(--surface);
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
         }
+        .sport-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--navy); /* Default Accent */
+        }
+        .sport-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
 
-        /* --- NOTIFICATION BAR --- */
-        #notify-bar {
-            position: fixed; top: -100px; left: 10px; right: 10px; /* Mobile safe margins */
-            max-width: 400px; margin: 0 auto; /* Center on desktop */
-            background: rgba(16, 185, 129, 0.95); color: white;
-            backdrop-filter: blur(5px);
-            padding: 14px 20px; border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 10000; transition: top 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            display: flex; align-items: center; gap: 12px; font-weight: 700;
-            justify-content: center; border: 1px solid rgba(255,255,255,0.3);
-        }
-        #notify-bar.show { top: 20px; }
-        #notify-bar.error { background: rgba(239, 68, 68, 0.95); }
-        #notify-bar.info { background: rgba(59, 130, 246, 0.95); }
+        /* Accent Variants */
+        .border-l-blue::before { background: var(--blue); }
+        .border-l-green::before { background: var(--green); }
+        .border-l-orange::before { background: var(--orange); }
 
-        /* --- INPUTS & BUTTONS --- */
-        .input-love {
-            width: 100%; padding: 14px; 
-            background: rgba(255, 255, 255, 0.6);
-            border: 2px solid rgba(255,255,255,0.5); border-radius: 16px;
-            font-weight: 600; outline: none; transition: all 0.3s;
-            color: #334155; font-size: 16px; /* Prevents iOS zoom */
+        /* --- INPUTS --- */
+        .input-sport {
+            width: 100%; padding: 12px 16px; background: #f8fafc;
+            border: 2px solid #e2e8f0; border-radius: 8px;
+            font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 1.1rem;
+            color: #0f172a; transition: all 0.2s;
         }
-        .input-love:focus { 
-            background: white; border-color: #6366f1; 
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2); 
-        }
+        .input-sport:focus { background: white; border-color: var(--blue); outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white; font-weight: 700; border-radius: 16px;
-            transition: all 0.3s; position: relative; overflow: hidden;
+        /* --- BUTTONS --- */
+        .btn-sport {
+            background: var(--navy); color: white;
+            font-family: 'Rajdhani', sans-serif; font-weight: 700; text-transform: uppercase;
+            padding: 12px 24px; border-radius: 6px; letter-spacing: 1px;
+            transition: all 0.2s; position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .btn-primary:active { transform: scale(0.95); }
+        .btn-sport:hover { background: #1e293b; transform: translateY(-1px); }
+        .btn-sport:active { transform: translateY(0); }
+        
+        .btn-accent { background: var(--blue); }
+        .btn-accent:hover { background: #1d4ed8; }
 
         /* --- NAVIGATION --- */
         .nav-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.5);
+            background: var(--navy); color: white;
+            box-shadow: 0 4px 20px -5px rgba(0,0,0,0.3);
         }
         .nav-btn {
-            padding: 8px 16px; border-radius: 99px; font-weight: 600;
-            color: #64748b; transition: all 0.3s; border: 1px solid transparent;
-            white-space: nowrap; font-size: 0.85rem;
+            padding: 8px 16px; border-radius: 4px; 
+            font-family: 'Rajdhani', sans-serif; font-weight: 600; letter-spacing: 0.5px;
+            color: #94a3b8; transition: all 0.2s;
+            border-bottom: 2px solid transparent;
         }
-        .nav-btn.active {
-            background: #4f46e5; color: white;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
-        }
+        .nav-btn:hover { color: white; background: rgba(255,255,255,0.05); }
+        .nav-btn.active { color: var(--blue); border-bottom-color: var(--blue); background: rgba(37, 99, 235, 0.1); }
 
-        /* --- DASHBOARD CARDS --- */
-        .stat-card {
-            padding: 20px; border-radius: 20px; color: white;
-            position: relative; overflow: hidden;
-            transition: transform 0.3s;
+        /* --- NOTIFICATION --- */
+        #notify-bar {
+            position: fixed; top: -100px; left: 0; right: 0;
+            background: var(--navy); color: white; border-bottom: 3px solid var(--green);
+            padding: 16px; text-align: center; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1.2rem;
+            z-index: 10000; transition: top 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex; justify-content: center; align-items: center; gap: 12px;
         }
-        .bg-gradient-1 { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); }
-        .bg-gradient-2 { background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%); }
-        .bg-gradient-3 { background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%); }
-        .bg-gradient-4 { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); }
+        #notify-bar.show { top: 0; }
+        
+        /* --- BADGE LIST --- */
+        .badge-item {
+            padding: 12px; border-radius: 6px; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid #e2e8f0; background: white; margin-bottom: 6px;
+            transition: 0.1s;
+        }
+        .badge-item:hover { border-color: var(--blue); }
+        .badge-item.active { background: #eff6ff; border-color: var(--blue); border-left: 4px solid var(--blue); }
 
         /* --- UTILS --- */
-        .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; opacity: 0; transform: translateY(20px); }
-        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-
         .loader { width: 24px; height: 24px; border: 3px solid #fff; border-bottom-color: transparent; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        
-        .badge-item {
-            padding: 12px; border-radius: 12px; cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid transparent; transition: 0.2s; margin-bottom: 6px;
-            background: white;
-        }
-        .badge-item:active { background: #f1f5f9; transform: scale(0.98); }
-        .badge-item.active { background: #e0e7ff; border-color: #6366f1; color: #4338ca; }
     </style>
 </head>
-<body class="flex flex-col">
+<body class="flex flex-col min-h-screen">
 
     <div id="notify-bar">
-        <i id="notify-icon" class="fa-solid fa-check-circle text-xl"></i>
-        <span id="notify-msg">Action Successful</span>
+        <i id="notify-icon" class="fa-solid fa-check"></i>
+        <span id="notify-msg">SYSTEM READY</span>
     </div>
 
-    <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
-        <div class="glass-panel p-8 max-w-xs w-full text-center fade-in-up">
-            <div class="h-16 w-16 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-xl text-white text-2xl font-black">E</div>
-            <h2 class="text-2xl font-black text-slate-800 mb-1">Admin Panel</h2>
-            <p class="text-xs text-slate-500 mb-6 font-bold uppercase tracking-widest">Restricted Access</p>
+    <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/95 backdrop-blur-md p-4">
+        <div class="sport-card p-10 max-w-sm w-full text-center border-l-orange">
+            <div class="h-16 w-16 bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg border border-slate-700">
+                <span class="text-2xl font-black text-white font-[Rajdhani]">EL</span>
+            </div>
+            <h2 class="text-3xl font-black text-slate-800 mb-1">ADMIN LOGIN</h2>
+            <p class="text-xs text-slate-500 mb-8 font-bold tracking-widest uppercase">Restricted Area</p>
             <form id="login-form" class="space-y-4">
-                <input type="password" id="adm-pass" placeholder="••••••••" class="input-love pl-4 text-center text-lg tracking-[0.3em]" required>
-                <button type="submit" class="w-full btn-primary py-3 text-sm uppercase tracking-wide shadow-lg">Authenticate</button>
+                <input type="password" id="adm-pass" placeholder="ACCESS CODE" class="input-sport text-center tracking-[0.3em] uppercase" required>
+                <button type="submit" class="w-full btn-sport">Authorize Access</button>
             </form>
-            <p id="login-msg" class="text-red-500 text-xs font-bold mt-4 hidden bg-red-50 py-2 rounded-lg">⛔ Access Denied</p>
+            <p id="login-msg" class="text-red-600 text-xs font-bold mt-4 hidden bg-red-50 py-2 rounded border border-red-100">INVALID CREDENTIALS</p>
         </div>
     </div>
 
-    <nav class="nav-container sticky top-0 z-50 px-4 py-3 shadow-sm">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+    <nav class="nav-container sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex justify-between items-center w-full md:w-auto">
-                <div class="flex items-center gap-2">
-                    <div class="bg-indigo-600 text-white h-7 w-7 rounded-md flex items-center justify-center font-black">E</div>
-                    <span class="font-black text-lg text-slate-800 tracking-tight">EDU-LEAGUE</span>
+                <div class="flex items-center gap-3">
+                    <div class="bg-blue-600 text-white h-8 w-8 rounded flex items-center justify-center font-black skew-x-[-10deg]">
+                        <span class="skew-x-[10deg]">E</span>
+                    </div>
+                    <span class="font-black text-2xl tracking-tighter text-white font-[Rajdhani]">EDU-LEAGUE <span class="text-blue-500 text-sm align-top">ADMIN</span></span>
                 </div>
                 <button onclick="logout()" class="md:hidden text-slate-400 hover:text-red-500"><i class="fa-solid fa-power-off"></i></button>
             </div>
+            
             <div class="overflow-x-auto w-full md:w-auto flex gap-2 no-scrollbar pb-1">
-                <button onclick="nav('dashboard')" id="btn-dashboard" class="nav-btn active"><i class="fa-solid fa-grid-2"></i> Home</button>
-                <button onclick="nav('teams')" id="btn-teams" class="nav-btn"><i class="fa-solid fa-shield-cat"></i> Badges</button>
-                <button onclick="nav('schedule')" id="btn-schedule" class="nav-btn"><i class="fa-regular fa-calendar"></i> Games</button>
-                <button onclick="nav('tables')" id="btn-tables" class="nav-btn"><i class="fa-solid fa-table"></i> Tables</button>
-                <button onclick="nav('spotlight')" id="btn-spotlight" class="nav-btn"><i class="fa-solid fa-star"></i> Spotlight</button>
-                <button onclick="nav('stats')" id="btn-stats" class="nav-btn"><i class="fa-solid fa-chart-line"></i> Stats</button>
-                <button onclick="nav('news')" id="btn-news" class="nav-btn"><i class="fa-solid fa-newspaper"></i> News</button>
-                <button onclick="nav('fanz')" id="btn-fanz" class="nav-btn"><i class="fa-solid fa-bolt"></i> Fanz</button>
-                <button onclick="nav('verification')" id="btn-verification" class="nav-btn"><i class="fa-solid fa-check-double"></i> Verify</button>
+                <button onclick="nav('dashboard')" id="btn-dashboard" class="nav-btn active">DASHBOARD</button>
+                <button onclick="nav('teams')" id="btn-teams" class="nav-btn">BADGES</button>
+                <button onclick="nav('schedule')" id="btn-schedule" class="nav-btn">FIXTURES</button>
+                <button onclick="nav('tables')" id="btn-tables" class="nav-btn">TABLES</button>
+                <button onclick="nav('spotlight')" id="btn-spotlight" class="nav-btn">SPOTLIGHT</button>
+                <button onclick="nav('stats')" id="btn-stats" class="nav-btn">STATS</button>
+                <button onclick="nav('news')" id="btn-news" class="nav-btn">NEWS</button>
+                <button onclick="nav('fanz')" id="btn-fanz" class="nav-btn">FANZ</button>
+                <button onclick="nav('verification')" id="btn-verification" class="nav-btn">VERIFY</button>
             </div>
-            <button onclick="logout()" class="hidden md:flex items-center gap-2 text-slate-500 hover:text-red-500 font-bold text-xs uppercase tracking-wide transition"><i class="fa-solid fa-power-off"></i> Logout</button>
+            
+            <button onclick="logout()" class="hidden md:flex items-center gap-2 text-slate-400 hover:text-red-500 font-bold text-xs uppercase tracking-wide transition"><i class="fa-solid fa-power-off"></i> LOGOUT</button>
         </div>
     </nav>
 
-    <main class="flex-1 overflow-y-auto p-4 md:p-8 max-w-7xl mx-auto w-full pb-24">
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 max-w-7xl mx-auto w-full mb-10">
 
-        <div id="dashboard" class="section fade-in-up">
-            <h2 class="text-2xl font-black text-white mb-6 drop-shadow-md">Overview</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                <div class="stat-card bg-gradient-1">
-                    <p class="text-[10px] font-bold uppercase opacity-80 mb-1">Total Teams</p>
-                    <h3 class="text-3xl font-black" id="dash-teams">0</h3>
-                    <i class="fa-solid fa-users absolute bottom-3 right-3 text-white/20 text-3xl"></i>
+        <div id="dashboard" class="section">
+            <h2 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-2"><i class="fa-solid fa-chart-pie text-blue-600"></i> LEAGUE OVERVIEW</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="sport-card p-6 border-l-blue">
+                    <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Registered Teams</p>
+                    <h3 class="text-4xl font-black text-slate-800 mt-1" id="dash-teams">0</h3>
+                    <i class="fa-solid fa-shield-halved absolute top-4 right-4 text-slate-100 text-4xl -z-0"></i>
                 </div>
-                <div class="stat-card bg-gradient-2">
-                    <p class="text-[10px] font-bold uppercase opacity-80 mb-1">Verified</p>
-                    <h3 class="text-3xl font-black" id="dash-verified">0</h3>
-                    <i class="fa-solid fa-check-circle absolute bottom-3 right-3 text-white/20 text-3xl"></i>
+                <div class="sport-card p-6 border-l-green">
+                    <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Verified Status</p>
+                    <h3 class="text-4xl font-black text-slate-800 mt-1" id="dash-verified">0</h3>
+                    <i class="fa-solid fa-check-double absolute top-4 right-4 text-slate-100 text-4xl -z-0"></i>
                 </div>
-                <div class="stat-card bg-gradient-3">
-                    <p class="text-[10px] font-bold uppercase opacity-80 mb-1">Matches</p>
-                    <h3 class="text-3xl font-black" id="dash-matches">0</h3>
-                    <i class="fa-regular fa-futbol absolute bottom-3 right-3 text-white/20 text-3xl"></i>
+                <div class="sport-card p-6 border-l-orange">
+                    <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Total Matches</p>
+                    <h3 class="text-4xl font-black text-slate-800 mt-1" id="dash-matches">0</h3>
+                    <i class="fa-solid fa-calendar-day absolute top-4 right-4 text-slate-100 text-4xl -z-0"></i>
                 </div>
-                <div class="stat-card bg-gradient-4">
-                    <p class="text-[10px] font-bold uppercase opacity-80 mb-1">News</p>
-                    <h3 class="text-3xl font-black" id="dash-news">0</h3>
-                    <i class="fa-solid fa-newspaper absolute bottom-3 right-3 text-white/20 text-3xl"></i>
+                <div class="sport-card p-6 border-l-4 border-l-slate-800">
+                    <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">News Articles</p>
+                    <h3 class="text-4xl font-black text-slate-800 mt-1" id="dash-news">0</h3>
+                    <i class="fa-solid fa-newspaper absolute top-4 right-4 text-slate-100 text-4xl -z-0"></i>
                 </div>
             </div>
         </div>
 
-        <div id="teams" class="section hidden fade-in-up">
-            <h2 class="text-2xl font-black text-white mb-6 drop-shadow-md">Badge Manager</h2>
-            
+        <div id="teams" class="section hidden">
+            <h2 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-2"><i class="fa-solid fa-id-badge text-blue-600"></i> BADGE MANAGEMENT</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:h-[600px] h-auto">
                 
-                <div class="glass-panel flex flex-col col-span-1 overflow-hidden h-[300px] lg:h-full">
-                    <div class="p-4 border-b border-gray-200/50 bg-white/50 sticky top-0 z-10">
-                        <h3 class="font-bold text-slate-800 text-xs uppercase tracking-wider">1. Select Team</h3>
-                        <p class="text-[10px] text-slate-500 mt-1">Status: <span class="text-green-600 font-bold">● Uploaded</span></p>
+                <div class="sport-card flex flex-col h-[400px] lg:h-full border-l-blue">
+                    <div class="p-4 border-b border-gray-100 bg-slate-50 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-700 text-sm">TEAM ROSTER</h3>
+                        <span class="text-[10px] font-bold bg-white border px-2 py-1 rounded text-slate-500">SELECT TO EDIT</span>
                     </div>
-                    <div id="badge-tracker-list" class="flex-1 overflow-y-auto p-3"></div>
+                    <div id="badge-tracker-list" class="flex-1 overflow-y-auto p-3 bg-slate-50/50"></div>
                 </div>
 
                 <div class="col-span-1 lg:col-span-2">
-                    <div class="glass-panel p-6 md:p-10 h-full flex flex-col justify-center relative overflow-hidden bg-white/90">
+                    <div class="sport-card p-8 h-full flex flex-col justify-center border-l-orange bg-white">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                             
-                            <div class="space-y-5">
+                            <div class="space-y-6">
                                 <div>
-                                    <label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">2. Team Selected</label>
-                                    <input id="logo-team-name-display" class="w-full p-3 bg-slate-100 border-none rounded-xl font-bold text-slate-700 outline-none text-sm" readonly placeholder="<< Select a team">
+                                    <label class="text-xs font-bold text-slate-400 uppercase block mb-1">TARGET TEAM</label>
+                                    <input id="logo-team-name-display" class="input-sport bg-slate-100 text-slate-500 cursor-not-allowed" readonly placeholder="SELECT TEAM FROM ROSTER">
                                     <input type="hidden" id="logo-team-name">
                                     <input type="hidden" id="logo-team-div">
                                     <input type="hidden" id="uploaded-url">
                                 </div>
                                 
-                                <button onclick="openCloudinaryBadgeWidget()" class="w-full border-2 border-dashed border-indigo-300 rounded-xl p-6 text-center hover:bg-indigo-50 transition bg-white group relative overflow-hidden">
-                                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-indigo-500 mb-2 group-hover:scale-110 transition duration-300"></i>
-                                    <p class="text-xs font-bold text-slate-600 uppercase">3. Choose File</p>
+                                <button onclick="openCloudinaryBadgeWidget()" class="w-full border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:bg-slate-50 hover:border-blue-500 transition group">
+                                    <i class="fa-solid fa-cloud-arrow-up text-4xl text-slate-300 group-hover:text-blue-500 mb-2 transition"></i>
+                                    <p class="text-sm font-bold text-slate-600 font-[Rajdhani] uppercase">UPLOAD FILE</p>
+                                    <p class="text-[10px] text-slate-400">JPG, PNG supported</p>
                                 </button>
 
-                                <button onclick="saveBadgeToFirebase()" id="btn-save-badge" class="w-full btn-primary py-3.5 text-sm uppercase tracking-wide shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                                    4. Save Changes
+                                <button onclick="saveBadgeToFirebase()" id="btn-save-badge" class="w-full btn-sport btn-accent shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                    <i class="fa-solid fa-floppy-disk"></i> CONFIRM & SAVE
                                 </button>
                             </div>
 
                             <div class="flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-slate-100 pt-6 md:pt-0 md:pl-6">
-                                <div class="w-40 h-40 bg-white rounded-full flex items-center justify-center shadow-xl border-4 border-white p-4 mb-3 relative group">
-                                    <img id="logo-preview" src="edulogo.jpg" class="w-full h-full object-contain rounded-full transition duration-500 group-hover:scale-105">
-                                    <div class="absolute bottom-1 right-2 bg-green-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow-lg hidden" id="preview-badge">READY</div>
+                                <div class="w-48 h-48 bg-slate-50 rounded-full flex items-center justify-center shadow-inner border border-slate-200 p-6 mb-4 relative">
+                                    <img id="logo-preview" src="edulogo.jpg" class="w-full h-full object-contain">
+                                    <div class="absolute bottom-0 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded shadow hidden" id="preview-badge">ACTIVE</div>
                                 </div>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Preview</p>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">LIVE PREVIEW</p>
                             </div>
 
                         </div>
@@ -249,57 +256,57 @@
             </div>
         </div>
 
-        <div id="schedule" class="section hidden fade-in-up">
-            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-white drop-shadow-md">Schedule</h2><button onclick="downloadSchedulePDF()" class="bg-white text-indigo-600 px-4 py-2 rounded-full text-[10px] font-bold shadow-lg uppercase">Download PDF</button></div>
+        <div id="schedule" class="section hidden">
+            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-regular fa-calendar-days text-blue-600"></i> FIXTURE LIST</h2><button onclick="downloadSchedulePDF()" class="bg-slate-800 text-white px-4 py-2 rounded text-xs font-bold font-[Rajdhani] uppercase hover:bg-black">Export PDF</button></div>
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <div class="lg:col-span-8">
-                    <div class="flex gap-3 mb-4 overflow-x-auto pb-1 no-scrollbar"><select id="view-div" onchange="loadSchedule()" class="input-love min-w-[140px]"><option value="All">All Divisions</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="view-day" onchange="loadSchedule()" class="input-love min-w-[120px]"><option value="All">All Days</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select></div>
+                    <div class="flex gap-3 mb-4 overflow-x-auto pb-1 no-scrollbar"><select id="view-div" onchange="loadSchedule()" class="input-sport w-auto"><option value="All">ALL DIVISIONS</option><option value="Finalist (400Lvl)">FINALIST</option><option value="Penultimate (300Lvl)">PENULTIMATE</option><option value="Sophomore (200Lvl)">SOPHOMORE</option><option value="Female League">FEMALE</option></select><select id="view-day" onchange="loadSchedule()" class="input-sport w-auto"><option value="All">ALL MATCHDAYS</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select></div>
                     <div id="active-fixtures" class="space-y-3"></div>
                 </div>
-                <div class="lg:col-span-4 glass-panel p-6 h-fit bg-white/95">
-                    <h3 class="font-bold text-slate-800 mb-4 text-sm uppercase">Add Match</h3>
-                    <div class="space-y-3"><select id="fix-div" class="input-love" onchange="filterTeamsByDiv()"><option value="">Select Division...</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><div class="grid grid-cols-2 gap-2"><select id="fix-day" class="input-love"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select><input type="date" id="fix-date" class="input-love"></div><select id="fix-time" class="input-love"><option value="TBD">⏰ TBD</option><option value="08:00">08:00 AM</option><option value="10:00">10:00 AM</option><option value="12:00">12:00 PM</option><option value="14:00">02:00 PM</option><option value="16:00">04:00 PM</option></select><div class="grid grid-cols-2 gap-2"><select id="fix-home" class="input-love"><option>Home</option></select><select id="fix-away" class="input-love"><option>Away</option></select></div><button onclick="saveFixture()" class="w-full btn-primary py-3 shadow-lg text-sm">Create Match</button></div>
+                <div class="lg:col-span-4 sport-card p-6 h-fit border-l-blue">
+                    <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">ADD FIXTURE</h3>
+                    <div class="space-y-3"><select id="fix-div" class="input-sport" onchange="filterTeamsByDiv()"><option value="">SELECT DIVISION</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><div class="grid grid-cols-2 gap-2"><select id="fix-day" class="input-sport"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select><input type="date" id="fix-date" class="input-sport"></div><select id="fix-time" class="input-sport"><option value="TBD">⏰ TIME TBD</option><option value="08:00">08:00 AM</option><option value="10:00">10:00 AM</option><option value="12:00">12:00 PM</option><option value="14:00">02:00 PM</option><option value="16:00">04:00 PM</option></select><div class="grid grid-cols-2 gap-2"><select id="fix-home" class="input-sport"><option>HOME</option></select><select id="fix-away" class="input-sport"><option>AWAY</option></select></div><button onclick="saveFixture()" class="w-full btn-sport btn-accent">CREATE MATCH</button></div>
                 </div>
             </div>
         </div>
 
-        <div id="tables" class="section hidden fade-in-up">
-            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-white drop-shadow-md">Standings</h2><button onclick="downloadTablePDF()" class="bg-white text-indigo-600 px-4 py-2 rounded-full text-[10px] font-bold shadow-lg uppercase">Download PDF</button></div>
-            <div class="flex gap-3 mb-6 overflow-x-auto pb-2 no-scrollbar"><button onclick="loadTableData('Finalist (400Lvl)','Finalist')" class="px-5 py-2.5 bg-white/90 border border-white rounded-full text-xs font-bold hover:text-indigo-600 shadow-sm whitespace-nowrap transition">Finalist</button><button onclick="loadTableData('Penultimate (300Lvl)','Penultimate')" class="px-5 py-2.5 bg-white/90 border border-white rounded-full text-xs font-bold hover:text-indigo-600 shadow-sm whitespace-nowrap transition">Penultimate</button><button onclick="loadTableData('Sophomore (200Lvl)','Sophomore')" class="px-5 py-2.5 bg-white/90 border border-white rounded-full text-xs font-bold hover:text-indigo-600 shadow-sm whitespace-nowrap transition">Sophomore</button><button onclick="loadTableData('Female League','Female')" class="px-5 py-2.5 bg-pink-50 border border-pink-100 rounded-full text-xs font-bold text-pink-600 whitespace-nowrap transition">Female</button></div>
-            <div id="table-logos" class="hidden mb-6 flex justify-center items-center gap-4 glass-panel p-3 w-fit mx-auto bg-white/90"><div class="text-center"><img src="edulogo.jpg" class="h-8 w-8 rounded-full border object-cover"><p class="text-[8px] font-black mt-1 text-slate-400">LEAGUE</p></div><div class="text-slate-300 font-black text-lg">X</div><div class="text-center"><img id="div-logo-display" src="" class="h-8 w-8 rounded-full border object-contain"><p class="text-[8px] font-black mt-1 text-slate-400">DIV</p></div></div>
-            <div class="glass-panel p-4 md:p-6 bg-white/95"><div id="table-container" class="space-y-2"></div><button onclick="saveTableUpdates()" id="save-table-btn" class="mt-6 w-full btn-primary py-3 shadow-lg hidden">Update Standings</button></div>
+        <div id="tables" class="section hidden">
+            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-solid fa-list-ol text-blue-600"></i> STANDINGS</h2><button onclick="downloadTablePDF()" class="bg-slate-800 text-white px-4 py-2 rounded text-xs font-bold font-[Rajdhani] uppercase">Export PDF</button></div>
+            <div class="flex gap-3 mb-6 overflow-x-auto pb-2 no-scrollbar"><button onclick="loadTableData('Finalist (400Lvl)','Finalist')" class="px-6 py-2 bg-white border border-slate-200 rounded text-xs font-bold font-[Rajdhani] hover:bg-slate-50 uppercase shadow-sm">Finalist</button><button onclick="loadTableData('Penultimate (300Lvl)','Penultimate')" class="px-6 py-2 bg-white border border-slate-200 rounded text-xs font-bold font-[Rajdhani] hover:bg-slate-50 uppercase shadow-sm">Penultimate</button><button onclick="loadTableData('Sophomore (200Lvl)','Sophomore')" class="px-6 py-2 bg-white border border-slate-200 rounded text-xs font-bold font-[Rajdhani] hover:bg-slate-50 uppercase shadow-sm">Sophomore</button><button onclick="loadTableData('Female League','Female')" class="px-6 py-2 bg-pink-50 border border-pink-200 text-pink-700 rounded text-xs font-bold font-[Rajdhani] uppercase shadow-sm">Female</button></div>
+            <div id="table-logos" class="hidden mb-6 flex justify-center items-center gap-4 bg-white p-3 w-fit mx-auto rounded shadow-sm border border-slate-200"><div class="text-center"><img src="edulogo.jpg" class="h-10 w-10 object-cover"><p class="text-[8px] font-bold uppercase mt-1">LEAGUE</p></div><div class="text-slate-300 font-black text-xl">VS</div><div class="text-center"><img id="div-logo-display" src="" class="h-10 w-10 object-contain"><p class="text-[8px] font-bold uppercase mt-1">DIV</p></div></div>
+            <div class="sport-card p-6 border-l-green"><div id="table-container" class="space-y-2"></div><button onclick="saveTableUpdates()" id="save-table-btn" class="mt-6 w-full btn-sport btn-accent hidden">UPDATE TABLE</button></div>
         </div>
 
-        <div id="spotlight" class="section hidden fade-in-up">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="glass-panel p-6 bg-white/90"><h3 class="font-bold text-slate-800 mb-4 text-sm uppercase border-b pb-2">1. Find Match</h3><div class="grid grid-cols-2 gap-3 mb-4"><select id="spot-div" class="input-love" onchange="loadSpotlightCandidates()"><option value="">Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="spot-day" class="input-love" onchange="loadSpotlightCandidates()"><option value="">Day</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select></div><div id="spot-candidates" class="space-y-2 max-h-[300px] overflow-y-auto p-1"></div></div><div class="glass-panel p-6 bg-white/90"><h3 class="font-bold text-slate-800 mb-4 text-sm uppercase border-b pb-2 flex justify-between"><span>2. Selected (Max 3)</span><button onclick="clearSpotlights()" class="text-[10px] text-red-500 font-bold hover:underline">Clear All</button></h3><div id="active-spotlights" class="space-y-3"></div><button onclick="publishSpotlights()" class="w-full btn-primary py-3 shadow-lg mt-6">Publish</button></div></div>
+        <div id="spotlight" class="section hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="sport-card p-6 border-l-orange"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">MATCH FINDER</h3><div class="grid grid-cols-2 gap-3 mb-4"><select id="spot-div" class="input-sport" onchange="loadSpotlightCandidates()"><option value="">Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="spot-day" class="input-sport" onchange="loadSpotlightCandidates()"><option value="">Day</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select></div><div id="spot-candidates" class="space-y-2 max-h-[300px] overflow-y-auto p-1"></div></div><div class="sport-card p-6 border-l-blue"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2 flex justify-between"><span>FEATURED MATCHES</span><button onclick="clearSpotlights()" class="text-xs text-red-500 hover:underline">CLEAR</button></h3><div id="active-spotlights" class="space-y-3"></div><button onclick="publishSpotlights()" class="w-full btn-sport mt-6">GO LIVE</button></div></div>
         </div>
 
-        <div id="stats" class="section hidden fade-in-up"><div class="glass-panel p-6 md:p-8 max-w-4xl mx-auto bg-white/95"><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b pb-8"><div><label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">1. Team</label><select id="stat-team-select" class="input-love" onchange="loadTeamPlayers()"><option value="">Select...</option></select></div><div><label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">2. Player</label><select id="stat-player-select" class="input-love" onchange="fetchPlayerCurrentStats()"><option value="">Select...</option></select></div></div><div id="stats-editor" class="hidden"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-slate-800">Editing: <span id="current-player-name" class="text-indigo-600"></span></h3></div><div class="grid grid-cols-3 md:grid-cols-5 gap-3 mb-8"><div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[9px] font-bold text-green-600 uppercase mb-1">Goals</p><input type="number" id="p-goals" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div><div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[9px] font-bold text-blue-600 uppercase mb-1">Assists</p><input type="number" id="p-assists" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div><div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[9px] font-bold text-yellow-600 uppercase mb-1">Yellow</p><input type="number" id="p-yellow" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div><div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[9px] font-bold text-red-600 uppercase mb-1">Red</p><input type="number" id="p-red" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div><div class="bg-slate-50 p-3 rounded-xl text-center border"><p class="text-[9px] font-bold text-orange-600 uppercase mb-1">Saves</p><input type="number" id="p-saves" min="0" class="bg-transparent text-2xl font-black w-full text-center outline-none"></div></div><button onclick="savePlayerStats()" class="w-full btn-primary py-3 shadow-lg">Save Stats</button></div></div></div>
+        <div id="stats" class="section hidden"><div class="sport-card p-8 max-w-4xl mx-auto border-l-green"><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b pb-8"><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">1. Team</label><select id="stat-team-select" class="input-sport" onchange="loadTeamPlayers()"><option value="">Select...</option></select></div><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">2. Player</label><select id="stat-player-select" class="input-sport" onchange="fetchPlayerCurrentStats()"><option value="">Select...</option></select></div></div><div id="stats-editor" class="hidden"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-slate-800 text-xl">PLAYER STATS</h3></div><div class="grid grid-cols-3 md:grid-cols-5 gap-3 mb-8"><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-green-600 uppercase mb-1">Goals</p><input type="number" id="p-goals" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Assists</p><input type="number" id="p-assists" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-yellow-600 uppercase mb-1">Yellow</p><input type="number" id="p-yellow" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-red-600 uppercase mb-1">Red</p><input type="number" id="p-red" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-orange-600 uppercase mb-1">Saves</p><input type="number" id="p-saves" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div></div><button onclick="savePlayerStats()" class="w-full btn-sport btn-accent">UPDATE STATS</button></div></div></div>
         
-        <div id="news" class="section hidden fade-in-up">
+        <div id="news" class="section hidden">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="glass-panel p-6 h-fit bg-white/90">
-                    <h3 class="font-bold text-slate-800 mb-4 text-sm uppercase">Create News</h3>
+                <div class="sport-card p-6 h-fit border-l-blue">
+                    <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">COMPOSE NEWS</h3>
                     <div class="space-y-3">
-                        <input id="news-title" placeholder="Headline" class="input-love">
-                        <textarea id="news-body" rows="4" placeholder="Story content..." class="input-love"></textarea>
-                        <button onclick="openCloudinaryNewsWidget()" class="w-full border-2 border-dashed border-indigo-300 rounded-xl p-4 text-center hover:bg-indigo-50 transition"><i class="fa-solid fa-cloud-arrow-up text-xl text-indigo-500 mb-1"></i><p class="text-[10px] font-bold text-slate-500">Upload Media</p></button>
+                        <input id="news-title" placeholder="HEADLINE" class="input-sport uppercase">
+                        <textarea id="news-body" rows="4" placeholder="Story details..." class="input-sport"></textarea>
+                        <button onclick="openCloudinaryNewsWidget()" class="w-full border-2 border-dashed border-slate-300 rounded p-4 text-center hover:bg-slate-50 transition"><i class="fa-solid fa-cloud-arrow-up text-xl text-slate-400 mb-1"></i><p class="text-xs font-bold text-slate-500 uppercase">Attach Media</p></button>
                         <input type="hidden" id="news-media-url">
-                        <button onclick="publishNews()" class="w-full btn-primary py-3 shadow-lg text-sm">Publish</button>
+                        <button onclick="publishNews()" class="w-full btn-sport btn-accent">PUBLISH</button>
                     </div>
                 </div>
-                <div class="lg:col-span-2 glass-panel p-6 h-[500px] flex flex-col bg-white/90">
-                    <div class="flex justify-between mb-4"><h3 class="font-bold text-slate-800 text-sm uppercase">Feed</h3><button onclick="loadNews()" class="text-xs font-bold text-indigo-600">Refresh</button></div>
+                <div class="lg:col-span-2 sport-card p-6 h-[500px] flex flex-col border-l-orange">
+                    <div class="flex justify-between mb-4"><h3 class="font-bold text-slate-800">LIVE FEED</h3><button onclick="loadNews()" class="text-xs font-bold text-blue-600 uppercase">REFRESH</button></div>
                     <div id="news-feed" class="flex-1 overflow-y-auto space-y-2 pr-2"></div>
                 </div>
             </div>
         </div>
         
-        <div id="fanz" class="section hidden fade-in-up"><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="glass-panel p-6 bg-white/90"><h3 class="font-bold text-slate-800 mb-4 text-sm uppercase">MOTM Voting</h3><div class="grid grid-cols-3 gap-2 mb-4"><input id="motm-1" placeholder="P1" class="input-love"><input id="motm-2" placeholder="P2" class="input-love"><input id="motm-3" placeholder="P3" class="input-love"></div><div class="flex gap-2"><button onclick="setMOTM(true)" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-bold text-xs hover:bg-green-600">Start</button><button onclick="setMOTM(false)" class="flex-1 bg-red-500 text-white py-3 rounded-xl font-bold text-xs hover:bg-red-600">Stop</button></div></div><div class="glass-panel p-6 bg-white/90"><h3 class="font-bold text-slate-800 mb-4 text-sm uppercase">Polls</h3><div class="space-y-3"><input id="poll-q" placeholder="Question" class="input-love"><input id="poll-o1" placeholder="Opt 1" class="input-love"><input id="poll-o2" placeholder="Opt 2" class="input-love"><button onclick="createPoll()" class="w-full btn-primary py-3 shadow-lg text-sm">Launch</button></div></div></div><div id="active-polls" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6"></div></div>
+        <div id="fanz" class="section hidden"><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="sport-card p-6 border-l-green"><h3 class="font-bold text-slate-800 mb-4">MAN OF THE MATCH</h3><div class="grid grid-cols-3 gap-2 mb-4"><input id="motm-1" placeholder="PLAYER 1" class="input-sport"><input id="motm-2" placeholder="PLAYER 2" class="input-sport"><input id="motm-3" placeholder="PLAYER 3" class="input-sport"></div><div class="flex gap-2"><button onclick="setMOTM(true)" class="flex-1 bg-green-600 text-white py-3 rounded font-bold font-[Rajdhani] uppercase">OPEN VOTING</button><button onclick="setMOTM(false)" class="flex-1 bg-red-600 text-white py-3 rounded font-bold font-[Rajdhani] uppercase">CLOSE VOTING</button></div></div><div class="sport-card p-6 border-l-blue"><h3 class="font-bold text-slate-800 mb-4">FAN POLL</h3><div class="space-y-3"><input id="poll-q" placeholder="POLL QUESTION" class="input-sport"><input id="poll-o1" placeholder="OPTION 1" class="input-sport"><input id="poll-o2" placeholder="OPTION 2" class="input-sport"><button onclick="createPoll()" class="w-full btn-sport btn-accent">LAUNCH POLL</button></div></div></div><div id="active-polls" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6"></div></div>
         
-        <div id="verification" class="section hidden fade-in-up"><div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-white drop-shadow-md">Team Status</h2><button onclick="loadVerifications()" class="bg-white text-indigo-600 px-4 py-2 rounded-full text-[10px] font-bold shadow-lg uppercase">Refresh</button></div><div class="glass-panel overflow-hidden bg-white/95"><table class="w-full text-sm text-left"><thead class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase border-b"><tr><th class="p-4 pl-6">Team</th><th class="p-4 hidden md:table-cell">Div</th><th class="p-4">Status</th><th class="p-4 text-right pr-6">Act</th></tr></thead><tbody id="verify-list" class="divide-y divide-slate-100"></tbody></table></div></div>
+        <div id="verification" class="section hidden"><div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-solid fa-check-double text-blue-600"></i> VERIFICATION</h2><button onclick="loadVerifications()" class="bg-slate-800 text-white px-4 py-2 rounded text-xs font-bold uppercase">Refresh</button></div><div class="sport-card overflow-hidden border-l-green"><table class="w-full text-sm text-left"><thead class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase border-b"><tr><th class="p-4 pl-6">Team</th><th class="p-4 hidden md:table-cell">Div</th><th class="p-4">Status</th><th class="p-4 text-right pr-6">Act</th></tr></thead><tbody id="verify-list" class="divide-y divide-slate-100"></tbody></table></div></div>
 
-        <div id="edit-match-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-slate-900/80 backdrop-blur-sm hidden p-4"><div class="bg-white p-6 rounded-3xl w-full max-w-sm shadow-2xl fade-in-up"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-bold text-slate-800">Edit Fixture</h3><button onclick="closeEditModal()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button></div><input type="hidden" id="edit-match-id"><div class="bg-slate-50 p-3 rounded-xl mb-4 text-center border"><p class="text-sm font-bold text-slate-700" id="edit-match-teams">...</p></div><div class="space-y-3"><div><label class="text-[10px] font-bold text-slate-400 uppercase">Date</label><input type="date" id="edit-match-date" class="input-love"></div><div><label class="text-[10px] font-bold text-slate-400 uppercase">Time</label><select id="edit-match-time" class="input-love"><option value="TBD">⏰ TBD</option><option value="08:00">08:00 AM</option><option value="10:00">10:00 AM</option><option value="12:00">12:00 PM</option><option value="14:00">02:00 PM</option><option value="16:00">04:00 PM</option></select></div><button onclick="confirmEditMatch()" class="w-full btn-primary py-3 shadow-lg mt-2 text-sm">Save Changes</button></div></div></div>
+        <div id="edit-match-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-slate-900/90 backdrop-blur-sm hidden p-4"><div class="bg-white p-6 rounded-lg w-full max-w-sm shadow-2xl border-l-4 border-blue-600"><div class="flex justify-between items-center mb-4"><h3 class="text-xl font-black text-slate-800 font-[Rajdhani]">EDIT FIXTURE</h3><button onclick="closeEditModal()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button></div><input type="hidden" id="edit-match-id"><div class="bg-slate-100 p-3 rounded mb-4 text-center border border-slate-200"><p class="text-sm font-bold text-slate-800 uppercase font-[Rajdhani]" id="edit-match-teams">...</p></div><div class="space-y-3"><div><label class="text-[10px] font-bold text-slate-400 uppercase">Date</label><input type="date" id="edit-match-date" class="input-sport"></div><div><label class="text-[10px] font-bold text-slate-400 uppercase">Time</label><select id="edit-match-time" class="input-sport"><option value="TBD">⏰ TBD</option><option value="08:00">08:00 AM</option><option value="10:00">10:00 AM</option><option value="12:00">12:00 PM</option><option value="14:00">02:00 PM</option><option value="16:00">04:00 PM</option></select></div><button onclick="confirmEditMatch()" class="w-full btn-sport btn-accent mt-2">UPDATE MATCH</button></div></div></div>
 
     </main>
 
@@ -312,40 +319,37 @@
         const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
         
-        // --- CLOUDINARY CONFIG ---
+        // CLOUDINARY
         const CLOUD_NAME = "dxdxgrvvb"; 
         const UPLOAD_PRESET = "edu_league"; 
-        // -------------------------
 
         const mainLogoUrl = "edulogo.jpg";
         const divisionLogos = { 'Finalist': 'edulogo.jpg', 'Penultimate': 'edulogo.jpg', 'Sophomore': 'edulogo.jpg', 'Female': 'edulogo.jpg' };
 
-        // NOTIFICATION
         const showNotify = (msg, type="success") => {
             const bar = document.getElementById('notify-bar');
             const icon = document.getElementById('notify-icon');
             const text = document.getElementById('notify-msg');
             bar.className = type; text.innerText = msg;
-            if(type === 'success') icon.className = "fa-solid fa-circle-check";
-            else if(type === 'error') icon.className = "fa-solid fa-triangle-exclamation";
-            else icon.className = "fa-solid fa-circle-info";
+            if(type === 'success') { icon.className = "fa-solid fa-check"; bar.style.borderBottomColor = "#10b981"; }
+            else if(type === 'error') { icon.className = "fa-solid fa-triangle-exclamation"; bar.style.borderBottomColor = "#ef4444"; }
+            else { icon.className = "fa-solid fa-info-circle"; bar.style.borderBottomColor = "#3b82f6"; }
             bar.classList.add('show');
             setTimeout(() => bar.classList.remove('show'), 3000);
         };
 
-        // AUTH
         document.getElementById('login-form').addEventListener('submit', (e) => { 
             e.preventDefault(); 
             const pass = document.getElementById('adm-pass').value;
-            const btn = e.target.querySelector('button'); btn.innerText='Checking...'; 
+            const btn = e.target.querySelector('button'); btn.innerText='VERIFYING...'; 
             signInWithEmailAndPassword(auth, HIDDEN_ADMIN_EMAIL, pass)
-                .then(() => { showNotify("Access Granted", "success"); })
+                .then(() => { showNotify("ACCESS GRANTED", "success"); })
                 .catch((err) => {
                     if((err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') && pass === 'EDUADMIN2025') {
                         createUserWithEmailAndPassword(auth, HIDDEN_ADMIN_EMAIL, pass)
-                            .then(() => showNotify("System Initialized", "success"))
-                            .catch((e) => { document.getElementById('login-msg').classList.remove('hidden'); btn.innerText='Unlock System'; });
-                    } else { document.getElementById('login-msg').classList.remove('hidden'); btn.innerText='Unlock System'; }
+                            .then(() => showNotify("SYSTEM INITIALIZED", "success"))
+                            .catch((e) => { document.getElementById('login-msg').classList.remove('hidden'); document.getElementById('login-msg').innerText = "ERROR: " + e.message; btn.innerText='AUTHORIZE ACCESS'; });
+                    } else { document.getElementById('login-msg').classList.remove('hidden'); btn.innerText='AUTHORIZE ACCESS'; }
                 }); 
         });
         
@@ -367,9 +371,8 @@
             } catch(e) { console.error(e); }
         }
 
-        // --- BADGE MANAGER ---
         window.loadTeams = async () => {
-            const listEl = document.getElementById('badge-tracker-list'); listEl.innerHTML = '<div class="loader mx-auto border-indigo-500"></div>';
+            const listEl = document.getElementById('badge-tracker-list'); listEl.innerHTML = '<div class="loader mx-auto border-blue-500"></div>';
             const teamsSnap = await getDocs(collection(db, "registrations"));
             const teams = []; teamsSnap.forEach(d => teams.push(d.data()));
             const assetsSnap = await getDocs(collection(db, "team_assets"));
@@ -388,17 +391,17 @@
                     const hasBadge = uploadedMap.has(uniqueId);
                     const item = document.createElement('div');
                     item.className = "badge-item";
-                    if(hasBadge) item.classList.add("bg-green-50/50", "border-green-100");
+                    if(hasBadge) item.classList.add("active");
                     item.onclick = () => selectTeamForUpload(t.department, t.level, item);
-                    item.innerHTML = `<span class="text-sm font-bold text-slate-700 truncate">${t.department}</span>${hasBadge ? '<i class="fa-solid fa-circle-check text-green-500 text-lg"></i>' : '<i class="fa-solid fa-circle text-gray-200 text-lg"></i>'}`;
+                    item.innerHTML = `<span class="text-sm font-bold text-slate-700 truncate font-[Rajdhani] uppercase tracking-wide">${t.department}</span>${hasBadge ? '<i class="fa-solid fa-circle-check text-blue-600 text-lg"></i>' : '<i class="fa-solid fa-circle text-slate-200 text-lg"></i>'}`;
                     listEl.appendChild(item);
                 });
             });
         };
 
         window.selectTeamForUpload = (name, div, el) => {
-            document.querySelectorAll('.badge-item').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
+            document.querySelectorAll('.badge-item').forEach(b => b.classList.remove('active', 'border-blue-500'));
+            el.classList.add('active', 'border-blue-500');
             document.getElementById('logo-team-name-display').value = `${name} (${div})`;
             document.getElementById('logo-team-name').value = name;
             document.getElementById('logo-team-div').value = div;
@@ -420,19 +423,18 @@
             } catch(e){ preview.src = "edulogo.jpg"; }
         };
 
-        // CLOUDINARY WIDGETS
         window.openCloudinaryBadgeWidget = () => {
             const myWidget = cloudinary.createUploadWidget({
                 cloudName: CLOUD_NAME, uploadPreset: UPLOAD_PRESET,
                 sources: ['local', 'url', 'camera'], multiple: false,
-                styles: { palette: { window: "#FFFFFF", windowBorder: "#90A0B3", tabIcon: "#4F46E5", menuIcons: "#5A616A", textDark: "#000000", textLight: "#FFFFFF", link: "#4F46E5", action: "#FF620C", inactiveTabIcon: "#0E2F5A", error: "#F44235", inProgress: "#4F46E5", complete: "#20B832", sourceBg: "#E4EBF1" } }
+                styles: { palette: { window: "#0F172A", windowBorder: "#90A0B3", tabIcon: "#3B82F6", menuIcons: "#5A616A", textDark: "#000000", textLight: "#FFFFFF", link: "#3B82F6", action: "#F59E0B", inactiveTabIcon: "#0E2F5A", error: "#F44235", inProgress: "#3B82F6", complete: "#10B981", sourceBg: "#1E293B" } }
             }, (error, result) => { 
                 if (!error && result && result.event === "success") { 
                     document.getElementById('uploaded-url').value = result.info.secure_url;
                     document.getElementById('logo-preview').src = result.info.secure_url; 
                     document.getElementById('preview-badge').classList.remove('hidden');
                     document.getElementById('btn-save-badge').disabled = false; 
-                    showNotify("Image Ready! Click Save", "info");
+                    showNotify("IMAGE READY", "info");
                 }
             });
             myWidget.open();
@@ -442,15 +444,14 @@
             const name = document.getElementById('logo-team-name').value;
             const div = document.getElementById('logo-team-div').value;
             const url = document.getElementById('uploaded-url').value;
-            if(!url) return showNotify("Please upload an image first", "error");
-            
+            if(!url) return showNotify("UPLOAD IMAGE FIRST", "error");
             const uniqueId = `${name}_${div.replace(/[^a-zA-Z0-9]/g, '')}`; 
             try {
                 await setDoc(doc(db,"team_assets",uniqueId), { logoUrl: url }, { merge: true });
-                showNotify("Badge Saved Successfully!", "success");
+                showNotify("BADGE SAVED", "success");
                 loadTeams(); 
                 document.getElementById('btn-save-badge').disabled = true;
-            } catch(err) { console.error(err); showNotify("Save Failed", "error"); }
+            } catch(err) { console.error(err); showNotify("SAVE FAILED", "error"); }
         };
 
         window.openCloudinaryNewsWidget = () => {
@@ -460,7 +461,7 @@
             }, (error, result) => { 
                 if (!error && result && result.event === "success") { 
                     document.getElementById('news-media-url').value = result.info.secure_url;
-                    showNotify("Media Attached!", "success");
+                    showNotify("MEDIA ATTACHED", "success");
                 }
             });
             myWidget.open();
@@ -469,10 +470,9 @@
         window.publishNews=async()=>{
             const u = document.getElementById('news-media-url').value;
             await addDoc(collection(db,"news_posts"),{title:document.getElementById('news-title').value,content:document.getElementById('news-body').value,imageUrl:u,timestamp:serverTimestamp(),likes:0,commentsCount:0});
-            showNotify("News Published!", "success"); loadNews();
+            showNotify("NEWS PUBLISHED", "success"); loadNews();
         };
 
-        // --- APP LOGIC ---
         async function getTeamLogo(name, div) { 
             if(!div) return mainLogoUrl;
             const uniqueId = `${name}_${div.replace(/[^a-zA-Z0-9]/g, '')}`;
@@ -487,34 +487,34 @@
 
         let allSchedules=[], allRegTeams=[];
         window.loadSchedule = async () => { if(allRegTeams.length===0) (await getDocs(collection(db,"registrations"))).forEach(d=>allRegTeams.push(d.data())); const el=document.getElementById('active-fixtures'); el.innerHTML='Loading...'; let snap=await getDocs(collection(db,"schedules")); if(snap.empty) snap=await getDocs(collection(db,"matches")); allSchedules=snap.docs.map(d=>({id:d.id,...d.data()})); loadSpotlightCandidates(); renderMatches(); };
-        function renderMatches() { const el=document.getElementById('active-fixtures'); el.innerHTML=''; const fDiv=document.getElementById('view-div').value, fDay=document.getElementById('view-day').value; let filtered=allSchedules; if(fDiv!=='All') filtered=filtered.filter(m=>m.div===fDiv); if(fDay!=='All') filtered=filtered.filter(m=>m.day===fDay); if(filtered.length===0) { el.innerHTML='<p class="text-center text-slate-400 text-sm">No matches found.</p>'; return; } filtered.forEach(m=>{ const home=m.home||m.homeTeam||"Unknown"; const away=m.away||m.awayTeam||"Unknown"; const isTBD=m.time==='TBD'||!m.time; el.innerHTML+=`<div class="love-card p-4 flex justify-between items-center mb-3"><div><div class="flex items-center gap-2 mb-1"><span class="text-[9px] font-black bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded uppercase">${(m.div||'').split(' ')[0]}</span><span class="text-[9px] font-bold text-slate-400 uppercase">${m.day||''}</span></div><div class="font-black text-slate-800 text-sm">${home} <span class="text-slate-400 font-normal mx-1">vs</span> ${away}</div><div class="text-[10px] font-bold text-slate-500 mt-1">${isTBD&&!m.date?'Pending':m.date} • ${isTBD?'TBD':m.time}</div></div><div class="flex gap-2"><button onclick="openEditMatch('${m.id}','${home}','${away}')" class="text-indigo-500 p-2"><i class="fa-solid fa-pen"></i></button><button onclick="deleteMatch('${m.id}')" class="text-slate-400 hover:text-red-500 p-2"><i class="fa-solid fa-trash"></i></button></div></div>`; }); }
+        function renderMatches() { const el=document.getElementById('active-fixtures'); el.innerHTML=''; const fDiv=document.getElementById('view-div').value, fDay=document.getElementById('view-day').value; let filtered=allSchedules; if(fDiv!=='All') filtered=filtered.filter(m=>m.div===fDiv); if(fDay!=='All') filtered=filtered.filter(m=>m.day===fDay); if(filtered.length===0) { el.innerHTML='<p class="text-center text-slate-400 text-sm">NO MATCHES FOUND</p>'; return; } filtered.forEach(m=>{ const home=m.home||m.homeTeam||"Unknown"; const away=m.away||m.awayTeam||"Unknown"; const isTBD=m.time==='TBD'||!m.time; el.innerHTML+=`<div class="sport-card p-4 flex justify-between items-center mb-3"><div><div class="flex items-center gap-2 mb-1"><span class="text-[9px] font-black bg-blue-600 text-white px-2 py-0.5 rounded uppercase">${(m.div||'').split(' ')[0]}</span><span class="text-[9px] font-bold text-slate-400 uppercase">${m.day||''}</span></div><div class="font-black text-slate-800 text-sm uppercase font-[Rajdhani] tracking-wide">${home} <span class="text-slate-400 font-normal mx-1">vs</span> ${away}</div><div class="text-[10px] font-bold text-slate-500 mt-1">${isTBD&&!m.date?'PENDING':m.date} • ${isTBD?'TBD':m.time}</div></div><div class="flex gap-2"><button onclick="openEditMatch('${m.id}','${home}','${away}')" class="text-blue-500 p-2 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen"></i></button><button onclick="deleteMatch('${m.id}')" class="text-slate-400 hover:text-red-500 p-2 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button></div></div>`; }); }
         window.openEditMatch = (id,h,a) => { document.getElementById('edit-match-id').value=id; document.getElementById('edit-match-teams').innerText=`${h} vs ${a}`; document.getElementById('edit-match-modal').classList.remove('hidden'); };
         window.closeEditModal = () => document.getElementById('edit-match-modal').classList.add('hidden');
-        window.confirmEditMatch = async () => { const id=document.getElementById('edit-match-id').value, d=document.getElementById('edit-match-date').value, t=document.getElementById('edit-match-time').value; if(!d||!t)return; await updateDoc(doc(db,"schedules",id),{date:d,time:t}); closeEditModal(); loadSchedule(); showNotify("Updated", "success"); };
-        window.saveFixture = async () => { const f={div:document.getElementById('fix-div').value, day:document.getElementById('fix-day').value, date:document.getElementById('fix-date').value, time:document.getElementById('fix-time').value, home:document.getElementById('fix-home').value, away:document.getElementById('fix-away').value, timestamp:serverTimestamp()}; if(!f.home) return showNotify("Select Teams!", "error"); await addDoc(collection(db,"schedules"), f); showNotify("Fixture Added", "success"); loadSchedule(); };
-        window.deleteMatch = async(id) => { if(confirm("Delete?")) { await deleteDoc(doc(db,"schedules",id)); showNotify("Deleted", "info"); loadSchedule(); }};
-        window.filterTeamsByDiv = () => { const div=document.getElementById('fix-div').value, h=document.getElementById('fix-home'), a=document.getElementById('fix-away'); h.innerHTML='<option>Home</option>'; a.innerHTML='<option>Away</option>'; allRegTeams.filter(t=>t.level===div || (div==="Female League"&&t.division==="Female")).forEach(t=>{ const o=`<option value="${t.department}">${t.department}</option>`; h.innerHTML+=o; a.innerHTML+=o; }); };
+        window.confirmEditMatch = async () => { const id=document.getElementById('edit-match-id').value, d=document.getElementById('edit-match-date').value, t=document.getElementById('edit-match-time').value; if(!d||!t)return; await updateDoc(doc(db,"schedules",id),{date:d,time:t}); closeEditModal(); loadSchedule(); showNotify("UPDATED", "success"); };
+        window.saveFixture = async () => { const f={div:document.getElementById('fix-div').value, day:document.getElementById('fix-day').value, date:document.getElementById('fix-date').value, time:document.getElementById('fix-time').value, home:document.getElementById('fix-home').value, away:document.getElementById('fix-away').value, timestamp:serverTimestamp()}; if(!f.home) return showNotify("SELECT TEAMS", "error"); await addDoc(collection(db,"schedules"), f); showNotify("FIXTURE ADDED", "success"); loadSchedule(); };
+        window.deleteMatch = async(id) => { if(confirm("DELETE FIXTURE?")) { await deleteDoc(doc(db,"schedules",id)); showNotify("DELETED", "info"); loadSchedule(); }};
+        window.filterTeamsByDiv = () => { const div=document.getElementById('fix-div').value, h=document.getElementById('fix-home'), a=document.getElementById('fix-away'); h.innerHTML='<option>HOME</option>'; a.innerHTML='<option>AWAY</option>'; allRegTeams.filter(t=>t.level===div || (div==="Female League"&&t.division==="Female")).forEach(t=>{ const o=`<option value="${t.department}">${t.department}</option>`; h.innerHTML+=o; a.innerHTML+=o; }); };
 
-        let currentSpotlights=[]; window.loadSpotlightCandidates=()=>{ const div=document.getElementById('spot-div').value, day=document.getElementById('spot-day').value; const el=document.getElementById('spot-candidates'); if(!div||!day)return; const matches=allSchedules.filter(m=>m.div===div&&m.day===day); el.innerHTML=''; matches.forEach(m=>{ const home=m.home||m.homeTeam; const away=m.away||m.awayTeam; const btn=document.createElement('button'); btn.className="w-full text-left p-3 bg-white border rounded-lg text-xs font-bold text-slate-700 hover:bg-indigo-50 mb-2"; btn.innerHTML=`<span>${home} vs ${away}</span>`; btn.onclick=()=>addToSpotlight({home,away,...m}); el.appendChild(btn); }); };
-        function addToSpotlight(m) { if(currentSpotlights.length>=3) return showNotify("Max 3 Spotlights!", "error"); currentSpotlights.push(m); renderSpotlightUI(); }
-        function renderSpotlightUI() { const el=document.getElementById('active-spotlights'); el.innerHTML=''; currentSpotlights.forEach((m,i)=>{ el.innerHTML+=`<div class="p-3 bg-indigo-50 border border-indigo-100 rounded-xl flex justify-between items-center"><div class="text-xs font-bold text-indigo-900">${m.home} vs ${m.away}<br><span class="text-[9px] text-indigo-400">${m.day}</span></div><button onclick="removeSpot(${i})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-times"></i></button></div>`; }); }
+        let currentSpotlights=[]; window.loadSpotlightCandidates=()=>{ const div=document.getElementById('spot-div').value, day=document.getElementById('spot-day').value; const el=document.getElementById('spot-candidates'); if(!div||!day)return; const matches=allSchedules.filter(m=>m.div===div&&m.day===day); el.innerHTML=''; matches.forEach(m=>{ const home=m.home||m.homeTeam; const away=m.away||m.awayTeam; const btn=document.createElement('button'); btn.className="w-full text-left p-3 bg-white border border-slate-200 rounded text-xs font-bold text-slate-700 hover:bg-blue-50 mb-2 font-[Rajdhani] uppercase"; btn.innerHTML=`<span>${home} vs ${away}</span>`; btn.onclick=()=>addToSpotlight({home,away,...m}); el.appendChild(btn); }); };
+        function addToSpotlight(m) { if(currentSpotlights.length>=3) return showNotify("MAX 3 SPOTLIGHTS", "error"); currentSpotlights.push(m); renderSpotlightUI(); }
+        function renderSpotlightUI() { const el=document.getElementById('active-spotlights'); el.innerHTML=''; currentSpotlights.forEach((m,i)=>{ el.innerHTML+=`<div class="p-3 bg-blue-50 border border-blue-200 rounded flex justify-between items-center"><div class="text-xs font-bold text-blue-900 font-[Rajdhani] uppercase">${m.home} vs ${m.away}<br><span class="text-[9px] text-blue-400 font-sans">${m.day}</span></div><button onclick="removeSpot(${i})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-times"></i></button></div>`; }); }
         window.removeSpot=(i)=>{ currentSpotlights.splice(i,1); renderSpotlightUI(); }; window.clearSpotlights=()=>{ currentSpotlights=[]; renderSpotlightUI(); };
-        window.publishSpotlights=async()=>{ if(currentSpotlights.length===0) return showNotify("No matches selected", "error"); const spotlightData=await Promise.all(currentSpotlights.map(async (m)=>{ let l1=await getTeamLogo(m.home, m.div), l2=await getTeamLogo(m.away, m.div); return { teamA:m.home, teamB:m.away, teamALogo:l1, teamBLogo:l2, date:m.date||'TBD', time:m.time||'TBD', venue:'Main Bowl', category:'SPOTLIGHT' }; })); await setDoc(doc(db,"app_content","current_fixture"),{matches:spotlightData}); showNotify("Spotlight Updated!", "success"); };
+        window.publishSpotlights=async()=>{ if(currentSpotlights.length===0) return showNotify("SELECT MATCHES", "error"); const spotlightData=await Promise.all(currentSpotlights.map(async (m)=>{ let l1=await getTeamLogo(m.home, m.div), l2=await getTeamLogo(m.away, m.div); return { teamA:m.home, teamB:m.away, teamALogo:l1, teamBLogo:l2, date:m.date||'TBD', time:m.time||'TBD', venue:'Main Bowl', category:'SPOTLIGHT' }; })); await setDoc(doc(db,"app_content","current_fixture"),{matches:spotlightData}); showNotify("SPOTLIGHT LIVE", "success"); };
 
-        let curDivCode=''; window.loadTableData=async(regLevel,shortCode)=>{ curDivCode=shortCode; document.getElementById('table-logos').classList.remove('hidden'); document.getElementById('div-logo-display').src=divisionLogos[shortCode]||mainLogoUrl; const container=document.getElementById('table-container'); container.innerHTML='<span class="loader"></span>'; const existing=(await getDoc(doc(db,"app_content",`league_table_${shortCode}`))).data()||{}; const regSnap=await getDocs(query(collection(db,"registrations"),where("level","==",regLevel))); container.innerHTML=`<div class="grid grid-cols-12 gap-1 text-[9px] font-bold text-slate-400 uppercase mb-2 px-1"><div class="col-span-3">Team</div><div class="col-span-1 text-center">PL</div><div class="col-span-1 text-center">W</div><div class="col-span-1 text-center">D</div><div class="col-span-1 text-center">L</div><div class="col-span-1 text-center">GD</div><div class="col-span-2 text-center">PTS</div></div>`; const map={}; Object.keys(existing).forEach(k=>map[k]=existing[k]); regSnap.forEach(d=>{ const n=d.data().department; if(!map[n]) map[n]={mp:0,w:0,d:0,l:0,gd:0,pts:0}; }); const names=Object.keys(map); const logos=await Promise.all(names.map(n=>getTeamLogo(n,regLevel))); names.map((n,i)=>({name:n,logo:logos[i],...map[n]})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd).forEach(t=>{ container.innerHTML+=`<div class="grid grid-cols-12 gap-1 items-center mb-2 team-row bg-slate-50 p-2 rounded-lg border border-slate-100" data-name="${t.name}"><div class="col-span-3 flex items-center gap-1.5"><img src="${t.logo}" class="h-5 w-5 rounded-full object-cover"><span class="font-bold text-xs truncate text-slate-700">${t.name}</span></div><input type="number" class="col-span-1 tbl-input inp-mp" value="${t.mp||0}"><input type="number" class="col-span-1 tbl-input inp-w text-green-600" value="${t.w||0}"><input type="number" class="col-span-1 tbl-input inp-d" value="${t.d||0}"><input type="number" class="col-span-1 tbl-input inp-l text-red-500" value="${t.l||0}"><input type="number" class="col-span-1 tbl-input inp-gd" value="${t.gd||0}"><input type="number" class="col-span-2 tbl-input inp-pts bg-indigo-50 text-indigo-700" value="${t.pts||0}"></div>`; }); document.getElementById('save-table-btn').classList.remove('hidden'); };
-        window.saveTableUpdates=async()=>{ const rows=document.querySelectorAll('.team-row'); let d={}; rows.forEach(r=>d[r.dataset.name]={mp:parseInt(r.querySelector('.inp-mp').value)||0, w:parseInt(r.querySelector('.inp-w').value)||0, d:parseInt(r.querySelector('.inp-d').value)||0, l:parseInt(r.querySelector('.inp-l').value)||0, gd:parseInt(r.querySelector('.inp-gd').value)||0, pts:parseInt(r.querySelector('.inp-pts').value)||0}); await setDoc(doc(db,"app_content",`league_table_${curDivCode}`),d); showNotify("Standings Updated", "success"); };
-        window.downloadTablePDF=async()=>{const{jsPDF}=window.jspdf;const pdf=new jsPDF();const mImg=await getBase64Image(mainLogoUrl);const dImg=await getBase64Image(divisionLogos[curDivCode]||mainLogoUrl);if(mImg)pdf.addImage(mImg,'JPEG',15,10,15,15);if(dImg)pdf.addImage(dImg,'JPEG',180,10,15,15);pdf.setFontSize(16);pdf.setTextColor(79,70,229);pdf.text(`${curDivCode.toUpperCase()} TABLE`,105,20,{align:'center'});const rows=[];document.querySelectorAll('.team-row').forEach((r,i)=>rows.push([i+1,r.dataset.name,r.querySelector('.inp-mp').value,r.querySelector('.inp-w').value,r.querySelector('.inp-d').value,r.querySelector('.inp-l').value,r.querySelector('.inp-gd').value,r.querySelector('.inp-pts').value]));pdf.autoTable({head:[['#','Team','P','W','D','L','GD','Pts']],body:rows,startY:35,theme:'grid',headStyles:{fillColor:[79,70,229]}});pdf.save("Table.pdf");};
+        let curDivCode=''; window.loadTableData=async(regLevel,shortCode)=>{ curDivCode=shortCode; document.getElementById('table-logos').classList.remove('hidden'); document.getElementById('div-logo-display').src=divisionLogos[shortCode]||mainLogoUrl; const container=document.getElementById('table-container'); container.innerHTML='<span class="loader border-blue-600"></span>'; const existing=(await getDoc(doc(db,"app_content",`league_table_${shortCode}`))).data()||{}; const regSnap=await getDocs(query(collection(db,"registrations"),where("level","==",regLevel))); container.innerHTML=`<div class="grid grid-cols-12 gap-1 text-[10px] font-black text-slate-400 uppercase mb-2 px-1 tracking-wider"><div class="col-span-3">Team</div><div class="col-span-1 text-center">PL</div><div class="col-span-1 text-center">W</div><div class="col-span-1 text-center">D</div><div class="col-span-1 text-center">L</div><div class="col-span-1 text-center">GD</div><div class="col-span-2 text-center text-blue-600">PTS</div></div>`; const map={}; Object.keys(existing).forEach(k=>map[k]=existing[k]); regSnap.forEach(d=>{ const n=d.data().department; if(!map[n]) map[n]={mp:0,w:0,d:0,l:0,gd:0,pts:0}; }); const names=Object.keys(map); const logos=await Promise.all(names.map(n=>getTeamLogo(n,regLevel))); names.map((n,i)=>({name:n,logo:logos[i],...map[n]})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd).forEach(t=>{ container.innerHTML+=`<div class="grid grid-cols-12 gap-1 items-center mb-2 team-row bg-white p-2 rounded border border-slate-100 shadow-sm" data-name="${t.name}"><div class="col-span-3 flex items-center gap-1.5"><img src="${t.logo}" class="h-6 w-6 rounded-full object-cover border"><span class="font-bold text-xs truncate text-slate-800 font-[Rajdhani] uppercase">${t.name}</span></div><input type="number" class="col-span-1 tbl-input inp-mp" value="${t.mp||0}"><input type="number" class="col-span-1 tbl-input inp-w text-green-600" value="${t.w||0}"><input type="number" class="col-span-1 tbl-input inp-d" value="${t.d||0}"><input type="number" class="col-span-1 tbl-input inp-l text-red-500" value="${t.l||0}"><input type="number" class="col-span-1 tbl-input inp-gd" value="${t.gd||0}"><input type="number" class="col-span-2 tbl-input inp-pts bg-blue-50 text-blue-700 rounded font-black" value="${t.pts||0}"></div>`; }); document.getElementById('save-table-btn').classList.remove('hidden'); };
+        window.saveTableUpdates=async()=>{ const rows=document.querySelectorAll('.team-row'); let d={}; rows.forEach(r=>d[r.dataset.name]={mp:parseInt(r.querySelector('.inp-mp').value)||0, w:parseInt(r.querySelector('.inp-w').value)||0, d:parseInt(r.querySelector('.inp-d').value)||0, l:parseInt(r.querySelector('.inp-l').value)||0, gd:parseInt(r.querySelector('.inp-gd').value)||0, pts:parseInt(r.querySelector('.inp-pts').value)||0}); await setDoc(doc(db,"app_content",`league_table_${curDivCode}`),d); showNotify("STANDINGS SAVED", "success"); };
+        window.downloadTablePDF=async()=>{const{jsPDF}=window.jspdf;const pdf=new jsPDF();const mImg=await getBase64Image(mainLogoUrl);const dImg=await getBase64Image(divisionLogos[curDivCode]||mainLogoUrl);if(mImg)pdf.addImage(mImg,'JPEG',15,10,15,15);if(dImg)pdf.addImage(dImg,'JPEG',180,10,15,15);pdf.setFontSize(16);pdf.setTextColor(37,99,235);pdf.text(`${curDivCode.toUpperCase()} TABLE`,105,20,{align:'center'});const rows=[];document.querySelectorAll('.team-row').forEach((r,i)=>rows.push([i+1,r.dataset.name,r.querySelector('.inp-mp').value,r.querySelector('.inp-w').value,r.querySelector('.inp-d').value,r.querySelector('.inp-l').value,r.querySelector('.inp-gd').value,r.querySelector('.inp-pts').value]));pdf.autoTable({head:[['#','Team','P','W','D','L','GD','Pts']],body:rows,startY:35,theme:'grid',headStyles:{fillColor:[37,99,235]}});pdf.save("Table.pdf");};
 
         window.loadTeamPlayers=async()=>{const t=document.getElementById('stat-team-select').value;const p=document.getElementById('stat-player-select');p.innerHTML='<option>Loading...</option>';if(!t)return;const d=await getDoc(doc(db,"registrations",t));p.innerHTML='<option value="">Select Player...</option>';(d.data().players||[]).forEach(o=>{const e=document.createElement('option');e.value=o.name;e.textContent=`${o.name} (${o.position})`;p.appendChild(e);});};
         window.fetchPlayerCurrentStats=async()=>{const t=document.getElementById('stat-team-select').value,p=document.getElementById('stat-player-select').value;if(!t||!p)return;document.getElementById('stats-editor').classList.remove('hidden');const s=await getDoc(doc(db,"player_stats",`${t}_${p.replace(/\s+/g,'')}`));const d=s.exists()?s.data():{};document.getElementById('p-goals').value=d.goals||0;document.getElementById('p-assists').value=d.assists||0;document.getElementById('p-yellow').value=d.yellow_cards||0;document.getElementById('p-red').value=d.red_cards||0;document.getElementById('p-saves').value=d.saves||0;};
-        window.savePlayerStats=async()=>{const t=document.getElementById('stat-team-select').value,p=document.getElementById('stat-player-select').value;if(!t||!p)return;await setDoc(doc(db,"player_stats",`${t}_${p.replace(/\s+/g,'')}`),{name:p,teamId:t,goals:parseInt(document.getElementById('p-goals').value)||0,assists:parseInt(document.getElementById('p-assists').value)||0,yellow_cards:parseInt(document.getElementById('p-yellow').value)||0,red_cards:parseInt(document.getElementById('p-red').value)||0,saves:parseInt(document.getElementById('p-saves').value)||0},{merge:true});showNotify("Stats Saved", "success");};
-        window.publishNews=async()=>{const f=document.getElementById('news-file').files[0];let u="";if(f){const r=ref(storage,`news/${Date.now()}_${f.name}`);await uploadBytes(r,f);u=await getDownloadURL(r);}await addDoc(collection(db,"news_posts"),{title:document.getElementById('news-title').value,content:document.getElementById('news-body').value,imageUrl:u,timestamp:serverTimestamp(),likes:0,commentsCount:0});showNotify("Published", "success");loadNews();};
-        window.loadNews=async()=>{const e=document.getElementById('news-feed');e.innerHTML='';(await getDocs(query(collection(db,"news_posts"),orderBy("timestamp","desc")))).forEach(d=>{e.innerHTML+=`<div class="love-card p-3 mb-2 flex justify-between items-center"><span class="text-xs font-bold text-slate-700 truncate w-32">${d.data().title}</span><button onclick="deleteDoc(doc(db,'news_posts','${d.id}'));loadNews()" class="text-red-400"><i class="fa-solid fa-trash"></i></button></div>`;});};
-        window.createPoll=async()=>{const q=document.getElementById('poll-q').value;if(!q)return;await addDoc(collection(db,"polls"),{question:q,opt1:document.getElementById('poll-o1').value,opt2:document.getElementById('poll-o2').value,votes1:0,votes2:0,active:true,timestamp:serverTimestamp()});showNotify("Poll Created", "success");loadActivePolls();};
-        window.loadActivePolls=async()=>{const e=document.getElementById('active-polls');e.innerHTML='';(await getDocs(query(collection(db,"polls"),orderBy("timestamp","desc")))).forEach(d=>{const p=d.data();e.innerHTML+=`<div class="love-card p-4 mb-2"><h4 class="font-bold text-sm text-slate-800">${p.question}</h4><div class="flex gap-2 justify-end mt-2"><button onclick="deleteDoc(doc(db,'polls','${d.id}'));loadActivePolls()" class="text-xs bg-slate-100 px-3 py-1 rounded font-bold">Delete</button></div></div>`;});};
-        window.loadVerifications=async()=>{const l=document.getElementById('verify-list');l.innerHTML='';(await getDocs(collection(db,"registrations"))).forEach(d=>{l.innerHTML+=`<tr class="border-b"><td class="p-4">${d.data().department}</td><td class="p-4">${d.data().level}</td><td class="p-4">${d.data().registrationStatus||'Pending'}</td><td class="p-4"><button onclick="verifyTeam('${d.id}')" class="text-green-500"><i class="fa-solid fa-check"></i></button></td></tr>`;});};
-        window.verifyTeam=async(id)=>{if(confirm("Verify?")){await updateDoc(doc(db,"registrations",id),{registrationStatus:"Verified"});showNotify("Verified", "success");loadVerifications();}};
-        window.setMOTM=async(a)=>{const n=[document.getElementById('motm-1').value,document.getElementById('motm-2').value,document.getElementById('motm-3').value];await setDoc(doc(db,"app_content","fan_zone"),{motm:{active:a,nominees:n,votes:[0,0,0]}},{merge:true});showNotify(a?"Voting On":"Voting Off", "info");};
+        window.savePlayerStats=async()=>{const t=document.getElementById('stat-team-select').value,p=document.getElementById('stat-player-select').value;if(!t||!p)return;await setDoc(doc(db,"player_stats",`${t}_${p.replace(/\s+/g,'')}`),{name:p,teamId:t,goals:parseInt(document.getElementById('p-goals').value)||0,assists:parseInt(document.getElementById('p-assists').value)||0,yellow_cards:parseInt(document.getElementById('p-yellow').value)||0,red_cards:parseInt(document.getElementById('p-red').value)||0,saves:parseInt(document.getElementById('p-saves').value)||0},{merge:true});showNotify("STATS SAVED", "success");};
+        window.publishNews=async()=>{const u = document.getElementById('news-media-url').value;await addDoc(collection(db,"news_posts"),{title:document.getElementById('news-title').value,content:document.getElementById('news-body').value,imageUrl:u,timestamp:serverTimestamp(),likes:0,commentsCount:0});showNotify("PUBLISHED", "success");loadNews();};
+        window.loadNews=async()=>{const e=document.getElementById('news-feed');e.innerHTML='';(await getDocs(query(collection(db,"news_posts"),orderBy("timestamp","desc")))).forEach(d=>{e.innerHTML+=`<div class="sport-card p-3 mb-2 flex justify-between items-center"><span class="text-xs font-bold text-slate-700 truncate w-32 uppercase font-[Rajdhani]">${d.data().title}</span><button onclick="deleteDoc(doc(db,'news_posts','${d.id}'));loadNews()" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button></div>`;});};
+        window.createPoll=async()=>{const q=document.getElementById('poll-q').value;if(!q)return;await addDoc(collection(db,"polls"),{question:q,opt1:document.getElementById('poll-o1').value,opt2:document.getElementById('poll-o2').value,votes1:0,votes2:0,active:true,timestamp:serverTimestamp()});showNotify("POLL LIVE", "success");loadActivePolls();};
+        window.loadActivePolls=async()=>{const e=document.getElementById('active-polls');e.innerHTML='';(await getDocs(query(collection(db,"polls"),orderBy("timestamp","desc")))).forEach(d=>{const p=d.data();e.innerHTML+=`<div class="sport-card p-4 mb-2"><h4 class="font-bold text-sm text-slate-800 uppercase font-[Rajdhani]">${p.question}</h4><div class="flex gap-2 justify-end mt-2"><button onclick="deleteDoc(doc(db,'polls','${d.id}'));loadActivePolls()" class="text-xs bg-slate-100 px-3 py-1 rounded font-bold uppercase text-slate-500 hover:text-red-500">Delete</button></div></div>`;});};
+        window.loadVerifications=async()=>{const l=document.getElementById('verify-list');l.innerHTML='';(await getDocs(collection(db,"registrations"))).forEach(d=>{l.innerHTML+=`<tr class="border-b border-slate-50 hover:bg-slate-50"><td class="p-4 font-bold text-slate-800 font-[Rajdhani] uppercase tracking-wide">${d.data().department}</td><td class="p-4 text-xs font-bold text-slate-400">${d.data().level}</td><td class="p-4"><span class="bg-slate-100 text-slate-500 px-2 py-1 rounded text-[10px] font-bold uppercase">${d.data().registrationStatus||'PENDING'}</span></td><td class="p-4 text-right"><button onclick="verifyTeam('${d.id}')" class="text-green-500 hover:bg-green-50 p-2 rounded"><i class="fa-solid fa-check"></i></button></td></tr>`;});};
+        window.verifyTeam=async(id)=>{if(confirm("CONFIRM VERIFICATION?")){await updateDoc(doc(db,"registrations",id),{registrationStatus:"Verified"});showNotify("VERIFIED", "success");loadVerifications();}};
+        window.setMOTM=async(a)=>{const n=[document.getElementById('motm-1').value,document.getElementById('motm-2').value,document.getElementById('motm-3').value];await setDoc(doc(db,"app_content","fan_zone"),{motm:{active:a,nominees:n,votes:[0,0,0]}},{merge:true});showNotify(a?"VOTING OPEN":"VOTING CLOSED", "info");};
         async function getBase64Image(u){try{const r=await fetch(u);const b=await r.blob();return new Promise(s=>{const a=new FileReader();a.onloadend=()=>s(a.result);a.readAsDataURL(b);});}catch(e){return null;}}
     </script>
 </body>
