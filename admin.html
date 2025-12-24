@@ -9,6 +9,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
@@ -143,7 +145,7 @@
                                     <input type="file" id="logo-file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewFile(this)" accept="image/*">
                                     <i class="fa-solid fa-cloud-arrow-up text-4xl text-slate-300 group-hover:text-blue-500 mb-2"></i>
                                     <p class="text-sm font-bold text-slate-600 font-[Rajdhani] uppercase" id="logo-file-label">TAP TO SELECT</p>
-                                    <p class="text-[10px] text-slate-400">Open Device Gallery</p>
+                                    <p class="text-[10px] text-slate-400">Open Gallery</p>
                                 </div>
 
                                 <button onclick="uploadBadgeDirect()" id="btn-save-badge" class="w-full btn-sport btn-accent shadow-lg">UPLOAD & SAVE</button>
@@ -183,7 +185,7 @@
                     <img id="div-logo-display" src="" class="h-16 w-16 object-contain">
                     <label class="absolute -bottom-2 -right-2 bg-blue-600 text-white p-1.5 rounded-full text-xs hover:bg-blue-700 shadow-lg cursor-pointer">
                         <i class="fa-solid fa-camera"></i>
-                        <input type="file" class="hidden" onchange="changeDivLogoDirect(this)">
+                        <input type="file" class="hidden" onchange="changeDivLogoDirect(this)" accept="image/*">
                     </label>
                     <p class="text-[8px] font-bold uppercase mt-1">DIVISION</p>
                 </div>
@@ -233,7 +235,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, serverTimestamp, query, orderBy, where, getDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, serverTimestamp, query, orderBy, where, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const HIDDEN_ADMIN_EMAIL = "admin@eduleague.com"; 
         const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
@@ -445,8 +447,6 @@
         window.loadTeamPlayers=async()=>{const t=document.getElementById('stat-team-select').value;const p=document.getElementById('stat-player-select');p.innerHTML='<option>Loading...</option>';if(!t)return;const d=await getDoc(doc(db,"registrations",t));p.innerHTML='<option value="">Select Player...</option>';(d.data().players||[]).forEach(o=>{const e=document.createElement('option');e.value=o.name;e.textContent=`${o.name} (${o.position})`;p.appendChild(e);});};
         window.fetchPlayerCurrentStats=async()=>{const t=document.getElementById('stat-team-select').value,p=document.getElementById('stat-player-select').value;if(!t||!p)return;document.getElementById('stats-editor').classList.remove('hidden');const s=await getDoc(doc(db,"player_stats",`${t}_${p.replace(/\s+/g,'')}`));const d=s.exists()?s.data():{};document.getElementById('p-goals').value=d.goals||0;document.getElementById('p-assists').value=d.assists||0;document.getElementById('p-yellow').value=d.yellow_cards||0;document.getElementById('p-red').value=d.red_cards||0;document.getElementById('p-saves').value=d.saves||0;};
         window.savePlayerStats=async()=>{const t=document.getElementById('stat-team-select').value,p=document.getElementById('stat-player-select').value;if(!t||!p)return;await setDoc(doc(db,"player_stats",`${t}_${p.replace(/\s+/g,'')}`),{name:p,teamId:t,goals:parseInt(document.getElementById('p-goals').value)||0,assists:parseInt(document.getElementById('p-assists').value)||0,yellow_cards:parseInt(document.getElementById('p-yellow').value)||0,red_cards:parseInt(document.getElementById('p-red').value)||0,saves:parseInt(document.getElementById('p-saves').value)||0},{merge:true});showNotify("STATS SAVED");};
-        window.publishNews=async()=>{const u = document.getElementById('news-media-url').value;await addDoc(collection(db,"news_posts"),{title:document.getElementById('news-title').value,content:document.getElementById('news-body').value,imageUrl:u,timestamp:serverTimestamp(),likes:0,commentsCount:0});showNotify("PUBLISHED");loadNews();};
-        window.loadNews=async()=>{const e=document.getElementById('news-feed');e.innerHTML='';(await getDocs(query(collection(db,"news_posts"),orderBy("timestamp","desc")))).forEach(d=>{e.innerHTML+=`<div class="sport-card p-3 mb-2 flex justify-between items-center"><span class="text-xs font-bold text-slate-700 truncate w-32 uppercase font-[Rajdhani]">${d.data().title}</span><button onclick="deleteDoc(doc(db,'news_posts','${d.id}'));loadNews()" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button></div>`;});};
         window.createPoll=async()=>{const q=document.getElementById('poll-q').value;if(!q)return;await addDoc(collection(db,"polls"),{question:q,opt1:document.getElementById('poll-o1').value,opt2:document.getElementById('poll-o2').value,votes1:0,votes2:0,active:true,timestamp:serverTimestamp()});showNotify("POLL LIVE");loadActivePolls();};
         window.loadActivePolls=async()=>{const e=document.getElementById('active-polls');e.innerHTML='';(await getDocs(query(collection(db,"polls"),orderBy("timestamp","desc")))).forEach(d=>{const p=d.data();e.innerHTML+=`<div class="sport-card p-4 mb-2"><h4 class="font-bold text-sm text-slate-800 uppercase font-[Rajdhani]">${p.question}</h4><div class="flex gap-2 justify-end mt-2"><button onclick="deleteDoc(doc(db,'polls','${d.id}'));loadActivePolls()" class="text-xs bg-slate-100 px-3 py-1 rounded font-bold uppercase text-slate-500 hover:text-red-500">Delete</button></div></div>`;});};
         window.loadVerifications=async()=>{const l=document.getElementById('verify-list');l.innerHTML='';(await getDocs(collection(db,"registrations"))).forEach(d=>{l.innerHTML+=`<tr class="border-b border-slate-50 hover:bg-slate-50"><td class="p-4 font-bold text-slate-800 font-[Rajdhani] uppercase tracking-wide">${d.data().department}</td><td class="p-4 text-xs font-bold text-slate-400">${d.data().level}</td><td class="p-4"><span class="bg-slate-100 text-slate-500 px-2 py-1 rounded text-[10px] font-bold uppercase">${d.data().registrationStatus||'PENDING'}</span></td><td class="p-4 text-right"><button onclick="verifyTeam('${d.id}')" class="text-green-500 hover:bg-green-50 p-2 rounded"><i class="fa-solid fa-check"></i></button></td></tr>`;});};
