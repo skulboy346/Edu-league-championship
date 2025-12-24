@@ -3,23 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News - EDU-LEAGUE</title>
+    <title>Home - EDU-LEAGUE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="icon" href="edulogo.jpg" type="image/jpeg">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        h1, h2, h3, .sport-font { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
         .bg-edu-purple { background-color: #6d28d9; }
-        .news-card { transition: all 0.3s ease; display: flex; flex-direction: column; }
+        .text-edu-purple { color: #6d28d9; }
+        .news-card { transition: all 0.3s ease; }
         .news-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1); }
-        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         .liked { color: #ef4444; animation: pop 0.3s ease; }
         @keyframes pop { 50% { transform: scale(1.2); } }
-        .tab-active { background-color: #16a34a; color: white; border-color: #16a34a; }
+        .tab-active { background-color: #6d28d9; color: white; border-color: #6d28d9; }
         .tab-inactive { background-color: white; color: #374151; border-color: #e5e7eb; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* POLL ANIMATIONS */
+        @keyframes burn { 
+            0% { transform: scale(1); opacity: 0.8; color: #ef4444; } 
+            50% { transform: scale(1.2); opacity: 1; color: #f59e0b; } 
+            100% { transform: scale(1); opacity: 0.8; color: #ef4444; } 
+        }
+        .fire-icon { animation: burn 0.8s infinite alternate; }
+        .progress-bar-striped {
+            background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+            background-size: 1rem 1rem; animation: progress-bar-stripes 1s linear infinite;
+        }
+        @keyframes progress-bar-stripes { from { background-position: 1rem 0; } to { background-position: 0 0; } }
+        .spin-ball { animation: spin 2s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        /* MOTM ANIMATION */
+        .crown-icon { animation: float 2s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-3px); } 100% { transform: translateY(0px); } }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -30,84 +49,202 @@
         <span class="text-[10px] md:text-xs font-bold tracking-widest opacity-90 hidden md:block">OFFICIAL NUESA SPORTS PLATFORM</span>
         <span class="text-[10px] md:text-xs font-bold tracking-widest opacity-90 md:hidden">NUESA SPORTS</span>
         <div class="flex space-x-4">
-            <a href="https://www.instagram.com/theambassadors_sport?igsh=NjZrdnE1ZXhkang=" target="_blank" class="hover:text-pink-400 transition transform hover:scale-125"><i class="fa-brands fa-instagram text-sm md:text-base"></i></a>
-            <a href="https://www.facebook.com/profile.php?id=61583536988203" target="_blank" class="hover:text-blue-500 transition transform hover:scale-125"><i class="fa-brands fa-facebook text-sm md:text-base"></i></a>
-            <a href="https://x.com/Ambassador30788?t=jMIhwr41PFXhuY2Q1gGWKg&s=09" target="_blank" class="hover:text-black transition transform hover:scale-125"><i class="fa-brands fa-x-twitter text-sm md:text-base"></i></a>
-            <a href="https://www.tiktok.com/@theambassadors_sport?_r=1&_t=ZS-91HkO4CoTOJ" target="_blank" class="hover:text-black transition transform hover:scale-125"><i class="fa-brands fa-tiktok text-sm md:text-base"></i></a>
-            <a href="https://youtube.com/@theambassadorsport?si=31duWmdmjbjGCSLI" target="_blank" class="hover:text-red-500 transition transform hover:scale-125"><i class="fa-brands fa-youtube text-sm md:text-base"></i></a>
-            <a href="https://wa.me/2348113032943" target="_blank" class="hover:text-green-400 transition transform hover:scale-125"><i class="fa-brands fa-whatsapp text-sm md:text-base"></i></a>
+            <a href="https://www.instagram.com/theambassadors_sport" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61583536988203" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://x.com/Ambassador30788" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://wa.me/2348113032943" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
         </div>
     </div>
 
-    <nav class="bg-white border-b sticky top-0 z-40"><div class="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center"><a href="index.html" class="flex items-center gap-2"><img src="edulogo.jpg" class="h-8 w-8 rounded-full"><span class="font-black text-xl">EDU-LEAGUE</span></a><div class="flex space-x-4"><a href="index.html" class="text-gray-500 font-bold text-sm">Register</a></div></div></nav>
+    <nav class="bg-white border-b sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
+            <a href="index.html" class="flex items-center gap-2"><img src="edulogo.jpg" class="h-9 w-9 rounded-full border border-gray-200"><span class="font-black text-2xl sport-font tracking-tight text-gray-800">EDU-LEAGUE</span></a>
+            <div class="flex space-x-4"><a href="index.html" class="text-edu-purple font-bold text-sm uppercase tracking-wide">Home</a></div>
+        </div>
+    </nav>
 
     <main class="flex-grow">
-        <div class="bg-gray-900 text-white py-8">
-            <div class="max-w-4xl mx-auto px-4">
-                <h2 class="text-center text-green-500 text-xs font-bold tracking-widest mb-4">MATCHDAY CENTER</h2>
-                <div id="match-widget" class="bg-white/10 rounded-xl p-6 flex justify-between items-center transition-opacity duration-500 mb-6">
-                    <div class="w-1/3 text-center"><img id="teamA_img" src="edulogo.jpg" class="w-16 h-16 mx-auto bg-white rounded-full p-1"><h3 id="teamA_name" class="font-bold mt-2">Loading</h3></div>
-                    <div class="w-1/3 text-center">
-                        <div id="match_category" class="text-[10px] bg-white/20 px-2 py-0.5 rounded mb-1 inline-block">LEAGUE</div>
-                        <div class="text-3xl font-black italic">VS</div>
-                        <div id="match_details" class="text-xs text-gray-300 font-mono mt-1">...</div>
-                    </div>
-                    <div class="w-1/3 text-center"><img id="teamB_img" src="edulogo.jpg" class="w-16 h-16 mx-auto bg-white rounded-full p-1"><h3 id="teamB_name" class="font-bold mt-2">Loading</h3></div>
-                </div>
-                <div class="bg-black/40 rounded-lg p-4 backdrop-blur-sm">
-                    <p class="text-center text-xs font-bold text-gray-400 mb-2 uppercase">Predict the Result</p>
-                    <div class="flex justify-between gap-2 mb-2"><button onclick="predict('home')" class="flex-1 bg-green-900/50 hover:bg-green-700 py-2 rounded text-xs font-bold border border-green-700">HOME WIN</button><button onclick="predict('draw')" class="flex-1 bg-gray-700/50 hover:bg-gray-600 py-2 rounded text-xs font-bold border border-gray-500">DRAW</button><button onclick="predict('away')" class="flex-1 bg-red-900/50 hover:bg-red-700 py-2 rounded text-xs font-bold border border-red-700">AWAY WIN</button></div>
-                    <div class="h-1.5 w-full bg-gray-700 rounded-full overflow-hidden flex"><div id="bar-home" class="bg-green-500 h-full transition-all" style="width: 33%"></div><div id="bar-draw" class="bg-gray-400 h-full transition-all" style="width: 33%"></div><div id="bar-away" class="bg-red-500 h-full transition-all" style="width: 33%"></div></div>
-                    <div class="flex justify-between text-[10px] text-gray-400 mt-1"><span id="pct-home">33%</span><span id="pct-draw">33%</span><span id="pct-away">33%</span></div>
-                </div>
-                <a href="#" target="_blank" class="block mt-4 bg-green-700 text-white rounded-xl p-4 shadow-lg flex justify-between items-center border border-green-500 hover:bg-green-800 transition"><div><p class="text-xs font-bold text-yellow-300">OFFICIAL BETTING PARTNER</p><h3 class="font-black text-lg">Predict & Win Cash! ⚽💰</h3></div><span class="bg-white text-green-800 text-xs font-black px-4 py-2 rounded">PLAY NOW</span></a>
+        
+        <div class="bg-white border-b border-gray-200">
+            <div class="max-w-4xl mx-auto px-4 py-4 grid grid-cols-2 gap-4">
+                <button onclick="document.getElementById('standings-section').scrollIntoView({behavior: 'smooth'})" class="flex items-center justify-center gap-2 bg-edu-purple text-white py-3 rounded-xl shadow-lg hover:bg-purple-800 transition transform active:scale-95">
+                    <i class="fa-solid fa-table"></i>
+                    <span class="font-bold text-sm sport-font tracking-wide">VIEW TABLES</span>
+                </button>
+                <button onclick="openScheduleModal()" class="flex items-center justify-center gap-2 bg-green-600 text-white py-3 rounded-xl shadow-lg hover:bg-green-700 transition transform active:scale-95">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <span class="font-bold text-sm sport-font tracking-wide">MATCH FIXTURES</span>
+                </button>
             </div>
         </div>
 
-        <div class="max-w-6xl mx-auto px-4 mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="stats.html" class="bg-gradient-to-r from-gray-900 to-black text-white p-6 rounded-xl shadow-lg flex justify-between items-center transition transform hover:scale-[1.02]"><div><h3 class="font-black text-xl text-yellow-500">STATS CENTER</h3><p class="text-xs text-gray-400">Golden Boot • Golden Glove</p></div><i class="fa-solid fa-trophy text-3xl text-gray-600"></i></a>
-            <div class="bg-white rounded-xl shadow p-5 border border-gray-100"><div class="flex justify-between items-center mb-3"><h3 class="font-bold text-gray-800 text-sm"><i class="fa-solid fa-bullhorn text-blue-500 mr-1"></i> ACTIVE POLLS</h3><span class="text-[10px] bg-blue-100 text-blue-600 px-2 py-1 rounded font-bold">VOTE</span></div><div id="polls-container" class="space-y-4 max-h-60 overflow-y-auto no-scrollbar"><p class="text-xs text-gray-400 text-center">No active polls.</p></div></div>
-            <div class="bg-white rounded-xl shadow p-5 border border-gray-100"><div class="flex justify-between items-center mb-3"><h3 class="font-bold text-gray-800 text-sm"><i class="fa-solid fa-star text-purple-500 mr-1"></i> MAN OF THE MATCH</h3><span class="text-[10px] bg-purple-100 text-purple-600 px-2 py-1 rounded font-bold">VOTE</span></div><div id="motm-container" class="space-y-2"><p class="text-xs text-gray-400 text-center">Voting opens after match.</p></div></div>
+        <div class="bg-gray-900 text-white py-8 border-b border-gray-800">
+            <div class="max-w-4xl mx-auto px-4">
+                <h2 class="text-center text-green-500 text-xs font-bold tracking-widest mb-4">MATCHDAY SPOTLIGHT</h2>
+                <div id="match-widget" class="bg-white/5 rounded-2xl p-6 flex justify-between items-center transition-opacity duration-500 mb-6 border border-white/10 backdrop-blur-sm">
+                    <div class="w-1/3 text-center flex flex-col items-center">
+                        <img id="teamA_img" src="edulogo.jpg" class="w-16 h-16 bg-white rounded-full p-1 object-contain shadow-md">
+                        <h3 id="teamA_name" class="font-bold mt-2 text-sm md:text-lg sport-font leading-tight">Loading</h3>
+                    </div>
+                    <div class="w-1/3 text-center">
+                        <div id="match_category" class="text-[10px] bg-red-600 px-2 py-0.5 rounded mb-2 inline-block font-bold shadow">LIVE</div>
+                        <div class="text-4xl font-black italic sport-font text-white/90">VS</div>
+                        <div id="match_details" class="text-xs text-gray-400 font-mono mt-2">...</div>
+                    </div>
+                    <div class="w-1/3 text-center flex flex-col items-center">
+                        <img id="teamB_img" src="edulogo.jpg" class="w-16 h-16 bg-white rounded-full p-1 object-contain shadow-md">
+                        <h3 id="teamB_name" class="font-bold mt-2 text-sm md:text-lg sport-font leading-tight">Loading</h3>
+                    </div>
+                </div>
+                <div class="bg-black/40 rounded-xl p-4 backdrop-blur-md border border-white/5 shadow-inner">
+                    <p class="text-center text-[10px] font-bold text-gray-400 mb-3 uppercase tracking-widest">Who will win?</p>
+                    <div class="flex justify-between gap-3 mb-3">
+                        <button onclick="predict('home')" class="flex-1 bg-green-900/40 hover:bg-green-600 text-green-100 py-2 rounded-lg text-xs font-bold border border-green-800 transition sport-font">HOME</button>
+                        <button onclick="predict('draw')" class="flex-1 bg-gray-700/40 hover:bg-gray-500 text-gray-100 py-2 rounded-lg text-xs font-bold border border-gray-600 transition sport-font">DRAW</button>
+                        <button onclick="predict('away')" class="flex-1 bg-red-900/40 hover:bg-red-600 text-red-100 py-2 rounded-lg text-xs font-bold border border-red-800 transition sport-font">AWAY</button>
+                    </div>
+                    <div class="h-2 w-full bg-gray-800 rounded-full overflow-hidden flex">
+                        <div id="bar-home" class="bg-green-500 h-full transition-all duration-500" style="width: 33%"></div>
+                        <div id="bar-draw" class="bg-gray-500 h-full transition-all duration-500" style="width: 33%"></div>
+                        <div id="bar-away" class="bg-red-500 h-full transition-all duration-500" style="width: 33%"></div>
+                    </div>
+                    <div class="flex justify-between text-[10px] text-gray-500 mt-1 font-mono"><span id="pct-home">33%</span><span id="pct-draw">33%</span><span id="pct-away">33%</span></div>
+                </div>
+            </div>
         </div>
 
-        <div class="max-w-4xl mx-auto px-4 mt-8">
-            <div class="bg-white rounded-xl shadow border overflow-hidden">
-                <div class="p-4 border-b flex justify-between items-center bg-gray-50"><h3 class="font-bold text-gray-800">Standings</h3><div class="flex space-x-1 overflow-x-auto"><button onclick="loadTable('Finalist')" id="tab-Finalist" class="tab-active px-3 py-1 rounded text-xs font-bold">Finalist</button><button onclick="loadTable('Penultimate')" id="tab-Penultimate" class="tab-inactive px-3 py-1 rounded text-xs font-bold">Penultimate</button><button onclick="loadTable('Sophomore')" id="tab-Sophomore" class="tab-inactive px-3 py-1 rounded text-xs font-bold">Sophomore</button><button onclick="loadTable('Female')" id="tab-Female" class="tab-inactive px-3 py-1 rounded text-xs font-bold bg-pink-50 text-pink-600">Female</button></div></div>
-                <div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="bg-gray-100 text-gray-500 text-xs"><tr><th class="p-3 w-10">#</th><th class="p-3">Team</th><th class="p-3 text-center">PL</th><th class="p-3 text-center">GD</th><th class="p-3 text-center font-black">PTS</th></tr></thead><tbody id="league-table-body"></tbody></table></div>
+        <div class="max-w-6xl mx-auto px-4 mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <a href="stats.html" class="bg-gradient-to-br from-gray-900 to-black text-white p-6 rounded-2xl shadow-xl flex justify-between items-center transition transform hover:-translate-y-1 group border border-gray-800">
+                <div><h3 class="font-black text-2xl text-yellow-400 sport-font group-hover:text-yellow-300">STATS CENTER</h3><p class="text-xs text-gray-400 font-medium">Top Scorers & Assists</p></div>
+                <div class="bg-white/10 p-3 rounded-full"><i class="fa-solid fa-trophy text-2xl text-yellow-400"></i></div>
+            </a>
+
+            <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-100 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-blue-50 rounded-full -mr-10 -mt-10 blur-2xl"></div>
+                <div class="flex justify-between items-center mb-4 relative z-10">
+                    <h3 class="font-black text-gray-800 text-sm sport-font uppercase flex items-center">
+                        <span class="bg-blue-600 text-white w-6 h-6 rounded flex items-center justify-center mr-2 text-[10px]"><i class="fa-solid fa-check"></i></span> FAN ZONE
+                    </h3>
+                    <span class="animate-pulse text-[10px] font-bold text-red-500 uppercase"><i class="fa-solid fa-circle text-[6px] align-middle mr-1"></i> Live Voting</span>
+                </div>
+                <div id="polls-container" class="space-y-4 max-h-60 overflow-y-auto no-scrollbar relative z-10">
+                    <p class="text-xs text-gray-400 text-center py-6">No active polls right now.</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-100 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-purple-50 rounded-full -mr-10 -mt-10 blur-2xl"></div>
+                <div class="flex justify-between items-center mb-4 relative z-10">
+                    <h3 class="font-black text-gray-800 text-sm sport-font uppercase flex items-center">
+                        <span class="bg-purple-600 text-white w-6 h-6 rounded flex items-center justify-center mr-2 text-[10px]"><i class="fa-solid fa-star"></i></span> MOTM
+                    </h3>
+                    <span class="text-[10px] font-bold text-gray-400 uppercase">Top Performer</span>
+                </div>
+                <div id="motm-container" class="space-y-3 relative z-10">
+                    <p class="text-xs text-gray-400 text-center py-4">Voting opens after match.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="standings-section" class="max-w-4xl mx-auto px-4 mt-12">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+                <div class="p-5 border-b bg-gray-50/50">
+                    <div class="flex justify-between items-center mb-5 px-4 bg-white p-3 rounded-xl shadow-sm border border-gray-100">
+                        <div class="text-center"><img src="edulogo.jpg" class="h-10 w-10 object-contain mx-auto"><p class="text-[8px] font-black uppercase mt-1 text-gray-400">LEAGUE</p></div>
+                        <div class="text-gray-300 font-black text-xl sport-font">VS</div>
+                        <div class="text-center"><img id="table-div-logo" src="edulogo.jpg" class="h-10 w-10 object-contain mx-auto"><p class="text-[8px] font-black uppercase mt-1 text-gray-400">DIVISION</p></div>
+                    </div>
+                    <div class="flex space-x-2 overflow-x-auto justify-center pb-1 no-scrollbar">
+                        <button onclick="loadTable('Finalist')" id="tab-Finalist" class="tab-active px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition">Finalist</button>
+                        <button onclick="loadTable('Penultimate')" id="tab-Penultimate" class="tab-inactive px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition">Penultimate</button>
+                        <button onclick="loadTable('Sophomore')" id="tab-Sophomore" class="tab-inactive px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition">Sophomore</button>
+                        <button onclick="loadTable('Female')" id="tab-Female" class="tab-inactive px-5 py-2 rounded-full text-xs font-bold bg-pink-50 text-pink-600 whitespace-nowrap shadow-sm transition border border-pink-100">Female</button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-gray-100 text-gray-500 text-[10px] uppercase font-bold tracking-wider">
+                            <tr><th class="p-4 w-10">#</th><th class="p-4">Team</th><th class="p-4 text-center">PL</th><th class="p-4 text-center">GD</th><th class="p-4 text-center font-black text-edu-purple text-base">PTS</th></tr>
+                        </thead>
+                        <tbody id="league-table-body" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <div class="max-w-6xl mx-auto px-4 py-12">
-            <h3 class="font-bold text-2xl mb-6 border-l-4 border-green-600 pl-4">Latest Updates</h3>
-            <div id="loading" class="text-center py-10"><i class="fa-solid fa-circle-notch fa-spin text-4xl text-green-600"></i></div>
+            <h3 class="font-black text-2xl mb-8 border-l-4 border-edu-purple pl-4 sport-font text-gray-800">LATEST NEWS</h3>
+            <div id="loading" class="text-center py-10"><i class="fa-solid fa-circle-notch fa-spin text-4xl text-edu-purple"></i></div>
             <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 hidden"></div>
         </div>
 
-        <div class="bg-gray-50 border-t border-b border-gray-200 py-10 mt-12">
+        <div class="bg-gray-50 border-t border-b border-gray-200 py-12 mt-8">
             <div class="max-w-6xl mx-auto px-4 text-center">
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Supported By</p>
-                <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-50 hover:opacity-100 transition duration-500">
-                    <img src="https://placehold.co/120x60/e5e7eb/a3a3a3?text=SPONSOR+1" class="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition duration-300">
-                    <img src="https://placehold.co/120x60/e5e7eb/a3a3a3?text=SPONSOR+2" class="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition duration-300">
-                    <img src="https://placehold.co/120x60/e5e7eb/a3a3a3?text=SPONSOR+3" class="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition duration-300">
-                    <a href="https://wa.me/2348113032943?text=Hello%20I%20want%20to%20advertise%20on%20EDU-LEAGUE" class="h-8 md:h-10 px-4 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-[10px] text-gray-400 font-bold hover:border-edu-purple hover:text-edu-purple transition">Your Logo Here</a>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-8">Official Partners</p>
+                <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60">
+                    <div class="h-10 w-24 bg-gray-200 rounded animate-pulse"></div>
+                    <div class="h-10 w-24 bg-gray-200 rounded animate-pulse"></div>
+                    <a href="https://wa.me/2348113032943" class="h-10 px-6 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-[10px] text-gray-400 font-bold hover:border-edu-purple hover:text-edu-purple transition hover:bg-white hover:shadow-sm">ADVERTISE HERE</a>
                 </div>
             </div>
         </div>
 
-        <footer class="bg-white border-t py-8 text-center"><p class="text-gray-400 text-xs font-bold mb-4">POWERED BY THE AMBASSADOR'S SPORTS</p></footer>
+        <footer class="bg-white border-t py-8 text-center"><p class="text-gray-400 text-[10px] font-bold mb-4 tracking-widest">POWERED BY THE AMBASSADOR'S SPORTS</p></footer>
     </main>
 
-    <div id="newsModal" class="fixed inset-0 bg-black bg-opacity-90 z-[60] hidden flex items-center justify-center p-0 md:p-4 backdrop-blur-sm">
+    <div id="newsModal" class="fixed inset-0 bg-black/90 z-[60] hidden flex items-center justify-center p-0 md:p-4 backdrop-blur-md">
         <div class="bg-white md:rounded-2xl w-full max-w-3xl h-full md:h-[90vh] flex flex-col overflow-hidden relative shadow-2xl">
-            <div class="p-4 border-b flex justify-between items-center bg-white z-10"><h3 class="font-bold text-gray-800 text-lg truncate pr-4">Post Details</h3><button onclick="closeModal()" class="bg-gray-100 p-2 rounded-full hover:bg-gray-200 text-gray-600 transition"><i class="fa-solid fa-times text-xl"></i></button></div>
-            <div class="overflow-y-auto flex-grow bg-gray-50 no-scrollbar pb-20"><div id="media-container" class="w-full bg-black flex justify-center"><img id="modalImg" class="w-full max-h-96 object-contain hidden"></div><div class="p-6 md:p-8 bg-white"><span id="modalDate" class="text-xs font-bold text-green-600 uppercase tracking-wide"></span><h2 id="modalTitle" class="text-2xl md:text-3xl font-black text-gray-900 mt-2 mb-6 leading-tight"></h2><p id="modalBody" class="text-gray-800 whitespace-pre-line text-base leading-relaxed"></p></div><div class="p-6 border-t bg-gray-50"><h4 class="font-bold text-gray-700 mb-4 text-sm uppercase">Comments</h4><div id="comments-list" class="space-y-3 mb-4"></div></div></div>
-            <form onsubmit="postComment(event)" class="bg-white p-3 border-t flex gap-2 items-center absolute bottom-0 w-full"><input id="commentName" class="w-1/4 text-xs border p-2 rounded bg-gray-50 focus:outline-none" placeholder="Name" required maxlength="15"><input id="commentInput" class="flex-grow text-sm p-2 border rounded bg-gray-50 focus:outline-none" placeholder="Write a comment..." required autocomplete="off"><button type="submit" class="bg-green-600 text-white px-4 py-2 rounded font-bold"><i class="fa-solid fa-paper-plane"></i></button></form>
+            <div class="p-4 border-b flex justify-between items-center bg-white z-10">
+                <h3 class="font-bold text-gray-800 text-lg truncate pr-4 sport-font">STORY DETAILS</h3>
+                <button onclick="closeModal()" class="bg-gray-100 p-2 rounded-full hover:bg-gray-200 text-gray-600 transition"><i class="fa-solid fa-times text-xl"></i></button>
+            </div>
+            <div class="overflow-y-auto flex-grow bg-gray-50 no-scrollbar pb-20">
+                <div id="media-container" class="w-full bg-black flex justify-center min-h-[250px] items-center"><img id="modalImg" class="w-full max-h-[500px] object-contain hidden"></div>
+                <div class="p-6 md:p-8 bg-white">
+                    <span id="modalDate" class="text-xs font-bold text-edu-purple uppercase tracking-wide"></span>
+                    <h2 id="modalTitle" class="text-2xl md:text-3xl font-black text-gray-900 mt-2 mb-6 leading-tight sport-font"></h2>
+                    <p id="modalBody" class="text-gray-800 whitespace-pre-line text-base leading-relaxed font-serif"></p>
+                </div>
+                <div class="p-6 border-t bg-gray-50"><h4 class="font-bold text-gray-700 mb-4 text-sm uppercase tracking-wide">Discussion</h4><div id="comments-list" class="space-y-3 mb-4"></div></div>
+            </div>
+            <form onsubmit="postComment(event)" class="bg-white p-3 border-t flex gap-2 items-center absolute bottom-0 w-full shadow-lg">
+                <input id="commentName" class="w-1/4 text-xs border p-3 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-100" placeholder="Your Name" required maxlength="15">
+                <input id="commentInput" class="flex-grow text-sm p-3 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-100" placeholder="Write a comment..." required autocomplete="off">
+                <button type="submit" class="bg-edu-purple text-white px-4 py-2 rounded-lg font-bold hover:bg-purple-800 transition"><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
         </div>
     </div>
 
-    <div id="teamModal" class="fixed inset-0 bg-black/90 z-[70] hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-sm rounded-2xl overflow-hidden relative"><button onclick="document.getElementById('teamModal').classList.add('hidden')" class="absolute top-2 right-2 bg-gray-100 p-2 rounded-full text-gray-600 z-10"><i class="fa-solid fa-times"></i></button><div class="bg-edu-purple p-6 text-center text-white relative"><img id="tm-logo" src="edulogo.jpg" class="w-20 h-20 rounded-full border-4 border-white shadow-lg mx-auto mb-2 object-contain bg-white"><h2 id="tm-name" class="text-xl font-black">Team Name</h2><p id="tm-coach" class="text-xs text-purple-200">Coach: ...</p></div><div class="p-6 max-h-[60vh] overflow-y-auto"><h4 class="font-bold text-gray-500 text-xs uppercase mb-3 border-b pb-1">Squad List</h4><ul id="tm-roster" class="space-y-2 text-sm text-gray-800"></ul></div></div>
+    <div id="scheduleModal" class="fixed inset-0 bg-black/90 z-[70] hidden flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white w-full max-w-2xl h-[80vh] rounded-2xl overflow-hidden flex flex-col relative shadow-2xl">
+            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+                <h3 class="font-black text-xl text-gray-800 sport-font flex items-center gap-2"><i class="fa-regular fa-calendar-days text-green-600"></i> FIXTURES</h3>
+                <button onclick="document.getElementById('scheduleModal').classList.add('hidden')" class="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="p-4 bg-white border-b">
+                <select id="sched-filter" onchange="renderSchedule()" class="w-full p-2 border rounded-lg text-sm font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-100">
+                    <option value="All">All Divisions</option>
+                    <option value="Finalist (400Lvl)">Finalist</option>
+                    <option value="Penultimate (300Lvl)">Penultimate</option>
+                    <option value="Sophomore (200Lvl)">Sophomore</option>
+                    <option value="Female League">Female</option>
+                </select>
+            </div>
+            <div id="schedule-list" class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50"><p class="text-center text-gray-400 mt-10"><i class="fa-solid fa-circle-notch fa-spin text-2xl"></i> Loading...</p></div>
+        </div>
+    </div>
+
+    <div id="teamModal" class="fixed inset-0 bg-black/90 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-2xl overflow-hidden relative shadow-2xl transform transition-all">
+            <button onclick="document.getElementById('teamModal').classList.add('hidden')" class="absolute top-2 right-2 bg-white/20 p-2 rounded-full text-white hover:bg-white/40 z-10"><i class="fa-solid fa-times"></i></button>
+            <div class="bg-edu-purple p-8 text-center text-white relative">
+                <img id="tm-logo" src="edulogo.jpg" class="w-24 h-24 rounded-full border-4 border-white shadow-lg mx-auto mb-3 object-contain bg-white">
+                <h2 id="tm-name" class="text-2xl font-black sport-font tracking-tight">Team Name</h2>
+                <p id="tm-coach" class="text-sm text-purple-200 font-medium bg-white/10 inline-block px-3 py-1 rounded-full mt-2">Coach: ...</p>
+            </div>
+            <div class="p-6 max-h-[50vh] overflow-y-auto"><h4 class="font-bold text-gray-400 text-[10px] uppercase mb-4 tracking-widest border-b pb-2">Squad Roster</h4><ul id="tm-roster" class="space-y-3 text-sm text-gray-700"></ul></div>
+        </div>
     </div>
 
     <script type="module">
@@ -118,137 +255,138 @@
         const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
         signInAnonymously(auth);
+        
         let currentPostId = null; let commentsUnsubscribe = null; let matchInterval = null;
+        let divLogos = { 'Finalist': 'edulogo.jpg', 'Penultimate': 'edulogo.jpg', 'Sophomore': 'edulogo.jpg', 'Female': 'edulogo.jpg' };
+        let allSchedules = [];
 
-        // --- 1. MATCH SPOTLIGHT (SAFELY HANDLED) ---
+        const fetchDivLogos = async () => { try { const s = await getDoc(doc(db, "app_content", "division_logos")); if(s.exists()) divLogos = { ...divLogos, ...s.data() }; } catch(e){} }; fetchDivLogos();
+
         onSnapshot(doc(db, "app_content", "current_fixture"), (docSnap) => {
             if(docSnap.exists()) {
                 const data = docSnap.data();
                 if(matchInterval) clearInterval(matchInterval);
-                
-                // Safety check for empty data
                 if (data.matches && Array.isArray(data.matches) && data.matches.length > 0) {
                     let idx = 0;
-                    document.getElementById('slider-dots').innerHTML = data.matches.map((_, i) => `<div class="h-2 w-2 rounded-full bg-gray-500 opacity-50 transition-all" id="dot-${i}"></div>`).join('');
-                    
                     const updateDisplay = () => {
                         const m = data.matches[idx];
                         const widget = document.getElementById('match-widget');
-                        
-                        // FADE OUT
                         widget.style.opacity = 0;
-                        
                         setTimeout(() => {
-                            document.getElementById('teamA_name').textContent = m.teamA;
-                            document.getElementById('teamB_name').textContent = m.teamB;
+                            document.getElementById('teamA_name').textContent = m.teamA; document.getElementById('teamB_name').textContent = m.teamB;
                             document.getElementById('match_details').textContent = `${m.date} • ${m.time} • ${m.venue}`;
-                            
-                            // SAFE CATEGORY DISPLAY
-                            const catEl = document.getElementById('match_category');
-                            if(catEl) catEl.innerText = (m.category || 'LEAGUE').toUpperCase();
-
-                            document.getElementById('teamA_img').src = m.teamALogo || 'edulogo.jpg';
-                            document.getElementById('teamB_img').src = m.teamBLogo || 'edulogo.jpg';
-                            
-                            for(let i=0; i<data.matches.length; i++) {
-                                const dot = document.getElementById(`dot-${i}`);
-                                if(dot) dot.className = i===idx ? "h-2 w-2 rounded-full bg-white" : "h-2 w-2 rounded-full bg-gray-500";
-                            }
-                            // FADE IN
+                            const catEl = document.getElementById('match_category'); if(catEl) catEl.innerText = (m.category || 'LEAGUE').toUpperCase();
+                            document.getElementById('teamA_img').src = m.teamALogo || 'edulogo.jpg'; document.getElementById('teamB_img').src = m.teamBLogo || 'edulogo.jpg';
                             widget.style.opacity = 1;
                         }, 250);
-                        
                         idx = (idx + 1) % data.matches.length;
                     };
                     updateDisplay();
                     if(data.matches.length > 1) matchInterval = setInterval(updateDisplay, 5000); 
                 } else {
-                    document.getElementById('teamA_name').textContent = "No Matches";
-                    document.getElementById('teamB_name').textContent = "Scheduled";
+                    document.getElementById('teamA_name').textContent = "No Matches"; document.getElementById('teamB_name').textContent = "Scheduled";
                 }
             }
         });
 
-        // --- 2. NEWS FEED (FIXED) ---
         onSnapshot(query(collection(db, "news_posts"), orderBy("timestamp", "desc")), (snapshot) => {
-            const grid = document.getElementById('news-grid');
-            document.getElementById('loading').classList.add('hidden');
-            grid.classList.remove('hidden');
-            grid.innerHTML = '';
-            
+            const grid = document.getElementById('news-grid'); document.getElementById('loading').classList.add('hidden'); grid.classList.remove('hidden'); grid.innerHTML = '';
             if (snapshot.empty) { grid.innerHTML = '<p class="text-center col-span-full text-gray-400">No news updates available.</p>'; return; }
-
             snapshot.forEach(doc => {
                 const data = doc.data(); const pid = doc.id;
                 const mediaUrl = data.imageUrl || 'https://placehold.co/600x400/16a34a/ffffff?text=EDU-LEAGUE+NEWS';
                 const likes = data.likes || 0; const commentsCount = data.commentsCount || 0;
                 const isLiked = localStorage.getItem(`liked_${pid}`) ? 'liked' : 'text-gray-400';
-                const heartIcon = localStorage.getItem(`liked_${pid}`) ? 'fa-solid' : 'fa-regular';
-                
-                let dateStr = "Recent";
-                if(data.timestamp) dateStr = data.timestamp.toDate().toLocaleDateString('en-US', {month:'short', day:'numeric'});
-
-                const isVideo = mediaUrl.includes('.mp4') || mediaUrl.includes('.mov') || mediaUrl.includes('.webm') || mediaUrl.includes('/video/upload/');
-                let mediaHtml = isVideo ? `<video src="${mediaUrl}" class="w-full h-full object-cover" muted></video>` : `<img src="${mediaUrl}" class="w-full h-full object-cover">`;
-
-                const card = document.createElement('div');
-                card.className = 'bg-white rounded-xl shadow-sm overflow-hidden news-card border border-gray-100 h-full flex flex-col';
-                card.id = `card-${pid}`; 
-                
+                let dateStr = "Recent"; if(data.timestamp) dateStr = data.timestamp.toDate().toLocaleDateString('en-US', {month:'short', day:'numeric'});
+                const isVideo = mediaUrl.includes('.mp4') || mediaUrl.includes('.mov') || mediaUrl.includes('video/upload');
+                let mediaHtml = isVideo ? `<video src="${mediaUrl}" class="w-full h-full object-cover" muted playsinline loop onmouseover="this.play()" onmouseout="this.pause()"></video><div class="absolute top-2 right-2 bg-black/60 text-white p-1 rounded-full"><i class="fa-solid fa-play"></i></div>` : `<img src="${mediaUrl}" class="w-full h-full object-cover">`;
+                const card = document.createElement('div'); card.className = 'bg-white rounded-xl shadow-sm overflow-hidden news-card border border-gray-100 h-full flex flex-col'; card.id = `card-${pid}`; 
                 card.dataset.title = data.title; card.dataset.content = data.content; card.dataset.media = mediaUrl; card.dataset.isvideo = isVideo; card.dataset.date = dateStr;
-
-                card.innerHTML = `
-                    <div class="relative h-48 bg-gray-100">
-                        ${mediaHtml}
-                        <div class="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm uppercase">${dateStr}</div>
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2 leading-snug cursor-pointer hover:text-green-600 transition" onclick="openModal('${pid}')">${data.title}</h3>
-                        <p class="text-sm text-gray-500 line-clamp-3 mb-4 flex-grow">${data.content}</p>
-                        <button onclick="openModal('${pid}')" class="text-green-600 font-bold text-xs mb-4 hover:underline self-start">READ FULL STORY &rarr;</button>
-                        <div class="pt-3 mt-auto border-t border-gray-100 flex justify-between items-center text-sm">
-                            <div class="flex space-x-4">
-                                <button onclick="handleLike('${pid}')" class="flex items-center space-x-1 interaction-btn ${isLiked}" id="like-btn-${pid}"><i class="${heartIcon} fa-heart"></i><span id="like-count-${pid}" class="text-xs font-bold">${likes}</span></button>
-                                <button onclick="openModal('${pid}')" class="flex items-center space-x-1 interaction-btn text-gray-400 hover:text-blue-500"><i class="fa-regular fa-comment"></i><span class="text-xs font-bold">${commentsCount}</span></button>
-                            </div>
-                            <button onclick="handleShare('${data.title}')" class="text-gray-400 hover:text-green-600 interaction-btn"><i class="fa-solid fa-share-nodes"></i></button>
-                        </div>
-                    </div>
-                `;
+                card.innerHTML = `<div class="relative h-48 bg-gray-900 overflow-hidden cursor-pointer" onclick="openModal('${pid}')">${mediaHtml}<div class="absolute bottom-2 left-2 bg-edu-purple text-white text-[10px] font-bold px-2 py-1 rounded shadow uppercase">${dateStr}</div></div><div class="p-5 flex flex-col flex-grow"><h3 class="text-lg font-bold text-gray-900 mb-2 leading-snug cursor-pointer hover:text-green-600 transition sport-font uppercase" onclick="openModal('${pid}')">${data.title}</h3><p class="text-sm text-gray-500 line-clamp-3 mb-4 flex-grow">${data.content}</p><div class="pt-3 mt-auto border-t border-gray-100 flex justify-between items-center text-sm"><div class="flex space-x-4"><button onclick="handleLike('${pid}')" class="flex items-center space-x-1 interaction-btn ${isLiked}" id="like-btn-${pid}"><i class="${isLiked.includes('liked') ? 'fa-solid' : 'fa-regular'} fa-heart"></i><span id="like-count-${pid}" class="text-xs font-bold">${likes}</span></button><button onclick="openModal('${pid}')" class="flex items-center space-x-1 interaction-btn text-gray-400 hover:text-blue-500"><i class="fa-regular fa-comment"></i><span class="text-xs font-bold">${commentsCount}</span></button></div><button onclick="handleShare('${data.title}')" class="text-gray-400 hover:text-green-600 interaction-btn"><i class="fa-solid fa-share-nodes"></i></button></div></div>`;
                 grid.appendChild(card);
             });
         });
 
-        window.handleLike = async (id) => {
-            const isLiked = localStorage.getItem(`liked_${id}`); const btn = document.getElementById(`like-btn-${id}`); const countSpan = document.getElementById(`like-count-${id}`); const icon = btn.querySelector('i');
-            let newCount = parseInt(countSpan.innerText);
-            if (isLiked) { newCount--; localStorage.removeItem(`liked_${id}`); btn.classList.remove('liked'); icon.classList.replace('fa-solid', 'fa-regular'); } 
-            else { newCount++; localStorage.setItem(`liked_${id}`, 'true'); btn.classList.add('liked'); icon.classList.replace('fa-regular', 'fa-solid'); }
-            countSpan.innerText = newCount; await updateDoc(doc(db, "news_posts", id), { likes: increment(isLiked ? -1 : 1) });
+        window.openScheduleModal = async () => {
+            document.getElementById('scheduleModal').classList.remove('hidden'); const list = document.getElementById('schedule-list');
+            if (allSchedules.length === 0) { const s1 = await getDocs(collection(db, "schedules")); const s2 = await getDocs(collection(db, "matches")); const combined = []; s1.forEach(d => combined.push(d.data())); s2.forEach(d => combined.push(d.data())); allSchedules = combined; }
+            window.renderSchedule();
         }
-        window.handleShare = (title) => { if (navigator.share) navigator.share({ title: 'EDU-LEAGUE Update', text: title, url: window.location.href }); else { navigator.clipboard.writeText(window.location.href); alert("Link copied!"); } }
+        window.renderSchedule = () => {
+            const list = document.getElementById('schedule-list'); const filterDiv = document.getElementById('sched-filter').value; list.innerHTML = '';
+            let filtered = allSchedules; if (filterDiv !== 'All') filtered = allSchedules.filter(m => m.div === filterDiv);
+            if (filtered.length === 0) { list.innerHTML = '<div class="text-center py-10"><p class="text-gray-400 font-bold">No matches found.</p></div>'; return; }
+            const grouped = {}; filtered.forEach(m => { if(!grouped[m.day]) grouped[m.day] = []; grouped[m.day].push(m); });
+            Object.keys(grouped).sort().forEach(day => { list.innerHTML += `<h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mt-4 mb-2 sticky top-0 bg-gray-50 py-1 pl-2">${day}</h4>`; grouped[day].forEach(m => { const isTBD = m.time === 'TBD' || !m.time; list.innerHTML += `<div class="bg-white p-4 rounded-xl border border-gray-100 mb-2 flex justify-between items-center shadow-sm"><div><span class="text-[9px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded uppercase mb-1 inline-block">${(m.div||'').split(' ')[0]}</span><div class="font-black text-gray-800 text-sm sport-font uppercase">${m.home || m.homeTeam} <span class="text-gray-300 mx-1">vs</span> ${m.away || m.awayTeam}</div></div><div class="text-right"><p class="text-xs font-bold text-gray-600">${m.date || 'Soon'}</p><p class="text-[10px] font-bold text-edu-purple bg-purple-50 px-2 py-1 rounded inline-block mt-1">${isTBD ? 'TBD' : m.time}</p></div></div>`; }); });
+        }
 
-        window.openModal = (pid) => {
-            currentPostId = pid; const cardEl = document.getElementById(`card-${pid}`); if(!cardEl) return;
-            document.getElementById('modalTitle').innerText = cardEl.dataset.title; document.getElementById('modalBody').innerText = cardEl.dataset.content; document.getElementById('modalDate').innerText = cardEl.dataset.date;
-            const imgEl = document.getElementById('modalImg'); const container = document.getElementById('media-container'); const existingVideo = container.querySelector('video'); if(existingVideo) existingVideo.remove(); imgEl.classList.add('hidden');
-            if (cardEl.dataset.isvideo === 'true') { const video = document.createElement('video'); video.src = cardEl.dataset.media; video.controls = true; video.autoplay = true; video.className = "w-full max-h-96 object-contain"; container.appendChild(video); } 
-            else { imgEl.src = cardEl.dataset.media; imgEl.classList.remove('hidden'); }
-            document.getElementById('newsModal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
-            const list = document.getElementById('comments-list'); list.innerHTML = '<p class="text-xs text-gray-400">Loading comments...</p>';
-            commentsUnsubscribe = onSnapshot(query(collection(db, "news_posts", pid, "comments"), orderBy("timestamp", "asc")), (snap) => {
-                list.innerHTML = ''; snap.forEach(d => { const c = d.data(); list.innerHTML += `<div class="bg-gray-50 p-2 rounded-lg border text-sm"><p class="font-bold text-green-700 text-xs">${c.user}</p><p class="text-gray-700">${c.text}</p></div>`; });
-            });
+        window.loadTable = (lvl) => { 
+            ['Finalist','Penultimate','Sophomore','Female'].forEach(l => { const b=document.getElementById(`tab-${l}`); b.className = l===lvl ? "tab-active px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition" : "tab-inactive px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition"; }); 
+            document.getElementById('table-div-logo').src = divLogos[lvl] || 'edulogo.jpg';
+            onSnapshot(doc(db, "app_content", `league_table_${lvl.toLowerCase()}`), (s) => { const b = document.getElementById('league-table-body'); b.innerHTML = ''; if(!s.exists()) { b.innerHTML='<tr><td colspan="5" class="p-6 text-center text-gray-400 text-xs font-bold">SEASON NOT STARTED</td></tr>'; return; } const d = s.data(); const teams = Object.keys(d).map(k=>({name:k, ...d[k]})).sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)); teams.forEach((t,i) => { const rankColor = i < 4 ? 'text-green-600' : 'text-gray-400'; const rowClass = i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'; b.innerHTML += `<tr class="${rowClass} hover:bg-purple-50 transition"><td class="p-4 font-black ${rankColor}">${i+1}</td><td class="p-4 font-bold text-gray-700 sport-font tracking-tight uppercase cursor-pointer hover:text-edu-purple" onclick="openTeam('${t.name}')">${t.name}</td><td class="p-4 text-center font-medium text-gray-500">${t.mp}</td><td class="p-4 text-center font-medium text-gray-500">${t.gd}</td><td class="p-4 text-center font-black text-edu-purple bg-purple-50/50 rounded-l-lg">${t.pts}</td></tr>`; }); }); 
         }
+        loadTable('Finalist'); 
+
+        onSnapshot(query(collection(db, "polls"), where("active", "==", true)), (snap) => { 
+            const el = document.getElementById('polls-container'); el.innerHTML = snap.empty ? '<p class="text-xs text-gray-400 text-center py-6">No active polls.</p>' : ''; 
+            snap.forEach(doc => { 
+                const d = doc.data(); const id = doc.id; const voted = localStorage.getItem(`voted_${id}`);
+                const v1 = d.votes1 || 0; const v2 = d.votes2 || 0; const total = v1 + v2;
+                const p1 = total ? Math.round((v1/total)*100) : 0; const p2 = total ? Math.round((v2/total)*100) : 0;
+                const lead1 = v1 > v2; const lead2 = v2 > v1;
+                let content = voted ? `<div class="mt-2 space-y-3"><div><div class="flex justify-between text-xs font-bold mb-1"><span class="${lead1 ? 'text-red-500' : 'text-gray-600'} flex items-center gap-1">${lead1 ? '<i class="fa-solid fa-fire fire-icon"></i>' : ''} ${d.opt1}</span><span>${p1}%</span></div><div class="h-4 bg-gray-100 rounded-full relative overflow-hidden"><div class="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full progress-bar-striped transition-all duration-1000 ease-out flex items-center justify-end pr-1" style="width: ${p1}%"><i class="fa-solid fa-futbol text-white text-[10px] spin-ball"></i></div></div></div><div><div class="flex justify-between text-xs font-bold mb-1"><span class="${lead2 ? 'text-red-500' : 'text-gray-600'} flex items-center gap-1">${lead2 ? '<i class="fa-solid fa-fire fire-icon"></i>' : ''} ${d.opt2}</span><span>${p2}%</span></div><div class="h-4 bg-gray-100 rounded-full relative overflow-hidden"><div class="h-full bg-gradient-to-r from-red-400 to-red-600 rounded-full progress-bar-striped transition-all duration-1000 ease-out flex items-center justify-end pr-1" style="width: ${p2}%"><i class="fa-solid fa-futbol text-white text-[10px] spin-ball"></i></div></div></div></div>` : `<div class="grid grid-cols-2 gap-3 mt-3"><button onclick="vote('${id}',1)" class="border border-blue-200 bg-blue-50 p-3 rounded-xl text-xs font-bold hover:bg-blue-600 hover:text-white transition flex flex-col items-center gap-1 shadow-sm"><span class="text-lg">🅰️</span> ${d.opt1}</button><button onclick="vote('${id}',2)" class="border border-red-200 bg-red-50 p-3 rounded-xl text-xs font-bold hover:bg-red-600 hover:text-white transition flex flex-col items-center gap-1 shadow-sm"><span class="text-lg">🅱️</span> ${d.opt2}</button></div>`; 
+                el.innerHTML += `<div class="bg-gray-50 p-4 rounded-xl border border-gray-100 mb-3 shadow-inner"><p class="text-sm font-black text-gray-800 sport-font uppercase border-b pb-2 mb-1">${d.question}</p>${content}</div>`; 
+            }); 
+        });
+
+        // 6. MOTM (VISUAL UPDATE)
+        const fanDoc = doc(db, "app_content", "fan_zone"); 
+        onSnapshot(fanDoc, (s) => { 
+            if(!s.exists()) { setDoc(fanDoc, { cheer_battle: {}, prediction: {home:0, draw:0, away:0}, motm: { active:false, nominees:[], votes:[] } }, { merge: true }); return; } 
+            const d = s.data(); 
+            const totalP = (d.prediction.home||0) + (d.prediction.draw||0) + (d.prediction.away||0); const ph = totalP ? Math.round((d.prediction.home/totalP)*100) : 33; const pd = totalP ? Math.round((d.prediction.draw/totalP)*100) : 33; const pa = totalP ? Math.round((d.prediction.away/totalP)*100) : 33; document.getElementById('bar-home').style.width = ph+'%'; document.getElementById('pct-home').innerText = ph+'%'; document.getElementById('bar-draw').style.width = pd+'%'; document.getElementById('pct-draw').innerText = pd+'%'; document.getElementById('bar-away').style.width = pa+'%'; document.getElementById('pct-away').innerText = pa+'%'; 
+            
+            const m = document.getElementById('motm-container'); 
+            if(d.motm && d.motm.active) { 
+                m.innerHTML = ''; 
+                const totalV = d.motm.votes.reduce((a,b)=>a+b, 0); 
+                
+                // Find max votes for crown
+                const maxVotes = Math.max(...d.motm.votes);
+
+                d.motm.nominees.forEach((n, i) => { 
+                    if(n) { 
+                        const pct = totalV ? Math.round((d.motm.votes[i]/totalV)*100) : 0; 
+                        const isLeader = d.motm.votes[i] === maxVotes && totalV > 0;
+                        
+                        m.innerHTML += `
+                            <div class="flex items-center gap-3 mb-3 p-2 rounded-lg bg-gray-50 border ${isLeader ? 'border-yellow-400 bg-yellow-50' : 'border-gray-100'} relative overflow-hidden transition-all duration-500">
+                                <div class="absolute left-0 top-0 h-full bg-purple-100 transition-all duration-1000 opacity-50" style="width: ${pct}%"></div>
+                                <div class="relative z-10 w-10 h-10 shrink-0">
+                                    <img src="https://ui-avatars.com/api/?name=${n}&background=random&color=fff&bold=true" class="w-full h-full rounded-full border-2 border-white shadow-sm">
+                                    ${isLeader ? '<div class="absolute -top-2 -right-1 text-xs crown-icon">👑</div>' : ''}
+                                </div>
+                                <div class="flex-grow z-10">
+                                    <h4 class="text-xs font-bold text-gray-800 uppercase flex items-center gap-1">${n}</h4>
+                                    <p class="text-[10px] text-purple-600 font-bold">${pct}% Votes</p>
+                                </div>
+                                <button onclick="voteMOTM(${i})" class="z-10 w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-purple-600 hover:text-white hover:border-purple-600 transition shadow-sm group">
+                                    <i class="fa-solid fa-thumbs-up group-hover:scale-110 transition"></i>
+                                </button>
+                            </div>
+                        `; 
+                    } 
+                }); 
+            } else { m.innerHTML = '<p class="text-xs text-gray-400 text-center py-4">Voting closed.</p>'; } 
+        });
+
+        window.handleLike = async (id) => { const isLiked = localStorage.getItem(`liked_${id}`); const btn = document.getElementById(`like-btn-${id}`); const countSpan = document.getElementById(`like-count-${id}`); let newCount = parseInt(countSpan.innerText); if (isLiked) { newCount--; localStorage.removeItem(`liked_${id}`); btn.classList.remove('liked'); btn.querySelector('i').classList.replace('fa-solid', 'fa-regular'); } else { newCount++; localStorage.setItem(`liked_${id}`, 'true'); btn.classList.add('liked'); btn.querySelector('i').classList.replace('fa-regular', 'fa-solid'); } countSpan.innerText = newCount; await updateDoc(doc(db, "news_posts", id), { likes: increment(isLiked ? -1 : 1) }); }
+        window.handleShare = (title) => { if (navigator.share) navigator.share({ title: 'EDU-LEAGUE Update', text: title, url: window.location.href }); else { navigator.clipboard.writeText(window.location.href); alert("Link copied!"); } }
+        window.openModal = (pid) => { currentPostId = pid; const cardEl = document.getElementById(`card-${pid}`); if(!cardEl) return; document.getElementById('modalTitle').innerText = cardEl.dataset.title; document.getElementById('modalBody').innerText = cardEl.dataset.content; document.getElementById('modalDate').innerText = cardEl.dataset.date; const imgEl = document.getElementById('modalImg'); const container = document.getElementById('media-container'); const existingVideo = container.querySelector('video'); if(existingVideo) existingVideo.remove(); imgEl.classList.add('hidden'); if (cardEl.dataset.isvideo === 'true') { const video = document.createElement('video'); video.src = cardEl.dataset.media; video.controls = true; video.autoplay = true; video.className = "w-full max-h-[500px] object-contain shadow-lg"; container.appendChild(video); } else { imgEl.src = cardEl.dataset.media; imgEl.classList.remove('hidden'); } document.getElementById('newsModal').classList.remove('hidden'); document.body.style.overflow = 'hidden'; const list = document.getElementById('comments-list'); list.innerHTML = '<p class="text-xs text-gray-400">Loading comments...</p>'; commentsUnsubscribe = onSnapshot(query(collection(db, "news_posts", pid, "comments"), orderBy("timestamp", "asc")), (snap) => { list.innerHTML = ''; snap.forEach(d => { const c = d.data(); list.innerHTML += `<div class="bg-gray-50 p-3 rounded-xl border border-gray-100 text-sm"><p class="font-bold text-edu-purple text-xs mb-1">${c.user}</p><p class="text-gray-700 leading-relaxed">${c.text}</p></div>`; }); }); }
         window.closeModal = () => { document.getElementById('newsModal').classList.add('hidden'); document.body.style.overflow = 'auto'; if(commentsUnsubscribe) commentsUnsubscribe(); }
         window.postComment = async (e) => { e.preventDefault(); if(!currentPostId) return; const t = document.getElementById('commentInput').value; const u = document.getElementById('commentName').value || "Fan"; if(!t)return; document.getElementById('commentInput').value=''; await addDoc(collection(db, "news_posts", currentPostId, "comments"), { user:u, text:t, timestamp: serverTimestamp() }); await updateDoc(doc(db, "news_posts", currentPostId), { commentsCount: increment(1) }); }
-
-        window.loadTable = (lvl) => { ['Finalist','Penultimate','Sophomore','Female'].forEach(l => { const b=document.getElementById(`tab-${l}`); b.className = l===lvl ? "tab-active px-3 py-1 rounded text-xs font-bold" : "tab-inactive px-3 py-1 rounded text-xs font-bold"; }); onSnapshot(doc(db, "app_content", `league_table_${lvl.toLowerCase()}`), (s) => { const b = document.getElementById('league-table-body'); b.innerHTML = ''; if(!s.exists()) return; const d = s.data(); const teams = Object.keys(d).map(k=>({name:k, ...d[k]})).sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)); teams.forEach((t,i) => { b.innerHTML += `<tr class="border-b"><td class="p-3 font-bold ${i<4?'text-green-700':''}">${i+1}</td><td class="p-3 font-semibold text-blue-700 cursor-pointer hover:underline" onclick="openTeam('${t.name}')">${t.name}</td><td class="p-3 text-center">${t.mp}</td><td class="p-3 text-center">${t.gd}</td><td class="p-3 text-center font-black">${t.pts}</td></tr>`; }); }); }
-        loadTable('Finalist');
-        window.openTeam = async (name) => { const q = query(collection(db, "registrations"), where("department", "==", name)); const snap = await getDocs(q); if(!snap.empty) { const d = snap.docs[0].data(); document.getElementById('tm-name').textContent=d.department; document.getElementById('tm-coach').textContent="Coach: "+d.coachName; const asset = await getDoc(doc(db, "team_assets", name)); document.getElementById('tm-logo').src = asset.exists()?asset.data().logoUrl : 'edulogo.jpg'; document.getElementById('tm-roster').innerHTML = (d.players||[]).map(p=>`<li class="flex justify-between border-b pb-1"><span>${p.name}</span><span class="text-gray-400 text-xs">${p.position||''}</span></li>`).join('') || '<li>No players.</li>'; document.getElementById('teamModal').classList.remove('hidden'); } else alert("Team details not found."); }
-        onSnapshot(query(collection(db, "polls"), where("active", "==", true)), (snap) => { const el = document.getElementById('polls-container'); el.innerHTML = snap.empty ? '<p class="text-xs text-gray-400 text-center">No active polls.</p>' : ''; snap.forEach(doc => { const d = doc.data(); const id = doc.id; const voted = localStorage.getItem(`voted_${id}`); let content = voted ? `<div class="mb-1 text-xs font-bold flex justify-between"><span>${d.opt1}</span><span>${(d.votes1||0)+(d.votes2||0)?Math.round((d.votes1/((d.votes1||0)+(d.votes2||0)))*100):0}%</span></div><div class="h-1.5 bg-gray-200 rounded mb-2"><div class="h-1.5 bg-blue-600 rounded" style="width:${(d.votes1||0)+(d.votes2||0)?Math.round((d.votes1/((d.votes1||0)+(d.votes2||0)))*100):0}%"></div></div><div class="mb-1 text-xs font-bold flex justify-between"><span>${d.opt2}</span><span>${(d.votes1||0)+(d.votes2||0)?Math.round((d.votes2/((d.votes1||0)+(d.votes2||0)))*100):0}%</span></div><div class="h-1.5 bg-gray-200 rounded"><div class="h-1.5 bg-red-600 rounded" style="width:${(d.votes1||0)+(d.votes2||0)?Math.round((d.votes2/((d.votes1||0)+(d.votes2||0)))*100):0}%"></div></div>` : `<div class="grid grid-cols-2 gap-2 mt-2"><button onclick="vote('${id}',1)" class="border p-2 rounded text-xs font-bold hover:bg-blue-50">${d.opt1}</button><button onclick="vote('${id}',2)" class="border p-2 rounded text-xs font-bold hover:bg-red-50">${d.opt2}</button></div>`; el.innerHTML += `<div class="border-b pb-4 mb-4 last:border-0"><p class="text-sm font-bold text-gray-800">${d.question}</p>${content}</div>`; }); });
+        window.openTeam = async (name) => { const q = query(collection(db, "registrations"), where("department", "==", name)); const snap = await getDocs(q); if(!snap.empty) { const d = snap.docs[0].data(); document.getElementById('tm-name').textContent=d.department; document.getElementById('tm-coach').textContent="Coach: "+d.coachName; const asset = await getDoc(doc(db, "team_assets", name)); document.getElementById('tm-logo').src = asset.exists()?asset.data().logoUrl : 'edulogo.jpg'; document.getElementById('tm-roster').innerHTML = (d.players||[]).map(p=>`<li class="flex justify-between border-b border-gray-100 pb-2"><span>${p.name}</span><span class="text-gray-400 text-xs font-mono bg-gray-100 px-2 py-0.5 rounded">${p.position||'-'}</span></li>`).join('') || '<li>No players.</li>'; document.getElementById('teamModal').classList.remove('hidden'); } else alert("Team details not found."); }
         window.vote = async (id, o) => { localStorage.setItem(`voted_${id}`,'true'); await updateDoc(doc(db, "polls", id), { [o===1?'votes1':'votes2']: increment(1) }); }
-        const fanDoc = doc(db, "app_content", "fan_zone"); onSnapshot(fanDoc, (s) => { if(!s.exists()) { setDoc(fanDoc, { cheer_battle: {}, prediction: {home:0, draw:0, away:0}, motm: { active:false, nominees:[], votes:[] } }, { merge: true }); return; } const d = s.data(); const totalP = (d.prediction.home||0) + (d.prediction.draw||0) + (d.prediction.away||0); const ph = totalP ? Math.round((d.prediction.home/totalP)*100) : 33; const pd = totalP ? Math.round((d.prediction.draw/totalP)*100) : 33; const pa = totalP ? Math.round((d.prediction.away/totalP)*100) : 33; document.getElementById('bar-home').style.width = ph+'%'; document.getElementById('pct-home').innerText = ph+'%'; document.getElementById('bar-draw').style.width = pd+'%'; document.getElementById('pct-draw').innerText = pd+'%'; document.getElementById('bar-away').style.width = pa+'%'; document.getElementById('pct-away').innerText = pa+'%'; const m = document.getElementById('motm-container'); if(d.motm && d.motm.active) { m.innerHTML = ''; const totalV = d.motm.votes.reduce((a,b)=>a+b, 0); d.motm.nominees.forEach((n, i) => { if(n) { const pct = totalV ? Math.round((d.motm.votes[i]/totalV)*100) : 0; m.innerHTML += `<div class="mb-2"><div class="flex justify-between items-center text-xs mb-1"><span>${n}</span><span>${pct}%</span></div><div class="w-full bg-gray-200 h-1.5 rounded mb-1"><div class="bg-purple-600 h-1.5 rounded" style="width:${pct}%"></div></div><button onclick="voteMOTM(${i})" class="text-[10px] underline text-gray-500">Vote</button></div>`; } }); } else { m.innerHTML = '<p class="text-xs text-gray-400 text-center">Voting closed.</p>'; } });
         window.predict = async (type) => { if(localStorage.getItem('predicted_match')) return alert("Already predicted!"); localStorage.setItem('predicted_match', 'true'); await updateDoc(fanDoc, { [`prediction.${type}`]: increment(1) }); }
         window.voteMOTM = async (idx) => { if(localStorage.getItem('voted_motm')) return alert("Already voted!"); localStorage.setItem('voted_motm', 'true'); alert("Vote Recorded!"); }
     </script>
