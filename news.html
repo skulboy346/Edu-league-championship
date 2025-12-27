@@ -14,7 +14,7 @@
         .bg-edu-purple { background-color: #6d28d9; }
         .text-edu-purple { color: #6d28d9; }
         .news-card { transition: all 0.3s ease; }
-        .news-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1); }
+        .news-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1); }
         .liked { color: #ef4444; animation: pop 0.3s ease; }
         @keyframes pop { 50% { transform: scale(1.2); } }
         /* Mini Table Styles */
@@ -33,11 +33,16 @@
 
     <a href="admin.html" class="fixed bottom-6 right-6 bg-gray-900 text-white w-12 h-12 flex items-center justify-center rounded-full shadow-2xl hover:bg-edu-purple hover:scale-110 transition z-50 border-2 border-white" title="Admin Login"><i class="fa-solid fa-lock"></i></a>
 
-    <div class="bg-edu-purple text-white py-2 px-4 flex justify-between items-center z-50 shadow-md">
-        <span class="text-[10px] md:text-xs font-bold tracking-widest opacity-90">OFFICIAL NUESA SPORTS PLATFORM</span>
+    <div class="bg-edu-purple text-white py-2 px-4 flex justify-between items-center z-50 relative shadow-md">
+        <span class="text-[10px] md:text-xs font-bold tracking-widest opacity-90 hidden md:block">OFFICIAL NUESA SPORTS PLATFORM</span>
+        <span class="text-[10px] md:text-xs font-bold tracking-widest opacity-90 md:hidden">NUESA SPORTS</span>
         <div class="flex space-x-4">
-            <a href="https://www.instagram.com/theambassadors_sport" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://x.com/Ambassador30788" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://www.instagram.com/theambassadors_sport?igsh=NjZrdnE1ZXhkang=" target="_blank" class="hover:text-pink-400 transition transform hover:scale-110"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61583536988203" target="_blank" class="hover:text-blue-400 transition transform hover:scale-110"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://x.com/Ambassador30788?t=jMIhwr41PFXhuY2Q1gGWKg&s=09" target="_blank" class="hover:text-black transition transform hover:scale-110"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://www.tiktok.com/@theambassadors_sport?_r=1&_t=ZS-91HkO4CoTOJ" target="_blank" class="hover:text-pink-600 transition transform hover:scale-110"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://youtube.com/@theambassadorsport?si=31duWmdmjbjGCSLI" target="_blank" class="hover:text-red-500 transition transform hover:scale-110"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://wa.me/2348113032943" target="_blank" class="hover:text-green-400 transition transform hover:scale-110"><i class="fa-brands fa-whatsapp"></i></a>
         </div>
     </div>
 
@@ -50,7 +55,7 @@
 
     <div class="bg-white border-b border-gray-200 sticky top-16 z-30 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 py-3 flex gap-3 overflow-x-auto no-scrollbar">
-            <button onclick="openTableModal()" class="flex-1 min-w-[120px] flex items-center justify-center gap-2 bg-slate-800 text-white py-2.5 rounded-lg shadow-md hover:bg-slate-900 transition">
+            <button onclick="document.getElementById('standings-section').scrollIntoView({behavior: 'smooth'})" class="flex-1 min-w-[120px] flex items-center justify-center gap-2 bg-slate-800 text-white py-2.5 rounded-lg shadow-md hover:bg-slate-900 transition">
                 <i class="fa-solid fa-table"></i> <span class="font-bold text-xs sport-font tracking-wide">FULL TABLE</span>
             </button>
             <button onclick="openScheduleModal('fixtures')" class="flex-1 min-w-[120px] flex items-center justify-center gap-2 bg-green-600 text-white py-2.5 rounded-lg shadow-md hover:bg-green-700 transition">
@@ -114,9 +119,10 @@
                     <div class="p-3 bg-gray-50 border-b flex justify-between items-center">
                         <h3 class="font-black text-gray-800 text-sm sport-font flex items-center gap-2"><i class="fa-solid fa-list-ol text-blue-600"></i> TOP 4</h3>
                         <div class="flex gap-1">
-                            <button onclick="loadMiniTable('Finalist')" id="mt-Finalist" class="mini-tab-active px-2 py-1 rounded text-[10px] font-bold transition">FIN</button>
-                            <button onclick="loadMiniTable('Penultimate')" id="mt-Penultimate" class="mini-tab-inactive px-2 py-1 rounded text-[10px] font-bold transition">PEN</button>
-                            <button onclick="loadMiniTable('Sophomore')" id="mt-Sophomore" class="mini-tab-inactive px-2 py-1 rounded text-[10px] font-bold transition">SOPH</button>
+                            <button onclick="loadMiniTable('Finalist')" id="mt-Finalist" class="mini-tab-active px-2 py-1 rounded text-[9px] font-bold transition">FIN</button>
+                            <button onclick="loadMiniTable('Penultimate')" id="mt-Penultimate" class="mini-tab-inactive px-2 py-1 rounded text-[9px] font-bold transition">PEN</button>
+                            <button onclick="loadMiniTable('Sophomore')" id="mt-Sophomore" class="mini-tab-inactive px-2 py-1 rounded text-[9px] font-bold transition">SOPH</button>
+                            <button onclick="loadMiniTable('Female')" id="mt-Female" class="mini-tab-inactive px-2 py-1 rounded text-[9px] font-bold transition bg-pink-100 text-pink-700">FEM</button>
                         </div>
                     </div>
                     <div class="p-2">
@@ -149,12 +155,14 @@
         <div class="bg-gray-50 border-t border-b border-gray-200 py-8 mt-12">
             <div class="max-w-6xl mx-auto px-4 text-center">
                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Partners</p>
-                <div class="flex flex-wrap justify-center items-center gap-8 opacity-60 grayscale hover:grayscale-0 transition">
-                    <img src="https://placehold.co/100x40/e5e7eb/a3a3a3?text=SPONSOR" class="h-6 object-contain">
-                    <a href="https://wa.me/2348113032943" class="text-[10px] font-bold text-edu-purple border border-edu-purple px-3 py-1 rounded">ADVERTISE</a>
+                <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60">
+                    <div class="h-10 w-24 bg-gray-200 rounded animate-pulse"></div>
+                    <div class="h-10 w-24 bg-gray-200 rounded animate-pulse"></div>
+                    <a href="https://wa.me/2348113032943" class="h-10 px-6 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-[10px] text-gray-400 font-bold hover:border-edu-purple hover:text-edu-purple transition hover:bg-white hover:shadow-sm">ADVERTISE HERE</a>
                 </div>
             </div>
         </div>
+
         <footer class="bg-white border-t py-6 text-center"><p class="text-gray-400 text-[10px] font-bold tracking-widest">POWERED BY THE AMBASSADOR'S SPORTS</p></footer>
     </main>
 
@@ -200,13 +208,51 @@
 
     <div id="newsModal" class="fixed inset-0 bg-black/95 z-[80] hidden flex items-center justify-center p-0 md:p-4 backdrop-blur-md">
         <div class="bg-white md:rounded-2xl w-full max-w-3xl h-full md:h-[90vh] flex flex-col overflow-hidden relative shadow-2xl">
-            <div class="p-4 border-b flex justify-between items-center bg-white z-10"><h3 class="font-bold text-gray-800 text-lg truncate pr-4 sport-font">STORY DETAILS</h3><button onclick="closeModal()" class="bg-gray-100 p-2 rounded-full hover:bg-gray-200 text-gray-600"><i class="fa-solid fa-times"></i></button></div>
+            <div class="p-4 border-b flex justify-between items-center bg-white z-10"><h3 class="font-bold text-gray-800 text-lg truncate pr-4 sport-font">STORY DETAILS</h3><button onclick="closeModal()" class="bg-gray-100 p-2 rounded-full hover:bg-gray-200 text-gray-600"><i class="fa-solid fa-times text-xl"></i></button></div>
             <div class="overflow-y-auto flex-grow bg-gray-50 no-scrollbar pb-20">
                 <div id="media-container" class="w-full bg-black flex justify-center min-h-[250px] items-center"><img id="modalImg" class="w-full max-h-[500px] object-contain hidden"></div>
                 <div class="p-6 md:p-8 bg-white"><span id="modalDate" class="text-xs font-bold text-edu-purple uppercase"></span><h2 id="modalTitle" class="text-2xl font-black text-gray-900 mt-2 mb-6 leading-tight sport-font"></h2><p id="modalBody" class="text-gray-800 whitespace-pre-line text-base leading-relaxed"></p></div>
                 <div class="p-6 border-t bg-gray-50"><h4 class="font-bold text-gray-700 mb-4 text-sm uppercase">Comments</h4><div id="comments-list" class="space-y-3 mb-4"></div></div>
             </div>
             <form onsubmit="postComment(event)" class="bg-white p-3 border-t flex gap-2 items-center absolute bottom-0 w-full shadow-lg"><input id="commentName" class="w-1/4 text-xs border p-3 rounded-lg bg-gray-50" placeholder="Name" required maxlength="15"><input id="commentInput" class="flex-grow text-sm p-3 border rounded-lg bg-gray-50" placeholder="Write a comment..." required autocomplete="off"><button type="submit" class="bg-edu-purple text-white px-4 py-2 rounded-lg font-bold"><i class="fa-solid fa-paper-plane"></i></button></form>
+        </div>
+    </div>
+
+    <div id="teamModal" class="fixed inset-0 bg-black/90 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-2xl overflow-hidden relative shadow-2xl transform transition-all">
+            <button onclick="document.getElementById('teamModal').classList.add('hidden')" class="absolute top-2 right-2 bg-white/20 p-2 rounded-full text-white hover:bg-white/40 z-10"><i class="fa-solid fa-times"></i></button>
+            <div class="bg-edu-purple p-8 text-center text-white relative">
+                <img id="tm-logo" src="edulogo.jpg" class="w-24 h-24 rounded-full border-4 border-white shadow-lg mx-auto mb-3 object-contain bg-white">
+                <h2 id="tm-name" class="text-2xl font-black sport-font tracking-tight">Team Name</h2>
+                <p id="tm-coach" class="text-sm text-purple-200 font-medium bg-white/10 inline-block px-3 py-1 rounded-full mt-2">Coach: ...</p>
+            </div>
+            <div class="p-6 max-h-[50vh] overflow-y-auto"><h4 class="font-bold text-gray-400 text-[10px] uppercase mb-4 tracking-widest border-b pb-2">Squad Roster</h4><ul id="tm-roster" class="space-y-3 text-sm text-gray-700"></ul></div>
+        </div>
+    </div>
+
+    <div id="standings-section" class="max-w-4xl mx-auto px-4 mt-12 mb-12">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+            <div class="p-5 border-b bg-gray-50/50">
+                <div class="flex justify-between items-center mb-5 px-4 bg-white p-3 rounded-xl shadow-sm border border-gray-100">
+                    <div class="text-center"><img src="edulogo.jpg" class="h-10 w-10 object-contain mx-auto"><p class="text-[8px] font-black uppercase mt-1 text-gray-400">LEAGUE</p></div>
+                    <div class="text-gray-300 font-black text-xl sport-font">VS</div>
+                    <div class="text-center"><img id="table-div-logo" src="edulogo.jpg" class="h-10 w-10 object-contain mx-auto"><p class="text-[8px] font-black uppercase mt-1 text-gray-400">DIVISION</p></div>
+                </div>
+                <div class="flex space-x-2 overflow-x-auto justify-center pb-1 no-scrollbar">
+                    <button onclick="loadTable('Finalist')" id="tab-Finalist" class="tab-active px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition">Finalist</button>
+                    <button onclick="loadTable('Penultimate')" id="tab-Penultimate" class="tab-inactive px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition">Penultimate</button>
+                    <button onclick="loadTable('Sophomore')" id="tab-Sophomore" class="tab-inactive px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition">Sophomore</button>
+                    <button onclick="loadTable('Female')" id="tab-Female" class="tab-inactive px-5 py-2 rounded-full text-xs font-bold bg-pink-50 text-pink-600 whitespace-nowrap shadow-sm transition border border-pink-100">Female</button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                    <thead class="bg-gray-100 text-gray-500 text-[10px] uppercase font-bold tracking-wider">
+                        <tr><th class="p-4 w-10">#</th><th class="p-4">Team</th><th class="p-4 text-center">PL</th><th class="p-4 text-center">GD</th><th class="p-4 text-center font-black text-edu-purple text-base">PTS</th></tr>
+                    </thead>
+                    <tbody id="league-table-body" class="divide-y divide-gray-100"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -220,9 +266,11 @@
         signInAnonymously(auth);
         
         let currentPostId = null; let commentsUnsubscribe = null; let matchInterval = null;
-        let allSchedules = []; let scheduleMode = 'fixtures'; // 'fixtures' or 'results'
+        let divLogos = { 'Finalist': 'edulogo.jpg', 'Penultimate': 'edulogo.jpg', 'Sophomore': 'edulogo.jpg', 'Female': 'edulogo.jpg' };
+        let allSchedules = []; let scheduleMode = 'fixtures'; 
 
-        // 1. MATCH SPOTLIGHT
+        const fetchDivLogos = async () => { try { const s = await getDoc(doc(db, "app_content", "division_logos")); if(s.exists()) divLogos = { ...divLogos, ...s.data() }; } catch(e){} }; fetchDivLogos();
+
         onSnapshot(doc(db, "app_content", "current_fixture"), (docSnap) => {
             if(docSnap.exists()) {
                 const data = docSnap.data();
@@ -236,6 +284,7 @@
                         setTimeout(() => {
                             document.getElementById('teamA_name').textContent = m.teamA; document.getElementById('teamB_name').textContent = m.teamB;
                             document.getElementById('match_details').textContent = `${m.date} • ${m.time} • ${m.venue}`;
+                            const catEl = document.getElementById('match_category'); if(catEl) catEl.innerText = (m.category || 'LEAGUE').toUpperCase();
                             document.getElementById('teamA_img').src = m.teamALogo || 'edulogo.jpg'; document.getElementById('teamB_img').src = m.teamBLogo || 'edulogo.jpg';
                             widget.style.opacity = 1;
                         }, 250);
@@ -247,40 +296,39 @@
             }
         });
 
-        // 2. NEWS FEED
         onSnapshot(query(collection(db, "news_posts"), orderBy("timestamp", "desc")), (snapshot) => {
             const grid = document.getElementById('news-grid'); document.getElementById('loading').classList.add('hidden'); grid.classList.remove('hidden'); grid.innerHTML = '';
             if (snapshot.empty) { grid.innerHTML = '<p class="text-center col-span-full text-gray-400">No news updates available.</p>'; return; }
             snapshot.forEach(doc => {
                 const data = doc.data(); const pid = doc.id;
                 const mediaUrl = data.imageUrl || 'https://placehold.co/600x400/16a34a/ffffff?text=EDU-LEAGUE+NEWS';
+                const likes = data.likes || 0; const commentsCount = data.commentsCount || 0;
+                const isLiked = localStorage.getItem(`liked_${pid}`) ? 'liked' : 'text-gray-400';
+                let dateStr = "Recent"; if(data.timestamp) dateStr = data.timestamp.toDate().toLocaleDateString('en-US', {month:'short', day:'numeric'});
                 const isVideo = mediaUrl.includes('.mp4') || mediaUrl.includes('video/upload');
                 let mediaHtml = isVideo ? `<video src="${mediaUrl}" class="w-full h-full object-cover" muted playsinline loop onmouseover="this.play()" onmouseout="this.pause()"></video><div class="absolute top-2 right-2 bg-black/60 text-white p-1 rounded-full"><i class="fa-solid fa-play"></i></div>` : `<img src="${mediaUrl}" class="w-full h-full object-cover">`;
-                
                 const card = document.createElement('div'); card.className = 'bg-white rounded-xl shadow-sm overflow-hidden news-card border border-gray-100 h-full flex flex-col'; card.id = `card-${pid}`; 
-                card.dataset.title = data.title; card.dataset.content = data.content; card.dataset.media = mediaUrl; card.dataset.isvideo = isVideo;
-                card.innerHTML = `<div class="relative h-48 bg-gray-900 overflow-hidden cursor-pointer" onclick="openModal('${pid}')">${mediaHtml}</div><div class="p-5 flex flex-col flex-grow"><h3 class="text-base font-bold text-gray-900 mb-2 line-clamp-2 uppercase cursor-pointer hover:text-green-600 transition" onclick="openModal('${pid}')">${data.title}</h3><div class="pt-2 mt-auto border-t border-gray-100 flex justify-between text-gray-400 text-xs"><span class="flex items-center gap-1"><i class="fa-solid fa-heart"></i> ${data.likes||0}</span><span class="flex items-center gap-1"><i class="fa-solid fa-comment"></i> ${data.commentsCount||0}</span></div></div>`;
+                card.dataset.title = data.title; card.dataset.content = data.content; card.dataset.media = mediaUrl; card.dataset.isvideo = isVideo; card.dataset.date = dateStr;
+                card.innerHTML = `<div class="relative h-48 bg-gray-900 overflow-hidden cursor-pointer" onclick="openModal('${pid}')">${mediaHtml}<div class="absolute bottom-2 left-2 bg-edu-purple text-white text-[10px] font-bold px-2 py-1 rounded shadow uppercase">${dateStr}</div></div><div class="p-5 flex flex-col flex-grow"><h3 class="text-lg font-bold text-gray-900 mb-2 leading-snug cursor-pointer hover:text-green-600 transition sport-font uppercase" onclick="openModal('${pid}')">${data.title}</h3><p class="text-sm text-gray-500 line-clamp-3 mb-4 flex-grow">${data.content}</p><div class="pt-3 mt-auto border-t border-gray-100 flex justify-between items-center text-sm"><div class="flex space-x-4"><button onclick="handleLike('${pid}')" class="flex items-center space-x-1 interaction-btn ${isLiked}" id="like-btn-${pid}"><i class="${isLiked.includes('liked') ? 'fa-solid' : 'fa-regular'} fa-heart"></i><span id="like-count-${pid}" class="text-xs font-bold">${likes}</span></button><button onclick="openModal('${pid}')" class="flex items-center space-x-1 interaction-btn text-gray-400 hover:text-blue-500"><i class="fa-regular fa-comment"></i><span class="text-xs font-bold">${commentsCount}</span></button></div><button onclick="handleShare('${data.title}')" class="text-gray-400 hover:text-green-600 interaction-btn"><i class="fa-solid fa-share-nodes"></i></button></div></div>`;
                 grid.appendChild(card);
             });
         });
 
-        // 3. MINI TABLE (SIDEBAR)
+        // MINI TABLE
         window.loadMiniTable = (lvl) => {
-            ['Finalist','Penultimate','Sophomore'].forEach(l => { 
+            ['Finalist','Penultimate','Sophomore','Female'].forEach(l => { 
                 const b=document.getElementById(`mt-${l}`); 
-                b.className = l===lvl ? "mini-tab-active px-2 py-1 rounded text-[10px] font-bold transition" : "mini-tab-inactive px-2 py-1 rounded text-[10px] font-bold transition"; 
+                if(b) b.className = l===lvl ? "mini-tab-active px-2 py-1 rounded text-[10px] font-bold transition" : "mini-tab-inactive px-2 py-1 rounded text-[10px] font-bold transition"; 
             });
             onSnapshot(doc(db, "app_content", `league_table_${lvl.toLowerCase()}`), (s) => {
                 const b = document.getElementById('mini-table-body'); b.innerHTML = '';
                 if(!s.exists()) { b.innerHTML = '<tr><td colspan="3" class="p-2 text-center text-gray-400">No Data</td></tr>'; return; }
-                const d = s.data(); 
-                const teams = Object.keys(d).map(k=>({name:k, ...d[k]})).sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)).slice(0,4); // TOP 4 ONLY
+                const d = s.data(); const teams = Object.keys(d).map(k=>({name:k, ...d[k]})).sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)).slice(0,4); 
                 teams.forEach((t,i) => { b.innerHTML += `<tr class="border-b border-gray-50"><td class="py-2 pl-2 font-bold text-gray-700 truncate w-24">${i+1}. ${t.name}</td><td class="text-center text-gray-500">${t.mp}</td><td class="text-center font-black text-edu-purple">${t.pts}</td></tr>`; });
             });
         }
         loadMiniTable('Finalist');
 
-        // 4. FULL TABLE MODAL
         window.openTableModal = () => { document.getElementById('tableModal').classList.remove('hidden'); loadFullTable('Finalist'); }
         window.loadFullTable = (lvl) => {
             ['Finalist','Penultimate','Sophomore','Female'].forEach(l => { const b=document.getElementById(`ft-${l}`); b.className = l===lvl ? "tab-active px-4 py-1.5 rounded-full text-xs font-bold" : "tab-inactive px-4 py-1.5 rounded-full text-xs font-bold"; });
@@ -292,7 +340,6 @@
             });
         }
 
-        // 5. SCHEDULE & RESULTS
         window.openScheduleModal = async (mode) => {
             scheduleMode = mode;
             const titleEl = document.getElementById('sched-modal-title');
@@ -304,11 +351,7 @@
         window.renderSchedule = () => {
             const list = document.getElementById('schedule-list'); const filterDiv = document.getElementById('sched-filter').value; list.innerHTML = '';
             let filtered = allSchedules; if (filterDiv !== 'All') filtered = allSchedules.filter(m => m.div === filterDiv);
-            
-            // Basic logic: Results (Past) vs Fixtures (Future). For simplicity, we show all, but color code differently.
-            // In a real app, you'd filter by Date. Here we just show the list.
-            if (filtered.length === 0) { list.innerHTML = '<div class="text-center py-10"><p class="text-gray-400">No data found.</p></div>'; return; }
-            
+            if (filtered.length === 0) { list.innerHTML = '<div class="text-center py-10"><p class="text-gray-400 font-bold">No data found.</p></div>'; return; }
             const grouped = {}; filtered.forEach(m => { if(!grouped[m.day]) grouped[m.day] = []; grouped[m.day].push(m); });
             Object.keys(grouped).sort().forEach(day => {
                 list.innerHTML += `<h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mt-4 mb-2 sticky top-0 bg-gray-50 py-1 pl-2">${day}</h4>`;
@@ -319,7 +362,6 @@
             });
         }
 
-        // 6. POLLS & MOTM
         onSnapshot(query(collection(db, "polls"), where("active", "==", true)), (snap) => {
             const el = document.getElementById('polls-container'); el.innerHTML = snap.empty ? '<p class="text-xs text-gray-400 text-center py-4">No active polls.</p>' : '';
             snap.forEach(doc => { 
@@ -331,27 +373,34 @@
             });
         });
 
-        // MOTM with Avatars
-        onSnapshot(doc(db, "app_content", "fan_zone"), (s) => {
-            const m = document.getElementById('motm-container'); if(!s.exists()) return;
-            const d = s.data();
-            if(d.motm && d.motm.active) {
+        const fanDoc = doc(db, "app_content", "fan_zone"); 
+        onSnapshot(fanDoc, (s) => { 
+            if(!s.exists()) { setDoc(fanDoc, { cheer_battle: {}, prediction: {home:0, draw:0, away:0}, motm: { active:false, nominees:[], votes:[] } }, { merge: true }); return; } 
+            const d = s.data(); 
+            const totalP = (d.prediction.home||0) + (d.prediction.draw||0) + (d.prediction.away||0); const ph = totalP ? Math.round((d.prediction.home/totalP)*100) : 33; const pd = totalP ? Math.round((d.prediction.draw/totalP)*100) : 33; const pa = totalP ? Math.round((d.prediction.away/totalP)*100) : 33; document.getElementById('bar-home').style.width = ph+'%'; document.getElementById('pct-home').innerText = ph+'%'; document.getElementById('bar-draw').style.width = pd+'%'; document.getElementById('pct-draw').innerText = pd+'%'; document.getElementById('bar-away').style.width = pa+'%'; document.getElementById('pct-away').innerText = pa+'%'; 
+            
+            const m = document.getElementById('motm-container'); 
+            if(d.motm && d.motm.active) { 
                 m.innerHTML = ''; const totalV = d.motm.votes.reduce((a,b)=>a+b,0); const maxV = Math.max(...d.motm.votes);
                 d.motm.nominees.forEach((n, i) => { if(n) {
                     const pct = totalV ? Math.round((d.motm.votes[i]/totalV)*100) : 0;
                     const isLeader = d.motm.votes[i] === maxV && totalV > 0;
                     m.innerHTML += `<div class="flex items-center gap-2 mb-2 p-2 rounded border ${isLeader?'border-yellow-400 bg-yellow-50':'border-gray-100 bg-gray-50'}"><div class="relative"><img src="https://ui-avatars.com/api/?name=${n}&background=random&color=fff&bold=true" class="w-8 h-8 rounded-full shadow-sm">${isLeader?'<div class="absolute -top-1 -right-1 text-xs crown-icon">👑</div>':''}</div><div class="flex-grow"><div class="flex justify-between text-[10px] font-bold text-gray-700"><span>${n}</span><span>${pct}%</span></div><div class="w-full bg-gray-200 h-1.5 rounded-full"><div class="bg-purple-600 h-full rounded-full transition-all duration-500" style="width:${pct}%"></div></div></div><button onclick="voteMOTM(${i})" class="text-gray-400 hover:text-purple-600"><i class="fa-solid fa-thumbs-up"></i></button></div>`;
                 }});
-            } else { m.innerHTML = '<p class="text-xs text-gray-400 text-center py-4">Voting closed.</p>'; }
+            } else { m.innerHTML = '<p class="text-xs text-gray-400 text-center py-4">Voting closed.</p>'; } 
         });
 
-        // Global functions (same as before)
+        window.handleLike = async (id) => { const isLiked = localStorage.getItem(`liked_${id}`); const btn = document.getElementById(`like-btn-${id}`); const countSpan = document.getElementById(`like-count-${id}`); let newCount = parseInt(countSpan.innerText); if (isLiked) { newCount--; localStorage.removeItem(`liked_${id}`); btn.classList.remove('liked'); btn.querySelector('i').classList.replace('fa-solid', 'fa-regular'); } else { newCount++; localStorage.setItem(`liked_${id}`, 'true'); btn.classList.add('liked'); btn.querySelector('i').classList.replace('fa-regular', 'fa-solid'); } countSpan.innerText = newCount; await updateDoc(doc(db, "news_posts", id), { likes: increment(isLiked ? -1 : 1) }); }
+        window.handleShare = (title) => { if (navigator.share) navigator.share({ title: 'EDU-LEAGUE Update', text: title, url: window.location.href }); else { navigator.clipboard.writeText(window.location.href); alert("Link copied!"); } }
         window.openModal = (pid) => { currentPostId = pid; const cardEl = document.getElementById(`card-${pid}`); if(!cardEl) return; document.getElementById('modalTitle').innerText = cardEl.dataset.title; document.getElementById('modalBody').innerText = cardEl.dataset.content; document.getElementById('modalDate').innerText = cardEl.dataset.date; const imgEl = document.getElementById('modalImg'); const container = document.getElementById('media-container'); const existingVideo = container.querySelector('video'); if(existingVideo) existingVideo.remove(); imgEl.classList.add('hidden'); if (cardEl.dataset.isvideo === 'true') { const video = document.createElement('video'); video.src = cardEl.dataset.media; video.controls = true; video.autoplay = true; video.className = "w-full max-h-[500px] object-contain shadow-lg"; container.appendChild(video); } else { imgEl.src = cardEl.dataset.media; imgEl.classList.remove('hidden'); } document.getElementById('newsModal').classList.remove('hidden'); document.body.style.overflow = 'hidden'; const list = document.getElementById('comments-list'); list.innerHTML = '<p class="text-xs text-gray-400">Loading comments...</p>'; commentsUnsubscribe = onSnapshot(query(collection(db, "news_posts", pid, "comments"), orderBy("timestamp", "asc")), (snap) => { list.innerHTML = ''; snap.forEach(d => { const c = d.data(); list.innerHTML += `<div class="bg-gray-50 p-3 rounded-xl border border-gray-100 text-sm"><p class="font-bold text-edu-purple text-xs mb-1">${c.user}</p><p class="text-gray-700 leading-relaxed">${c.text}</p></div>`; }); }); }
         window.closeModal = () => { document.getElementById('newsModal').classList.add('hidden'); document.body.style.overflow = 'auto'; if(commentsUnsubscribe) commentsUnsubscribe(); }
         window.postComment = async (e) => { e.preventDefault(); if(!currentPostId) return; const t = document.getElementById('commentInput').value; const u = document.getElementById('commentName').value || "Fan"; if(!t)return; document.getElementById('commentInput').value=''; await addDoc(collection(db, "news_posts", currentPostId, "comments"), { user:u, text:t, timestamp: serverTimestamp() }); await updateDoc(doc(db, "news_posts", currentPostId), { commentsCount: increment(1) }); }
+        window.openTeam = async (name) => { const q = query(collection(db, "registrations"), where("department", "==", name)); const snap = await getDocs(q); if(!snap.empty) { const d = snap.docs[0].data(); document.getElementById('tm-name').textContent=d.department; document.getElementById('tm-coach').textContent="Coach: "+d.coachName; const asset = await getDoc(doc(db, "team_assets", name)); document.getElementById('tm-logo').src = asset.exists()?asset.data().logoUrl : 'edulogo.jpg'; document.getElementById('tm-roster').innerHTML = (d.players||[]).map(p=>`<li class="flex justify-between border-b border-gray-100 pb-2"><span>${p.name}</span><span class="text-gray-400 text-xs font-mono bg-gray-100 px-2 py-0.5 rounded">${p.position||'-'}</span></li>`).join('') || '<li>No players.</li>'; document.getElementById('teamModal').classList.remove('hidden'); } else alert("Team details not found."); }
         window.vote = async (id, o) => { localStorage.setItem(`voted_${id}`,'true'); await updateDoc(doc(db, "polls", id), { [o===1?'votes1':'votes2']: increment(1) }); }
+        window.predict = async (type) => { if(localStorage.getItem('predicted_match')) return alert("Already predicted!"); localStorage.setItem('predicted_match', 'true'); await updateDoc(fanDoc, { [`prediction.${type}`]: increment(1) }); }
         window.voteMOTM = async (idx) => { if(localStorage.getItem('voted_motm')) return alert("Already voted!"); localStorage.setItem('voted_motm', 'true'); alert("Vote Recorded!"); }
-        window.predict = async (type) => { if(localStorage.getItem('predicted_match')) return alert("Already predicted!"); localStorage.setItem('predicted_match', 'true'); await updateDoc(doc(db, "app_content", "fan_zone"), { [`prediction.${type}`]: increment(1) }); }
+        window.loadTable = (lvl) => { ['Finalist','Penultimate','Sophomore','Female'].forEach(l => { const b=document.getElementById(`tab-${l}`); b.className = l===lvl ? "tab-active px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition" : "tab-inactive px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition"; }); document.getElementById('table-div-logo').src = divLogos[lvl] || 'edulogo.jpg'; onSnapshot(doc(db, "app_content", `league_table_${lvl.toLowerCase()}`), (s) => { const b = document.getElementById('league-table-body'); b.innerHTML = ''; if(!s.exists()) { b.innerHTML='<tr><td colspan="5" class="p-6 text-center text-gray-400 text-xs font-bold">SEASON NOT STARTED</td></tr>'; return; } const d = s.data(); const teams = Object.keys(d).map(k=>({name:k, ...d[k]})).sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)); teams.forEach((t,i) => { const rankColor = i < 4 ? 'text-green-600' : 'text-gray-400'; const rowClass = i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'; b.innerHTML += `<tr class="${rowClass} hover:bg-purple-50 transition"><td class="p-4 font-black ${rankColor}">${i+1}</td><td class="p-4 font-bold text-gray-700 sport-font tracking-tight uppercase cursor-pointer hover:text-edu-purple" onclick="openTeam('${t.name}')">${t.name}</td><td class="p-4 text-center font-medium text-gray-500">${t.mp}</td><td class="p-4 text-center font-medium text-gray-500">${t.gd}</td><td class="p-4 text-center font-black text-edu-purple bg-purple-50/50 rounded-l-lg">${t.pts}</td></tr>`; }); }); }
+        loadTable('Finalist');
     </script>
 </body>
 </html>
