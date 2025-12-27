@@ -20,6 +20,8 @@
         /* Mini Table Styles */
         .mini-tab-active { background-color: #1f2937; color: white; }
         .mini-tab-inactive { background-color: #f3f4f6; color: #6b7280; }
+        .tab-active { background-color: #6d28d9; color: white; border-color: #6d28d9; }
+        .tab-inactive { background-color: white; color: #374151; border-color: #e5e7eb; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
         /* Animations */
@@ -55,7 +57,7 @@
 
     <div class="bg-white border-b border-gray-200 sticky top-16 z-30 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 py-3 flex gap-3 overflow-x-auto no-scrollbar">
-            <button onclick="document.getElementById('standings-section').scrollIntoView({behavior: 'smooth'})" class="flex-1 min-w-[120px] flex items-center justify-center gap-2 bg-slate-800 text-white py-2.5 rounded-lg shadow-md hover:bg-slate-900 transition">
+            <button onclick="openTableModal()" class="flex-1 min-w-[120px] flex items-center justify-center gap-2 bg-slate-800 text-white py-2.5 rounded-lg shadow-md hover:bg-slate-900 transition">
                 <i class="fa-solid fa-table"></i> <span class="font-bold text-xs sport-font tracking-wide">FULL TABLE</span>
             </button>
             <button onclick="openScheduleModal('fixtures')" class="flex-1 min-w-[120px] flex items-center justify-center gap-2 bg-green-600 text-white py-2.5 rounded-lg shadow-md hover:bg-green-700 transition">
@@ -180,7 +182,18 @@
             </div>
             <div class="flex-1 overflow-auto p-4">
                 <table class="w-full text-sm text-left">
-                    <thead class="bg-gray-100 text-gray-500 text-[10px] uppercase font-bold sticky top-0"><tr><th class="p-3">#</th><th class="p-3">Team</th><th class="p-3 text-center">PL</th><th class="p-3 text-center">GD</th><th class="p-3 text-center text-black">PTS</th></tr></thead>
+                    <thead class="bg-gray-100 text-gray-500 text-[10px] uppercase font-bold sticky top-0">
+                        <tr>
+                            <th class="p-3">#</th>
+                            <th class="p-3">Team</th>
+                            <th class="p-3 text-center">PL</th>
+                            <th class="p-3 text-center">W</th>
+                            <th class="p-3 text-center">D</th>
+                            <th class="p-3 text-center">L</th>
+                            <th class="p-3 text-center">GD</th>
+                            <th class="p-3 text-center text-black">PTS</th>
+                        </tr>
+                    </thead>
                     <tbody id="full-table-body" class="divide-y divide-gray-100"></tbody>
                 </table>
             </div>
@@ -230,32 +243,6 @@
         </div>
     </div>
 
-    <div id="standings-section" class="max-w-4xl mx-auto px-4 mt-12 mb-12">
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <div class="p-5 border-b bg-gray-50/50">
-                <div class="flex justify-between items-center mb-5 px-4 bg-white p-3 rounded-xl shadow-sm border border-gray-100">
-                    <div class="text-center"><img src="edulogo.jpg" class="h-10 w-10 object-contain mx-auto"><p class="text-[8px] font-black uppercase mt-1 text-gray-400">LEAGUE</p></div>
-                    <div class="text-gray-300 font-black text-xl sport-font">VS</div>
-                    <div class="text-center"><img id="table-div-logo" src="edulogo.jpg" class="h-10 w-10 object-contain mx-auto"><p class="text-[8px] font-black uppercase mt-1 text-gray-400">DIVISION</p></div>
-                </div>
-                <div class="flex space-x-2 overflow-x-auto justify-center pb-1 no-scrollbar">
-                    <button onclick="loadTable('Finalist')" id="tab-Finalist" class="tab-active px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition">Finalist</button>
-                    <button onclick="loadTable('Penultimate')" id="tab-Penultimate" class="tab-inactive px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition">Penultimate</button>
-                    <button onclick="loadTable('Sophomore')" id="tab-Sophomore" class="tab-inactive px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition">Sophomore</button>
-                    <button onclick="loadTable('Female')" id="tab-Female" class="tab-inactive px-5 py-2 rounded-full text-xs font-bold bg-pink-50 text-pink-600 whitespace-nowrap shadow-sm transition border border-pink-100">Female</button>
-                </div>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left">
-                    <thead class="bg-gray-100 text-gray-500 text-[10px] uppercase font-bold tracking-wider">
-                        <tr><th class="p-4 w-10">#</th><th class="p-4">Team</th><th class="p-4 text-center">PL</th><th class="p-4 text-center">GD</th><th class="p-4 text-center font-black text-edu-purple text-base">PTS</th></tr>
-                    </thead>
-                    <tbody id="league-table-body" class="divide-y divide-gray-100"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -267,9 +254,17 @@
         
         let currentPostId = null; let commentsUnsubscribe = null; let matchInterval = null;
         let divLogos = { 'Finalist': 'edulogo.jpg', 'Penultimate': 'edulogo.jpg', 'Sophomore': 'edulogo.jpg', 'Female': 'edulogo.jpg' };
+        let globalTeamLogos = {}; // CACHE FOR LOGOS
         let allSchedules = []; let scheduleMode = 'fixtures'; 
 
         const fetchDivLogos = async () => { try { const s = await getDoc(doc(db, "app_content", "division_logos")); if(s.exists()) divLogos = { ...divLogos, ...s.data() }; } catch(e){} }; fetchDivLogos();
+        
+        // Cache Team Logos once
+        const fetchTeamLogos = async () => {
+            const assetsSnap = await getDocs(collection(db, "team_assets"));
+            assetsSnap.forEach(doc => { globalTeamLogos[doc.id] = doc.data().logoUrl; });
+        };
+        fetchTeamLogos();
 
         onSnapshot(doc(db, "app_content", "current_fixture"), (docSnap) => {
             if(docSnap.exists()) {
@@ -305,7 +300,7 @@
                 const likes = data.likes || 0; const commentsCount = data.commentsCount || 0;
                 const isLiked = localStorage.getItem(`liked_${pid}`) ? 'liked' : 'text-gray-400';
                 let dateStr = "Recent"; if(data.timestamp) dateStr = data.timestamp.toDate().toLocaleDateString('en-US', {month:'short', day:'numeric'});
-                const isVideo = mediaUrl.includes('.mp4') || mediaUrl.includes('video/upload');
+                const isVideo = mediaUrl.includes('.mp4') || mediaUrl.includes('.mov') || mediaUrl.includes('video/upload');
                 let mediaHtml = isVideo ? `<video src="${mediaUrl}" class="w-full h-full object-cover" muted playsinline loop onmouseover="this.play()" onmouseout="this.pause()"></video><div class="absolute top-2 right-2 bg-black/60 text-white p-1 rounded-full"><i class="fa-solid fa-play"></i></div>` : `<img src="${mediaUrl}" class="w-full h-full object-cover">`;
                 const card = document.createElement('div'); card.className = 'bg-white rounded-xl shadow-sm overflow-hidden news-card border border-gray-100 h-full flex flex-col'; card.id = `card-${pid}`; 
                 card.dataset.title = data.title; card.dataset.content = data.content; card.dataset.media = mediaUrl; card.dataset.isvideo = isVideo; card.dataset.date = dateStr;
@@ -314,11 +309,11 @@
             });
         });
 
-        // MINI TABLE
+        // MINI TABLE (SIDEBAR - 4 DIVISIONS)
         window.loadMiniTable = (lvl) => {
             ['Finalist','Penultimate','Sophomore','Female'].forEach(l => { 
                 const b=document.getElementById(`mt-${l}`); 
-                if(b) b.className = l===lvl ? "mini-tab-active px-2 py-1 rounded text-[10px] font-bold transition" : "mini-tab-inactive px-2 py-1 rounded text-[10px] font-bold transition"; 
+                if(b) b.className = l===lvl ? "mini-tab-active px-2 py-1 rounded text-[9px] font-bold transition" : "mini-tab-inactive px-2 py-1 rounded text-[9px] font-bold transition"; 
             });
             onSnapshot(doc(db, "app_content", `league_table_${lvl.toLowerCase()}`), (s) => {
                 const b = document.getElementById('mini-table-body'); b.innerHTML = '';
@@ -330,13 +325,18 @@
         loadMiniTable('Finalist');
 
         window.openTableModal = () => { document.getElementById('tableModal').classList.remove('hidden'); loadFullTable('Finalist'); }
+        
+        // FULL TABLE (WITH W/D/L AND LOGOS)
         window.loadFullTable = (lvl) => {
             ['Finalist','Penultimate','Sophomore','Female'].forEach(l => { const b=document.getElementById(`ft-${l}`); b.className = l===lvl ? "tab-active px-4 py-1.5 rounded-full text-xs font-bold" : "tab-inactive px-4 py-1.5 rounded-full text-xs font-bold"; });
             onSnapshot(doc(db, "app_content", `league_table_${lvl.toLowerCase()}`), (s) => {
                 const b = document.getElementById('full-table-body'); b.innerHTML = '';
-                if(!s.exists()) { b.innerHTML='<tr><td colspan="5" class="p-4 text-center">No Data</td></tr>'; return; }
+                if(!s.exists()) { b.innerHTML='<tr><td colspan="8" class="p-4 text-center">No Data</td></tr>'; return; }
                 const d = s.data(); const teams = Object.keys(d).map(k=>({name:k, ...d[k]})).sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd));
-                teams.forEach((t,i) => { b.innerHTML += `<tr class="border-b"><td class="p-3 font-bold ${i<4?'text-green-600':''}">${i+1}</td><td class="p-3 font-bold text-gray-700">${t.name}</td><td class="p-3 text-center">${t.mp}</td><td class="p-3 text-center">${t.gd}</td><td class="p-3 text-center font-black">${t.pts}</td></tr>`; });
+                teams.forEach((t,i) => {
+                    const logoUrl = globalTeamLogos[`${t.name}_${lvl}`] || globalTeamLogos[t.name] || 'edulogo.jpg';
+                    b.innerHTML += `<tr class="border-b"><td class="p-3 font-bold ${i<4?'text-green-600':''}">${i+1}</td><td class="p-3 font-bold text-gray-700 flex items-center gap-2"><img src="${logoUrl}" class="h-6 w-6 rounded-full object-contain"> ${t.name}</td><td class="p-3 text-center">${t.mp}</td><td class="p-3 text-center text-green-600">${t.w}</td><td class="p-3 text-center text-gray-500">${t.d}</td><td class="p-3 text-center text-red-500">${t.l}</td><td class="p-3 text-center">${t.gd}</td><td class="p-3 text-center font-black text-lg">${t.pts}</td></tr>`; 
+                });
             });
         }
 
@@ -399,8 +399,6 @@
         window.vote = async (id, o) => { localStorage.setItem(`voted_${id}`,'true'); await updateDoc(doc(db, "polls", id), { [o===1?'votes1':'votes2']: increment(1) }); }
         window.predict = async (type) => { if(localStorage.getItem('predicted_match')) return alert("Already predicted!"); localStorage.setItem('predicted_match', 'true'); await updateDoc(fanDoc, { [`prediction.${type}`]: increment(1) }); }
         window.voteMOTM = async (idx) => { if(localStorage.getItem('voted_motm')) return alert("Already voted!"); localStorage.setItem('voted_motm', 'true'); alert("Vote Recorded!"); }
-        window.loadTable = (lvl) => { ['Finalist','Penultimate','Sophomore','Female'].forEach(l => { const b=document.getElementById(`tab-${l}`); b.className = l===lvl ? "tab-active px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition" : "tab-inactive px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition"; }); document.getElementById('table-div-logo').src = divLogos[lvl] || 'edulogo.jpg'; onSnapshot(doc(db, "app_content", `league_table_${lvl.toLowerCase()}`), (s) => { const b = document.getElementById('league-table-body'); b.innerHTML = ''; if(!s.exists()) { b.innerHTML='<tr><td colspan="5" class="p-6 text-center text-gray-400 text-xs font-bold">SEASON NOT STARTED</td></tr>'; return; } const d = s.data(); const teams = Object.keys(d).map(k=>({name:k, ...d[k]})).sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)); teams.forEach((t,i) => { const rankColor = i < 4 ? 'text-green-600' : 'text-gray-400'; const rowClass = i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'; b.innerHTML += `<tr class="${rowClass} hover:bg-purple-50 transition"><td class="p-4 font-black ${rankColor}">${i+1}</td><td class="p-4 font-bold text-gray-700 sport-font tracking-tight uppercase cursor-pointer hover:text-edu-purple" onclick="openTeam('${t.name}')">${t.name}</td><td class="p-4 text-center font-medium text-gray-500">${t.mp}</td><td class="p-4 text-center font-medium text-gray-500">${t.gd}</td><td class="p-4 text-center font-black text-edu-purple bg-purple-50/50 rounded-l-lg">${t.pts}</td></tr>`; }); }); }
-        loadTable('Finalist');
     </script>
 </body>
 </html>
