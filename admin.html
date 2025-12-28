@@ -46,7 +46,6 @@
             font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 1rem; outline: none; transition: 0.2s;
         }
         .input-sport:focus { background: white; border-color: var(--blue); }
-        .input-sport:disabled { opacity: 0.5; cursor: not-allowed; background: #e2e8f0; }
 
         .btn-sport {
             background: var(--navy); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700;
@@ -71,7 +70,6 @@
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* TBD Checkbox Styling */
         .tbd-label { display: flex; items-center; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-top: 4px; }
         .tbd-check { margin-right: 6px; width: 16px; height: 16px; }
     </style>
@@ -143,16 +141,10 @@
                     <div class="sport-card p-8 h-full flex flex-col justify-center border-l-orange bg-white">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                             <div class="space-y-6">
-                                <div>
-                                    <label class="text-xs font-bold text-slate-400 uppercase block mb-1">TARGET TEAM</label>
-                                    <input id="logo-team-name-display" class="input-sport bg-slate-100 text-slate-500 cursor-not-allowed" readonly placeholder="SELECT FROM ROSTER">
-                                    <input type="hidden" id="logo-team-name"><input type="hidden" id="logo-team-div">
-                                </div>
+                                <div><label class="text-xs font-bold text-slate-400 uppercase block mb-1">TARGET TEAM</label><input id="logo-team-name-display" class="input-sport bg-slate-100 text-slate-500 cursor-not-allowed" readonly placeholder="SELECT FROM ROSTER"><input type="hidden" id="logo-team-name"><input type="hidden" id="logo-team-div"></div>
                                 <div class="relative group cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:bg-slate-50 hover:border-blue-500 transition">
                                     <input type="file" id="logo-file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewFile(this)" accept="image/*">
-                                    <i class="fa-solid fa-cloud-arrow-up text-4xl text-slate-300 group-hover:text-blue-500 mb-2"></i>
-                                    <p class="text-sm font-bold text-slate-600 font-[Rajdhani] uppercase" id="logo-file-label">TAP TO SELECT</p>
-                                    <p class="text-[10px] text-slate-400">Open Gallery</p>
+                                    <i class="fa-solid fa-cloud-arrow-up text-4xl text-slate-300 group-hover:text-blue-500 mb-2"></i><p class="text-sm font-bold text-slate-600 font-[Rajdhani] uppercase" id="logo-file-label">TAP TO SELECT</p><p class="text-[10px] text-slate-400">Open Gallery</p>
                                 </div>
                                 <button onclick="uploadBadgeDirect()" id="btn-save-badge" class="w-full btn-sport btn-accent shadow-lg">UPLOAD & SAVE</button>
                             </div>
@@ -177,21 +169,9 @@
                     <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">ADD FIXTURE</h3>
                     <div class="space-y-3">
                         <select id="fix-div" class="input-sport" onchange="filterTeamsByDiv()"><option value="">SELECT DIVISION</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-                        <div class="grid grid-cols-2 gap-2">
-                            <select id="fix-day" class="input-sport"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select>
-                            <input type="date" id="fix-date" class="input-sport">
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-2 items-center">
-                            <input type="time" id="fix-time" class="input-sport">
-                            <label class="tbd-label"><input type="checkbox" id="fix-time-tbd" class="tbd-check" onchange="toggleTime(this, 'fix-time')"> TIME TBD</label>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2 items-center">
-                            <input type="text" id="fix-venue" placeholder="VENUE" class="input-sport uppercase">
-                            <label class="tbd-label"><input type="checkbox" id="fix-venue-tbd" class="tbd-check" onchange="toggleVenue(this, 'fix-venue')"> VENUE TBD</label>
-                        </div>
-
+                        <div class="grid grid-cols-2 gap-2"><select id="fix-day" class="input-sport"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select><input type="date" id="fix-date" class="input-sport"></div>
+                        <div class="grid grid-cols-2 gap-2 items-center"><input type="time" id="fix-time" class="input-sport"><label class="tbd-label"><input type="checkbox" id="fix-time-tbd" class="tbd-check" onchange="toggleTime(this, 'fix-time')"> TIME TBD</label></div>
+                        <div class="grid grid-cols-2 gap-2 items-center"><input type="text" id="fix-venue" placeholder="VENUE" class="input-sport uppercase"><label class="tbd-label"><input type="checkbox" id="fix-venue-tbd" class="tbd-check" onchange="toggleVenue(this, 'fix-venue')"> VENUE TBD</label></div>
                         <div class="grid grid-cols-2 gap-2"><select id="fix-home" class="input-sport"><option>HOME</option></select><select id="fix-away" class="input-sport"><option>AWAY</option></select></div>
                         <button onclick="saveFixture()" class="w-full btn-sport btn-accent">CREATE MATCH</button>
                     </div>
@@ -204,11 +184,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 <div class="lg:col-span-1 sport-card p-6 h-fit border-l-red">
                     <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">FILTER</h3>
-                    <div class="space-y-3">
-                        <select id="res-div" onchange="loadResults()" class="input-sport"><option value="All">All Divisions</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-                        <select id="res-day" onchange="loadResults()" class="input-sport"><option value="All">All Days</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select>
-                        <button onclick="loadResults()" class="w-full btn-sport btn-danger">REFRESH LIST</button>
-                    </div>
+                    <div class="space-y-3"><select id="res-div" onchange="loadResults()" class="input-sport"><option value="All">All Divisions</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="res-day" onchange="loadResults()" class="input-sport"><option value="All">All Days</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select><button onclick="loadResults()" class="w-full btn-sport btn-danger">REFRESH LIST</button></div>
                 </div>
                 <div class="lg:col-span-3"><div id="results-list" class="space-y-3"></div></div>
             </div>
@@ -226,15 +202,11 @@
         </div>
 
         <div id="stats" class="section hidden"><div class="sport-card p-8 max-w-4xl mx-auto border-l-green"><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b pb-8"><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">1. Team</label><select id="stat-team-select" class="input-sport" onchange="loadTeamPlayers()"><option value="">Select...</option></select></div><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">2. Player</label><select id="stat-player-select" class="input-sport" onchange="fetchPlayerCurrentStats()"><option value="">Select...</option></select></div></div><div id="stats-editor" class="hidden"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-slate-800 text-xl">PLAYER STATS</h3></div><div class="grid grid-cols-3 md:grid-cols-5 gap-3 mb-8"><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-green-600 uppercase mb-1">Goals</p><input type="number" id="p-goals" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Assists</p><input type="number" id="p-assists" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-yellow-600 uppercase mb-1">Yellow</p><input type="number" id="p-yellow" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-red-600 uppercase mb-1">Red</p><input type="number" id="p-red" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-orange-600 uppercase mb-1">Saves</p><input type="number" id="p-saves" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div></div><button onclick="savePlayerStats()" class="w-full btn-sport btn-accent">UPDATE STATS</button></div></div></div>
-        
         <div id="news" class="section hidden"><div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="sport-card p-6 h-fit border-l-blue"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">COMPOSE NEWS</h3><div class="space-y-3"><input id="news-title" placeholder="HEADLINE" class="input-sport uppercase"><textarea id="news-body" rows="4" placeholder="Details..." class="input-sport"></textarea><div class="relative group cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-4 text-center hover:bg-slate-50 transition"><input type="file" id="news-file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('news-file-label').innerText=this.files[0].name"><i class="fa-solid fa-cloud-arrow-up text-xl text-slate-400 mb-1"></i><p class="text-xs font-bold text-slate-500 uppercase" id="news-file-label">Attach Media</p></div><button onclick="publishNews()" id="btn-pub-news" class="w-full btn-sport btn-accent">PUBLISH</button></div></div><div class="lg:col-span-2 sport-card p-6 h-[500px] flex flex-col border-l-orange"><div class="flex justify-between mb-4"><h3 class="font-bold text-slate-800">LIVE FEED</h3><button onclick="loadNews()" class="text-xs font-bold text-blue-600 uppercase">REFRESH</button></div><div id="news-feed" class="flex-1 overflow-y-auto space-y-2 pr-2"></div></div></div></div>
         <div id="fanz" class="section hidden"><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="sport-card p-6 border-l-green"><h3 class="font-bold text-slate-800 mb-4">MAN OF THE MATCH</h3><div class="grid grid-cols-3 gap-2 mb-4"><input id="motm-1" placeholder="PLAYER 1" class="input-sport"><input id="motm-2" placeholder="PLAYER 2" class="input-sport"><input id="motm-3" placeholder="PLAYER 3" class="input-sport"></div><div class="flex gap-2"><button onclick="setMOTM(true)" class="flex-1 bg-green-600 text-white py-3 rounded font-bold font-[Rajdhani]">OPEN</button><button onclick="setMOTM(false)" class="flex-1 bg-red-600 text-white py-3 rounded font-bold font-[Rajdhani]">CLOSE</button></div></div><div class="sport-card p-6 border-l-blue"><h3 class="font-bold text-slate-800 mb-4">FAN POLL</h3><div class="space-y-3"><input id="poll-q" placeholder="QUESTION" class="input-sport"><input id="poll-o1" placeholder="OPTION 1" class="input-sport"><input id="poll-o2" placeholder="OPTION 2" class="input-sport"><button onclick="createPoll()" class="w-full btn-sport btn-accent">LAUNCH</button></div></div></div><div id="active-polls" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6"></div></div>
-        <div id="verification" class="section hidden"><div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-solid fa-check-double text-blue-600"></i> VERIFICATION</h2><button onclick="loadVerifications()" class="bg-slate-800 text-white px-4 py-2 rounded text-xs font-bold uppercase">Refresh</button></div><div class="sport-card overflow-hidden border-l-green"><table class="w-full text-sm text-left"><thead class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase border-b"><tr><th class="p-4 pl-6">Team</th><th class="p-4 hidden md:table-cell">Div</th><th class="p-4">Status</th><th class="p-4 text-right pr-6">Act</th></tr></thead><tbody id="verify-list" class="divide-y divide-slate-100"></tbody></table></div></div>
+        <div id="verification" class="section hidden"><div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-solid fa-check-double text-blue-600"></i> VERIFICATION</h2><button onclick="loadVerifications()" class="bg-slate-800 text-white px-4 py-2 rounded text-xs font-bold uppercase">Refresh</button></div><div class="sport-card overflow-hidden border-l-green"><table class="w-full text-sm text-left"><thead class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase border-b"><tr><th class="p-4 pl-6">Team</th><th class="p-4 hidden md:table-cell">Div</th><th class="p-4">Acronym</th><th class="p-4">Status</th><th class="p-4 text-right pr-6">Act</th></tr></thead><tbody id="verify-list" class="divide-y divide-slate-100"></tbody></table></div></div>
 
-        <div id="edit-match-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-slate-900/90 backdrop-blur-sm hidden p-4"><div class="bg-white p-6 rounded-lg w-full max-w-sm shadow-2xl border-l-4 border-blue-600"><div class="flex justify-between items-center mb-4"><h3 class="text-xl font-black text-slate-800 font-[Rajdhani]">EDIT FIXTURE</h3><button onclick="closeEditModal()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button></div><input type="hidden" id="edit-match-id"><div class="bg-slate-100 p-3 rounded mb-4 text-center border border-slate-200"><p class="text-sm font-bold text-slate-800 uppercase font-[Rajdhani]" id="edit-match-teams">...</p></div><div class="space-y-3"><div><label class="text-[10px] font-bold text-slate-400 uppercase">Date</label><input type="date" id="edit-match-date" class="input-sport"></div><div><label class="text-[10px] font-bold text-slate-400 uppercase">Time</label>
-        <div class="grid grid-cols-2 gap-2 items-center"><input type="time" id="edit-match-time" class="input-sport"><label class="tbd-label"><input type="checkbox" id="edit-time-tbd" class="tbd-check" onchange="toggleTime(this, 'edit-match-time')"> TBD</label></div></div>
-        <div><label class="text-[10px] font-bold text-slate-400 uppercase">Venue</label><div class="grid grid-cols-2 gap-2 items-center"><input type="text" id="edit-match-venue" class="input-sport uppercase"><label class="tbd-label"><input type="checkbox" id="edit-venue-tbd" class="tbd-check" onchange="toggleVenue(this, 'edit-match-venue')"> TBD</label></div></div>
-        <button onclick="confirmEditMatch()" class="w-full btn-sport btn-accent mt-2">UPDATE MATCH</button></div></div></div>
+        <div id="edit-match-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-slate-900/90 backdrop-blur-sm hidden p-4"><div class="bg-white p-6 rounded-lg w-full max-w-sm shadow-2xl border-l-4 border-blue-600"><div class="flex justify-between items-center mb-4"><h3 class="text-xl font-black text-slate-800 font-[Rajdhani]">EDIT FIXTURE</h3><button onclick="closeEditModal()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button></div><input type="hidden" id="edit-match-id"><div class="bg-slate-100 p-3 rounded mb-4 text-center border border-slate-200"><p class="text-sm font-bold text-slate-800 uppercase font-[Rajdhani]" id="edit-match-teams">...</p></div><div class="space-y-3"><div><label class="text-[10px] font-bold text-slate-400 uppercase">Date</label><input type="date" id="edit-match-date" class="input-sport"></div><div><label class="text-[10px] font-bold text-slate-400 uppercase">Time</label><div class="grid grid-cols-2 gap-2 items-center"><input type="time" id="edit-match-time" class="input-sport"><label class="tbd-label"><input type="checkbox" id="edit-time-tbd" class="tbd-check" onchange="toggleTime(this, 'edit-match-time')"> TBD</label></div></div><div><label class="text-[10px] font-bold text-slate-400 uppercase">Venue</label><div class="grid grid-cols-2 gap-2 items-center"><input type="text" id="edit-match-venue" class="input-sport uppercase"><label class="tbd-label"><input type="checkbox" id="edit-venue-tbd" class="tbd-check" onchange="toggleVenue(this, 'edit-match-venue')"> TBD</label></div></div><button onclick="confirmEditMatch()" class="w-full btn-sport btn-accent mt-2">UPDATE MATCH</button></div></div></div>
 
     </main>
 
@@ -253,6 +225,9 @@
         const mainLogoUrl = "edulogo.jpg";
         let divisionLogos = { 'Finalist': 'edulogo.jpg', 'Penultimate': 'edulogo.jpg', 'Sophomore': 'edulogo.jpg', 'Female': 'edulogo.jpg' };
         
+        // --- GLOBAL TEAM MAP (Acronyms) ---
+        let teamAcronymMap = {};
+
         const showNotify = (msg, type="success") => {
             const bar = document.getElementById('notify-bar'); const icon = document.getElementById('notify-icon'); const text = document.getElementById('notify-msg');
             bar.className = type; text.innerText = msg;
@@ -262,24 +237,12 @@
             bar.classList.add('show'); setTimeout(() => bar.classList.remove('show'), 3000);
         };
 
-        // HELPER FUNCTIONS FOR TIME/VENUE TOGGLE
-        window.toggleTime = (checkbox, inputId) => {
-            const input = document.getElementById(inputId);
-            if(checkbox.checked) { input.value = ''; input.disabled = true; } else { input.disabled = false; }
-        };
-        window.toggleVenue = (checkbox, inputId) => {
-            const input = document.getElementById(inputId);
-            if(checkbox.checked) { input.value = ''; input.disabled = true; } else { input.disabled = false; }
-        };
-        // Time Conversion Helper (24h to 12h)
-        const formatTime = (time) => {
-            if(!time || time === 'TBD') return 'TBD';
-            const [h, m] = time.split(':');
-            const hour = parseInt(h);
-            const ampm = hour >= 12 ? 'PM' : 'AM';
-            const h12 = hour % 12 || 12;
-            return `${h12}:${m} ${ampm}`;
-        };
+        window.toggleTime = (checkbox, inputId) => { const input = document.getElementById(inputId); if(checkbox.checked) { input.value = ''; input.disabled = true; } else { input.disabled = false; } };
+        window.toggleVenue = (checkbox, inputId) => { const input = document.getElementById(inputId); if(checkbox.checked) { input.value = ''; input.disabled = true; } else { input.disabled = false; } };
+        const formatTime = (time) => { if(!time || time === 'TBD') return 'TBD'; const [h, m] = time.split(':'); const hour = parseInt(h); const ampm = hour >= 12 ? 'PM' : 'AM'; const h12 = hour % 12 || 12; return `${h12}:${m} ${ampm}`; };
+        
+        // Helper to get Acronym
+        const getShortName = (name) => teamAcronymMap[name] || name;
 
         document.getElementById('login-form').addEventListener('submit', (e) => { 
             e.preventDefault(); const pass = document.getElementById('adm-pass').value;
@@ -299,6 +262,10 @@
                 const divLogosSnap = await getDoc(doc(db, "app_content", "division_logos"));
                 if(divLogosSnap.exists()) divisionLogos = { ...divisionLogos, ...divLogosSnap.data() };
                 const t = await getDocs(collection(db, "registrations"));
+                
+                // Build Acronym Map
+                t.forEach(doc => { const d = doc.data(); if(d.acronym) teamAcronymMap[d.department] = d.acronym; });
+
                 document.getElementById('dash-teams').innerText = t.size;
                 document.getElementById('dash-verified').innerText = t.docs.filter(d => d.data().registrationStatus === "Verified").length;
                 let schedSize = (await getDocs(collection(db, "schedules"))).size; if(schedSize===0) schedSize=(await getDocs(collection(db, "matches"))).size;
@@ -381,22 +348,33 @@
 
         let allSchedules=[], allRegTeams=[];
         window.loadSchedule = async () => { if(allRegTeams.length===0) (await getDocs(collection(db,"registrations"))).forEach(d=>allRegTeams.push(d.data())); const el=document.getElementById('active-fixtures'); el.innerHTML='Loading...'; let snap=await getDocs(collection(db,"schedules")); if(snap.empty) snap=await getDocs(collection(db,"matches")); allSchedules=snap.docs.map(d=>({id:d.id,...d.data()})); loadSpotlightCandidates(); renderMatches(); };
-        function renderMatches() { const el=document.getElementById('active-fixtures'); el.innerHTML=''; const fDiv=document.getElementById('view-div').value, fDay=document.getElementById('view-day').value; let filtered=allSchedules; if(fDiv!=='All') filtered=filtered.filter(m=>m.div===fDiv); if(fDay!=='All') filtered=filtered.filter(m=>m.day===fDay); if(filtered.length===0) { el.innerHTML='<p class="text-center text-slate-400 text-sm">NO MATCHES FOUND</p>'; return; } filtered.forEach(m=>{ const home=m.home||m.homeTeam||"Unknown"; const away=m.away||m.awayTeam||"Unknown"; const isTBD=m.time==='TBD'||!m.time; const venue = m.venue || 'TBD'; el.innerHTML+=`<div class="sport-card p-4 flex justify-between items-center mb-3"><div><div class="flex items-center gap-2 mb-1"><span class="text-[9px] font-black bg-blue-600 text-white px-2 py-0.5 rounded uppercase">${(m.div||'').split(' ')[0]}</span><span class="text-[9px] font-bold text-slate-400 uppercase">${m.day||''}</span></div><div class="font-black text-slate-800 text-sm uppercase font-[Rajdhani] tracking-wide">${home} <span class="text-slate-400 font-normal mx-1">vs</span> ${away}</div><div class="text-[10px] font-bold text-slate-500 mt-1">${isTBD&&!m.date?'PENDING':m.date} • ${isTBD?'TBD':m.time} • ${venue}</div></div><div class="flex gap-2"><button onclick="openEditMatch('${m.id}','${home}','${away}','${m.date}','${m.time}','${venue}')" class="text-blue-500 p-2 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen"></i></button><button onclick="deleteMatch('${m.id}')" class="text-slate-400 hover:text-red-500 p-2 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button></div></div>`; }); }
         
-        // MODIFIED EDIT MATCH FUNCTION TO POPULATE DATA
+        function renderMatches() { 
+            const el=document.getElementById('active-fixtures'); el.innerHTML=''; 
+            const fDiv=document.getElementById('view-div').value, fDay=document.getElementById('view-day').value; 
+            let filtered=allSchedules; 
+            if(fDiv!=='All') filtered=filtered.filter(m=>m.div===fDiv); 
+            if(fDay!=='All') filtered=filtered.filter(m=>m.day===fDay); 
+            if(filtered.length===0) { el.innerHTML='<p class="text-center text-slate-400 text-sm">NO MATCHES FOUND</p>'; return; } 
+            filtered.forEach(m=>{ 
+                const home=getShortName(m.home||m.homeTeam||"Unknown"); 
+                const away=getShortName(m.away||m.awayTeam||"Unknown"); 
+                const isTBD=m.time==='TBD'||!m.time; 
+                const venue = m.venue || 'TBD'; 
+                el.innerHTML+=`<div class="sport-card p-4 flex justify-between items-center mb-3"><div><div class="flex items-center gap-2 mb-1"><span class="text-[9px] font-black bg-blue-600 text-white px-2 py-0.5 rounded uppercase">${(m.div||'').split(' ')[0]}</span><span class="text-[9px] font-bold text-slate-400 uppercase">${m.day||''}</span></div><div class="font-black text-slate-800 text-sm uppercase font-[Rajdhani] tracking-wide">${home} <span class="text-slate-400 font-normal mx-1">vs</span> ${away}</div><div class="text-[10px] font-bold text-slate-500 mt-1">${isTBD&&!m.date?'PENDING':m.date} • ${isTBD?'TBD':m.time} • ${venue}</div></div><div class="flex gap-2"><button onclick="openEditMatch('${m.id}','${m.home}','${m.away}','${m.date}','${m.time}','${venue}')" class="text-blue-500 p-2 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen"></i></button><button onclick="deleteMatch('${m.id}')" class="text-slate-400 hover:text-red-500 p-2 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button></div></div>`; 
+            }); 
+        }
+
         window.openEditMatch = (id,h,a,date,time,venue) => { 
             document.getElementById('edit-match-id').value=id; 
-            document.getElementById('edit-match-teams').innerText=`${h} vs ${a}`; 
+            document.getElementById('edit-match-teams').innerText=`${getShortName(h)} vs ${getShortName(a)}`; 
             document.getElementById('edit-match-date').value = date;
-            
             const timeInp = document.getElementById('edit-match-time');
             const timeCheck = document.getElementById('edit-time-tbd');
             if(time === 'TBD') { timeInp.value=''; timeInp.disabled=true; timeCheck.checked=true; } else { timeInp.value=time; timeInp.disabled=false; timeCheck.checked=false; }
-
             const venInp = document.getElementById('edit-match-venue');
             const venCheck = document.getElementById('edit-venue-tbd');
             if(venue === 'TBD') { venInp.value=''; venInp.disabled=true; venCheck.checked=true; } else { venInp.value=venue; venInp.disabled=false; venCheck.checked=false; }
-
             document.getElementById('edit-match-modal').classList.remove('hidden'); 
         };
         
@@ -404,15 +382,12 @@
         window.confirmEditMatch = async () => { 
             const id=document.getElementById('edit-match-id').value;
             const d=document.getElementById('edit-match-date').value;
-            
             const timeTBD = document.getElementById('edit-time-tbd').checked;
             const timeVal = document.getElementById('edit-match-time').value;
             const t = timeTBD ? "TBD" : (timeVal ? formatTime(timeVal) : "TBD");
-
             const venueTBD = document.getElementById('edit-venue-tbd').checked;
             const venueVal = document.getElementById('edit-match-venue').value;
             const v = venueTBD ? "TBD" : (venueVal || "TBD");
-
             if(!d) return showNotify("DATE REQUIRED", "error");
             await updateDoc(doc(db,"schedules",id),{date:d,time:t,venue:v}); 
             closeEditModal(); loadSchedule(); showNotify("UPDATED", "success"); 
@@ -424,17 +399,13 @@
             const date = document.getElementById('fix-date').value;
             const home = document.getElementById('fix-home').value;
             const away = document.getElementById('fix-away').value;
-
             const timeTBD = document.getElementById('fix-time-tbd').checked;
             const timeVal = document.getElementById('fix-time').value;
             const time = timeTBD ? "TBD" : (timeVal ? formatTime(timeVal) : "TBD");
-
             const venueTBD = document.getElementById('fix-venue-tbd').checked;
             const venueVal = document.getElementById('fix-venue').value;
             const venue = venueTBD ? "TBD" : (venueVal || "TBD");
-
             if(!home || !date) return showNotify("FILL ALL FIELDS", "error");
-            
             const f = {div, day, date, time, venue, home, away, timestamp: serverTimestamp()}; 
             await addDoc(collection(db,"schedules"), f); 
             showNotify("FIXTURE ADDED", "success"); loadSchedule(); 
@@ -443,7 +414,7 @@
         window.deleteMatch = async(id) => { if(confirm("DELETE FIXTURE?")) { await deleteDoc(doc(db,"schedules",id)); showNotify("DELETED", "info"); loadSchedule(); }};
         window.filterTeamsByDiv = () => { const div=document.getElementById('fix-div').value, h=document.getElementById('fix-home'), a=document.getElementById('fix-away'); h.innerHTML='<option>HOME</option>'; a.innerHTML='<option>AWAY</option>'; allRegTeams.filter(t=>t.level===div || (div==="Female League"&&t.division==="Female")).forEach(t=>{ const o=`<option value="${t.department}">${t.department}</option>`; h.innerHTML+=o; a.innerHTML+=o; }); };
 
-        // --- SCORES LOGIC ---
+        // --- NEW: RESULTS LIST LOGIC ---
         window.loadResults = async () => {
             if(allSchedules.length===0) await loadSchedule();
             const list = document.getElementById('results-list'); list.innerHTML = '';
@@ -452,18 +423,9 @@
             if(matches.length === 0) { list.innerHTML = '<p class="text-center text-gray-400">No matches found.</p>'; return; }
             matches.forEach(m => {
                 const hScore = m.homeScore !== undefined ? m.homeScore : ''; const aScore = m.awayScore !== undefined ? m.awayScore : '';
-                list.innerHTML += `
-                    <div class="sport-card p-4 flex items-center justify-between gap-4">
-                        <div class="w-1/3 text-right font-black text-sm uppercase truncate">${m.home||m.homeTeam}</div>
-                        <div class="flex items-center gap-2">
-                            <input type="number" id="hs-${m.id}" value="${hScore}" class="w-12 p-2 text-center border rounded font-bold bg-slate-50 outline-none focus:border-blue-500" placeholder="-">
-                            <span class="font-black text-slate-300">:</span>
-                            <input type="number" id="as-${m.id}" value="${aScore}" class="w-12 p-2 text-center border rounded font-bold bg-slate-50 outline-none focus:border-blue-500" placeholder="-">
-                        </div>
-                        <div class="w-1/3 font-black text-sm uppercase truncate">${m.away||m.awayTeam}</div>
-                        <button onclick="saveScore('${m.id}')" class="bg-green-600 text-white p-2 rounded hover:bg-green-700 transition"><i class="fa-solid fa-floppy-disk"></i></button>
-                    </div>
-                `;
+                const home = getShortName(m.home||m.homeTeam);
+                const away = getShortName(m.away||m.awayTeam);
+                list.innerHTML += `<div class="sport-card p-4 flex items-center justify-between gap-4"><div class="w-1/3 text-right font-black text-sm uppercase truncate">${home}</div><div class="flex items-center gap-2"><input type="number" id="hs-${m.id}" value="${hScore}" class="w-12 p-2 text-center border rounded font-bold bg-slate-50 outline-none focus:border-blue-500" placeholder="-"><span class="font-black text-slate-300">:</span><input type="number" id="as-${m.id}" value="${aScore}" class="w-12 p-2 text-center border rounded font-bold bg-slate-50 outline-none focus:border-blue-500" placeholder="-"></div><div class="w-1/3 font-black text-sm uppercase truncate">${away}</div><button onclick="saveScore('${m.id}')" class="bg-green-600 text-white p-2 rounded hover:bg-green-700 transition"><i class="fa-solid fa-floppy-disk"></i></button></div>`;
             });
         };
         window.saveScore = async (id) => {
@@ -473,13 +435,13 @@
             showNotify("SCORE UPDATED", "success");
         };
 
-        let currentSpotlights=[]; window.loadSpotlightCandidates=()=>{ const div=document.getElementById('spot-div').value, day=document.getElementById('spot-day').value; const el=document.getElementById('spot-candidates'); if(!div||!day)return; const matches=allSchedules.filter(m=>m.div===div&&m.day===day); el.innerHTML=''; matches.forEach(m=>{ const home=m.home||m.homeTeam; const away=m.away||m.awayTeam; const btn=document.createElement('button'); btn.className="w-full text-left p-3 bg-white border border-slate-200 rounded text-xs font-bold text-slate-700 hover:bg-blue-50 mb-2 font-[Rajdhani] uppercase"; btn.innerHTML=`<span>${home} vs ${away}</span>`; btn.onclick=()=>addToSpotlight({home,away,...m}); el.appendChild(btn); }); };
+        let currentSpotlights=[]; window.loadSpotlightCandidates=()=>{ const div=document.getElementById('spot-div').value, day=document.getElementById('spot-day').value; const el=document.getElementById('spot-candidates'); if(!div||!day)return; const matches=allSchedules.filter(m=>m.div===div&&m.day===day); el.innerHTML=''; matches.forEach(m=>{ const home=getShortName(m.home||m.homeTeam); const away=getShortName(m.away||m.awayTeam); const btn=document.createElement('button'); btn.className="w-full text-left p-3 bg-white border border-slate-200 rounded text-xs font-bold text-slate-700 hover:bg-blue-50 mb-2 font-[Rajdhani] uppercase"; btn.innerHTML=`<span>${home} vs ${away}</span>`; btn.onclick=()=>addToSpotlight({home,away,...m}); el.appendChild(btn); }); };
         function addToSpotlight(m) { if(currentSpotlights.length>=3) return showNotify("MAX 3 SPOTLIGHTS", "error"); currentSpotlights.push(m); renderSpotlightUI(); }
         function renderSpotlightUI() { const el=document.getElementById('active-spotlights'); el.innerHTML=''; currentSpotlights.forEach((m,i)=>{ el.innerHTML+=`<div class="p-3 bg-blue-50 border border-blue-200 rounded flex justify-between items-center"><div class="text-xs font-bold text-blue-900 font-[Rajdhani] uppercase">${m.home} vs ${m.away}<br><span class="text-[9px] text-blue-400 font-sans">${m.day}</span></div><button onclick="removeSpot(${i})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-times"></i></button></div>`; }); }
         window.removeSpot=(i)=>{ currentSpotlights.splice(i,1); renderSpotlightUI(); }; window.clearSpotlights=()=>{ currentSpotlights=[]; renderSpotlightUI(); };
         window.publishSpotlights=async()=>{ if(currentSpotlights.length===0) return showNotify("SELECT MATCHES", "error"); const spotlightData=await Promise.all(currentSpotlights.map(async (m)=>{ let l1=await getTeamLogo(m.home, m.div), l2=await getTeamLogo(m.away, m.div); return { teamA:m.home, teamB:m.away, teamALogo:l1, teamBLogo:l2, date:m.date||'TBD', time:m.time||'TBD', venue: m.venue||'TBD', category:'SPOTLIGHT' }; })); await setDoc(doc(db,"app_content","current_fixture"),{matches:spotlightData}); showNotify("SPOTLIGHT LIVE"); };
         
-        let curDivCode=''; window.loadTableData=async(regLevel,shortCode)=>{ curDivCode=shortCode; document.getElementById('table-logos').classList.remove('hidden'); document.getElementById('div-logo-display').src=divisionLogos[shortCode]||mainLogoUrl; const container=document.getElementById('table-container'); container.innerHTML='<span class="loader border-blue-600"></span>'; const existing=(await getDoc(doc(db,"app_content",`league_table_${shortCode}`))).data()||{}; const regSnap=await getDocs(query(collection(db,"registrations"),where("level","==",regLevel))); container.innerHTML=`<div class="grid grid-cols-12 gap-1 text-[10px] font-black text-slate-400 uppercase mb-2 px-1 tracking-wider"><div class="col-span-3">Team</div><div class="col-span-1 text-center">PL</div><div class="col-span-1 text-center">W</div><div class="col-span-1 text-center">D</div><div class="col-span-1 text-center">L</div><div class="col-span-1 text-center">GD</div><div class="col-span-2 text-center text-blue-600">PTS</div></div>`; const map={}; Object.keys(existing).forEach(k=>map[k]=existing[k]); regSnap.forEach(d=>{ const n=d.data().department; if(!map[n]) map[n]={mp:0,w:0,d:0,l:0,gd:0,pts:0}; }); const names=Object.keys(map); const logos=await Promise.all(names.map(n=>getTeamLogo(n,regLevel))); names.map((n,i)=>({name:n,logo:logos[i],...map[n]})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd).forEach(t=>{ container.innerHTML+=`<div class="grid grid-cols-12 gap-1 items-center mb-2 team-row bg-white p-2 rounded border border-slate-100 shadow-sm" data-name="${t.name}"><div class="col-span-3 flex items-center gap-1.5"><img src="${t.logo}" class="h-6 w-6 rounded-full object-cover border"><span class="font-bold text-xs truncate text-slate-800 font-[Rajdhani] uppercase">${t.name}</span></div><input type="number" class="col-span-1 tbl-input inp-mp" value="${t.mp||0}"><input type="number" class="col-span-1 tbl-input inp-w text-green-600" value="${t.w||0}"><input type="number" class="col-span-1 tbl-input inp-d" value="${t.d||0}"><input type="number" class="col-span-1 tbl-input inp-l text-red-500" value="${t.l||0}"><input type="number" class="col-span-1 tbl-input inp-gd" value="${t.gd||0}"><input type="number" class="col-span-2 tbl-input inp-pts bg-blue-50 text-blue-700 rounded font-black" value="${t.pts||0}"></div>`; }); document.getElementById('save-table-btn').classList.remove('hidden'); };
+        let curDivCode=''; window.loadTableData=async(regLevel,shortCode)=>{ curDivCode=shortCode; document.getElementById('table-logos').classList.remove('hidden'); document.getElementById('div-logo-display').src=divisionLogos[shortCode]||mainLogoUrl; const container=document.getElementById('table-container'); container.innerHTML='<span class="loader border-blue-600"></span>'; const existing=(await getDoc(doc(db,"app_content",`league_table_${shortCode}`))).data()||{}; const regSnap=await getDocs(query(collection(db,"registrations"),where("level","==",regLevel))); container.innerHTML=`<div class="grid grid-cols-12 gap-1 text-[10px] font-black text-slate-400 uppercase mb-2 px-1 tracking-wider"><div class="col-span-3">Team</div><div class="col-span-1 text-center">PL</div><div class="col-span-1 text-center">W</div><div class="col-span-1 text-center">D</div><div class="col-span-1 text-center">L</div><div class="col-span-1 text-center">GD</div><div class="col-span-2 text-center text-blue-600">PTS</div></div>`; const map={}; Object.keys(existing).forEach(k=>map[k]=existing[k]); regSnap.forEach(d=>{ const n=d.data().department; if(!map[n]) map[n]={mp:0,w:0,d:0,l:0,gd:0,pts:0}; }); const names=Object.keys(map); const logos=await Promise.all(names.map(n=>getTeamLogo(n,regLevel))); names.map((n,i)=>({name:n,logo:logos[i],...map[n]})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd).forEach(t=>{ container.innerHTML+=`<div class="grid grid-cols-12 gap-1 items-center mb-2 team-row bg-white p-2 rounded border border-slate-100 shadow-sm" data-name="${t.name}"><div class="col-span-3 flex items-center gap-1.5"><img src="${t.logo}" class="h-6 w-6 rounded-full object-cover border"><span class="font-bold text-xs truncate text-slate-800 font-[Rajdhani] uppercase">${getShortName(t.name)}</span></div><input type="number" class="col-span-1 tbl-input inp-mp" value="${t.mp||0}"><input type="number" class="col-span-1 tbl-input inp-w text-green-600" value="${t.w||0}"><input type="number" class="col-span-1 tbl-input inp-d" value="${t.d||0}"><input type="number" class="col-span-1 tbl-input inp-l text-red-500" value="${t.l||0}"><input type="number" class="col-span-1 tbl-input inp-gd" value="${t.gd||0}"><input type="number" class="col-span-2 tbl-input inp-pts bg-blue-50 text-blue-700 rounded font-black" value="${t.pts||0}"></div>`; }); document.getElementById('save-table-btn').classList.remove('hidden'); };
         window.saveTableUpdates=async()=>{ const rows=document.querySelectorAll('.team-row'); let d={}; rows.forEach(r=>d[r.dataset.name]={mp:parseInt(r.querySelector('.inp-mp').value)||0, w:parseInt(r.querySelector('.inp-w').value)||0, d:parseInt(r.querySelector('.inp-d').value)||0, l:parseInt(r.querySelector('.inp-l').value)||0, gd:parseInt(r.querySelector('.inp-gd').value)||0, pts:parseInt(r.querySelector('.inp-pts').value)||0}); await setDoc(doc(db,"app_content",`league_table_${curDivCode}`),d); showNotify("STANDINGS SAVED"); };
         
         window.downloadTablePDF=async()=>{const{jsPDF}=window.jspdf;const pdf=new jsPDF();const mImg=await getBase64Image(mainLogoUrl);const dImg=await getBase64Image(divisionLogos[curDivCode]||mainLogoUrl);if(mImg)pdf.addImage(mImg,'JPEG',15,10,15,15);if(dImg)pdf.addImage(dImg,'JPEG',180,10,15,15);pdf.setFontSize(16);pdf.setTextColor(37,99,235);pdf.text(`${curDivCode.toUpperCase()} TABLE`,105,20,{align:'center'});const rows=[];document.querySelectorAll('.team-row').forEach((r,i)=>rows.push([i+1,r.dataset.name,r.querySelector('.inp-mp').value,r.querySelector('.inp-w').value,r.querySelector('.inp-d').value,r.querySelector('.inp-l').value,r.querySelector('.inp-gd').value,r.querySelector('.inp-pts').value]));pdf.autoTable({head:[['#','Team','P','W','D','L','GD','Pts']],body:rows,startY:35,theme:'grid',headStyles:{fillColor:[37,99,235]}});pdf.save("Table.pdf");};
@@ -489,7 +451,8 @@
         window.savePlayerStats=async()=>{const t=document.getElementById('stat-team-select').value,p=document.getElementById('stat-player-select').value;if(!t||!p)return;await setDoc(doc(db,"player_stats",`${t}_${p.replace(/\s+/g,'')}`),{name:p,teamId:t,goals:parseInt(document.getElementById('p-goals').value)||0,assists:parseInt(document.getElementById('p-assists').value)||0,yellow_cards:parseInt(document.getElementById('p-yellow').value)||0,red_cards:parseInt(document.getElementById('p-red').value)||0,saves:parseInt(document.getElementById('p-saves').value)||0},{merge:true});showNotify("STATS SAVED");};
         window.createPoll=async()=>{const q=document.getElementById('poll-q').value;if(!q)return;await addDoc(collection(db,"polls"),{question:q,opt1:document.getElementById('poll-o1').value,opt2:document.getElementById('poll-o2').value,votes1:0,votes2:0,active:true,timestamp:serverTimestamp()});showNotify("POLL LIVE");loadActivePolls();};
         window.loadActivePolls=async()=>{const e=document.getElementById('active-polls');e.innerHTML='';(await getDocs(query(collection(db,"polls"),orderBy("timestamp","desc")))).forEach(d=>{const p=d.data();e.innerHTML+=`<div class="sport-card p-4 mb-2"><h4 class="font-bold text-sm text-slate-800 uppercase font-[Rajdhani]">${p.question}</h4><div class="flex gap-2 justify-end mt-2"><button onclick="deleteDoc(doc(db,'polls','${d.id}'));loadActivePolls()" class="text-xs bg-slate-100 px-3 py-1 rounded font-bold uppercase text-slate-500 hover:text-red-500">Delete</button></div></div>`;});};
-        window.loadVerifications=async()=>{const l=document.getElementById('verify-list');l.innerHTML='';(await getDocs(collection(db,"registrations"))).forEach(d=>{l.innerHTML+=`<tr class="border-b border-slate-50 hover:bg-slate-50"><td class="p-4 font-bold text-slate-800 font-[Rajdhani] uppercase tracking-wide">${d.data().department}</td><td class="p-4 text-xs font-bold text-slate-400">${d.data().level}</td><td class="p-4"><span class="bg-slate-100 text-slate-500 px-2 py-1 rounded text-[10px] font-bold uppercase">${d.data().registrationStatus||'PENDING'}</span></td><td class="p-4 text-right"><button onclick="verifyTeam('${d.id}')" class="text-green-500 hover:bg-green-50 p-2 rounded"><i class="fa-solid fa-check"></i></button></td></tr>`;});};
+        window.loadVerifications=async()=>{const l=document.getElementById('verify-list');l.innerHTML='';(await getDocs(collection(db,"registrations"))).forEach(d=>{l.innerHTML+=`<tr class="border-b border-slate-50 hover:bg-slate-50"><td class="p-4 font-bold text-slate-800 font-[Rajdhani] uppercase tracking-wide">${d.data().department}</td><td class="p-4 text-xs font-bold text-slate-400">${d.data().level}</td><td class="p-4"><input class="input-sport p-1 text-xs" value="${d.data().acronym||''}" placeholder="Acronym" onchange="updateAcronym('${d.id}', this.value)"></td><td class="p-4"><span class="bg-slate-100 text-slate-500 px-2 py-1 rounded text-[10px] font-bold uppercase">${d.data().registrationStatus||'PENDING'}</span></td><td class="p-4 text-right"><button onclick="verifyTeam('${d.id}')" class="text-green-500 hover:bg-green-50 p-2 rounded"><i class="fa-solid fa-check"></i></button></td></tr>`;});};
+        window.updateAcronym=async(id, val)=>{await updateDoc(doc(db,"registrations",id),{acronym:val});showNotify("ACRONYM SAVED");};
         window.verifyTeam=async(id)=>{if(confirm("CONFIRM VERIFICATION?")){await updateDoc(doc(db,"registrations",id),{registrationStatus:"Verified"});showNotify("VERIFIED");loadVerifications();}};
         window.setMOTM=async(a)=>{const n=[document.getElementById('motm-1').value,document.getElementById('motm-2').value,document.getElementById('motm-3').value];await setDoc(doc(db,"app_content","fan_zone"),{motm:{active:a,nominees:n,votes:[0,0,0]}},{merge:true});showNotify(a?"VOTING OPEN":"VOTING CLOSED", "info");};
         async function getBase64Image(u){try{const r=await fetch(u);const b=await r.blob();return new Promise(s=>{const a=new FileReader();a.onloadend=()=>s(a.result);a.readAsDataURL(b);});}catch(e){return null;}}
