@@ -14,7 +14,7 @@
     <nav class="bg-white shadow-md sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2"><img src="edulogo.jpg" class="h-10 w-10 rounded-full"><span class="text-xl font-bold text-purple-700">EDU-LEAGUE</span></div>
-            <a href="news.html" class="text-gray-600 font-bold">Home</a>
+            <a href="index.html" class="text-gray-600 font-bold">Home</a>
         </div>
     </nav>
 
@@ -80,9 +80,7 @@
 
                 <ul id="rosterList" class="space-y-2 mb-6"></ul>
                 
-                <button onclick="finishRoster()" id="btn-submit" class="w-full bg-green-600 text-white py-4 rounded-lg font-bold hover:bg-green-700 shadow-lg text-lg">
-                    Submit Final Roster
-                </button>
+                <button onclick="finishRoster()" id="btn-submit" class="w-full bg-green-600 text-white py-4 rounded-lg font-bold hover:bg-green-700 shadow-lg text-lg">Submit Final Roster</button>
             </div>
         </div>
     </main>
@@ -99,7 +97,7 @@
         
         let teamId = null;
         let currentPlayers = [];
-        let rosterEdits = 0; // Track edits
+        let rosterEdits = 0;
         let allTeamsData = {}; 
 
         async function init() {
@@ -167,12 +165,11 @@
         function loadRosterData(data) {
             document.getElementById('teamNameDisplay').innerText = data.department;
             currentPlayers = data.players || [];
-            rosterEdits = data.rosterEdits || 0; // Fetch edit count from DB
-            checkLocks(); // Initial Lock Check
+            rosterEdits = data.rosterEdits || 0; 
+            checkLocks(); 
             renderList();
         }
 
-        // --- CORE LOGIC: CHECK LOCKS ---
         function checkLocks() {
             const editsLeft = 2 - rosterEdits;
             const playerCount = currentPlayers.length;
@@ -180,7 +177,6 @@
             const isEditsExhausted = editsLeft <= 0;
             const isLocked = isFull || isEditsExhausted;
 
-            // 1. Update Banner
             document.getElementById('edits-left-text').innerText = `Submissions Remaining: ${Math.max(0, editsLeft)}`;
             const statusBadge = document.getElementById('lock-status');
             
@@ -188,28 +184,21 @@
                 statusBadge.innerText = "LOCKED";
                 statusBadge.className = "bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full";
                 document.getElementById('status-banner').className = "bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow mb-4 flex justify-between items-center";
-                
-                // Hide Inputs
                 document.getElementById('input-area').classList.add('hidden');
                 document.getElementById('max-msg').classList.remove('hidden');
-                
-                // Hide Submit Button if no edits left
                 if(isEditsExhausted) document.getElementById('btn-submit').classList.add('hidden');
             } else {
                 statusBadge.innerText = "ACTIVE";
                 statusBadge.className = "bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full";
-                
-                // Show Inputs
                 document.getElementById('input-area').classList.remove('hidden');
                 document.getElementById('max-msg').classList.add('hidden');
                 document.getElementById('btn-submit').classList.remove('hidden');
             }
-            return isLocked; // Return status for other functions
+            return isLocked; 
         }
 
         window.addPlayer = async () => {
-            if (checkLocks()) return alert("Roster is Locked."); // Double check
-
+            if (checkLocks()) return alert("Roster is Locked."); 
             const name = document.getElementById('playerName').value.trim();
             const num = document.getElementById('playerNum').value.trim();
             const pos = document.getElementById('playerPosition').value;
@@ -219,18 +208,16 @@
             
             const newPlayer = { name, number: num || '00', position: pos };
             currentPlayers.push(newPlayer);
-            
             await updateDoc(doc(db, "registrations", teamId), { players: currentPlayers });
             
             document.getElementById('playerName').value = "";
             document.getElementById('playerNum').value = "";
-            checkLocks(); // Re-check locks after adding
+            checkLocks(); 
             renderList();
         }
 
         window.removePlayer = async (idx) => {
-            if (checkLocks()) return alert("Roster is Locked. Cannot remove players."); // Lock Check
-            
+            if (checkLocks()) return alert("Roster is Locked. Cannot remove players."); 
             if(!confirm("Remove player?")) return;
             currentPlayers.splice(idx, 1);
             await updateDoc(doc(db, "registrations", teamId), { players: currentPlayers });
@@ -241,42 +228,22 @@
         function renderList() {
             const list = document.getElementById('rosterList'); list.innerHTML = '';
             document.getElementById('count').innerText = currentPlayers.length;
-            const isLocked = checkLocks(); // Get lock status to hide trash icons
+            const isLocked = checkLocks(); 
 
             currentPlayers.forEach((p, i) => {
-                list.innerHTML += `
-                    <li class="flex justify-between items-center bg-gray-50 p-3 rounded border">
-                        <div class="flex items-center gap-3">
-                            <span class="bg-purple-100 text-purple-700 font-bold text-xs w-8 h-8 flex items-center justify-center rounded-full">${p.number}</span>
-                            <span class="font-bold text-gray-700">${p.name}</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs bg-gray-200 px-2 py-1 rounded text-gray-700 font-mono">${p.position}</span>
-                            ${!isLocked ? `<button onclick="removePlayer(${i})" class="text-red-400 hover:text-red-600 px-2"><i class="fa-solid fa-trash"></i></button>` : ''}
-                        </div>
-                    </li>
-                `;
+                list.innerHTML += `<li class="flex justify-between items-center bg-gray-50 p-3 rounded border"><div class="flex items-center gap-3"><span class="bg-purple-100 text-purple-700 font-bold text-xs w-8 h-8 flex items-center justify-center rounded-full">${p.number}</span><span class="font-bold text-gray-700">${p.name}</span></div><div class="flex items-center gap-2"><span class="text-xs bg-gray-200 px-2 py-1 rounded text-gray-700 font-mono">${p.position}</span>${!isLocked ? `<button onclick="removePlayer(${i})" class="text-red-400 hover:text-red-600 px-2"><i class="fa-solid fa-trash"></i></button>` : ''}</div></li>`;
             });
         }
 
         window.finishRoster = async () => { 
             if(rosterEdits >= 2) return alert("No more edits allowed.");
-            
             const confirmSubmit = confirm(`You are about to submit. You have ${2 - rosterEdits - 1} edits remaining after this. Continue?`);
             if(!confirmSubmit) return;
-
-            // Increment edit count in DB
             await updateDoc(doc(db, "registrations", teamId), { rosterEdits: increment(1) });
-            
-            // Local update
             rosterEdits++;
             checkLocks();
             alert("Roster Submitted Successfully!"); 
-            
-            if(rosterEdits >= 2) {
-                alert("You have used all your edits. Roster is now FINAL.");
-                window.location.href = "news.html";
-            }
+            if(rosterEdits >= 2) { alert("You have used all your edits. Roster is now FINAL."); window.location.href = "news.html"; }
         }
         
         init();
