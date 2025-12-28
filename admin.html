@@ -162,14 +162,26 @@
             <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-regular fa-calendar-days text-blue-600"></i> FIXTURE LIST</h2><button onclick="downloadSchedulePDF()" class="bg-slate-800 text-white px-4 py-2 rounded text-xs font-bold font-[Rajdhani] uppercase">Export PDF</button></div>
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <div class="lg:col-span-8">
-                    <div class="flex gap-3 mb-4 overflow-x-auto pb-1 no-scrollbar"><select id="view-div" onchange="loadSchedule()" class="input-sport w-auto"><option value="All">ALL DIVISIONS</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="view-day" onchange="loadSchedule()" class="input-sport w-auto"><option value="All">ALL MATCHDAYS</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select></div>
+                    <div class="flex gap-3 mb-4 overflow-x-auto pb-1 no-scrollbar"><select id="view-div" onchange="loadSchedule()" class="input-sport w-auto"><option value="All">ALL DIVISIONS</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
+                        <select id="view-day" onchange="loadSchedule()" class="input-sport w-auto">
+                            <option value="All">ALL MATCHDAYS</option>
+                            <option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option>
+                            <option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option>
+                        </select>
+                    </div>
                     <div id="active-fixtures" class="space-y-3"></div>
                 </div>
                 <div class="lg:col-span-4 sport-card p-6 h-fit border-l-blue">
                     <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">ADD FIXTURE</h3>
                     <div class="space-y-3">
                         <select id="fix-div" class="input-sport" onchange="filterTeamsByDiv()"><option value="">SELECT DIVISION</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-                        <div class="grid grid-cols-2 gap-2"><select id="fix-day" class="input-sport"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select><input type="date" id="fix-date" class="input-sport"></div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="fix-day" class="input-sport">
+                                <option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option>
+                                <option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option>
+                            </select>
+                            <input type="date" id="fix-date" class="input-sport">
+                        </div>
                         <div class="grid grid-cols-2 gap-2 items-center"><input type="time" id="fix-time" class="input-sport"><label class="tbd-label"><input type="checkbox" id="fix-time-tbd" class="tbd-check" onchange="toggleTime(this, 'fix-time')"> TIME TBD</label></div>
                         <div class="grid grid-cols-2 gap-2 items-center"><input type="text" id="fix-venue" placeholder="VENUE" class="input-sport uppercase"><label class="tbd-label"><input type="checkbox" id="fix-venue-tbd" class="tbd-check" onchange="toggleVenue(this, 'fix-venue')"> VENUE TBD</label></div>
                         <div class="grid grid-cols-2 gap-2"><select id="fix-home" class="input-sport"><option>HOME</option></select><select id="fix-away" class="input-sport"><option>AWAY</option></select></div>
@@ -184,7 +196,15 @@
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 <div class="lg:col-span-1 sport-card p-6 h-fit border-l-red">
                     <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">FILTER</h3>
-                    <div class="space-y-3"><select id="res-div" onchange="loadResults()" class="input-sport"><option value="All">All Divisions</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="res-day" onchange="loadResults()" class="input-sport"><option value="All">All Days</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select><button onclick="loadResults()" class="w-full btn-sport btn-danger">REFRESH LIST</button></div>
+                    <div class="space-y-3">
+                        <select id="res-div" onchange="loadResults()" class="input-sport"><option value="All">All Divisions</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
+                        <select id="res-day" onchange="loadResults()" class="input-sport">
+                            <option value="All">All Days</option>
+                            <option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option>
+                            <option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option>
+                        </select>
+                        <button onclick="loadResults()" class="w-full btn-sport btn-danger">REFRESH LIST</button>
+                    </div>
                 </div>
                 <div class="lg:col-span-3"><div id="results-list" class="space-y-3"></div></div>
             </div>
@@ -198,7 +218,12 @@
         </div>
 
         <div id="spotlight" class="section hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="sport-card p-6 border-l-orange"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">MATCH FINDER</h3><div class="grid grid-cols-2 gap-3 mb-4"><select id="spot-div" class="input-sport" onchange="loadSpotlightCandidates()"><option value="">Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="spot-day" class="input-sport" onchange="loadSpotlightCandidates()"><option value="">Day</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select></div><div id="spot-candidates" class="space-y-2 max-h-[300px] overflow-y-auto p-1"></div></div><div class="sport-card p-6 border-l-blue"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2 flex justify-between"><span>FEATURED MATCHES</span><button onclick="clearSpotlights()" class="text-xs text-red-500 hover:underline">CLEAR</button></h3><div id="active-spotlights" class="space-y-3"></div><button onclick="publishSpotlights()" class="w-full btn-sport mt-6">GO LIVE</button></div></div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="sport-card p-6 border-l-orange"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">MATCH FINDER</h3><div class="grid grid-cols-2 gap-3 mb-4"><select id="spot-div" class="input-sport" onchange="loadSpotlightCandidates()"><option value="">Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
+            <select id="spot-day" class="input-sport" onchange="loadSpotlightCandidates()">
+                <option value="">Day</option>
+                <option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option>
+                <option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option>
+            </select></div><div id="spot-candidates" class="space-y-2 max-h-[300px] overflow-y-auto p-1"></div></div><div class="sport-card p-6 border-l-blue"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2 flex justify-between"><span>FEATURED MATCHES</span><button onclick="clearSpotlights()" class="text-xs text-red-500 hover:underline">CLEAR</button></h3><div id="active-spotlights" class="space-y-3"></div><button onclick="publishSpotlights()" class="w-full btn-sport mt-6">GO LIVE</button></div></div>
         </div>
 
         <div id="stats" class="section hidden"><div class="sport-card p-8 max-w-4xl mx-auto border-l-green"><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b pb-8"><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">1. Team</label><select id="stat-team-select" class="input-sport" onchange="loadTeamPlayers()"><option value="">Select...</option></select></div><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">2. Player</label><select id="stat-player-select" class="input-sport" onchange="fetchPlayerCurrentStats()"><option value="">Select...</option></select></div></div><div id="stats-editor" class="hidden"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-slate-800 text-xl">PLAYER STATS</h3></div><div class="grid grid-cols-3 md:grid-cols-5 gap-3 mb-8"><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-green-600 uppercase mb-1">Goals</p><input type="number" id="p-goals" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Assists</p><input type="number" id="p-assists" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-yellow-600 uppercase mb-1">Yellow</p><input type="number" id="p-yellow" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-red-600 uppercase mb-1">Red</p><input type="number" id="p-red" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-orange-600 uppercase mb-1">Saves</p><input type="number" id="p-saves" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div></div><button onclick="savePlayerStats()" class="w-full btn-sport btn-accent">UPDATE STATS</button></div></div></div>
@@ -225,7 +250,6 @@
         const mainLogoUrl = "edulogo.jpg";
         let divisionLogos = { 'Finalist': 'edulogo.jpg', 'Penultimate': 'edulogo.jpg', 'Sophomore': 'edulogo.jpg', 'Female': 'edulogo.jpg' };
         
-        // --- GLOBAL TEAM MAP (Acronyms) ---
         let teamAcronymMap = {};
 
         const showNotify = (msg, type="success") => {
@@ -241,7 +265,6 @@
         window.toggleVenue = (checkbox, inputId) => { const input = document.getElementById(inputId); if(checkbox.checked) { input.value = ''; input.disabled = true; } else { input.disabled = false; } };
         const formatTime = (time) => { if(!time || time === 'TBD') return 'TBD'; const [h, m] = time.split(':'); const hour = parseInt(h); const ampm = hour >= 12 ? 'PM' : 'AM'; const h12 = hour % 12 || 12; return `${h12}:${m} ${ampm}`; };
         
-        // Helper to get Acronym
         const getShortName = (name) => teamAcronymMap[name] || name;
 
         document.getElementById('login-form').addEventListener('submit', (e) => { 
@@ -262,10 +285,7 @@
                 const divLogosSnap = await getDoc(doc(db, "app_content", "division_logos"));
                 if(divLogosSnap.exists()) divisionLogos = { ...divisionLogos, ...divLogosSnap.data() };
                 const t = await getDocs(collection(db, "registrations"));
-                
-                // Build Acronym Map
                 t.forEach(doc => { const d = doc.data(); if(d.acronym) teamAcronymMap[d.department] = d.acronym; });
-
                 document.getElementById('dash-teams').innerText = t.size;
                 document.getElementById('dash-verified').innerText = t.docs.filter(d => d.data().registrationStatus === "Verified").length;
                 let schedSize = (await getDocs(collection(db, "schedules"))).size; if(schedSize===0) schedSize=(await getDocs(collection(db, "matches"))).size;
@@ -348,23 +368,8 @@
 
         let allSchedules=[], allRegTeams=[];
         window.loadSchedule = async () => { if(allRegTeams.length===0) (await getDocs(collection(db,"registrations"))).forEach(d=>allRegTeams.push(d.data())); const el=document.getElementById('active-fixtures'); el.innerHTML='Loading...'; let snap=await getDocs(collection(db,"schedules")); if(snap.empty) snap=await getDocs(collection(db,"matches")); allSchedules=snap.docs.map(d=>({id:d.id,...d.data()})); loadSpotlightCandidates(); renderMatches(); };
+        function renderMatches() { const el=document.getElementById('active-fixtures'); el.innerHTML=''; const fDiv=document.getElementById('view-div').value, fDay=document.getElementById('view-day').value; let filtered=allSchedules; if(fDiv!=='All') filtered=filtered.filter(m=>m.div===fDiv); if(fDay!=='All') filtered=filtered.filter(m=>m.day===fDay); if(filtered.length===0) { el.innerHTML='<p class="text-center text-slate-400 text-sm">NO MATCHES FOUND</p>'; return; } filtered.forEach(m=>{ const home=getShortName(m.home||m.homeTeam||"Unknown"); const away=getShortName(m.away||m.awayTeam||"Unknown"); const isTBD=m.time==='TBD'||!m.time; const venue = m.venue || 'TBD'; el.innerHTML+=`<div class="sport-card p-4 flex justify-between items-center mb-3"><div><div class="flex items-center gap-2 mb-1"><span class="text-[9px] font-black bg-blue-600 text-white px-2 py-0.5 rounded uppercase">${(m.div||'').split(' ')[0]}</span><span class="text-[9px] font-bold text-slate-400 uppercase">${m.day||''}</span></div><div class="font-black text-slate-800 text-sm uppercase font-[Rajdhani] tracking-wide">${home} <span class="text-slate-400 font-normal mx-1">vs</span> ${away}</div><div class="text-[10px] font-bold text-slate-500 mt-1">${isTBD&&!m.date?'PENDING':m.date} • ${isTBD?'TBD':m.time} • ${venue}</div></div><div class="flex gap-2"><button onclick="openEditMatch('${m.id}','${m.home}','${m.away}','${m.date}','${m.time}','${venue}')" class="text-blue-500 p-2 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen"></i></button><button onclick="deleteMatch('${m.id}')" class="text-slate-400 hover:text-red-500 p-2 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button></div></div>`; }); }
         
-        function renderMatches() { 
-            const el=document.getElementById('active-fixtures'); el.innerHTML=''; 
-            const fDiv=document.getElementById('view-div').value, fDay=document.getElementById('view-day').value; 
-            let filtered=allSchedules; 
-            if(fDiv!=='All') filtered=filtered.filter(m=>m.div===fDiv); 
-            if(fDay!=='All') filtered=filtered.filter(m=>m.day===fDay); 
-            if(filtered.length===0) { el.innerHTML='<p class="text-center text-slate-400 text-sm">NO MATCHES FOUND</p>'; return; } 
-            filtered.forEach(m=>{ 
-                const home=getShortName(m.home||m.homeTeam||"Unknown"); 
-                const away=getShortName(m.away||m.awayTeam||"Unknown"); 
-                const isTBD=m.time==='TBD'||!m.time; 
-                const venue = m.venue || 'TBD'; 
-                el.innerHTML+=`<div class="sport-card p-4 flex justify-between items-center mb-3"><div><div class="flex items-center gap-2 mb-1"><span class="text-[9px] font-black bg-blue-600 text-white px-2 py-0.5 rounded uppercase">${(m.div||'').split(' ')[0]}</span><span class="text-[9px] font-bold text-slate-400 uppercase">${m.day||''}</span></div><div class="font-black text-slate-800 text-sm uppercase font-[Rajdhani] tracking-wide">${home} <span class="text-slate-400 font-normal mx-1">vs</span> ${away}</div><div class="text-[10px] font-bold text-slate-500 mt-1">${isTBD&&!m.date?'PENDING':m.date} • ${isTBD?'TBD':m.time} • ${venue}</div></div><div class="flex gap-2"><button onclick="openEditMatch('${m.id}','${m.home}','${m.away}','${m.date}','${m.time}','${venue}')" class="text-blue-500 p-2 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen"></i></button><button onclick="deleteMatch('${m.id}')" class="text-slate-400 hover:text-red-500 p-2 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button></div></div>`; 
-            }); 
-        }
-
         window.openEditMatch = (id,h,a,date,time,venue) => { 
             document.getElementById('edit-match-id').value=id; 
             document.getElementById('edit-match-teams').innerText=`${getShortName(h)} vs ${getShortName(a)}`; 
@@ -414,7 +419,6 @@
         window.deleteMatch = async(id) => { if(confirm("DELETE FIXTURE?")) { await deleteDoc(doc(db,"schedules",id)); showNotify("DELETED", "info"); loadSchedule(); }};
         window.filterTeamsByDiv = () => { const div=document.getElementById('fix-div').value, h=document.getElementById('fix-home'), a=document.getElementById('fix-away'); h.innerHTML='<option>HOME</option>'; a.innerHTML='<option>AWAY</option>'; allRegTeams.filter(t=>t.level===div || (div==="Female League"&&t.division==="Female")).forEach(t=>{ const o=`<option value="${t.department}">${t.department}</option>`; h.innerHTML+=o; a.innerHTML+=o; }); };
 
-        // --- NEW: RESULTS LIST LOGIC ---
         window.loadResults = async () => {
             if(allSchedules.length===0) await loadSchedule();
             const list = document.getElementById('results-list'); list.innerHTML = '';
