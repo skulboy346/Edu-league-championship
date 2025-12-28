@@ -127,9 +127,15 @@
             const msg = document.getElementById('login-msg');
             msg.classList.add('hidden');
             if (!tid) { codeSection.classList.add('hidden'); return; }
+            
             const team = allTeamsData[tid];
-            if (team && team.registrationStatus === "Verified") { codeSection.classList.add('hidden'); } 
-            else { codeSection.classList.remove('hidden'); }
+            if (team && team.registrationStatus === "Verified") { 
+                // IF VERIFIED: HIDE CODE INPUT
+                codeSection.classList.add('hidden'); 
+            } else { 
+                // IF NOT VERIFIED: SHOW CODE INPUT
+                codeSection.classList.remove('hidden'); 
+            }
         }
 
         window.attemptLogin = async () => {
@@ -143,10 +149,12 @@
             const team = allTeamsData[tid];
             let allowAccess = false;
 
-            if (team.registrationStatus === "Verified") { allowAccess = true; } 
-            else {
-                if (codeInput && codeInput === team.paymentReference) { allowAccess = true; } 
-                else {
+            if (team.registrationStatus === "Verified") { 
+                allowAccess = true; 
+            } else {
+                if (codeInput && codeInput === team.paymentReference) { 
+                    allowAccess = true; 
+                } else {
                     msg.innerText = "❌ Verification Required. Incorrect Code.";
                     msg.classList.remove('hidden');
                     btn.innerText = "ENTER PORTAL";
