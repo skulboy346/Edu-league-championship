@@ -51,7 +51,7 @@
         .btn-sport {
             background: var(--navy); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700;
             padding: 12px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase; transition: 0.2s;
-            width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;
+            width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer;
         }
         .btn-sport:hover { background: #1e293b; transform: translateY(-1px); }
         .btn-accent { background: var(--blue); } .btn-accent:hover { background: #1d4ed8; }
@@ -88,7 +88,7 @@
             <p class="text-xs text-slate-500 mb-8 font-bold tracking-widest uppercase">Restricted Area</p>
             <form id="login-form" class="space-y-4">
                 <input type="password" id="adm-pass" placeholder="ACCESS CODE" class="input-sport text-center tracking-[0.3em] uppercase" required>
-                <button type="submit" class="w-full btn-sport">Authorize</button>
+                <button type="submit" id="btn-auth" class="w-full btn-sport">Authorize</button>
             </form>
             <p id="login-msg" class="text-red-600 text-xs font-bold mt-4 hidden bg-red-50 py-2 rounded">INVALID CODE</p>
         </div>
@@ -132,6 +132,18 @@
             </div>
         </div>
 
+        <div id="rosters" class="section hidden">
+            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-solid fa-clipboard-list text-purple-600"></i> TEAM ROSTERS</h2></div>
+            <div class="sport-card border-l-purple overflow-hidden">
+                <table class="w-full text-sm text-left">
+                    <thead class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase border-b">
+                        <tr><th class="p-4 pl-6">Department</th><th class="p-4">Level</th><th class="p-4">Players</th><th class="p-4 text-right pr-6">Action</th></tr>
+                    </thead>
+                    <tbody id="roster-table-body" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+        </div>
+
         <div id="teams" class="section hidden">
             <h2 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-2"><i class="fa-solid fa-id-badge text-blue-600"></i> BADGE MANAGER</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:h-[600px] h-auto">
@@ -157,18 +169,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div id="rosters" class="section hidden">
-            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-solid fa-clipboard-list text-purple-600"></i> TEAM ROSTERS</h2></div>
-            <div class="sport-card border-l-purple overflow-hidden">
-                <table class="w-full text-sm text-left">
-                    <thead class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase border-b">
-                        <tr><th class="p-4 pl-6">Department</th><th class="p-4">Level</th><th class="p-4">Players</th><th class="p-4 text-right pr-6">Action</th></tr>
-                    </thead>
-                    <tbody id="roster-table-body" class="divide-y divide-slate-100"></tbody>
-                </table>
             </div>
         </div>
 
@@ -210,15 +210,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 <div class="lg:col-span-1 sport-card p-6 h-fit border-l-red">
                     <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">FILTER</h3>
-                    <div class="space-y-3">
-                        <select id="res-div" onchange="loadResults()" class="input-sport"><option value="All">All Divisions</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-                        <select id="res-day" onchange="loadResults()" class="input-sport">
-                            <option value="All">All Days</option>
-                            <option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option>
-                            <option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option>
-                        </select>
-                        <button onclick="loadResults()" class="w-full btn-sport btn-danger">REFRESH LIST</button>
-                    </div>
+                    <div class="space-y-3"><select id="res-div" onchange="loadResults()" class="input-sport"><option value="All">All Divisions</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="res-day" onchange="loadResults()" class="input-sport"><option value="All">All Days</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select><button onclick="loadResults()" class="w-full btn-sport btn-danger">REFRESH LIST</button></div>
                 </div>
                 <div class="lg:col-span-3"><div id="results-list" class="space-y-3"></div></div>
             </div>
@@ -232,12 +224,7 @@
         </div>
 
         <div id="spotlight" class="section hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="sport-card p-6 border-l-orange"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">MATCH FINDER</h3><div class="grid grid-cols-2 gap-3 mb-4"><select id="spot-div" class="input-sport" onchange="loadSpotlightCandidates()"><option value="">Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-            <select id="spot-day" class="input-sport" onchange="loadSpotlightCandidates()">
-                <option value="">Day</option>
-                <option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option>
-                <option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option>
-            </select></div><div id="spot-candidates" class="space-y-2 max-h-[300px] overflow-y-auto p-1"></div></div><div class="sport-card p-6 border-l-blue"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2 flex justify-between"><span>FEATURED MATCHES</span><button onclick="clearSpotlights()" class="text-xs text-red-500 hover:underline">CLEAR</button></h3><div id="active-spotlights" class="space-y-3"></div><button onclick="publishSpotlights()" class="w-full btn-sport mt-6">GO LIVE</button></div></div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="sport-card p-6 border-l-orange"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">MATCH FINDER</h3><div class="grid grid-cols-2 gap-3 mb-4"><select id="spot-div" class="input-sport" onchange="loadSpotlightCandidates()"><option value="">Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="spot-day" class="input-sport" onchange="loadSpotlightCandidates()"><option value="">Day</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select></div><div id="spot-candidates" class="space-y-2 max-h-[300px] overflow-y-auto p-1"></div></div><div class="sport-card p-6 border-l-blue"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2 flex justify-between"><span>FEATURED MATCHES</span><button onclick="clearSpotlights()" class="text-xs text-red-500 hover:underline">CLEAR</button></h3><div id="active-spotlights" class="space-y-3"></div><button onclick="publishSpotlights()" class="w-full btn-sport mt-6">GO LIVE</button></div></div>
         </div>
 
         <div id="stats" class="section hidden"><div class="sport-card p-8 max-w-4xl mx-auto border-l-green"><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b pb-8"><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">1. Team</label><select id="stat-team-select" class="input-sport" onchange="loadTeamPlayers()"><option value="">Select...</option></select></div><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">2. Player</label><select id="stat-player-select" class="input-sport" onchange="fetchPlayerCurrentStats()"><option value="">Select...</option></select></div></div><div id="stats-editor" class="hidden"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-slate-800 text-xl">PLAYER STATS</h3></div><div class="grid grid-cols-3 md:grid-cols-5 gap-3 mb-8"><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-green-600 uppercase mb-1">Goals</p><input type="number" id="p-goals" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Assists</p><input type="number" id="p-assists" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-yellow-600 uppercase mb-1">Yellow</p><input type="number" id="p-yellow" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-red-600 uppercase mb-1">Red</p><input type="number" id="p-red" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-orange-600 uppercase mb-1">Saves</p><input type="number" id="p-saves" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div></div><button onclick="savePlayerStats()" class="w-full btn-sport btn-accent">UPDATE STATS</button></div></div></div>
@@ -254,7 +241,8 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, serverTimestamp, query, orderBy, where, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const HIDDEN_ADMIN_EMAIL = "admin@eduleague.com"; 
+        // IMPORTANT: RESETTING ADMIN KEY TO FIX LOGIN
+        const HIDDEN_ADMIN_EMAIL = "admin_master@eduleague.com"; 
         const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
         
@@ -263,7 +251,6 @@
 
         const mainLogoUrl = "edulogo.jpg";
         let divisionLogos = { 'Finalist': 'edulogo.jpg', 'Penultimate': 'edulogo.jpg', 'Sophomore': 'edulogo.jpg', 'Female': 'edulogo.jpg' };
-        
         let teamAcronymMap = {};
 
         const showNotify = (msg, type="success") => {
@@ -275,7 +262,7 @@
             bar.classList.add('show'); setTimeout(() => bar.classList.remove('show'), 3000);
         };
 
-        // NEW: ROBUST IMAGE LOADER FOR PDF
+        // IMAGE LOADER FIX FOR PDF (CANVAS METHOD)
         async function getBase64Image(url) {
             return new Promise((resolve, reject) => {
                 var img = new Image();
@@ -289,9 +276,7 @@
                     var dataURL = canvas.toDataURL("image/jpeg");
                     resolve(dataURL);
                 };
-                img.onerror = function() {
-                    resolve(null); // Return null on error so PDF still generates
-                };
+                img.onerror = function() { resolve(null); }; // Return null to skip image instead of crashing
                 img.src = url;
             });
         }
@@ -304,14 +289,27 @@
 
         document.getElementById('login-form').addEventListener('submit', (e) => { 
             e.preventDefault(); const pass = document.getElementById('adm-pass').value;
-            signInWithEmailAndPassword(auth, HIDDEN_ADMIN_EMAIL, pass).then(() => showNotify("ACCESS GRANTED")).catch((err) => {
-                if((err.code==='auth/user-not-found'||err.code==='auth/invalid-credential') && pass==='EDUADMIN2025') {
-                    createUserWithEmailAndPassword(auth, HIDDEN_ADMIN_EMAIL, pass).then(()=>showNotify("INITIALIZED")).catch((e)=>console.error(e));
-                } else {
-                    document.getElementById('login-msg').innerText = "INCORRECT CODE";
-                    document.getElementById('login-msg').classList.remove('hidden');
-                }
-            });
+            const btn = document.getElementById('btn-auth');
+            btn.innerHTML = "Authenticating...";
+            
+            signInWithEmailAndPassword(auth, HIDDEN_ADMIN_EMAIL, pass)
+                .then(() => { showNotify("ACCESS GRANTED"); })
+                .catch((err) => {
+                    // IF USER NOT FOUND OR INVALID, TRY CREATING (Auto-Fix for "Reset")
+                    if((err.code==='auth/user-not-found'||err.code==='auth/invalid-credential') && pass==='EDUADMIN2025') {
+                        createUserWithEmailAndPassword(auth, HIDDEN_ADMIN_EMAIL, pass)
+                            .then(()=> { showNotify("INITIALIZED"); })
+                            .catch((e)=> { 
+                                console.error(e); 
+                                alert("Login Failed: " + e.message); 
+                                btn.innerHTML = "Authorize";
+                            });
+                    } else {
+                        document.getElementById('login-msg').innerText = "WRONG CODE: " + err.code;
+                        document.getElementById('login-msg').classList.remove('hidden');
+                        btn.innerHTML = "Authorize";
+                    }
+                });
         });
         
         onAuthStateChanged(auth, (u) => { if(u) { document.getElementById('login-modal').classList.add('hidden'); initData(); } });
@@ -336,65 +334,31 @@
 
         // --- NEW: LOAD ROSTERS ---
         window.loadRosters = async () => {
-            const body = document.getElementById('roster-table-body');
-            body.innerHTML = '';
+            const body = document.getElementById('roster-table-body'); body.innerHTML = '';
             try {
                 const snap = await getDocs(collection(db, "registrations"));
                 snap.forEach(doc => {
-                    const d = doc.data();
-                    const players = d.players || [];
-                    body.innerHTML += `
-                        <tr class="border-b hover:bg-slate-50">
-                            <td class="p-4 font-bold text-gray-700">${d.department}</td>
-                            <td class="p-4 text-xs font-bold text-gray-500">${d.level}</td>
-                            <td class="p-4"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold">${players.length}/18</span></td>
-                            <td class="p-4 text-right">
-                                <button onclick="downloadRosterPDF('${doc.id}')" class="bg-purple-600 text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-purple-700">
-                                    <i class="fa-solid fa-download mr-1"></i> PDF
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+                    const d = doc.data(); const players = d.players || [];
+                    body.innerHTML += `<tr class="border-b hover:bg-slate-50"><td class="p-4 font-bold text-gray-700">${d.department}</td><td class="p-4 text-xs font-bold text-gray-500">${d.level}</td><td class="p-4"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold">${players.length}/18</span></td><td class="p-4 text-right"><button onclick="downloadRosterPDF('${doc.id}')" class="bg-purple-600 text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-purple-700"><i class="fa-solid fa-download mr-1"></i> PDF</button></td></tr>`;
                 });
             } catch(e) { console.error(e); }
         };
 
-        // --- NEW: ROSTER PDF DOWNLOAD ---
+        // --- NEW: ROSTER PDF DOWNLOAD (SAFE) ---
         window.downloadRosterPDF = async (teamId) => {
             try {
                 showNotify("GENERATING PDF...", "info");
                 const docSnap = await getDoc(doc(db, "registrations", teamId));
                 if(!docSnap.exists()) return;
                 const d = docSnap.data();
-                
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF();
-                
-                const mImg = await getBase64Image(mainLogoUrl);
-                if(mImg) pdf.addImage(mImg, 'JPEG', 15, 10, 20, 20);
-                
-                pdf.setFontSize(18);
-                pdf.setTextColor(30, 41, 59);
-                pdf.text("OFFICIAL TEAM ROSTER", 105, 20, { align: 'center' });
-                pdf.setFontSize(14);
-                pdf.setTextColor(37, 99, 235);
-                pdf.text(d.department.toUpperCase(), 105, 30, { align: 'center' });
-                pdf.setFontSize(10);
-                pdf.setTextColor(100);
-                pdf.text(`Division: ${d.level}  |  Coach: ${d.coachName || 'N/A'}`, 105, 38, { align: 'center' });
-
+                const { jsPDF } = window.jspdf; const pdf = new jsPDF();
+                const mImg = await getBase64Image(mainLogoUrl); if(mImg) pdf.addImage(mImg, 'JPEG', 15, 10, 20, 20);
+                pdf.setFontSize(18); pdf.setTextColor(30, 41, 59); pdf.text("OFFICIAL TEAM ROSTER", 105, 20, { align: 'center' });
+                pdf.setFontSize(14); pdf.setTextColor(37, 99, 235); pdf.text(d.department.toUpperCase(), 105, 30, { align: 'center' });
+                pdf.setFontSize(10); pdf.setTextColor(100); pdf.text(`Division: ${d.level}  |  Coach: ${d.coachName || 'N/A'}`, 105, 38, { align: 'center' });
                 const rows = (d.players || []).map((p, i) => [i+1, p.name, p.number, p.position]);
-                
-                pdf.autoTable({
-                    head: [['S/N', 'Player Name', 'Jersey #', 'Pos']],
-                    body: rows,
-                    startY: 45,
-                    theme: 'grid',
-                    headStyles: { fillColor: [37, 99, 235] }
-                });
-                
-                pdf.save(`${d.department}_Roster.pdf`);
-                showNotify("DOWNLOAD STARTED");
+                pdf.autoTable({ head: [['S/N', 'Player Name', 'Jersey #', 'Pos']], body: rows, startY: 45, theme: 'grid', headStyles: { fillColor: [37, 99, 235] } });
+                pdf.save(`${d.department}_Roster.pdf`); showNotify("DOWNLOAD STARTED");
             } catch(e) { console.error(e); alert("PDF Error: " + e.message); }
         };
 
@@ -628,30 +592,7 @@
         window.updateAcronym=async(id, val)=>{await updateDoc(doc(db,"registrations",id),{acronym:val});showNotify("ACRONYM SAVED");};
         window.verifyTeam=async(id)=>{if(confirm("CONFIRM VERIFICATION?")){await updateDoc(doc(db,"registrations",id),{registrationStatus:"Verified"});showNotify("VERIFIED");loadVerifications();}};
         window.setMOTM=async(a)=>{const n=[document.getElementById('motm-1').value,document.getElementById('motm-2').value,document.getElementById('motm-3').value];await setDoc(doc(db,"app_content","fan_zone"),{motm:{active:a,nominees:n,votes:[0,0,0]}},{merge:true});showNotify(a?"VOTING OPEN":"VOTING CLOSED", "info");};
-        
-        // SAFE IMAGE LOADER (Prevents PDF Crash)
-        async function getBase64Image(u){
-            try {
-                if(!u) return null;
-                return new Promise((resolve, reject) => {
-                    var img = new Image();
-                    img.setAttribute("crossOrigin", "anonymous"); 
-                    img.onload = function () {
-                        var canvas = document.createElement("canvas");
-                        canvas.width = this.width;
-                        canvas.height = this.height;
-                        var ctx = canvas.getContext("2d");
-                        ctx.drawImage(this, 0, 0);
-                        var dataURL = canvas.toDataURL("image/jpeg");
-                        resolve(dataURL);
-                    };
-                    img.onerror = function() {
-                        resolve(null);
-                    };
-                    img.src = u;
-                });
-            } catch(e){ return null; }
-        }
+        async function getBase64Image(u){try{const r=await fetch(u);const b=await r.blob();return new Promise(s=>{const a=new FileReader();a.onloadend=()=>s(a.result);a.readAsDataURL(b);});}catch(e){return null;}}
     </script>
 </body>
 </html>
