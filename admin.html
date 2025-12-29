@@ -40,7 +40,6 @@
         .border-l-green::before { background: var(--green); }
         .border-l-orange::before { background: var(--orange); }
         .border-l-red::before { background: var(--red); }
-        /* NEW FOR ROSTER */
         .border-l-purple::before { background: #9333ea; }
 
         .input-sport {
@@ -133,6 +132,18 @@
             </div>
         </div>
 
+        <div id="rosters" class="section hidden">
+            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-solid fa-clipboard-list text-purple-600"></i> TEAM ROSTERS</h2></div>
+            <div class="sport-card border-l-purple overflow-hidden">
+                <table class="w-full text-sm text-left">
+                    <thead class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase border-b">
+                        <tr><th class="p-4 pl-6">Department</th><th class="p-4">Level</th><th class="p-4">Players</th><th class="p-4 text-right pr-6">Action</th></tr>
+                    </thead>
+                    <tbody id="roster-table-body" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+        </div>
+
         <div id="teams" class="section hidden">
             <h2 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-2"><i class="fa-solid fa-id-badge text-blue-600"></i> BADGE MANAGER</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:h-[600px] h-auto">
@@ -161,20 +172,8 @@
             </div>
         </div>
 
-        <div id="rosters" class="section hidden">
-            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-solid fa-clipboard-list text-purple-600"></i> TEAM ROSTERS</h2></div>
-            <div class="sport-card border-l-purple overflow-hidden">
-                <table class="w-full text-sm text-left">
-                    <thead class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase border-b">
-                        <tr><th class="p-4 pl-6">Department</th><th class="p-4">Level</th><th class="p-4">Players</th><th class="p-4 text-right pr-6">Action</th></tr>
-                    </thead>
-                    <tbody id="roster-table-body" class="divide-y divide-slate-100"></tbody>
-                </table>
-            </div>
-        </div>
-
         <div id="schedule" class="section hidden">
-            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-regular fa-calendar-days text-blue-600"></i> FIXTURE LIST</h2><button onclick="downloadSchedulePDF()" class="bg-slate-800 text-white px-4 py-2 rounded text-xs font-bold font-[Rajdhani] uppercase">Export PDF</button></div>
+            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-regular fa-calendar-days text-blue-600"></i> FIXTURE LIST</h2><button onclick="downloadSchedulePDF()" class="bg-slate-800 text-white px-4 py-2 rounded text-xs font-bold font-[Rajdhani] uppercase shadow hover:bg-slate-700 transition"><i class="fa-solid fa-download mr-1"></i> Export PDF</button></div>
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <div class="lg:col-span-8">
                     <div class="flex gap-3 mb-4 overflow-x-auto pb-1 no-scrollbar"><select id="view-div" onchange="loadSchedule()" class="input-sport w-auto"><option value="All">ALL DIVISIONS</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
@@ -307,8 +306,7 @@
                 document.getElementById('dash-matches').innerText = schedSize;
                 document.getElementById('dash-news').innerText = (await getDocs(collection(db, "news_posts"))).size;
                 loadTeams(); loadVerifications(); loadSchedule(); loadNews(); loadActivePolls(); 
-                // 🔥 ADDED THIS CALL
-                loadRosters();
+                loadRosters(); // 🔥 ADDED: LOAD ROSTERS
                 const ts = document.getElementById('stat-team-select'); ts.innerHTML = '<option value="">Select Team...</option>'; t.forEach(doc => { const d=doc.data(); const o=document.createElement('option'); o.value=doc.id; o.textContent=`${d.department} (${d.level})`; ts.appendChild(o); });
             } catch(e) { console.error(e); }
         }
@@ -465,13 +463,73 @@
         let curDivCode=''; window.loadTableData=async(regLevel,shortCode)=>{ curDivCode=shortCode; document.getElementById('table-logos').classList.remove('hidden'); document.getElementById('div-logo-display').src=divisionLogos[shortCode]||mainLogoUrl; const container=document.getElementById('table-container'); container.innerHTML='<span class="loader border-blue-600"></span>'; const existing=(await getDoc(doc(db,"app_content",`league_table_${shortCode}`))).data()||{}; const regSnap=await getDocs(query(collection(db,"registrations"),where("level","==",regLevel))); container.innerHTML=`<div class="grid grid-cols-12 gap-1 text-[10px] font-black text-slate-400 uppercase mb-2 px-1 tracking-wider"><div class="col-span-3">Team</div><div class="col-span-1 text-center">PL</div><div class="col-span-1 text-center">W</div><div class="col-span-1 text-center">D</div><div class="col-span-1 text-center">L</div><div class="col-span-1 text-center">GD</div><div class="col-span-2 text-center text-blue-600">PTS</div></div>`; const map={}; Object.keys(existing).forEach(k=>map[k]=existing[k]); regSnap.forEach(d=>{ const n=d.data().department; if(!map[n]) map[n]={mp:0,w:0,d:0,l:0,gd:0,pts:0}; }); const names=Object.keys(map); const logos=await Promise.all(names.map(n=>getTeamLogo(n,regLevel))); names.map((n,i)=>({name:n,logo:logos[i],...map[n]})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd).forEach(t=>{ container.innerHTML+=`<div class="grid grid-cols-12 gap-1 items-center mb-2 team-row bg-white p-2 rounded border border-slate-100 shadow-sm" data-name="${t.name}"><div class="col-span-3 flex items-center gap-1.5"><img src="${t.logo}" class="h-6 w-6 rounded-full object-cover border"><span class="font-bold text-xs truncate text-slate-800 font-[Rajdhani] uppercase">${getShortName(t.name)}</span></div><input type="number" class="col-span-1 tbl-input inp-mp" value="${t.mp||0}"><input type="number" class="col-span-1 tbl-input inp-w text-green-600" value="${t.w||0}"><input type="number" class="col-span-1 tbl-input inp-d" value="${t.d||0}"><input type="number" class="col-span-1 tbl-input inp-l text-red-500" value="${t.l||0}"><input type="number" class="col-span-1 tbl-input inp-gd" value="${t.gd||0}"><input type="number" class="col-span-2 tbl-input inp-pts bg-blue-50 text-blue-700 rounded font-black" value="${t.pts||0}"></div>`; }); document.getElementById('save-table-btn').classList.remove('hidden'); };
         window.saveTableUpdates=async()=>{ const rows=document.querySelectorAll('.team-row'); let d={}; rows.forEach(r=>d[r.dataset.name]={mp:parseInt(r.querySelector('.inp-mp').value)||0, w:parseInt(r.querySelector('.inp-w').value)||0, d:parseInt(r.querySelector('.inp-d').value)||0, l:parseInt(r.querySelector('.inp-l').value)||0, gd:parseInt(r.querySelector('.inp-gd').value)||0, pts:parseInt(r.querySelector('.inp-pts').value)||0}); await setDoc(doc(db,"app_content",`league_table_${curDivCode}`),d); showNotify("STANDINGS SAVED"); };
         
-        // 🔥 UPDATE 1: FIXED PDF LOADER (CANVAS METHOD)
-        window.downloadTablePDF=async()=>{
+        // 🔥 UPDATE 1: DYNAMIC FIXTURE PDF
+        window.downloadSchedulePDF=async()=>{
             try {
                 const{jsPDF}=window.jspdf;
                 const pdf=new jsPDF();
                 
-                // Safe Image Loader
+                // Get Current Filter Values
+                const divFilter = document.getElementById('view-div').value;
+                const dayFilter = document.getElementById('view-day').value;
+                
+                // Build Dynamic Title
+                let title = "EDU-LEAGUE 2025/26";
+                if(divFilter !== "All") title += ` ${divFilter.split(' ')[0].toUpperCase()}`;
+                if(dayFilter !== "All") title += ` ${dayFilter.toUpperCase()}`;
+                title += " FIXTURES";
+
+                // Determine Logos to Show
+                const mImg = await getBase64Image(mainLogoUrl);
+                if(mImg) pdf.addImage(mImg, 'JPEG', 15, 10, 20, 20);
+
+                // Add Division Logo ONLY if specific division selected
+                let divCode = "";
+                if(divFilter.includes("Finalist")) divCode="Finalist";
+                else if(divFilter.includes("Penultimate")) divCode="Penultimate";
+                else if(divFilter.includes("Sophomore")) divCode="Sophomore";
+                else if(divFilter.includes("Female")) divCode="Female";
+
+                if(divCode) {
+                    const dImg = await getBase64Image(divisionLogos[divCode] || mainLogoUrl);
+                    if(dImg) pdf.addImage(dImg, 'JPEG', 175, 10, 20, 20);
+                }
+                
+                // Header Text
+                pdf.setFontSize(14);
+                pdf.setTextColor(37,99,235);
+                pdf.text(title, 105, 20, {align:'center'});
+                
+                const rows=[];
+                allSchedules.forEach(m => {
+                    if(divFilter !== 'All' && m.div !== divFilter) return;
+                    if(dayFilter !== 'All' && m.day !== dayFilter) return;
+                    
+                    rows.push([
+                        m.date || 'TBD',
+                        m.time || 'TBD',
+                        m.div ? m.div.split(' ')[0] : '',
+                        `${getShortName(m.home)} vs ${getShortName(m.away)}`,
+                        m.venue || 'TBD'
+                    ]);
+                });
+                
+                pdf.autoTable({
+                    head:[['Date','Time','Div','Match','Venue']],
+                    body:rows,
+                    startY: 35,
+                    theme:'grid',
+                    headStyles:{fillColor:[37,99,235]}
+                });
+                pdf.save(`${title.replace(/ /g, '_')}.pdf`);
+            } catch(e) { console.error(e); showNotify("PDF Error", "error"); }
+        };
+
+        // 🔥 UPDATE 2: FIXED TABLE PDF
+        window.downloadTablePDF=async()=>{
+            try {
+                const{jsPDF}=window.jspdf;
+                const pdf=new jsPDF();
                 const mImg=await getBase64Image(mainLogoUrl);
                 const dImg=await getBase64Image(divisionLogos[curDivCode]||mainLogoUrl);
                 
@@ -502,39 +560,10 @@
                     headStyles:{fillColor:[37,99,235]}
                 });
                 pdf.save("Table.pdf");
-            } catch(e) { console.error(e); showNotify("PDF Error: " + e.message, "error"); }
+            } catch(e) { console.error(e); showNotify("PDF Error", "error"); }
         };
 
-        window.downloadSchedulePDF=async()=>{
-            try {
-                const{jsPDF}=window.jspdf;
-                const pdf=new jsPDF();
-                const mImg=await getBase64Image(mainLogoUrl);
-                if(mImg) pdf.addImage(mImg,'JPEG',15,10,15,15);
-                
-                pdf.setFontSize(16);
-                pdf.setTextColor(37,99,235);
-                pdf.text("FIXTURE SCHEDULE",105,20,{align:'center'});
-                
-                const rows=[];
-                allSchedules.forEach(m => {
-                    const fDiv = document.getElementById('view-div').value;
-                    if(fDiv !== 'All' && m.div !== fDiv) return;
-                    rows.push([m.date, m.time, m.div ? m.div.split(' ')[0] : '', `${getShortName(m.home)} vs ${getShortName(m.away)}`, m.venue || 'TBD']);
-                });
-                
-                pdf.autoTable({
-                    head:[['Date','Time','Div','Match','Venue']],
-                    body:rows,
-                    startY:35,
-                    theme:'grid',
-                    headStyles:{fillColor:[37,99,235]}
-                });
-                pdf.save("Schedule.pdf");
-            } catch(e) { console.error(e); showNotify("PDF Error: " + e.message, "error"); }
-        };
-
-        // 🔥 UPDATE 2: ROSTER FUNCTIONS
+        // 🔥 UPDATE 3: ROSTER FUNCTIONS
         window.loadRosters = async () => {
             const body = document.getElementById('roster-table-body'); body.innerHTML = '';
             try {
@@ -559,15 +588,9 @@
                 const mImg = await getBase64Image(mainLogoUrl);
                 if(mImg) pdf.addImage(mImg, 'JPEG', 15, 10, 20, 20);
                 
-                pdf.setFontSize(18);
-                pdf.setTextColor(30, 41, 59);
-                pdf.text("OFFICIAL TEAM ROSTER", 105, 20, { align: 'center' });
-                pdf.setFontSize(14);
-                pdf.setTextColor(37, 99, 235);
-                pdf.text(d.department.toUpperCase(), 105, 30, { align: 'center' });
-                pdf.setFontSize(10);
-                pdf.setTextColor(100);
-                pdf.text(`Division: ${d.level}  |  Coach: ${d.coachName || 'N/A'}`, 105, 38, { align: 'center' });
+                pdf.setFontSize(18); pdf.setTextColor(30, 41, 59); pdf.text("OFFICIAL TEAM ROSTER", 105, 20, { align: 'center' });
+                pdf.setFontSize(14); pdf.setTextColor(37, 99, 235); pdf.text(d.department.toUpperCase(), 105, 30, { align: 'center' });
+                pdf.setFontSize(10); pdf.setTextColor(100); pdf.text(`Division: ${d.level}  |  Coach: ${d.coachName || 'N/A'}`, 105, 38, { align: 'center' });
 
                 const rows = (d.players || []).map((p, i) => [i+1, p.name, p.number, p.position]);
                 
@@ -581,7 +604,7 @@
                 
                 pdf.save(`${d.department}_Roster.pdf`);
                 showNotify("DOWNLOAD STARTED");
-            } catch(e) { console.error(e); alert("PDF Error: " + e.message); }
+            } catch(e) { console.error(e); alert("PDF Error"); }
         };
 
         window.loadTeamPlayers=async()=>{const t=document.getElementById('stat-team-select').value;const p=document.getElementById('stat-player-select');p.innerHTML='<option>Loading...</option>';if(!t)return;const d=await getDoc(doc(db,"registrations",t));p.innerHTML='<option value="">Select Player...</option>';(d.data().players||[]).forEach(o=>{const e=document.createElement('option');e.value=o.name;e.textContent=`${o.name} (${o.position})`;p.appendChild(e);});};
@@ -594,7 +617,7 @@
         window.verifyTeam=async(id)=>{if(confirm("CONFIRM VERIFICATION?")){await updateDoc(doc(db,"registrations",id),{registrationStatus:"Verified"});showNotify("VERIFIED");loadVerifications();}};
         window.setMOTM=async(a)=>{const n=[document.getElementById('motm-1').value,document.getElementById('motm-2').value,document.getElementById('motm-3').value];await setDoc(doc(db,"app_content","fan_zone"),{motm:{active:a,nominees:n,votes:[0,0,0]}},{merge:true});showNotify(a?"VOTING OPEN":"VOTING CLOSED", "info");};
         
-        // 🔥 UPDATE 3: SAFER IMAGE LOADER (CANVAS METHOD)
+        // 🔥 UPDATE 4: SAFER IMAGE LOADER (CANVAS METHOD)
         async function getBase64Image(u){
             try {
                 if(!u) return null;
@@ -614,7 +637,7 @@
                         resolve(dataURL);
                     };
                     img.onerror = function() {
-                        resolve(null); // Return null on error so PDF still generates without image
+                        resolve(null); // Return null on error so PDF still generates
                     };
                     img.src = u;
                 });
