@@ -10,67 +10,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
     <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
     <link rel="icon" href="edulogo.jpg" type="image/jpeg">
 
     <style>
-        /* --- SPORTS THEME --- */
-        :root {
-            --navy: #0f172a; --blue: #2563eb; --green: #10b981; --orange: #f59e0b; --red: #dc2626;
-            --surface: #ffffff; --bg: #f1f5f9;
-        }
-        body { 
-            font-family: 'Inter', sans-serif; background-color: var(--bg);
-            background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
-            background-size: 24px 24px; color: #1e293b;
-        }
+        :root { --navy: #0f172a; --blue: #2563eb; --green: #10b981; --orange: #f59e0b; --red: #dc2626; --surface: #ffffff; --bg: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px); background-size: 24px 24px; color: #1e293b; }
         h1, h2, h3, h4 { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
-
-        /* --- UI ELEMENTS --- */
-        .sport-card {
-            background: var(--surface); border-radius: 12px; border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); position: relative; overflow: hidden;
-        }
+        .sport-card { background: var(--surface); border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
         .sport-card::before { content: ''; position: absolute; top:0; left:0; width:4px; height:100%; background: var(--navy); }
-        
-        .border-l-blue::before { background: var(--blue); }
-        .border-l-green::before { background: var(--green); }
-        .border-l-orange::before { background: var(--orange); }
-        .border-l-red::before { background: var(--red); }
-        .border-l-purple::before { background: #9333ea; }
-
-        .input-sport {
-            width: 100%; padding: 12px 16px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px;
-            font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 1rem; outline: none; transition: 0.2s;
-        }
+        .border-l-blue::before { background: var(--blue); } .border-l-green::before { background: var(--green); } .border-l-orange::before { background: var(--orange); } .border-l-red::before { background: var(--red); } .border-l-purple::before { background: #9333ea; }
+        .input-sport { width: 100%; padding: 10px 12px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 0.9rem; outline: none; transition: 0.2s; }
         .input-sport:focus { background: white; border-color: var(--blue); }
-
-        .btn-sport {
-            background: var(--navy); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700;
-            padding: 12px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase; transition: 0.2s;
-            width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer;
-        }
+        .btn-sport { background: var(--navy); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700; padding: 12px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase; transition: 0.2s; width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; }
         .btn-sport:hover { background: #1e293b; transform: translateY(-1px); }
         .btn-accent { background: var(--blue); } .btn-accent:hover { background: #1d4ed8; }
         .btn-danger { background: var(--red); } .btn-danger:hover { background: #b91c1c; }
-
         .nav-container { background: var(--navy); color: white; box-shadow: 0 4px 20px -5px rgba(0,0,0,0.3); }
         .nav-btn { padding: 8px 16px; border-radius: 4px; font-family: 'Rajdhani', sans-serif; font-weight: 600; color: #94a3b8; border-bottom: 2px solid transparent; }
         .nav-btn.active { color: var(--blue); border-bottom-color: var(--blue); background: rgba(37, 99, 235, 0.1); }
-
         .badge-item { padding: 10px; border-radius: 6px; cursor: pointer; display: flex; justify-content: space-between; border: 1px solid #e2e8f0; background: white; margin-bottom: 6px; }
         .badge-item.active { background: #eff6ff; border-color: var(--blue); border-left: 4px solid var(--blue); }
-
         #notify-bar { position: fixed; top: -100px; left: 0; right: 0; background: var(--navy); color: white; border-bottom: 3px solid var(--green); padding: 16px; text-align: center; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1.2rem; z-index: 10000; transition: top 0.4s; display: flex; justify-content: center; gap: 10px; }
         #notify-bar.show { top: 0; }
-
         .loader { width: 20px; height: 20px; border: 3px solid #fff; border-bottom-color: transparent; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        
         .tbd-label { display: flex; items-center; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-top: 4px; }
         .tbd-check { margin-right: 6px; width: 16px; height: 16px; }
     </style>
@@ -88,7 +55,7 @@
             <p class="text-xs text-slate-500 mb-8 font-bold tracking-widest uppercase">Restricted Area</p>
             <form id="login-form" class="space-y-4">
                 <input type="password" id="adm-pass" placeholder="ACCESS CODE" class="input-sport text-center tracking-[0.3em] uppercase" required>
-                <button type="submit" class="w-full btn-sport">Authorize</button>
+                <button type="submit" id="btn-auth" class="w-full btn-sport">Authorize</button>
             </form>
             <p id="login-msg" class="text-red-600 text-xs font-bold mt-4 hidden bg-red-50 py-2 rounded">INVALID CODE</p>
         </div>
@@ -135,91 +102,30 @@
         <div id="rosters" class="section hidden">
             <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-solid fa-clipboard-list text-purple-600"></i> TEAM ROSTERS</h2></div>
             <div class="sport-card border-l-purple overflow-hidden">
-                <table class="w-full text-sm text-left">
-                    <thead class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase border-b">
-                        <tr><th class="p-4 pl-6">Department</th><th class="p-4">Level</th><th class="p-4">Players</th><th class="p-4 text-right pr-6">Action</th></tr>
-                    </thead>
-                    <tbody id="roster-table-body" class="divide-y divide-slate-100"></tbody>
-                </table>
+                <table class="w-full text-sm text-left"><thead class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase border-b"><tr><th class="p-4 pl-6">Department</th><th class="p-4">Level</th><th class="p-4">Players</th><th class="p-4 text-right pr-6">Action</th></tr></thead><tbody id="roster-table-body" class="divide-y divide-slate-100"></tbody></table>
             </div>
         </div>
 
         <div id="teams" class="section hidden">
             <h2 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-2"><i class="fa-solid fa-id-badge text-blue-600"></i> BADGE MANAGER</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:h-[600px] h-auto">
-                <div class="sport-card flex flex-col h-[400px] lg:h-full border-l-blue">
-                    <div class="p-4 border-b border-gray-100 bg-slate-50 flex justify-between items-center"><h3 class="font-bold text-slate-700 text-sm">TEAM ROSTER</h3><span class="text-[10px] font-bold bg-white border px-2 py-1 rounded text-slate-500">SELECT TO EDIT</span></div>
-                    <div id="badge-tracker-list" class="flex-1 overflow-y-auto p-3 bg-slate-50/50"></div>
-                </div>
-                <div class="col-span-1 lg:col-span-2">
-                    <div class="sport-card p-8 h-full flex flex-col justify-center border-l-orange bg-white">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                            <div class="space-y-6">
-                                <div><label class="text-xs font-bold text-slate-400 uppercase block mb-1">TARGET TEAM</label><input id="logo-team-name-display" class="input-sport bg-slate-100 text-slate-500 cursor-not-allowed" readonly placeholder="SELECT FROM ROSTER"><input type="hidden" id="logo-team-name"><input type="hidden" id="logo-team-div"></div>
-                                <div class="relative group cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:bg-slate-50 hover:border-blue-500 transition">
-                                    <input type="file" id="logo-file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewFile(this)" accept="image/*">
-                                    <i class="fa-solid fa-cloud-arrow-up text-4xl text-slate-300 group-hover:text-blue-500 mb-2"></i><p class="text-sm font-bold text-slate-600 font-[Rajdhani] uppercase" id="logo-file-label">TAP TO SELECT</p><p class="text-[10px] text-slate-400">Open Gallery</p>
-                                </div>
-                                <button onclick="uploadBadgeDirect()" id="btn-save-badge" class="w-full btn-sport btn-accent shadow-lg">UPLOAD & SAVE</button>
-                            </div>
-                            <div class="flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-slate-100 pt-6 md:pt-0 md:pl-6">
-                                <div class="w-48 h-48 bg-slate-50 rounded-full flex items-center justify-center shadow-inner border border-slate-200 p-6 mb-4 relative"><img id="logo-preview" src="edulogo.jpg" class="w-full h-full object-contain"><div class="absolute bottom-0 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded shadow hidden" id="preview-badge">ACTIVE</div></div>
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">LIVE PREVIEW</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="sport-card flex flex-col h-[400px] lg:h-full border-l-blue"><div class="p-4 border-b border-gray-100 bg-slate-50 flex justify-between items-center"><h3 class="font-bold text-slate-700 text-sm">TEAM ROSTER</h3><span class="text-[10px] font-bold bg-white border px-2 py-1 rounded text-slate-500">SELECT TO EDIT</span></div><div id="badge-tracker-list" class="flex-1 overflow-y-auto p-3 bg-slate-50/50"></div></div>
+                <div class="col-span-1 lg:col-span-2"><div class="sport-card p-8 h-full flex flex-col justify-center border-l-orange bg-white"><div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center"><div class="space-y-6"><div><label class="text-xs font-bold text-slate-400 uppercase block mb-1">TARGET TEAM</label><input id="logo-team-name-display" class="input-sport bg-slate-100 text-slate-500 cursor-not-allowed" readonly placeholder="SELECT FROM ROSTER"><input type="hidden" id="logo-team-name"><input type="hidden" id="logo-team-div"></div><div class="relative group cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:bg-slate-50 hover:border-blue-500 transition"><input type="file" id="logo-file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewFile(this)" accept="image/*"><i class="fa-solid fa-cloud-arrow-up text-4xl text-slate-300 group-hover:text-blue-500 mb-2"></i><p class="text-sm font-bold text-slate-600 font-[Rajdhani] uppercase" id="logo-file-label">TAP TO SELECT</p><p class="text-[10px] text-slate-400">Open Gallery</p></div><button onclick="uploadBadgeDirect()" id="btn-save-badge" class="w-full btn-sport btn-accent shadow-lg">UPLOAD & SAVE</button></div><div class="flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-slate-100 pt-6 md:pt-0 md:pl-6"><div class="w-48 h-48 bg-slate-50 rounded-full flex items-center justify-center shadow-inner border border-slate-200 p-6 mb-4 relative"><img id="logo-preview" src="edulogo.jpg" class="w-full h-full object-contain"><div class="absolute bottom-0 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded shadow hidden" id="preview-badge">ACTIVE</div></div><p class="text-xs font-bold text-slate-400 uppercase tracking-widest">LIVE PREVIEW</p></div></div></div></div>
             </div>
         </div>
 
         <div id="schedule" class="section hidden">
             <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-regular fa-calendar-days text-blue-600"></i> FIXTURE LIST</h2><button onclick="downloadSchedulePDF()" class="bg-slate-800 text-white px-4 py-2 rounded text-xs font-bold font-[Rajdhani] uppercase">Export PDF</button></div>
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div class="lg:col-span-8">
-                    <div class="flex gap-3 mb-4 overflow-x-auto pb-1 no-scrollbar"><select id="view-div" onchange="loadSchedule()" class="input-sport w-auto"><option value="All">ALL DIVISIONS</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-                        <select id="view-day" onchange="loadSchedule()" class="input-sport w-auto">
-                            <option value="All">ALL MATCHDAYS</option>
-                            <option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option>
-                            <option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option>
-                        </select>
-                    </div>
-                    <div id="active-fixtures" class="space-y-3"></div>
-                </div>
-                <div class="lg:col-span-4 sport-card p-6 h-fit border-l-blue">
-                    <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">ADD FIXTURE</h3>
-                    <div class="space-y-3">
-                        <select id="fix-div" class="input-sport" onchange="filterTeamsByDiv()"><option value="">SELECT DIVISION</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-                        <div class="grid grid-cols-2 gap-2">
-                            <select id="fix-day" class="input-sport">
-                                <option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option>
-                                <option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option>
-                            </select>
-                            <input type="date" id="fix-date" class="input-sport">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 items-center"><input type="time" id="fix-time" class="input-sport"><label class="tbd-label"><input type="checkbox" id="fix-time-tbd" class="tbd-check" onchange="toggleTime(this, 'fix-time')"> TIME TBD</label></div>
-                        <div class="grid grid-cols-2 gap-2 items-center"><input type="text" id="fix-venue" placeholder="VENUE" class="input-sport uppercase"><label class="tbd-label"><input type="checkbox" id="fix-venue-tbd" class="tbd-check" onchange="toggleVenue(this, 'fix-venue')"> VENUE TBD</label></div>
-                        <div class="grid grid-cols-2 gap-2"><select id="fix-home" class="input-sport"><option>HOME</option></select><select id="fix-away" class="input-sport"><option>AWAY</option></select></div>
-                        <button onclick="saveFixture()" class="w-full btn-sport btn-accent">CREATE MATCH</button>
-                    </div>
-                </div>
+                <div class="lg:col-span-8"><div class="flex gap-3 mb-4 overflow-x-auto pb-1 no-scrollbar"><select id="view-div" onchange="loadSchedule()" class="input-sport w-auto"><option value="All">ALL DIVISIONS</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="view-day" onchange="loadSchedule()" class="input-sport w-auto"><option value="All">ALL MATCHDAYS</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option><option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option></select></div><div id="active-fixtures" class="space-y-3"></div></div>
+                <div class="lg:col-span-4 sport-card p-6 h-fit border-l-blue"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">ADD FIXTURE</h3><div class="space-y-3"><select id="fix-div" class="input-sport" onchange="filterTeamsByDiv()"><option value="">SELECT DIVISION</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><div class="grid grid-cols-2 gap-2"><select id="fix-day" class="input-sport"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option><option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option></select><input type="date" id="fix-date" class="input-sport"></div><div class="grid grid-cols-2 gap-2 items-center"><input type="time" id="fix-time" class="input-sport"><label class="tbd-label"><input type="checkbox" id="fix-time-tbd" class="tbd-check" onchange="toggleTime(this, 'fix-time')"> TIME TBD</label></div><div class="grid grid-cols-2 gap-2 items-center"><input type="text" id="fix-venue" placeholder="VENUE" class="input-sport uppercase"><label class="tbd-label"><input type="checkbox" id="fix-venue-tbd" class="tbd-check" onchange="toggleVenue(this, 'fix-venue')"> VENUE TBD</label></div><div class="grid grid-cols-2 gap-2"><select id="fix-home" class="input-sport"><option>HOME</option></select><select id="fix-away" class="input-sport"><option>AWAY</option></select></div><button onclick="saveFixture()" class="w-full btn-sport btn-accent">CREATE MATCH</button></div></div>
             </div>
         </div>
 
         <div id="results" class="section hidden">
-            <h2 class="text-2xl font-black text-slate-800 mb-6"><i class="fa-solid fa-square-check text-red-500"></i> MATCH RESULTS</h2>
+            <h2 class="text-2xl font-black text-slate-800 mb-6"><i class="fa-solid fa-square-check text-red-500"></i> MATCH RESULTS & MOTM</h2>
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <div class="lg:col-span-1 sport-card p-6 h-fit border-l-red">
-                    <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">FILTER</h3>
-                    <div class="space-y-3">
-                        <select id="res-div" onchange="loadResults()" class="input-sport"><option value="All">All Divisions</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-                        <select id="res-day" onchange="loadResults()" class="input-sport">
-                            <option value="All">All Days</option>
-                            <option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option>
-                            <option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option>
-                        </select>
-                        <button onclick="loadResults()" class="w-full btn-sport btn-danger">REFRESH LIST</button>
-                    </div>
-                </div>
+                <div class="lg:col-span-1 sport-card p-6 h-fit border-l-red"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">FILTER</h3><div class="space-y-3"><select id="res-div" onchange="loadResults()" class="input-sport"><option value="All">All Divisions</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="res-day" onchange="loadResults()" class="input-sport"><option value="All">All Days</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option><option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option></select><button onclick="loadResults()" class="w-full btn-sport btn-danger">REFRESH LIST</button></div></div>
                 <div class="lg:col-span-3"><div id="results-list" class="space-y-3"></div></div>
             </div>
         </div>
@@ -232,19 +138,15 @@
         </div>
 
         <div id="spotlight" class="section hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="sport-card p-6 border-l-orange"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">MATCH FINDER</h3><div class="grid grid-cols-2 gap-3 mb-4"><select id="spot-div" class="input-sport" onchange="loadSpotlightCandidates()"><option value="">Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
-            <select id="spot-day" class="input-sport" onchange="loadSpotlightCandidates()">
-                <option value="">Day</option>
-                <option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option>
-                <option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option>
-            </select></div><div id="spot-candidates" class="space-y-2 max-h-[300px] overflow-y-auto p-1"></div></div><div class="sport-card p-6 border-l-blue"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2 flex justify-between"><span>FEATURED MATCHES</span><button onclick="clearSpotlights()" class="text-xs text-red-500 hover:underline">CLEAR</button></h3><div id="active-spotlights" class="space-y-3"></div><button onclick="publishSpotlights()" class="w-full btn-sport mt-6">GO LIVE</button></div></div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="sport-card p-6 border-l-orange"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">MATCH FINDER</h3><div class="grid grid-cols-2 gap-3 mb-4"><select id="spot-div" class="input-sport" onchange="loadSpotlightCandidates()"><option value="">Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="spot-day" class="input-sport" onchange="loadSpotlightCandidates()"><option value="">Day</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option><option>Matchday 8 (PlayOff)</option><option>Matchday 9 (Rest for All)</option><option>Matchday 10 (Final)</option></select></div><div id="spot-candidates" class="space-y-2 max-h-[300px] overflow-y-auto p-1"></div></div><div class="sport-card p-6 border-l-blue"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2 flex justify-between"><span>FEATURED MATCHES (MAX 4)</span><button onclick="clearSpotlights()" class="text-xs text-red-500 hover:underline">CLEAR</button></h3><div id="active-spotlights" class="space-y-3"></div><button onclick="publishSpotlights()" class="w-full btn-sport mt-6">GO LIVE</button></div></div>
         </div>
 
         <div id="stats" class="section hidden"><div class="sport-card p-8 max-w-4xl mx-auto border-l-green"><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b pb-8"><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">1. Team</label><select id="stat-team-select" class="input-sport" onchange="loadTeamPlayers()"><option value="">Select...</option></select></div><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">2. Player</label><select id="stat-player-select" class="input-sport" onchange="fetchPlayerCurrentStats()"><option value="">Select...</option></select></div></div><div id="stats-editor" class="hidden"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-slate-800 text-xl">PLAYER STATS</h3></div><div class="grid grid-cols-3 md:grid-cols-5 gap-3 mb-8"><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-green-600 uppercase mb-1">Goals</p><input type="number" id="p-goals" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Assists</p><input type="number" id="p-assists" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-yellow-600 uppercase mb-1">Yellow</p><input type="number" id="p-yellow" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-red-600 uppercase mb-1">Red</p><input type="number" id="p-red" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-orange-600 uppercase mb-1">Saves</p><input type="number" id="p-saves" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div></div><button onclick="savePlayerStats()" class="w-full btn-sport btn-accent">UPDATE STATS</button></div></div></div>
+        <div id="news" class="section hidden"><div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="sport-card p-6 h-fit border-l-blue"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">COMPOSE NEWS</h3><div class="space-y-3"><input id="news-title" placeholder="HEADLINE" class="input-sport uppercase"><textarea id="news-body" rows="4" placeholder="Details..." class="input-sport"></textarea><div class="relative group cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-4 text-center hover:bg-slate-50 transition"><input type="file" id="news-file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('news-file-label').innerText=this.files[0].name"><i class="fa-solid fa-cloud-arrow-up text-xl text-slate-400 mb-1"></i><p class="text-xs font-bold text-slate-500 uppercase" id="news-file-label">Attach Media</p></div><button onclick="publishNews()" id="btn-pub-news" class="w-full btn-sport btn-accent">PUBLISH</button></div></div><div class="lg:col-span-2 sport-card p-6 h-[500px] flex flex-col border-l-orange"><div class="flex justify-between mb-4"><h3 class="font-bold text-slate-800">LIVE FEED</h3><button onclick="loadNews()" class="text-xs font-bold text-blue-600 uppercase">REFRESH</button></div><div id="news-feed" class="flex-1 overflow-y-auto space-y-2 pr-2"></div></div></div></div>
         
         <div id="fanz" class="section hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="sport-card p-6 border-l-blue">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-4 sport-card p-6 border-l-blue h-fit">
                     <h3 class="font-bold text-slate-800 mb-4">FAN POLL</h3>
                     <div class="space-y-3">
                         <input id="poll-q" placeholder="QUESTION" class="input-sport">
@@ -252,28 +154,42 @@
                         <input id="poll-o2" placeholder="OPTION 2" class="input-sport">
                         <button onclick="createPoll()" class="w-full btn-sport btn-accent">LAUNCH</button>
                     </div>
-                    <div id="active-polls" class="mt-4 space-y-2"></div>
+                    <div id="active-polls" class="mt-6 space-y-2"></div>
                 </div>
-                <div class="sport-card p-6 border-l-green">
-                    <h3 class="font-bold text-slate-800 mb-4">MAN OF THE MATCH</h3>
-                    <div class="grid grid-cols-3 gap-2 mb-4">
-                        <input id="motm-1" placeholder="PLAYER 1" class="input-sport">
-                        <input id="motm-2" placeholder="PLAYER 2" class="input-sport">
-                        <input id="motm-3" placeholder="PLAYER 3" class="input-sport">
+
+                <div class="lg:col-span-8 sport-card p-6 border-l-purple">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-800 text-xl"><i class="fa-solid fa-user-astronaut text-purple-600"></i> PLAYER OF THE WEEK (POTW)</h3>
+                        <div class="flex gap-2">
+                            <select id="potw-matchday" class="input-sport w-32 py-1"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option><option>Matchday 8</option><option>Matchday 9</option><option>Matchday 10</option></select>
+                            <button onclick="togglePOTWVoting(false)" class="bg-red-500 text-white px-4 rounded text-xs font-bold hover:bg-red-600">STOP VOTE</button>
+                        </div>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="setMOTM(true)" class="flex-1 bg-green-600 text-white py-3 rounded font-bold font-[Rajdhani]">OPEN</button>
-                        <button onclick="setMOTM(false)" class="flex-1 bg-red-600 text-white py-3 rounded font-bold font-[Rajdhani]">CLOSE</button>
+                    
+                    <div id="potw-nominees-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="bg-slate-50 p-3 rounded border border-slate-200">
+                            <p class="text-xs font-bold text-slate-400 mb-2">NOMINEE 1</p>
+                            <select class="input-sport mb-2 text-xs" onchange="loadPOTWTeams(this, 1)"><option value="">Division...</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
+                            <select id="potw-team-1" class="input-sport mb-2 text-xs" onchange="loadPOTWPlayers(this, 1)"><option>Team...</option></select>
+                            <select id="potw-player-1" class="input-sport mb-2 text-xs font-bold text-purple-700"><option>Player...</option></select>
+                            <textarea id="potw-stats-1" rows="3" class="input-sport text-xs" placeholder="Stats (comma separated):&#10;2 Goals, 1 Assist, 90% Pass"></textarea>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded border border-slate-200">
+                            <p class="text-xs font-bold text-slate-400 mb-2">NOMINEE 2</p>
+                            <select class="input-sport mb-2 text-xs" onchange="loadPOTWTeams(this, 2)"><option value="">Division...</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
+                            <select id="potw-team-2" class="input-sport mb-2 text-xs" onchange="loadPOTWPlayers(this, 2)"><option>Team...</option></select>
+                            <select id="potw-player-2" class="input-sport mb-2 text-xs font-bold text-purple-700"><option>Player...</option></select>
+                            <textarea id="potw-stats-2" rows="3" class="input-sport text-xs" placeholder="Stats (comma separated)"></textarea>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded border border-slate-200">
+                            <p class="text-xs font-bold text-slate-400 mb-2">NOMINEE 3</p>
+                            <select class="input-sport mb-2 text-xs" onchange="loadPOTWTeams(this, 3)"><option value="">Division...</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
+                            <select id="potw-team-3" class="input-sport mb-2 text-xs" onchange="loadPOTWPlayers(this, 3)"><option>Team...</option></select>
+                            <select id="potw-player-3" class="input-sport mb-2 text-xs font-bold text-purple-700"><option>Player...</option></select>
+                            <textarea id="potw-stats-3" rows="3" class="input-sport text-xs" placeholder="Stats (comma separated)"></textarea>
+                        </div>
                     </div>
-                </div>
-                <div class="sport-card p-6 border-l-purple lg:col-span-2">
-                    <h3 class="font-bold text-slate-800 mb-4">PLAYER OF THE WEEK</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <input id="potw-name" placeholder="Player Name" class="input-sport">
-                        <input id="potw-team" placeholder="Team" class="input-sport">
-                        <input id="potw-stat" placeholder="Key Stat (e.g. Hat-trick)" class="input-sport">
-                    </div>
-                    <button onclick="savePOTW()" class="w-full btn-sport btn-accent mt-3">SET PLAYER OF THE WEEK</button>
+                    <button onclick="publishPOTW()" class="w-full btn-sport btn-accent">START VOTING</button>
                 </div>
             </div>
         </div>
@@ -281,6 +197,26 @@
         <div id="verification" class="section hidden"><div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-solid fa-check-double text-blue-600"></i> VERIFICATION</h2><button onclick="loadVerifications()" class="bg-slate-800 text-white px-4 py-2 rounded text-xs font-bold uppercase">Refresh</button></div><div class="sport-card overflow-hidden border-l-green"><table class="w-full text-sm text-left"><thead class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase border-b"><tr><th class="p-4 pl-6">Team</th><th class="p-4 hidden md:table-cell">Div</th><th class="p-4">Acronym</th><th class="p-4">Status</th><th class="p-4 text-right pr-6">Act</th></tr></thead><tbody id="verify-list" class="divide-y divide-slate-100"></tbody></table></div></div>
 
         <div id="edit-match-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-slate-900/90 backdrop-blur-sm hidden p-4"><div class="bg-white p-6 rounded-lg w-full max-w-sm shadow-2xl border-l-4 border-blue-600"><div class="flex justify-between items-center mb-4"><h3 class="text-xl font-black text-slate-800 font-[Rajdhani]">EDIT FIXTURE</h3><button onclick="closeEditModal()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button></div><input type="hidden" id="edit-match-id"><div class="bg-slate-100 p-3 rounded mb-4 text-center border border-slate-200"><p class="text-sm font-bold text-slate-800 uppercase font-[Rajdhani]" id="edit-match-teams">...</p></div><div class="space-y-3"><div><label class="text-[10px] font-bold text-slate-400 uppercase">Date</label><input type="date" id="edit-match-date" class="input-sport"></div><div><label class="text-[10px] font-bold text-slate-400 uppercase">Time</label><div class="grid grid-cols-2 gap-2 items-center"><input type="time" id="edit-match-time" class="input-sport"><label class="tbd-label"><input type="checkbox" id="edit-time-tbd" class="tbd-check" onchange="toggleTime(this, 'edit-match-time')"> TBD</label></div></div><div><label class="text-[10px] font-bold text-slate-400 uppercase">Venue</label><div class="grid grid-cols-2 gap-2 items-center"><input type="text" id="edit-match-venue" class="input-sport uppercase"><label class="tbd-label"><input type="checkbox" id="edit-venue-tbd" class="tbd-check" onchange="toggleVenue(this, 'edit-match-venue')"> TBD</label></div></div><button onclick="confirmEditMatch()" class="w-full btn-sport btn-accent mt-2">UPDATE MATCH</button></div></div></div>
+
+        <div id="motm-modal" class="fixed inset-0 z-[160] flex items-center justify-center bg-slate-900/95 backdrop-blur-md hidden p-4">
+            <div class="bg-white w-full max-w-md rounded-xl p-6 border-l-4 border-green-500 shadow-2xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-black text-xl text-slate-800">MAN OF THE MATCH</h3>
+                    <button onclick="document.getElementById('motm-modal').classList.add('hidden')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-times text-xl"></i></button>
+                </div>
+                <input type="hidden" id="motm-match-id">
+                <div class="mb-4">
+                    <p class="text-xs font-bold text-gray-400 uppercase mb-1">Select Player</p>
+                    <select id="motm-player-select" class="input-sport w-full font-bold text-lg"><option>Loading Squads...</option></select>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <input id="motm-stat-1" placeholder="Stat 1 (e.g. 2 Goals)" class="input-sport">
+                    <input id="motm-stat-2" placeholder="Stat 2 (e.g. 1 Assist)" class="input-sport">
+                    <input id="motm-stat-3" placeholder="Stat 3 (e.g. 90% Pass)" class="input-sport">
+                </div>
+                <button onclick="confirmMOTM()" class="w-full btn-sport btn-accent">SAVE MOTM</button>
+            </div>
+        </div>
 
     </main>
 
@@ -310,6 +246,25 @@
             bar.classList.add('show'); setTimeout(() => bar.classList.remove('show'), 3000);
         };
 
+        // NEW: ROBUST IMAGE LOADER FOR PDF
+        async function getBase64Image(url) {
+            return new Promise((resolve, reject) => {
+                var img = new Image();
+                img.setAttribute("crossOrigin", "anonymous"); 
+                img.onload = function () {
+                    var canvas = document.createElement("canvas");
+                    canvas.width = this.width;
+                    canvas.height = this.height;
+                    var ctx = canvas.getContext("2d");
+                    ctx.drawImage(this, 0, 0);
+                    var dataURL = canvas.toDataURL("image/jpeg");
+                    resolve(dataURL);
+                };
+                img.onerror = function() { resolve(null); }; 
+                img.src = url;
+            });
+        }
+
         window.toggleTime = (checkbox, inputId) => { const input = document.getElementById(inputId); if(checkbox.checked) { input.value = ''; input.disabled = true; } else { input.disabled = false; } };
         window.toggleVenue = (checkbox, inputId) => { const input = document.getElementById(inputId); if(checkbox.checked) { input.value = ''; input.disabled = true; } else { input.disabled = false; } };
         const formatTime = (time) => { if(!time || time === 'TBD') return 'TBD'; const [h, m] = time.split(':'); const hour = parseInt(h); const ampm = hour >= 12 ? 'PM' : 'AM'; const h12 = hour % 12 || 12; return `${h12}:${m} ${ampm}`; };
@@ -325,16 +280,109 @@
             }
         };
 
-        // 🔥 GLOBAL POTW FUNCTION
-        window.savePOTW = async () => {
-            const data = {
-                name: document.getElementById('potw-name').value,
-                team: document.getElementById('potw-team').value,
-                stat: document.getElementById('potw-stat').value,
-                timestamp: serverTimestamp()
-            };
-            await setDoc(doc(db, "app_content", "player_of_week"), data);
-            showNotify("POTW UPDATED");
+        // 🔥 POTW LOGIC
+        window.loadPOTWTeams = (select, idx) => {
+            const div = select.value;
+            const teamSelect = document.getElementById(`potw-team-${idx}`);
+            teamSelect.innerHTML = '<option>Select Team...</option>';
+            if(!div) return;
+            allRegTeams.filter(t => t.level === div || (div === "Female League" && t.division === "Female")).forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t.department; opt.text = t.department;
+                teamSelect.appendChild(opt);
+            });
+        };
+
+        window.loadPOTWPlayers = async (select, idx) => {
+            const teamName = select.value;
+            const playerSelect = document.getElementById(`potw-player-${idx}`);
+            playerSelect.innerHTML = '<option>Loading...</option>';
+            if(!teamName) return;
+            // Find team ID/Doc based on department name
+            const teamDoc = allRegTeams.find(t => t.department === teamName);
+            if(teamDoc && teamDoc.players) {
+                playerSelect.innerHTML = '<option>Select Player...</option>';
+                teamDoc.players.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.name; opt.text = `${p.name} (${p.position})`;
+                    playerSelect.appendChild(opt);
+                });
+            } else { playerSelect.innerHTML = '<option>No players found</option>'; }
+        };
+
+        window.publishPOTW = async () => {
+            const nominees = [];
+            for(let i=1; i<=3; i++) {
+                const div = document.querySelector(`#potw-nominees-container > div:nth-child(${i}) select:nth-child(2)`).value;
+                const team = document.getElementById(`potw-team-${i}`).value;
+                const player = document.getElementById(`potw-player-${i}`).value;
+                const stats = document.getElementById(`potw-stats-${i}`).value;
+                if(player && player !== "Player...") nominees.push({div, team, name: player, stats: stats.split(',').map(s=>s.trim())});
+            }
+            if(nominees.length < 3) return showNotify("SELECT 3 PLAYERS", "error");
+            
+            const matchday = document.getElementById('potw-matchday').value;
+            
+            await setDoc(doc(db, "app_content", "potw_current"), {
+                matchday: matchday,
+                active: true,
+                nominees: nominees,
+                votes: { [nominees[0].name]: 0, [nominees[1].name]: 0, [nominees[2].name]: 0 }
+            });
+            showNotify("POTW VOTING STARTED");
+        };
+
+        window.togglePOTWVoting = async (active) => {
+            await updateDoc(doc(db, "app_content", "potw_current"), { active: active });
+            showNotify(active ? "VOTING OPEN" : "VOTING CLOSED", active ? "success" : "info");
+        };
+
+        // 🔥 MOTM LOGIC
+        window.openMOTMModal = (matchId, home, away) => {
+            document.getElementById('motm-match-id').value = matchId;
+            const select = document.getElementById('motm-player-select');
+            select.innerHTML = '<option>Loading...</option>';
+            document.getElementById('motm-modal').classList.remove('hidden');
+            
+            // Find teams
+            const teamH = allRegTeams.find(t => t.department === home || t.acronym === home);
+            const teamA = allRegTeams.find(t => t.department === away || t.acronym === away);
+            
+            select.innerHTML = '<option value="">Select MOTM...</option>';
+            
+            if(teamH) {
+                const grp = document.createElement('optgroup'); grp.label = home;
+                (teamH.players||[]).forEach(p => { const o=document.createElement('option'); o.value=`${p.name}|${home}`; o.text=p.name; grp.appendChild(o); });
+                select.appendChild(grp);
+            }
+            if(teamA) {
+                const grp = document.createElement('optgroup'); grp.label = away;
+                (teamA.players||[]).forEach(p => { const o=document.createElement('option'); o.value=`${p.name}|${away}`; o.text=p.name; grp.appendChild(o); });
+                select.appendChild(grp);
+            }
+        };
+
+        window.confirmMOTM = async () => {
+            const matchId = document.getElementById('motm-match-id').value;
+            const val = document.getElementById('motm-player-select').value;
+            if(!val) return showNotify("SELECT PLAYER", "error");
+            
+            const [player, team] = val.split('|');
+            const stats = [
+                document.getElementById('motm-stat-1').value,
+                document.getElementById('motm-stat-2').value,
+                document.getElementById('motm-stat-3').value
+            ].filter(s => s);
+
+            if(stats.length === 0) return showNotify("ENTER AT LEAST 1 STAT", "error");
+
+            await updateDoc(doc(db, "schedules", matchId), {
+                motm: { player, team, stats }
+            });
+            
+            document.getElementById('motm-modal').classList.add('hidden');
+            showNotify("MOTM SAVED");
+            loadResults(); // Refresh list to show star
         };
 
         document.getElementById('login-form').addEventListener('submit', (e) => { 
@@ -355,17 +403,54 @@
                 const divLogosSnap = await getDoc(doc(db, "app_content", "division_logos"));
                 if(divLogosSnap.exists()) divisionLogos = { ...divisionLogos, ...divLogosSnap.data() };
                 const t = await getDocs(collection(db, "registrations"));
-                t.forEach(doc => { const d = doc.data(); if(d.acronym) teamAcronymMap[d.department] = d.acronym; });
+                allRegTeams = []; // Global Store
+                t.forEach(doc => { 
+                    const d = doc.data(); 
+                    allRegTeams.push(d); // Store full team data
+                    if(d.acronym) teamAcronymMap[d.department] = d.acronym; 
+                });
+                
                 document.getElementById('dash-teams').innerText = t.size;
                 document.getElementById('dash-verified').innerText = t.docs.filter(d => d.data().registrationStatus === "Verified").length;
                 let schedSize = (await getDocs(collection(db, "schedules"))).size; if(schedSize===0) schedSize=(await getDocs(collection(db, "matches"))).size;
                 document.getElementById('dash-matches').innerText = schedSize;
                 document.getElementById('dash-news').innerText = (await getDocs(collection(db, "news_posts"))).size;
-                loadTeams(); loadVerifications(); loadSchedule(); loadNews(); loadActivePolls(); 
-                loadRosters();
+                
+                loadTeams(); loadVerifications(); loadSchedule(); loadNews(); loadActivePolls(); loadRosters();
+                
                 const ts = document.getElementById('stat-team-select'); ts.innerHTML = '<option value="">Select Team...</option>'; t.forEach(doc => { const d=doc.data(); const o=document.createElement('option'); o.value=doc.id; o.textContent=`${d.department} (${d.level})`; ts.appendChild(o); });
             } catch(e) { console.error(e); }
         }
+
+        // --- NEW: LOAD ROSTERS ---
+        window.loadRosters = async () => {
+            const body = document.getElementById('roster-table-body'); body.innerHTML = '';
+            try {
+                const snap = await getDocs(collection(db, "registrations"));
+                snap.forEach(doc => {
+                    const d = doc.data(); const players = d.players || [];
+                    body.innerHTML += `<tr class="border-b hover:bg-slate-50"><td class="p-4 font-bold text-gray-700">${d.department}</td><td class="p-4 text-xs font-bold text-gray-500">${d.level}</td><td class="p-4"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold">${players.length}/18</span></td><td class="p-4 text-right"><button onclick="downloadRosterPDF('${doc.id}')" class="bg-purple-600 text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-purple-700"><i class="fa-solid fa-download mr-1"></i> PDF</button></td></tr>`;
+                });
+            } catch(e) { console.error(e); }
+        };
+
+        // --- NEW: ROSTER PDF DOWNLOAD (SAFE) ---
+        window.downloadRosterPDF = async (teamId) => {
+            try {
+                showNotify("GENERATING PDF...", "info");
+                const docSnap = await getDoc(doc(db, "registrations", teamId));
+                if(!docSnap.exists()) return;
+                const d = docSnap.data();
+                const { jsPDF } = window.jspdf; const pdf = new jsPDF();
+                const mImg = await getBase64Image(mainLogoUrl); if(mImg) pdf.addImage(mImg, 'JPEG', 15, 10, 20, 20);
+                pdf.setFontSize(18); pdf.setTextColor(30, 41, 59); pdf.text("OFFICIAL TEAM ROSTER", 105, 20, { align: 'center' });
+                pdf.setFontSize(14); pdf.setTextColor(37, 99, 235); pdf.text(d.department.toUpperCase(), 105, 30, { align: 'center' });
+                pdf.setFontSize(10); pdf.setTextColor(100); pdf.text(`Division: ${d.level}  |  Coach: ${d.coachName || 'N/A'}`, 105, 38, { align: 'center' });
+                const rows = (d.players || []).map((p, i) => [i+1, p.name, p.number, p.position]);
+                pdf.autoTable({ head: [['S/N', 'Player Name', 'Jersey #', 'Pos']], body: rows, startY: 45, theme: 'grid', headStyles: { fillColor: [37, 99, 235] } });
+                pdf.save(`${d.department}_Roster.pdf`); showNotify("DOWNLOAD STARTED");
+            } catch(e) { console.error(e); alert("PDF Error: " + e.message); }
+        };
 
         window.loadTeams = async () => {
             const listEl = document.getElementById('badge-tracker-list'); listEl.innerHTML = '<div class="loader mx-auto border-blue-500"></div>';
@@ -500,7 +585,21 @@
                 const hScore = m.homeScore !== undefined ? m.homeScore : ''; const aScore = m.awayScore !== undefined ? m.awayScore : '';
                 const home = getShortName(m.home||m.homeTeam);
                 const away = getShortName(m.away||m.awayTeam);
-                list.innerHTML += `<div class="sport-card p-4 flex items-center justify-between gap-4"><div class="w-1/3 text-right font-black text-sm uppercase truncate">${home}</div><div class="flex items-center gap-2"><input type="number" id="hs-${m.id}" value="${hScore}" class="w-12 p-2 text-center border rounded font-bold bg-slate-50 outline-none focus:border-blue-500" placeholder="-"><span class="font-black text-slate-300">:</span><input type="number" id="as-${m.id}" value="${aScore}" class="w-12 p-2 text-center border rounded font-bold bg-slate-50 outline-none focus:border-blue-500" placeholder="-"></div><div class="w-1/3 font-black text-sm uppercase truncate">${away}</div><button onclick="saveScore('${m.id}')" class="bg-green-600 text-white p-2 rounded hover:bg-green-700 transition"><i class="fa-solid fa-floppy-disk"></i></button></div>`;
+                // ADDED MOTM ICON TO RESULTS
+                list.innerHTML += `
+                    <div class="sport-card p-4 flex items-center justify-between gap-4">
+                        <div class="w-1/3 text-right font-black text-sm uppercase truncate">${home}</div>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="hs-${m.id}" value="${hScore}" class="w-12 p-2 text-center border rounded font-bold bg-slate-50 outline-none focus:border-blue-500" placeholder="-">
+                            <span class="font-black text-slate-300">:</span>
+                            <input type="number" id="as-${m.id}" value="${aScore}" class="w-12 p-2 text-center border rounded font-bold bg-slate-50 outline-none focus:border-blue-500" placeholder="-">
+                        </div>
+                        <div class="w-1/3 font-black text-sm uppercase truncate">${away}</div>
+                        <div class="flex gap-1">
+                            <button onclick="saveScore('${m.id}')" class="bg-green-600 text-white p-2 rounded hover:bg-green-700 transition" title="Save Score"><i class="fa-solid fa-floppy-disk"></i></button>
+                            <button onclick="openMOTMModal('${m.id}', '${m.home||m.homeTeam}', '${m.away||m.awayTeam}')" class="bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600 transition ${m.motm ? 'opacity-50' : ''}" title="Set MOTM"><i class="fa-solid fa-star"></i></button>
+                        </div>
+                    </div>`;
             });
         };
         window.saveScore = async (id) => {
@@ -510,8 +609,9 @@
             showNotify("SCORE UPDATED", "success");
         };
 
+        // 🔥 INCREASED SPOTLIGHT LIMIT TO 4
         let currentSpotlights=[]; window.loadSpotlightCandidates=()=>{ const div=document.getElementById('spot-div').value, day=document.getElementById('spot-day').value; const el=document.getElementById('spot-candidates'); if(!div||!day)return; const matches=allSchedules.filter(m=>m.div===div&&m.day===day); el.innerHTML=''; matches.forEach(m=>{ const home=getShortName(m.home||m.homeTeam); const away=getShortName(m.away||m.awayTeam); const btn=document.createElement('button'); btn.className="w-full text-left p-3 bg-white border border-slate-200 rounded text-xs font-bold text-slate-700 hover:bg-blue-50 mb-2 font-[Rajdhani] uppercase"; btn.innerHTML=`<span>${home} vs ${away}</span>`; btn.onclick=()=>addToSpotlight({home,away,...m}); el.appendChild(btn); }); };
-        function addToSpotlight(m) { if(currentSpotlights.length>=3) return showNotify("MAX 3 SPOTLIGHTS", "error"); currentSpotlights.push(m); renderSpotlightUI(); }
+        function addToSpotlight(m) { if(currentSpotlights.length>=4) return showNotify("MAX 4 SPOTLIGHTS", "error"); currentSpotlights.push(m); renderSpotlightUI(); }
         function renderSpotlightUI() { const el=document.getElementById('active-spotlights'); el.innerHTML=''; currentSpotlights.forEach((m,i)=>{ el.innerHTML+=`<div class="p-3 bg-blue-50 border border-blue-200 rounded flex justify-between items-center"><div class="text-xs font-bold text-blue-900 font-[Rajdhani] uppercase">${m.home} vs ${m.away}<br><span class="text-[9px] text-blue-400 font-sans">${m.day}</span></div><button onclick="removeSpot(${i})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-times"></i></button></div>`; }); }
         window.removeSpot=(i)=>{ currentSpotlights.splice(i,1); renderSpotlightUI(); }; window.clearSpotlights=()=>{ currentSpotlights=[]; renderSpotlightUI(); };
         window.publishSpotlights=async()=>{ if(currentSpotlights.length===0) return showNotify("SELECT MATCHES", "error"); const spotlightData=await Promise.all(currentSpotlights.map(async (m)=>{ let l1=await getTeamLogo(m.home, m.div), l2=await getTeamLogo(m.away, m.div); return { teamA:m.home, teamB:m.away, teamALogo:l1, teamBLogo:l2, date:m.date||'TBD', time:m.time||'TBD', venue: m.venue||'TBD', category:'SPOTLIGHT' }; })); await setDoc(doc(db,"app_content","current_fixture"),{matches:spotlightData}); showNotify("SPOTLIGHT LIVE"); };
