@@ -22,9 +22,19 @@
         @keyframes pop { 50% { transform: scale(1.2); } }
         .mini-tab-active { background-color: #1f2937; color: white; }
         .mini-tab-inactive { background-color: #f3f4f6; color: #6b7280; }
+        .tab-active { background-color: #6d28d9; color: white; border-color: #6d28d9; }
+        .tab-inactive { background-color: white; color: #374151; border-color: #e5e7eb; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         @keyframes burn { 0% { opacity: 0.8; color: #ef4444; } 100% { opacity: 1; color: #f59e0b; } }
         .fire-icon { animation: burn 0.8s infinite alternate; }
+        .crown-icon { animation: float 2s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-3px); } 100% { transform: translateY(0); } }
+        
+        /* New Energetic Partner Styles */
+        .sponsor-slot { border: 2px dashed rgba(255,255,255,0.2); transition: all 0.3s; }
+        .sponsor-slot:hover { border-color: #fbbf24; background: rgba(255,255,255,0.05); transform: scale(1.05); }
+        .glow-btn { animation: pulse-gold 2s infinite; }
+        @keyframes pulse-gold { 0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(251, 191, 36, 0); } 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); } }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -36,6 +46,10 @@
         <span class="text-[10px] md:text-xs font-bold tracking-widest opacity-90 md:hidden">NUESA SPORTS</span>
         <div class="flex space-x-4">
             <a href="https://www.instagram.com/theambassadors_sport" target="_blank" class="hover:text-pink-400 transition transform hover:scale-110"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61583536988203" target="_blank" class="hover:text-blue-400 transition transform hover:scale-110"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://x.com/Ambassador30788" target="_blank" class="hover:text-black transition transform hover:scale-110"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://www.tiktok.com/@theambassadors_sport" target="_blank" class="hover:text-pink-600 transition transform hover:scale-110"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://youtube.com/@theambassadorsport" target="_blank" class="hover:text-red-500 transition transform hover:scale-110"><i class="fa-brands fa-youtube"></i></a>
             <a href="https://wa.me/2348113032943" target="_blank" class="hover:text-green-400 transition transform hover:scale-110"><i class="fa-brands fa-whatsapp"></i></a>
         </div>
     </div>
@@ -43,7 +57,7 @@
     <nav class="bg-white border-b sticky top-0 z-40 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
             <a href="index.html" class="flex items-center gap-2"><img src="edulogo.jpg" class="h-9 w-9 rounded-full border border-gray-200"><span class="font-black text-2xl sport-font tracking-tight text-gray-800">EDU-LEAGUE</span></a>
-            <div class="flex space-x-4"><a href="index.html" class="text-gray-500 hover:text-edu-purple font-bold text-sm uppercase tracking-wide">Register</a></div>
+            <div class="flex space-x-4"><a href="index.html" class="text-edu-purple font-bold text-sm uppercase tracking-wide">Home</a></div>
         </div>
     </nav>
 
@@ -62,9 +76,11 @@
     </div>
 
     <main class="flex-grow max-w-7xl mx-auto w-full p-4">
+        
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             <div class="lg:col-span-2 space-y-8">
+                
                 <div class="bg-gray-900 text-white rounded-2xl overflow-hidden shadow-xl relative">
                     <div class="absolute inset-0 bg-gradient-to-br from-purple-900/50 to-blue-900/50"></div>
                     <div class="relative p-6">
@@ -84,6 +100,18 @@
                                 <h3 id="teamB_name" class="font-bold mt-2 text-sm sport-font">Loading</h3>
                             </div>
                         </div>
+                        <div class="bg-white/10 rounded-lg p-3 backdrop-blur-sm border border-white/10">
+                            <div class="flex justify-between gap-2 mb-2">
+                                <button onclick="predict('home')" class="flex-1 bg-green-600/80 hover:bg-green-600 py-1.5 rounded text-[10px] font-bold border border-green-400 transition">HOME</button>
+                                <button onclick="predict('draw')" class="flex-1 bg-gray-600/80 hover:bg-gray-500 py-1.5 rounded text-[10px] font-bold border border-gray-400 transition">DRAW</button>
+                                <button onclick="predict('away')" class="flex-1 bg-red-600/80 hover:bg-red-600 py-1.5 rounded text-[10px] font-bold border border-red-400 transition">AWAY</button>
+                            </div>
+                            <div class="h-1.5 w-full bg-gray-700 rounded-full overflow-hidden flex">
+                                <div id="bar-home" class="bg-green-500 h-full transition-all duration-500" style="width: 33%"></div>
+                                <div id="bar-draw" class="bg-gray-400 h-full transition-all duration-500" style="width: 33%"></div>
+                                <div id="bar-away" class="bg-red-500 h-full transition-all duration-500" style="width: 33%"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -96,7 +124,7 @@
 
             <div class="lg:col-span-1 space-y-6">
                 
-                <div class="bg-white rounded-xl shadow-lg border-t-4 border-purple-600 overflow-hidden">
+                <div id="potw-card" class="bg-white rounded-xl shadow-lg border-t-4 border-purple-600 overflow-hidden">
                     <div class="p-4 bg-purple-50 border-b border-purple-100 flex justify-between items-center">
                         <h3 class="font-black text-purple-900 text-sm sport-font flex items-center gap-2">
                             <i class="fa-solid fa-star text-yellow-500"></i> PLAYER OF THE WEEK
@@ -105,9 +133,8 @@
                             <i class="fa-solid fa-clock-rotate-left"></i> HISTORY
                         </button>
                     </div>
-                    
                     <div id="potw-voting-area" class="p-4">
-                        <p class="text-center text-xs text-gray-400 py-4">No active voting.</p>
+                        <p class="text-center text-xs text-gray-400 py-4">Loading POTW...</p>
                     </div>
                 </div>
 
@@ -126,6 +153,7 @@
                             <thead class="text-gray-400 font-bold border-b"><tr><th class="py-2 pl-2">Team</th><th class="text-center">P</th><th class="text-center">Pts</th></tr></thead>
                             <tbody id="mini-table-body" class="divide-y divide-gray-50"></tbody>
                         </table>
+                        <button onclick="openTableModal()" class="w-full text-center text-[10px] text-blue-600 font-bold mt-3 hover:underline">VIEW FULL TABLE</button>
                     </div>
                 </div>
 
@@ -138,10 +166,38 @@
                     <h3 class="font-black text-lg text-yellow-400 sport-font">STATS CENTER</h3>
                     <p class="text-[10px] text-gray-400">Goals • Assists • Cards</p>
                 </a>
+
             </div>
         </div>
 
-        <footer class="bg-white border-t py-6 text-center mt-12"><p class="text-gray-400 text-[10px] font-bold tracking-widest">POWERED BY THE AMBASSADOR'S SPORTS</p></footer>
+        <div class="mt-12 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 py-10 relative overflow-hidden shadow-2xl border-t-4 border-yellow-400">
+            <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+            
+            <div class="max-w-6xl mx-auto px-4 relative z-10 text-center">
+                <h2 class="text-2xl md:text-3xl font-black text-white italic sport-font tracking-tighter mb-2">FUEL THE PASSION</h2>
+                <p class="text-xs text-purple-200 font-bold uppercase tracking-[0.3em] mb-8">Official Partners & Sponsors</p>
+                
+                <div class="flex flex-wrap justify-center items-center gap-6 md:gap-10">
+                    <div class="h-16 w-32 rounded-lg bg-white/5 backdrop-blur-sm flex items-center justify-center text-white/20 font-bold text-xs uppercase tracking-widest sponsor-slot cursor-default">
+                        Your Logo
+                    </div>
+                    <div class="h-16 w-32 rounded-lg bg-white/5 backdrop-blur-sm flex items-center justify-center text-white/20 font-bold text-xs uppercase tracking-widest sponsor-slot cursor-default">
+                        Your Logo
+                    </div>
+                    <div class="h-16 w-32 rounded-lg bg-white/5 backdrop-blur-sm flex items-center justify-center text-white/20 font-bold text-xs uppercase tracking-widest sponsor-slot cursor-default hidden md:flex">
+                        Your Logo
+                    </div>
+                    
+                    <a href="https://wa.me/2348113032943?text=Hello%20I%20want%20to%20sponsor%20EDU-LEAGUE" target="_blank" class="glow-btn bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 h-14 px-8 rounded-lg transform skew-x-[-10deg] flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl border-b-4 border-yellow-700">
+                        <span class="skew-x-[10deg] font-black text-lg sport-font flex items-center gap-2">
+                            BECOME A SPONSOR <i class="fa-solid fa-arrow-right-long"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <footer class="bg-white border-t py-6 text-center"><p class="text-gray-400 text-[10px] font-bold tracking-widest">POWERED BY THE AMBASSADOR'S SPORTS</p></footer>
     </main>
 
     <div id="potwHistoryModal" class="fixed inset-0 bg-black/90 z-[90] hidden flex items-center justify-center p-4 backdrop-blur-md">
@@ -170,7 +226,18 @@
             </div>
             <div class="flex-1 overflow-auto p-4">
                 <table class="w-full text-sm text-left">
-                    <thead class="bg-gray-100 text-gray-500 text-[10px] uppercase font-bold sticky top-0"><tr><th class="p-3">#</th><th class="p-3">Team</th><th class="p-3 text-center">PL</th><th class="p-3 text-center">W</th><th class="p-3 text-center">D</th><th class="p-3 text-center">L</th><th class="p-3 text-center">GD</th><th class="p-3 text-center text-black">PTS</th></tr></thead>
+                    <thead class="bg-gray-100 text-gray-500 text-[10px] uppercase font-bold sticky top-0">
+                        <tr>
+                            <th class="p-3">#</th>
+                            <th class="p-3">Team</th>
+                            <th class="p-3 text-center">PL</th>
+                            <th class="p-3 text-center">W</th>
+                            <th class="p-3 text-center">D</th>
+                            <th class="p-3 text-center">L</th>
+                            <th class="p-3 text-center">GD</th>
+                            <th class="p-3 text-center text-black">PTS</th>
+                        </tr>
+                    </thead>
                     <tbody id="full-table-body" class="divide-y divide-gray-100"></tbody>
                 </table>
             </div>
@@ -208,6 +275,18 @@
         </div>
     </div>
 
+    <div id="teamModal" class="fixed inset-0 bg-black/90 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-2xl overflow-hidden relative shadow-2xl transform transition-all">
+            <button onclick="document.getElementById('teamModal').classList.add('hidden')" class="absolute top-2 right-2 bg-white/20 p-2 rounded-full text-white hover:bg-white/40 z-10"><i class="fa-solid fa-times"></i></button>
+            <div class="bg-edu-purple p-8 text-center text-white relative">
+                <img id="tm-logo" src="edulogo.jpg" class="w-24 h-24 rounded-full border-4 border-white shadow-lg mx-auto mb-3 object-contain bg-white">
+                <h2 id="tm-name" class="text-2xl font-black sport-font tracking-tight">Team Name</h2>
+                <p id="tm-coach" class="text-sm text-purple-200 font-medium bg-white/10 inline-block px-3 py-1 rounded-full mt-2">Coach: ...</p>
+            </div>
+            <div class="p-6 max-h-[50vh] overflow-y-auto"><h4 class="font-bold text-gray-400 text-[10px] uppercase mb-4 tracking-widest border-b pb-2">Squad Roster</h4><ul id="tm-roster" class="space-y-3 text-sm text-gray-700"></ul></div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -225,7 +304,7 @@
         const fetchDivLogos = async () => { try { const s = await getDoc(doc(db, "app_content", "division_logos")); if(s.exists()) divLogos = { ...divLogos, ...s.data() }; } catch(e){} }; fetchDivLogos();
         const fetchTeamLogos = async () => { const assetsSnap = await getDocs(collection(db, "team_assets")); assetsSnap.forEach(doc => { globalTeamLogos[doc.id] = doc.data().logoUrl; }); }; fetchTeamLogos();
 
-        // 🔥 1. PLAYER OF THE WEEK VOTING
+        // 🔥 1. POTW VOTING LISTENER
         onSnapshot(doc(db, "app_content", "potw_current"), (docSnap) => {
             const container = document.getElementById('potw-voting-area');
             if(!docSnap.exists()) { container.innerHTML = '<p class="text-xs text-gray-400 text-center">No active voting.</p>'; return; }
@@ -238,45 +317,17 @@
             
             let html = `<div class="mb-3 flex justify-between items-center"><span class="text-[10px] font-bold bg-purple-100 text-purple-700 px-2 py-0.5 rounded uppercase">${matchday}</span><span class="text-[9px] text-gray-400">Vote once</span></div>`;
             
-            // Calculate Total Votes for Percentages
             const totalVotes = Object.values(d.votes || {}).reduce((a,b)=>a+b, 0);
 
-            d.nominees.forEach((n, i) => {
+            d.nominees.forEach((n) => {
                 const votes = d.votes ? (d.votes[n.name] || 0) : 0;
                 const pct = totalVotes > 0 ? Math.round((votes/totalVotes)*100) : 0;
-                
-                // Show Stats List
                 const statsHtml = n.stats.map(s => `<span class="text-[9px] bg-gray-100 px-1.5 rounded text-gray-600">${s}</span>`).join(' ');
 
                 if (userVoted) {
-                    // RESULT VIEW
-                    html += `
-                        <div class="mb-3 p-3 bg-gray-50 rounded border border-gray-100 relative overflow-hidden">
-                            <div class="flex justify-between items-start relative z-10">
-                                <div>
-                                    <p class="font-bold text-sm text-gray-800 leading-tight">${n.name}</p>
-                                    <p class="text-[10px] text-purple-600 font-bold uppercase mb-1">${n.team}</p>
-                                    <div class="flex flex-wrap gap-1">${statsHtml}</div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-lg font-black text-purple-600">${pct}%</span>
-                                </div>
-                            </div>
-                            <div class="absolute bottom-0 left-0 h-1 bg-purple-500 transition-all duration-1000" style="width:${pct}%"></div>
-                        </div>`;
+                    html += `<div class="mb-3 p-3 bg-gray-50 rounded border border-gray-100 relative overflow-hidden"><div class="flex justify-between items-start relative z-10"><div><p class="font-bold text-sm text-gray-800 leading-tight">${n.name}</p><p class="text-[10px] text-purple-600 font-bold uppercase mb-1">${n.team}</p><div class="flex flex-wrap gap-1">${statsHtml}</div></div><div class="text-right"><span class="text-lg font-black text-purple-600">${pct}%</span></div></div><div class="absolute bottom-0 left-0 h-1 bg-purple-500 transition-all duration-1000" style="width:${pct}%"></div></div>`;
                 } else {
-                    // VOTING VIEW
-                    html += `
-                        <div class="mb-3 p-3 bg-white border border-gray-200 rounded hover:border-purple-300 transition shadow-sm">
-                            <div class="flex justify-between items-start mb-2">
-                                <div>
-                                    <p class="font-black text-sm text-gray-800">${n.name}</p>
-                                    <p class="text-[10px] text-gray-500 uppercase font-bold">${n.team} (${n.div.split(' ')[0]})</p>
-                                </div>
-                                <button onclick="votePOTW('${matchday}', '${n.name}')" class="bg-purple-600 text-white text-xs font-bold px-3 py-1.5 rounded hover:bg-purple-700 shadow">VOTE</button>
-                            </div>
-                            <div class="flex flex-wrap gap-1">${statsHtml}</div>
-                        </div>`;
+                    html += `<div class="mb-3 p-3 bg-white border border-gray-200 rounded hover:border-purple-300 transition shadow-sm"><div class="flex justify-between items-start mb-2"><div><p class="font-black text-sm text-gray-800">${n.name}</p><p class="text-[10px] text-gray-500 uppercase font-bold">${n.team} (${n.div.split(' ')[0]})</p></div><button onclick="votePOTW('${matchday}', '${n.name}')" class="bg-purple-600 text-white text-xs font-bold px-3 py-1.5 rounded hover:bg-purple-700 shadow">VOTE</button></div><div class="flex flex-wrap gap-1">${statsHtml}</div></div>`;
                 }
             });
             container.innerHTML = html;
@@ -285,12 +336,8 @@
         window.votePOTW = async (matchday, playerName) => {
             if(localStorage.getItem(`voted_potw_${matchday}`)) return alert("You have already voted!");
             localStorage.setItem(`voted_potw_${matchday}`, 'true');
-            // Update Firestore
-            const potwRef = doc(db, "app_content", "potw_current");
-            // We use dot notation for nested field update
-            const updateData = {};
-            updateData[`votes.${playerName}`] = increment(1);
-            await updateDoc(potwRef, updateData);
+            const updateData = {}; updateData[`votes.${playerName}`] = increment(1);
+            await updateDoc(doc(db, "app_content", "potw_current"), updateData);
             alert(`Vote cast for ${playerName}!`);
         };
 
@@ -299,32 +346,17 @@
             const list = document.getElementById('potw-history-list');
             list.innerHTML = '<div class="text-center py-4"><i class="fa-solid fa-circle-notch fa-spin text-purple-500"></i></div>';
             document.getElementById('potwHistoryModal').classList.remove('hidden');
-
-            // Query "potw_history" collection (Admin should save winners here)
-            // Note: Since I didn't add auto-history saving in Admin yet, this might be empty initially.
-            // But this is the logic to display it.
             const q = query(collection(db, "potw_history"), orderBy("timestamp", "desc"));
             const snap = await getDocs(q);
-            
             list.innerHTML = '';
             if (snap.empty) { list.innerHTML = '<p class="text-center text-gray-400 text-sm mt-4">No history records yet.</p>'; return; }
-
             snap.forEach(d => {
                 const h = d.data();
-                list.innerHTML += `
-                    <div class="bg-white p-4 rounded-xl border border-purple-100 shadow-sm flex items-center gap-4">
-                        <div class="bg-purple-100 h-12 w-12 rounded-full flex items-center justify-center text-xl">👑</div>
-                        <div>
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${h.matchday}</p>
-                            <h4 class="font-black text-lg text-gray-800 leading-none">${h.winner}</h4>
-                            <p class="text-xs text-purple-600 font-bold">${h.team}</p>
-                            <p class="text-[10px] text-gray-500 mt-1">${h.stats}</p>
-                        </div>
-                    </div>`;
+                list.innerHTML += `<div class="bg-white p-4 rounded-xl border border-purple-100 shadow-sm flex items-center gap-4"><div class="bg-purple-100 h-12 w-12 rounded-full flex items-center justify-center text-xl">👑</div><div><p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${h.matchday}</p><h4 class="font-black text-lg text-gray-800 leading-none">${h.winner}</h4><p class="text-xs text-purple-600 font-bold">${h.team}</p><p class="text-[10px] text-gray-500 mt-1">${h.stats}</p></div></div>`;
             });
         };
 
-        // 3. FIXTURES & MOTM DISPLAY
+        // MATCH TICKER
         onSnapshot(doc(db, "app_content", "current_fixture"), (docSnap) => {
             if(docSnap.exists()) {
                 const data = docSnap.data();
@@ -350,6 +382,7 @@
             }
         });
 
+        // NEWS FEED
         onSnapshot(query(collection(db, "news_posts"), orderBy("timestamp", "desc")), (snapshot) => {
             const grid = document.getElementById('news-grid'); document.getElementById('loading').classList.add('hidden'); grid.classList.remove('hidden'); grid.innerHTML = '';
             if (snapshot.empty) { grid.innerHTML = '<p class="text-center col-span-full text-gray-400">No news updates available.</p>'; return; }
@@ -368,7 +401,7 @@
             });
         });
 
-        // 4. MINI TABLE
+        // MINI TABLE
         window.loadMiniTable = (lvl) => {
             ['Finalist','Penultimate','Sophomore','Female'].forEach(l => { 
                 const b=document.getElementById(`mt-${l}`); 
@@ -406,54 +439,23 @@
             window.renderSchedule();
         }
         
-        // 🔥 RENDER SCHEDULE WITH MOTM (New Feature)
         window.renderSchedule = () => {
             const list = document.getElementById('schedule-list'); const filterDiv = document.getElementById('sched-filter').value; list.innerHTML = '';
             let filtered = allSchedules; if (filterDiv !== 'All') filtered = allSchedules.filter(m => m.div === filterDiv);
             if (filtered.length === 0) { list.innerHTML = '<div class="text-center py-10"><p class="text-gray-400 font-bold">No data found.</p></div>'; return; }
-            
-            // Sort by matchday logic not strictly implemented in simple array, but grouping handles view
             const grouped = {}; filtered.forEach(m => { if(!grouped[m.day]) grouped[m.day] = []; grouped[m.day].push(m); });
-            
             Object.keys(grouped).sort().forEach(day => {
                 list.innerHTML += `<h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mt-4 mb-2 sticky top-0 bg-gray-50 py-1 pl-2">${day}</h4>`;
                 grouped[day].forEach(m => {
                     let status = m.time === 'TBD' ? 'TBD' : m.time;
                     let motmHtml = '';
-
-                    // If Results Mode AND Score exists
                     if (scheduleMode === 'results') {
-                        if (m.homeScore !== undefined && m.awayScore !== undefined) {
-                            status = `<span class="text-lg font-black text-slate-800">${m.homeScore} - ${m.awayScore}</span>`;
-                        } else {
-                            status = '<span class="text-xs text-gray-400 font-bold">vs</span>';
-                        }
-                        
-                        // Check for MOTM
+                        status = (m.homeScore !== undefined) ? `<span class="text-lg font-black text-slate-800">${m.homeScore} - ${m.awayScore}</span>` : '<span class="text-xs text-gray-400 font-bold">vs</span>';
                         if (m.motm && m.motm.player) {
-                            motmHtml = `
-                                <div class="mt-2 pt-2 border-t border-gray-100 flex items-center gap-2">
-                                    <span class="bg-yellow-100 text-yellow-700 text-[9px] font-black px-1.5 py-0.5 rounded"><i class="fa-solid fa-star"></i> MOTM</span>
-                                    <span class="text-[10px] font-bold text-gray-700 uppercase">${m.motm.player} <span class="text-gray-400">(${m.motm.team})</span></span>
-                                </div>
-                            `;
+                            motmHtml = `<div class="mt-2 pt-2 border-t border-gray-100 flex items-center gap-2"><span class="bg-yellow-100 text-yellow-700 text-[9px] font-black px-1.5 py-0.5 rounded"><i class="fa-solid fa-star"></i> MOTM</span><span class="text-[10px] font-bold text-gray-700 uppercase">${m.motm.player} <span class="text-gray-400">(${m.motm.team})</span></span></div>`;
                         }
                     }
-
-                    list.innerHTML += `
-                        <div class="bg-white p-4 rounded-xl border border-gray-100 mb-2 shadow-sm">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <span class="text-[9px] font-bold bg-gray-100 text-gray-600 px-2 py-0.5 rounded uppercase mb-1 inline-block">${(m.div||'').split(' ')[0]}</span>
-                                    <div class="font-black text-gray-800 text-sm sport-font uppercase">${m.home||m.homeTeam} <span class="text-gray-300 mx-1">vs</span> ${m.away||m.awayTeam}</div>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-xs font-bold text-gray-600">${m.date||''}</p>
-                                    <div class="mt-1">${status}</div>
-                                </div>
-                            </div>
-                            ${motmHtml}
-                        </div>`;
+                    list.innerHTML += `<div class="bg-white p-4 rounded-xl border border-gray-100 mb-2 shadow-sm"><div class="flex justify-between items-center"><div><span class="text-[9px] font-bold bg-gray-100 text-gray-600 px-2 py-0.5 rounded uppercase mb-1 inline-block">${(m.div||'').split(' ')[0]}</span><div class="font-black text-gray-800 text-sm sport-font uppercase">${m.home||m.homeTeam} <span class="text-gray-300 mx-1">vs</span> ${m.away||m.awayTeam}</div></div><div class="text-right"><p class="text-xs font-bold text-gray-600">${m.date||''}</p><div class="mt-1">${status}</div></div></div>${motmHtml}</div>`;
                 });
             });
         }
@@ -469,16 +471,11 @@
             });
         });
 
-        // 6. FAN ZONE (Predictions only now, MOTM is in Results)
         const fanDoc = doc(db, "app_content", "fan_zone"); 
         onSnapshot(fanDoc, (s) => { 
-            if(!s.exists()) { setDoc(fanDoc, { prediction: {home:0, draw:0, away:0} }, { merge: true }); return; } 
+            if(!s.exists()) { setDoc(fanDoc, { cheer_battle: {}, prediction: {home:0, draw:0, away:0}, motm: { active:false, nominees:[], votes:[] } }, { merge: true }); return; } 
             const d = s.data(); 
-            const totalP = (d.prediction.home||0) + (d.prediction.draw||0) + (d.prediction.away||0); 
-            const ph = totalP ? Math.round((d.prediction.home/totalP)*100) : 33; 
-            const pd = totalP ? Math.round((d.prediction.draw/totalP)*100) : 33; 
-            const pa = totalP ? Math.round((d.prediction.away/totalP)*100) : 33; 
-            document.getElementById('bar-home').style.width = ph+'%'; document.getElementById('bar-draw').style.width = pd+'%'; document.getElementById('bar-away').style.width = pa+'%'; 
+            const totalP = (d.prediction.home||0) + (d.prediction.draw||0) + (d.prediction.away||0); const ph = totalP ? Math.round((d.prediction.home/totalP)*100) : 33; const pd = totalP ? Math.round((d.prediction.draw/totalP)*100) : 33; const pa = totalP ? Math.round((d.prediction.away/totalP)*100) : 33; document.getElementById('bar-home').style.width = ph+'%'; document.getElementById('bar-draw').style.width = pd+'%'; document.getElementById('bar-away').style.width = pa+'%'; 
         });
 
         window.handleLike = async (id) => { const isLiked = localStorage.getItem(`liked_${id}`); const btn = document.getElementById(`like-btn-${id}`); const countSpan = document.getElementById(`like-count-${id}`); let newCount = parseInt(countSpan.innerText); if (isLiked) { newCount--; localStorage.removeItem(`liked_${id}`); btn.classList.remove('liked'); btn.querySelector('i').classList.replace('fa-solid', 'fa-regular'); } else { newCount++; localStorage.setItem(`liked_${id}`, 'true'); btn.classList.add('liked'); btn.querySelector('i').classList.replace('fa-regular', 'fa-solid'); } countSpan.innerText = newCount; await updateDoc(doc(db, "news_posts", id), { likes: increment(isLiked ? -1 : 1) }); }
@@ -486,6 +483,7 @@
         window.openModal = (pid) => { currentPostId = pid; const cardEl = document.getElementById(`card-${pid}`); if(!cardEl) return; document.getElementById('modalTitle').innerText = cardEl.dataset.title; document.getElementById('modalBody').innerText = cardEl.dataset.content; document.getElementById('modalDate').innerText = cardEl.dataset.date; const imgEl = document.getElementById('modalImg'); const container = document.getElementById('media-container'); const existingVideo = container.querySelector('video'); if(existingVideo) existingVideo.remove(); imgEl.classList.add('hidden'); if (cardEl.dataset.isvideo === 'true') { const video = document.createElement('video'); video.src = cardEl.dataset.media; video.controls = true; video.autoplay = true; video.className = "w-full max-h-[500px] object-contain shadow-lg"; container.appendChild(video); } else { imgEl.src = cardEl.dataset.media; imgEl.classList.remove('hidden'); } document.getElementById('newsModal').classList.remove('hidden'); document.body.style.overflow = 'hidden'; const list = document.getElementById('comments-list'); list.innerHTML = '<p class="text-xs text-gray-400">Loading comments...</p>'; commentsUnsubscribe = onSnapshot(query(collection(db, "news_posts", pid, "comments"), orderBy("timestamp", "asc")), (snap) => { list.innerHTML = ''; snap.forEach(d => { const c = d.data(); list.innerHTML += `<div class="bg-gray-50 p-3 rounded-xl border border-gray-100 text-sm"><p class="font-bold text-edu-purple text-xs mb-1">${c.user}</p><p class="text-gray-700 leading-relaxed">${c.text}</p></div>`; }); }); }
         window.closeModal = () => { document.getElementById('newsModal').classList.add('hidden'); document.body.style.overflow = 'auto'; if(commentsUnsubscribe) commentsUnsubscribe(); }
         window.postComment = async (e) => { e.preventDefault(); if(!currentPostId) return; const t = document.getElementById('commentInput').value; const u = document.getElementById('commentName').value || "Fan"; if(!t)return; document.getElementById('commentInput').value=''; await addDoc(collection(db, "news_posts", currentPostId, "comments"), { user:u, text:t, timestamp: serverTimestamp() }); await updateDoc(doc(db, "news_posts", currentPostId), { commentsCount: increment(1) }); }
+        window.openTeam = async (name) => { const q = query(collection(db, "registrations"), where("department", "==", name)); const snap = await getDocs(q); if(!snap.empty) { const d = snap.docs[0].data(); document.getElementById('tm-name').textContent=d.department; document.getElementById('tm-coach').textContent="Coach: "+d.coachName; const asset = await getDoc(doc(db, "team_assets", name)); document.getElementById('tm-logo').src = asset.exists()?asset.data().logoUrl : 'edulogo.jpg'; document.getElementById('tm-roster').innerHTML = (d.players||[]).map(p=>`<li class="flex justify-between border-b border-gray-100 pb-2"><span>${p.name}</span><span class="text-gray-400 text-xs font-mono bg-gray-100 px-2 py-0.5 rounded">${p.position||'-'}</span></li>`).join('') || '<li>No players.</li>'; document.getElementById('teamModal').classList.remove('hidden'); } else alert("Team details not found."); }
         window.vote = async (id, o) => { localStorage.setItem(`voted_${id}`,'true'); await updateDoc(doc(db, "polls", id), { [o===1?'votes1':'votes2']: increment(1) }); }
         window.predict = async (type) => { if(localStorage.getItem('predicted_match')) return alert("Already predicted!"); localStorage.setItem('predicted_match', 'true'); await updateDoc(fanDoc, { [`prediction.${type}`]: increment(1) }); }
     </script>
