@@ -51,7 +51,7 @@
         .btn-sport {
             background: var(--navy); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700;
             padding: 12px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase; transition: 0.2s;
-            width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;
+            width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer;
         }
         .btn-sport:hover { background: #1e293b; transform: translateY(-1px); }
         .btn-accent { background: var(--blue); } .btn-accent:hover { background: #1d4ed8; }
@@ -173,7 +173,7 @@
         </div>
 
         <div id="schedule" class="section hidden">
-            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-regular fa-calendar-days text-blue-600"></i> FIXTURE LIST</h2><button onclick="downloadSchedulePDF()" class="bg-slate-800 text-white px-4 py-2 rounded text-xs font-bold font-[Rajdhani] uppercase shadow hover:bg-slate-700 transition"><i class="fa-solid fa-download mr-1"></i> Export PDF</button></div>
+            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-regular fa-calendar-days text-blue-600"></i> FIXTURE LIST</h2><button onclick="downloadSchedulePDF()" class="bg-slate-800 text-white px-4 py-2 rounded text-xs font-bold font-[Rajdhani] uppercase">Export PDF</button></div>
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <div class="lg:col-span-8">
                     <div class="flex gap-3 mb-4 overflow-x-auto pb-1 no-scrollbar"><select id="view-div" onchange="loadSchedule()" class="input-sport w-auto"><option value="All">ALL DIVISIONS</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select>
@@ -241,8 +241,43 @@
         </div>
 
         <div id="stats" class="section hidden"><div class="sport-card p-8 max-w-4xl mx-auto border-l-green"><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b pb-8"><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">1. Team</label><select id="stat-team-select" class="input-sport" onchange="loadTeamPlayers()"><option value="">Select...</option></select></div><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">2. Player</label><select id="stat-player-select" class="input-sport" onchange="fetchPlayerCurrentStats()"><option value="">Select...</option></select></div></div><div id="stats-editor" class="hidden"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-slate-800 text-xl">PLAYER STATS</h3></div><div class="grid grid-cols-3 md:grid-cols-5 gap-3 mb-8"><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-green-600 uppercase mb-1">Goals</p><input type="number" id="p-goals" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Assists</p><input type="number" id="p-assists" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-yellow-600 uppercase mb-1">Yellow</p><input type="number" id="p-yellow" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-red-600 uppercase mb-1">Red</p><input type="number" id="p-red" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-orange-600 uppercase mb-1">Saves</p><input type="number" id="p-saves" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div></div><button onclick="savePlayerStats()" class="w-full btn-sport btn-accent">UPDATE STATS</button></div></div></div>
-        <div id="news" class="section hidden"><div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="sport-card p-6 h-fit border-l-blue"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">COMPOSE NEWS</h3><div class="space-y-3"><input id="news-title" placeholder="HEADLINE" class="input-sport uppercase"><textarea id="news-body" rows="4" placeholder="Details..." class="input-sport"></textarea><div class="relative group cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-4 text-center hover:bg-slate-50 transition"><input type="file" id="news-file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('news-file-label').innerText=this.files[0].name"><i class="fa-solid fa-cloud-arrow-up text-xl text-slate-400 mb-1"></i><p class="text-xs font-bold text-slate-500 uppercase" id="news-file-label">Attach Media</p></div><button onclick="publishNews()" id="btn-pub-news" class="w-full btn-sport btn-accent">PUBLISH</button></div></div><div class="lg:col-span-2 sport-card p-6 h-[500px] flex flex-col border-l-orange"><div class="flex justify-between mb-4"><h3 class="font-bold text-slate-800">LIVE FEED</h3><button onclick="loadNews()" class="text-xs font-bold text-blue-600 uppercase">REFRESH</button></div><div id="news-feed" class="flex-1 overflow-y-auto space-y-2 pr-2"></div></div></div></div>
-        <div id="fanz" class="section hidden"><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="sport-card p-6 border-l-green"><h3 class="font-bold text-slate-800 mb-4">MAN OF THE MATCH</h3><div class="grid grid-cols-3 gap-2 mb-4"><input id="motm-1" placeholder="PLAYER 1" class="input-sport"><input id="motm-2" placeholder="PLAYER 2" class="input-sport"><input id="motm-3" placeholder="PLAYER 3" class="input-sport"></div><div class="flex gap-2"><button onclick="setMOTM(true)" class="flex-1 bg-green-600 text-white py-3 rounded font-bold font-[Rajdhani]">OPEN</button><button onclick="setMOTM(false)" class="flex-1 bg-red-600 text-white py-3 rounded font-bold font-[Rajdhani]">CLOSE</button></div></div><div class="sport-card p-6 border-l-blue"><h3 class="font-bold text-slate-800 mb-4">FAN POLL</h3><div class="space-y-3"><input id="poll-q" placeholder="QUESTION" class="input-sport"><input id="poll-o1" placeholder="OPTION 1" class="input-sport"><input id="poll-o2" placeholder="OPTION 2" class="input-sport"><button onclick="createPoll()" class="w-full btn-sport btn-accent">LAUNCH</button></div></div></div><div id="active-polls" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6"></div></div>
+        
+        <div id="fanz" class="section hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="sport-card p-6 border-l-blue">
+                    <h3 class="font-bold text-slate-800 mb-4">FAN POLL</h3>
+                    <div class="space-y-3">
+                        <input id="poll-q" placeholder="QUESTION" class="input-sport">
+                        <input id="poll-o1" placeholder="OPTION 1" class="input-sport">
+                        <input id="poll-o2" placeholder="OPTION 2" class="input-sport">
+                        <button onclick="createPoll()" class="w-full btn-sport btn-accent">LAUNCH</button>
+                    </div>
+                    <div id="active-polls" class="mt-4 space-y-2"></div>
+                </div>
+                <div class="sport-card p-6 border-l-green">
+                    <h3 class="font-bold text-slate-800 mb-4">MAN OF THE MATCH</h3>
+                    <div class="grid grid-cols-3 gap-2 mb-4">
+                        <input id="motm-1" placeholder="PLAYER 1" class="input-sport">
+                        <input id="motm-2" placeholder="PLAYER 2" class="input-sport">
+                        <input id="motm-3" placeholder="PLAYER 3" class="input-sport">
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="setMOTM(true)" class="flex-1 bg-green-600 text-white py-3 rounded font-bold font-[Rajdhani]">OPEN</button>
+                        <button onclick="setMOTM(false)" class="flex-1 bg-red-600 text-white py-3 rounded font-bold font-[Rajdhani]">CLOSE</button>
+                    </div>
+                </div>
+                <div class="sport-card p-6 border-l-purple lg:col-span-2">
+                    <h3 class="font-bold text-slate-800 mb-4">PLAYER OF THE WEEK</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <input id="potw-name" placeholder="Player Name" class="input-sport">
+                        <input id="potw-team" placeholder="Team" class="input-sport">
+                        <input id="potw-stat" placeholder="Key Stat (e.g. Hat-trick)" class="input-sport">
+                    </div>
+                    <button onclick="savePOTW()" class="w-full btn-sport btn-accent mt-3">SET PLAYER OF THE WEEK</button>
+                </div>
+            </div>
+        </div>
+
         <div id="verification" class="section hidden"><div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black text-slate-800"><i class="fa-solid fa-check-double text-blue-600"></i> VERIFICATION</h2><button onclick="loadVerifications()" class="bg-slate-800 text-white px-4 py-2 rounded text-xs font-bold uppercase">Refresh</button></div><div class="sport-card overflow-hidden border-l-green"><table class="w-full text-sm text-left"><thead class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase border-b"><tr><th class="p-4 pl-6">Team</th><th class="p-4 hidden md:table-cell">Div</th><th class="p-4">Acronym</th><th class="p-4">Status</th><th class="p-4 text-right pr-6">Act</th></tr></thead><tbody id="verify-list" class="divide-y divide-slate-100"></tbody></table></div></div>
 
         <div id="edit-match-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-slate-900/90 backdrop-blur-sm hidden p-4"><div class="bg-white p-6 rounded-lg w-full max-w-sm shadow-2xl border-l-4 border-blue-600"><div class="flex justify-between items-center mb-4"><h3 class="text-xl font-black text-slate-800 font-[Rajdhani]">EDIT FIXTURE</h3><button onclick="closeEditModal()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button></div><input type="hidden" id="edit-match-id"><div class="bg-slate-100 p-3 rounded mb-4 text-center border border-slate-200"><p class="text-sm font-bold text-slate-800 uppercase font-[Rajdhani]" id="edit-match-teams">...</p></div><div class="space-y-3"><div><label class="text-[10px] font-bold text-slate-400 uppercase">Date</label><input type="date" id="edit-match-date" class="input-sport"></div><div><label class="text-[10px] font-bold text-slate-400 uppercase">Time</label><div class="grid grid-cols-2 gap-2 items-center"><input type="time" id="edit-match-time" class="input-sport"><label class="tbd-label"><input type="checkbox" id="edit-time-tbd" class="tbd-check" onchange="toggleTime(this, 'edit-match-time')"> TBD</label></div></div><div><label class="text-[10px] font-bold text-slate-400 uppercase">Venue</label><div class="grid grid-cols-2 gap-2 items-center"><input type="text" id="edit-match-venue" class="input-sport uppercase"><label class="tbd-label"><input type="checkbox" id="edit-venue-tbd" class="tbd-check" onchange="toggleVenue(this, 'edit-match-venue')"> TBD</label></div></div><button onclick="confirmEditMatch()" class="w-full btn-sport btn-accent mt-2">UPDATE MATCH</button></div></div></div>
@@ -281,6 +316,27 @@
         
         const getShortName = (name) => teamAcronymMap[name] || name;
 
+        // 🔥 GLOBAL POLL DELETE FUNCTION (FIXED)
+        window.deletePoll = async (id) => {
+            if(confirm("Delete this poll?")) {
+                await deleteDoc(doc(db, "polls", id));
+                loadActivePolls();
+                showNotify("POLL DELETED", "info");
+            }
+        };
+
+        // 🔥 GLOBAL POTW FUNCTION
+        window.savePOTW = async () => {
+            const data = {
+                name: document.getElementById('potw-name').value,
+                team: document.getElementById('potw-team').value,
+                stat: document.getElementById('potw-stat').value,
+                timestamp: serverTimestamp()
+            };
+            await setDoc(doc(db, "app_content", "player_of_week"), data);
+            showNotify("POTW UPDATED");
+        };
+
         document.getElementById('login-form').addEventListener('submit', (e) => { 
             e.preventDefault(); const pass = document.getElementById('adm-pass').value;
             signInWithEmailAndPassword(auth, HIDDEN_ADMIN_EMAIL, pass).then(() => showNotify("ACCESS GRANTED")).catch((err) => {
@@ -306,7 +362,7 @@
                 document.getElementById('dash-matches').innerText = schedSize;
                 document.getElementById('dash-news').innerText = (await getDocs(collection(db, "news_posts"))).size;
                 loadTeams(); loadVerifications(); loadSchedule(); loadNews(); loadActivePolls(); 
-                loadRosters(); // 🔥 ADDED: LOAD ROSTERS
+                loadRosters();
                 const ts = document.getElementById('stat-team-select'); ts.innerHTML = '<option value="">Select Team...</option>'; t.forEach(doc => { const d=doc.data(); const o=document.createElement('option'); o.value=doc.id; o.textContent=`${d.department} (${d.level})`; ts.appendChild(o); });
             } catch(e) { console.error(e); }
         }
@@ -611,13 +667,44 @@
         window.fetchPlayerCurrentStats=async()=>{const t=document.getElementById('stat-team-select').value,p=document.getElementById('stat-player-select').value;if(!t||!p)return;document.getElementById('stats-editor').classList.remove('hidden');const s=await getDoc(doc(db,"player_stats",`${t}_${p.replace(/\s+/g,'')}`));const d=s.exists()?s.data():{};document.getElementById('p-goals').value=d.goals||0;document.getElementById('p-assists').value=d.assists||0;document.getElementById('p-yellow').value=d.yellow_cards||0;document.getElementById('p-red').value=d.red_cards||0;document.getElementById('p-saves').value=d.saves||0;};
         window.savePlayerStats=async()=>{const t=document.getElementById('stat-team-select').value,p=document.getElementById('stat-player-select').value;if(!t||!p)return;await setDoc(doc(db,"player_stats",`${t}_${p.replace(/\s+/g,'')}`),{name:p,teamId:t,goals:parseInt(document.getElementById('p-goals').value)||0,assists:parseInt(document.getElementById('p-assists').value)||0,yellow_cards:parseInt(document.getElementById('p-yellow').value)||0,red_cards:parseInt(document.getElementById('p-red').value)||0,saves:parseInt(document.getElementById('p-saves').value)||0},{merge:true});showNotify("STATS SAVED");};
         window.createPoll=async()=>{const q=document.getElementById('poll-q').value;if(!q)return;await addDoc(collection(db,"polls"),{question:q,opt1:document.getElementById('poll-o1').value,opt2:document.getElementById('poll-o2').value,votes1:0,votes2:0,active:true,timestamp:serverTimestamp()});showNotify("POLL LIVE");loadActivePolls();};
-        window.loadActivePolls=async()=>{const e=document.getElementById('active-polls');e.innerHTML='';(await getDocs(query(collection(db,"polls"),orderBy("timestamp","desc")))).forEach(d=>{const p=d.data();e.innerHTML+=`<div class="sport-card p-4 mb-2"><h4 class="font-bold text-sm text-slate-800 uppercase font-[Rajdhani]">${p.question}</h4><div class="flex gap-2 justify-end mt-2"><button onclick="deleteDoc(doc(db,'polls','${d.id}'));loadActivePolls()" class="text-xs bg-slate-100 px-3 py-1 rounded font-bold uppercase text-slate-500 hover:text-red-500">Delete</button></div></div>`;});};
+        
+        // 🔥 UPDATE 4: FIXED POLL DELETION
+        window.deletePoll = async (id) => {
+            if(confirm("Delete this poll?")) {
+                await deleteDoc(doc(db, "polls", id));
+                loadActivePolls();
+                showNotify("POLL DELETED", "info");
+            }
+        };
+
+        window.loadActivePolls=async()=>{
+            const e=document.getElementById('active-polls');
+            e.innerHTML='';
+            (await getDocs(query(collection(db,"polls"),orderBy("timestamp","desc")))).forEach(d=>{
+                const p=d.data();
+                // Updated to call window.deletePoll
+                e.innerHTML+=`<div class="sport-card p-4 mb-2"><h4 class="font-bold text-sm text-slate-800 uppercase font-[Rajdhani]">${p.question}</h4><div class="flex gap-2 justify-end mt-2"><button onclick="deletePoll('${d.id}')" class="text-xs bg-slate-100 px-3 py-1 rounded font-bold uppercase text-slate-500 hover:text-red-500">Delete</button></div></div>`;
+            });
+        };
+
         window.loadVerifications=async()=>{const l=document.getElementById('verify-list');l.innerHTML='';(await getDocs(collection(db,"registrations"))).forEach(d=>{l.innerHTML+=`<tr class="border-b border-slate-50 hover:bg-slate-50"><td class="p-4 font-bold text-slate-800 font-[Rajdhani] uppercase tracking-wide">${d.data().department}</td><td class="p-4 text-xs font-bold text-slate-400">${d.data().level}</td><td class="p-4"><input class="input-sport p-1 text-xs" value="${d.data().acronym||''}" placeholder="Acronym" onchange="updateAcronym('${d.id}', this.value)"></td><td class="p-4"><span class="bg-slate-100 text-slate-500 px-2 py-1 rounded text-[10px] font-bold uppercase">${d.data().registrationStatus||'PENDING'}</span></td><td class="p-4 text-right"><button onclick="verifyTeam('${d.id}')" class="text-green-500 hover:bg-green-50 p-2 rounded"><i class="fa-solid fa-check"></i></button></td></tr>`;});};
         window.updateAcronym=async(id, val)=>{await updateDoc(doc(db,"registrations",id),{acronym:val});showNotify("ACRONYM SAVED");};
         window.verifyTeam=async(id)=>{if(confirm("CONFIRM VERIFICATION?")){await updateDoc(doc(db,"registrations",id),{registrationStatus:"Verified"});showNotify("VERIFIED");loadVerifications();}};
         window.setMOTM=async(a)=>{const n=[document.getElementById('motm-1').value,document.getElementById('motm-2').value,document.getElementById('motm-3').value];await setDoc(doc(db,"app_content","fan_zone"),{motm:{active:a,nominees:n,votes:[0,0,0]}},{merge:true});showNotify(a?"VOTING OPEN":"VOTING CLOSED", "info");};
         
-        // 🔥 UPDATE 4: SAFER IMAGE LOADER (CANVAS METHOD)
+        // 🔥 UPDATE 5: GLOBAL POTW FUNCTION
+        window.savePOTW = async () => {
+            const data = {
+                name: document.getElementById('potw-name').value,
+                team: document.getElementById('potw-team').value,
+                stat: document.getElementById('potw-stat').value,
+                timestamp: serverTimestamp()
+            };
+            await setDoc(doc(db, "app_content", "player_of_week"), data);
+            showNotify("POTW UPDATED");
+        };
+
+        // 🔥 UPDATE 6: SAFER IMAGE LOADER (CANVAS METHOD)
         async function getBase64Image(u){
             try {
                 if(!u) return null;
