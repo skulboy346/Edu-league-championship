@@ -7,252 +7,122 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" href="edulogo.jpg" type="image/jpeg">
-    <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap'); body { font-family: 'Inter', sans-serif; background-color: #f7f9fd; } </style>
+    <style>body { font-family: sans-serif; background-color: #f7f9fd; }</style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-50 min-h-screen p-4 flex justify-center">
 
-    <nav class="bg-white shadow-md sticky top-0 z-40">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-2"><img src="edulogo.jpg" class="h-10 w-10 rounded-full"><span class="text-xl font-bold text-purple-700">EDU-LEAGUE</span></div>
-            <a href="index.html" class="text-gray-600 font-bold">Home</a>
-        </div>
-    </nav>
-
-    <div id="login-overlay" class="fixed inset-0 bg-gray-900/95 z-50 flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-xl shadow-2xl p-6">
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-black text-gray-800">TEAM ACCESS</h2>
-                <p class="text-gray-500 text-sm">Select your department to continue</p>
+    <div class="max-w-4xl w-full bg-white shadow-xl rounded-xl overflow-hidden">
+        <div class="bg-gray-900 text-white p-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-black uppercase tracking-wide">Official Roster</h1>
+                <p class="text-yellow-400 font-bold text-sm mt-1" id="displayTeamName">Loading Team...</p>
             </div>
-            
-            <div class="space-y-4">
-                <select id="team-select" class="w-full p-3 border rounded-lg font-bold bg-gray-50" onchange="checkVerificationStatus()">
-                    <option value="">Loading Teams...</option>
+            <div class="text-right">
+                <p class="text-xs text-gray-400">PLAYERS</p>
+                <p class="text-2xl font-bold" id="playerCount">0/25</p>
+            </div>
+        </div>
+
+        <div class="p-6">
+            <form id="addPlayerForm" class="flex flex-col md:flex-row gap-3 mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <input type="text" id="pName" placeholder="Player Name" required class="flex-grow border p-3 rounded text-sm uppercase font-bold text-gray-700 outline-none focus:border-blue-500">
+                <input type="number" id="pNum" placeholder="#" class="w-20 border p-3 rounded text-sm text-center font-bold">
+                <select id="pPos" class="border p-3 rounded text-sm bg-white font-bold text-gray-600">
+                    <option value="GK">GK</option><option value="DEF">DEF</option>
+                    <option value="MID">MID</option><option value="FWD">FWD</option>
                 </select>
+                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded font-bold hover:bg-blue-700 transition shadow">ADD</button>
+            </form>
 
-                <div id="code-section" class="hidden">
-                    <label class="text-xs font-bold text-red-500 uppercase">Verification Needed</label>
-                    <input type="text" id="auth-code" placeholder="Enter Payment Code" class="w-full p-3 border-2 border-red-100 rounded-lg focus:border-red-500 outline-none">
-                </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-gray-100 text-gray-500 uppercase font-bold text-xs">
+                        <tr><th class="p-3">#</th><th class="p-3">Name</th><th class="p-3">Pos</th><th class="p-3 text-right">Action</th></tr>
+                    </thead>
+                    <tbody id="rosterList" class="divide-y"></tbody>
+                </table>
+                <p id="emptyMsg" class="text-center text-gray-400 text-sm py-8">No players added yet.</p>
+            </div>
 
-                <button onclick="attemptLogin()" id="btn-login" class="w-full bg-purple-700 text-white py-3 rounded-lg font-bold hover:bg-purple-800 transition">
-                    ENTER PORTAL
-                </button>
-                <p id="login-msg" class="text-center text-xs font-bold text-red-500 mt-2 hidden"></p>
+            <div class="mt-8 pt-4 border-t text-center">
+                <p class="text-xs text-gray-500 mb-4">Ensure all players are listed before finishing.</p>
+                <button onclick="alert('Roster Saved Successfully!'); window.location.href='index.html'" class="bg-green-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-green-700 transition shadow-lg">FINISH & SUBMIT</button>
             </div>
         </div>
     </div>
 
-    <main id="main-content" class="max-w-3xl mx-auto p-4 md:p-8 hidden">
-        
-        <div id="status-banner" class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded shadow mb-4 flex justify-between items-center">
-            <div>
-                <p class="font-bold">Submission Status</p>
-                <p class="text-xs" id="edits-left-text">You have 2 edits remaining.</p>
-            </div>
-            <span id="lock-status" class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">ACTIVE</span>
-        </div>
-
-        <div class="bg-white shadow-xl rounded-xl overflow-hidden">
-            <div class="bg-purple-800 text-white p-6 text-center">
-                <h2 class="text-2xl font-bold">Official Squad List</h2>
-                <p id="teamNameDisplay" class="text-purple-200 mt-1">Loading...</p>
-                <div class="mt-2 text-xs bg-white/20 inline-block px-3 py-1 rounded-full uppercase tracking-wider font-bold">Verified Team ✅</div>
-            </div>
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-700">Players (<span id="count">0</span>/18)</h3>
-                    <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Auto-Saved</span>
-                </div>
-                
-                <div id="input-area" class="flex gap-2 mb-6">
-                    <input id="playerNum" type="number" class="w-16 border p-3 rounded-lg text-center" placeholder="#">
-                    <input id="playerName" class="flex-grow border p-3 rounded-lg" placeholder="Player Name">
-                    <select id="playerPosition" class="border p-3 rounded-lg">
-                        <option>GK</option><option>DEF</option><option>MID</option><option>FWD</option>
-                    </select>
-                    <button onclick="addPlayer()" class="bg-purple-700 text-white px-4 rounded-lg font-bold"><i class="fa-solid fa-plus"></i></button>
-                </div>
-
-                <div id="max-msg" class="hidden mb-6 p-3 bg-red-50 text-red-600 border border-red-100 rounded text-center font-bold text-sm">
-                    <i class="fa-solid fa-lock"></i> Roster Locked: Maximum Players Reached (18) or Edit Limit Exceeded.
-                </div>
-
-                <ul id="rosterList" class="space-y-2 mb-6"></ul>
-                
-                <button onclick="finishRoster()" id="btn-submit" class="w-full bg-green-600 text-white py-4 rounded-lg font-bold hover:bg-green-700 shadow-lg text-lg">Submit Final Roster</button>
-            </div>
-        </div>
-    </main>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, arrayUnion, collection, getDocs, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, updateDoc, getDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
-        const app = initializeApp(firebaseConfig); 
-        const db = getFirestore(app); 
-        const auth = getAuth(app);
-        
-        let teamId = null;
+        const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
+
+        let teamId = new URLSearchParams(window.location.search).get('teamId') || localStorage.getItem('eduLeagueTeamID');
         let currentPlayers = [];
-        let rosterEdits = 0;
-        let allTeamsData = {}; 
 
         async function init() {
             await signInAnonymously(auth);
-            loadTeamDropdown();
-        }
-
-        async function loadTeamDropdown() {
-            const select = document.getElementById('team-select');
-            select.innerHTML = '<option value="">Select Department...</option>';
-            try {
-                const snap = await getDocs(collection(db, "registrations"));
-                snap.forEach(doc => {
-                    const d = doc.data();
-                    allTeamsData[doc.id] = d; 
-                    const opt = document.createElement('option');
-                    opt.value = doc.id;
-                    opt.text = `${d.department} (${d.level})`;
-                    select.appendChild(opt);
-                });
-            } catch(e) { console.error("Error loading teams", e); }
-        }
-
-        window.checkVerificationStatus = () => {
-            const tid = document.getElementById('team-select').value;
-            const codeSection = document.getElementById('code-section');
-            const msg = document.getElementById('login-msg');
-            msg.classList.add('hidden');
-            if (!tid) { codeSection.classList.add('hidden'); return; }
-            const team = allTeamsData[tid];
-            if (team && team.registrationStatus === "Verified") { 
-                codeSection.classList.add('hidden'); 
-            } else { 
-                codeSection.classList.remove('hidden'); 
-            }
-        }
-
-        window.attemptLogin = async () => {
-            const tid = document.getElementById('team-select').value;
-            const codeInput = document.getElementById('auth-code').value;
-            const msg = document.getElementById('login-msg');
-            const btn = document.getElementById('btn-login');
-
-            if (!tid) return alert("Select a team");
-            btn.innerText = "CHECKING...";
-            const team = allTeamsData[tid];
-            let allowAccess = false;
-
-            if (team.registrationStatus === "Verified") { allowAccess = true; } 
-            else {
-                if (codeInput && codeInput === team.paymentReference) { allowAccess = true; } 
-                else {
-                    msg.innerText = "❌ Verification Required. Incorrect Code.";
-                    msg.classList.remove('hidden');
-                    btn.innerText = "ENTER PORTAL";
-                    return;
-                }
-            }
-
-            if (allowAccess) {
-                teamId = tid;
-                document.getElementById('login-overlay').classList.add('hidden');
-                document.getElementById('main-content').classList.remove('hidden');
-                loadRosterData(team);
-            }
-        };
-
-        function loadRosterData(data) {
-            document.getElementById('teamNameDisplay').innerText = data.department;
-            currentPlayers = data.players || [];
-            rosterEdits = data.rosterEdits || 0; 
-            checkLocks(); 
-            renderList();
-        }
-
-        function checkLocks() {
-            const editsLeft = 2 - rosterEdits;
-            const playerCount = currentPlayers.length;
-            const isFull = playerCount >= 18;
-            const isEditsExhausted = editsLeft <= 0;
-            const isLocked = isFull || isEditsExhausted;
-
-            document.getElementById('edits-left-text').innerText = `Submissions Remaining: ${Math.max(0, editsLeft)}`;
-            const statusBadge = document.getElementById('lock-status');
+            if (!teamId) { alert("Session Expired. Please login again."); window.location.href='index.html'; return; }
             
-            if (isLocked) {
-                statusBadge.innerText = "LOCKED";
-                statusBadge.className = "bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full";
-                document.getElementById('status-banner').className = "bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow mb-4 flex justify-between items-center";
-                document.getElementById('input-area').classList.add('hidden');
-                document.getElementById('max-msg').classList.remove('hidden');
-                if(isEditsExhausted) document.getElementById('btn-submit').classList.add('hidden');
-            } else {
-                statusBadge.innerText = "ACTIVE";
-                statusBadge.className = "bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full";
-                document.getElementById('input-area').classList.remove('hidden');
-                document.getElementById('max-msg').classList.add('hidden');
-                document.getElementById('btn-submit').classList.remove('hidden');
-            }
-            return isLocked; 
+            const snap = await getDoc(doc(db, "registrations", teamId));
+            if (snap.exists()) {
+                const data = snap.data();
+                document.getElementById('displayTeamName').innerText = data.teamName.toUpperCase();
+                currentPlayers = data.players || [];
+                renderList();
+            } else { alert("Team not found."); window.location.href='index.html'; }
         }
 
-        window.addPlayer = async () => {
-            if (checkLocks()) return alert("Roster is Locked."); 
-            const name = document.getElementById('playerName').value.trim();
-            const num = document.getElementById('playerNum').value.trim();
-            const pos = document.getElementById('playerPosition').value;
+        document.getElementById('addPlayerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('pName').value.toUpperCase();
+            const num = document.getElementById('pNum').value;
+            const pos = document.getElementById('pPos').value;
+
+            if(currentPlayers.some(p => p.name === name)) return alert("Player already added!");
+
+            const newPlayer = { name, number: num, position: pos };
             
-            if(!name) return alert("Enter Name");
-            if(currentPlayers.length >= 18) return alert("Roster full (Max 18)");
-            
-            const newPlayer = { name, number: num || '00', position: pos };
+            // Optimistic Update
             currentPlayers.push(newPlayer);
-            
-            await updateDoc(doc(db, "registrations", teamId), { players: currentPlayers });
-            
-            document.getElementById('playerName').value = "";
-            document.getElementById('playerNum').value = "";
-            checkLocks(); 
             renderList();
-        }
+            
+            // Save
+            await updateDoc(doc(db, "registrations", teamId), { players: arrayUnion(newPlayer) });
+            e.target.reset();
+        });
 
         window.removePlayer = async (idx) => {
-            if (checkLocks()) return alert("Roster is Locked. Cannot remove players."); 
             if(!confirm("Remove player?")) return;
+            const playerToRemove = currentPlayers[idx];
             currentPlayers.splice(idx, 1);
-            await updateDoc(doc(db, "registrations", teamId), { players: currentPlayers });
-            checkLocks();
             renderList();
-        }
+            await updateDoc(doc(db, "registrations", teamId), { players: arrayRemove(playerToRemove) });
+        };
 
         function renderList() {
-            const list = document.getElementById('rosterList'); list.innerHTML = '';
-            document.getElementById('count').innerText = currentPlayers.length;
-            const isLocked = checkLocks(); 
+            const list = document.getElementById('rosterList');
+            const emptyMsg = document.getElementById('emptyMsg');
+            list.innerHTML = "";
+            document.getElementById('playerCount').innerText = `${currentPlayers.length}/25`;
+            
+            if(currentPlayers.length === 0) { emptyMsg.classList.remove('hidden'); return; }
+            emptyMsg.classList.add('hidden');
 
             currentPlayers.forEach((p, i) => {
-                list.innerHTML += `<li class="flex justify-between items-center bg-gray-50 p-3 rounded border"><div class="flex items-center gap-3"><span class="bg-purple-100 text-purple-700 font-bold text-xs w-8 h-8 flex items-center justify-center rounded-full">${p.number}</span><span class="font-bold text-gray-700">${p.name}</span></div><div class="flex items-center gap-2"><span class="text-xs bg-gray-200 px-2 py-1 rounded text-gray-700 font-mono">${p.position}</span>${!isLocked ? `<button onclick="removePlayer(${i})" class="text-red-400 hover:text-red-600 px-2"><i class="fa-solid fa-trash"></i></button>` : ''}</div></li>`;
+                list.innerHTML += `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="p-3 font-bold text-gray-400">${p.number || '-'}</td>
+                        <td class="p-3 font-bold text-gray-800">${p.name}</td>
+                        <td class="p-3 text-xs"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold">${p.position}</span></td>
+                        <td class="p-3 text-right"><button onclick="removePlayer(${i})" class="text-red-400 hover:text-red-600 transition"><i class="fa-solid fa-trash"></i></button></td>
+                    </tr>
+                `;
             });
         }
 
-        window.finishRoster = async () => { 
-            if(rosterEdits >= 2) return alert("No more edits allowed.");
-            const confirmSubmit = confirm(`You are about to submit. You have ${2 - rosterEdits - 1} edits remaining after this. Continue?`);
-            if(!confirmSubmit) return;
-            await updateDoc(doc(db, "registrations", teamId), { rosterEdits: increment(1) });
-            rosterEdits++;
-            checkLocks();
-            alert("Roster Submitted Successfully!"); 
-            if(rosterEdits >= 2) {
-                alert("You have used all your edits. Roster is now FINAL.");
-                window.location.href = "news.html";
-            }
-        }
-        
         init();
     </script>
 </body>

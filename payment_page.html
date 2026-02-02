@@ -3,54 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment & Receipt - EDU-LEAGUE</title>
-    <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#6d28d9">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-<script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js');
-        });
-    }
-</script>
+    <title>Verification - EDU-LEAGUE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" href="edulogo.jpg" type="image/jpeg">
-    <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap'); body { font-family: 'Inter', sans-serif; background-color: #f7f9fd; } .bg-edu-purple { background-color: #6d28d9; } .text-edu-purple { color: #6d28d9; } </style>
+    <style>body { font-family: sans-serif; background-color: #f7f9fd; } .bg-edu-purple { background-color: #6d28d9; }</style>
 </head>
-<body class="bg-gray-50 flex flex-col min-h-screen">
-    <nav class="bg-white shadow-md sticky top-0 z-40"><div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center"><a href="./news.html" class="flex items-center space-x-2"><img src="edulogo.jpg" alt="Logo" class="h-10 w-10 rounded-full object-cover"><span class="text-xl font-bold text-edu-purple">EDU-LEAGUE</span></a><div class="flex space-x-4"><a href="./index.html" class="text-gray-600 hover:text-edu-purple font-semibold">New Registration</a></div></div></nav>
-    <main class="flex-grow flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white shadow-2xl rounded-xl overflow-hidden">
-            <div class="bg-edu-purple text-white p-8 text-center"><h1 class="text-3xl font-extrabold tracking-tight">Access Verification</h1><p class="mt-1 text-purple-200 text-lg">EDU-LEAGUE 2025</p></div>
-            <div class="p-8 space-y-6">
-                <div id="loadingState" class="text-center py-4"><i class="fa-solid fa-circle-notch fa-spin text-4xl text-edu-purple"></i><p class="text-gray-500 mt-2">Checking status...</p></div>
-                <div id="verificationSection" class="hidden space-y-4">
-                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4"><div class="flex"><div class="flex-shrink-0"><i class="fa-solid fa-circle-info text-yellow-400"></i></div><div class="ml-3"><p class="text-sm text-yellow-700">Registration for <span id="pendingTeamName" class="font-bold">...</span> is pending.</p></div></div></div>
-                    <h3 class="text-lg font-bold text-gray-800">Enter Access Code</h3>
-                    <input type="text" id="accessCodeInput" class="w-full border-gray-300 border rounded-lg p-3 text-center text-xl uppercase font-bold tracking-widest focus:ring-edu-purple focus:border-edu-purple" placeholder="EDU-XXXX">
-                    <button onclick="verifyCode()" id="verifyBtn" class="w-full bg-edu-purple text-white font-bold py-3 rounded-lg hover:bg-purple-700 transition shadow">Verify Code</button>
+<body class="bg-gray-50 flex flex-col min-h-screen items-center justify-center p-4">
+
+    <div class="max-w-md w-full bg-white shadow-2xl rounded-xl overflow-hidden">
+        <div class="bg-edu-purple text-white p-8 text-center"><h1 class="text-2xl font-bold">Access Verification</h1><p class="text-purple-200 text-sm">Verify your team slot.</p></div>
+        <div class="p-8 space-y-6">
+            <div id="loadingState" class="text-center"><i class="fa-solid fa-circle-notch fa-spin text-3xl text-purple-600"></i><p class="text-gray-400 mt-2">Loading...</p></div>
+            
+            <div id="verificationSection" class="hidden space-y-4">
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-sm text-yellow-700">Registration for <span id="pendingTeamName" class="font-bold">...</span> is pending.</div>
+                <h3 class="font-bold text-gray-700">Enter Access Code</h3>
+                <input type="text" id="accessCodeInput" class="w-full border-2 border-gray-300 p-3 text-center text-xl font-bold uppercase tracking-widest rounded focus:border-purple-600 outline-none" placeholder="EDU-XXXX">
+                <button onclick="verifyCode()" id="verifyBtn" class="w-full bg-edu-purple text-white font-bold py-3 rounded hover:bg-purple-700 transition shadow-lg">Verify Code</button>
+            </div>
+
+            <div id="successSection" class="hidden text-center space-y-4">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto"><i class="fa-solid fa-check text-2xl text-green-600"></i></div>
+                <h2 class="text-2xl font-bold text-gray-800">Verified!</h2>
+                <div id="receipt" class="border-2 border-dashed border-gray-300 bg-gray-50 p-6 rounded text-left relative mt-4">
+                    <div class="absolute top-4 right-4 border-2 border-green-600 text-green-600 font-black px-2 rotate-12 opacity-30 text-xl">PAID</div>
+                    <div class="flex items-center gap-3 border-b pb-3 mb-3"><img src="edulogo.jpg" class="h-10 w-10 rounded-full"><div class="leading-tight"><p class="font-bold text-purple-800">OFFICIAL RECEIPT</p><p class="text-[10px] text-gray-500">NUESA SPORTS OFFICE</p></div></div>
+                    <p class="text-sm flex justify-between"><span class="text-gray-500">Team:</span> <span class="font-bold" id="rcptTeam">...</span></p>
+                    <p class="text-sm flex justify-between"><span class="text-gray-500">Ref:</span> <span class="font-mono" id="rcptRef">...</span></p>
+                    <p class="text-sm flex justify-between border-t mt-2 pt-2"><span class="font-bold">Amount:</span> <span class="font-black text-green-600">FREE</span></p>
                 </div>
-                <div id="successSection" class="hidden text-center space-y-4">
-                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-2"><i class="fa-solid fa-check text-3xl text-green-600"></i></div>
-                    <h2 class="text-2xl font-bold text-gray-800">Verified!</h2>
-                    <div id="receipt" class="border-4 border-dashed border-gray-300 bg-gray-50 p-6 rounded-lg text-left relative overflow-hidden mt-4">
-                        <div class="absolute top-6 right-6 transform rotate-12 opacity-20 pointer-events-none"><span class="text-5xl font-black text-green-600 border-4 border-green-600 p-2 rounded-lg">PAID</span></div>
-                        <div class="flex items-center border-b pb-4 mb-4"><img src="edulogo.jpg" class="w-12 h-12 rounded-full border border-gray-300 object-cover mr-3"><div><h3 class="text-lg font-bold text-edu-purple leading-tight">OFFICIAL RECEIPT</h3><p class="text-xs text-gray-500 uppercase tracking-wide">NUESA SPORTS OFFICE</p></div></div>
-                        <div class="space-y-2 text-sm"><div class="flex justify-between"><span class="text-gray-500">Date:</span><strong id="rcptDate" class="text-gray-800">...</strong></div><div class="flex justify-between"><span class="text-gray-500">Ref ID:</span><strong id="rcptRef" class="text-gray-800 font-mono">...</strong></div><div class="flex justify-between"><span class="text-gray-500">Team:</span><strong id="rcptTeam" class="text-gray-800">...</strong></div><div class="flex justify-between"><span class="text-gray-500">Level:</span><strong id="rcptLevel" class="text-gray-800">...</strong></div></div>
-                        <div class="mt-4 pt-4 border-t border-gray-300 flex justify-between items-center"><span class="font-bold text-gray-800">AMOUNT PAID:</span><span class="text-xl font-black text-green-600">FREE</span></div>
-                    </div>
-                    <div class="grid grid-cols-1 gap-3 mt-6"><button onclick="downloadReceipt()" class="w-full py-3 bg-gray-800 text-white font-bold rounded-lg hover:bg-black transition"><i class="fa-solid fa-download mr-2"></i> Download PDF</button><button onclick="goToRoster()" class="w-full py-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition shadow-lg animate-pulse">Proceed to Team Roster &rarr;</button></div>
-                </div>
+                <button onclick="goToRoster()" class="w-full py-3 bg-green-600 text-white font-bold rounded shadow-lg hover:bg-green-700 transition animate-pulse">Proceed to Squad List &rarr;</button>
+                <button onclick="downloadReceipt()" class="text-xs text-gray-500 underline hover:text-purple-600">Download PDF Receipt</button>
             </div>
         </div>
-    </main>
-    <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300"><div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center transform transition-all scale-95 duration-300 modal-content"><h3 id="custom-alert-title" class="text-xl font-bold text-gray-800 mb-2">Alert</h3><p id="custom-alert-message" class="text-gray-600 mb-6">Message</p><button onclick="closeCustomAlert()" class="py-2 px-6 bg-edu-purple text-white font-semibold rounded-md hover:bg-purple-700 transition duration-150">OK</button></div></div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -59,63 +48,54 @@
 
         const firebaseConfig = { apiKey: "AIzaSyDtxFsLYoe0NYlZRWiXgEM90IYKMwx7K8s", authDomain: "sonic-verbena-239117.firebaseapp.com", projectId: "sonic-verbena-239117", storageBucket: "sonic-verbena-239117.appspot.com", messagingSenderId: "652544574249", appId: "1:652544574249:web:6ff33771307e892e7f6d38", measurementId: "G-TD780JGNED" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
-        const { jsPDF } = window.jspdf;
+        
         let teamId = new URLSearchParams(window.location.search).get('teamId') || localStorage.getItem('eduLeagueTeamID');
         let teamData = null;
 
-        const VALID_ACCESS_CODES = [
-            "EDU-A7X9", "EDU-B2K4", "EDU-C8M1", "EDU-D5P3", "EDU-E9L2", "EDU-F4R7",
-            "EDU-G1W6", "EDU-H3T9", "EDU-J6N8", "EDU-K2Q5", "EDU-L9V4", "EDU-M7Z1",
-            "EDU-N3X6", "EDU-P5B2", "EDU-Q8J9", "EDU-R4K3", "EDU-S1M7", "EDU-T6L2",
-            "EDU-V9P5", "EDU-W2R8", "EDU-X5T3", "EDU-Y8N6", "EDU-Z4Q9", "EDU-9V1K",
-            "EDU-FEM1", "EDU-FEM2", "EDU-FEM3", "EDU-FEM4", 
-            "EDU-FEM5", "EDU-FEM6", "EDU-FEM7", "EDU-FEM8"
-        ];
+        const VALID_ACCESS_CODES = ["EDU-A7X9", "EDU-B2K4", "EDU-C8M1", "EDU-D5P3", "EDU-E9L2", "EDU-F4R7", "EDU-G1W6", "EDU-H3T9", "EDU-J6N8", "EDU-K2Q5", "EDU-L9V4", "EDU-M7Z1", "EDU-N3X6", "EDU-P5B2", "EDU-Q8J9", "EDU-R4K3", "EDU-S1M7", "EDU-T6L2", "EDU-V9P5", "EDU-W2R8", "EDU-X5T3", "EDU-Y8N6", "EDU-Z4Q9", "EDU-9V1K", "EDU-FEM1", "EDU-FEM2", "EDU-FEM3", "EDU-FEM4", "EDU-FEM5", "EDU-FEM6", "EDU-FEM7", "EDU-FEM8"];
 
         async function init() {
             await signInAnonymously(auth);
-            if (!teamId) { showCustomAlert("Error", "No registration found."); setTimeout(() => window.location.href = 'index.html', 2000); return; }
-            try {
-                const snap = await getDoc(doc(db, "registrations", teamId));
-                if (snap.exists()) {
-                    teamData = snap.data();
-                    document.getElementById('loadingState').classList.add('hidden');
-                    if (teamData.registrationStatus === "Pending Payment") {
-                        document.getElementById('verificationSection').classList.remove('hidden');
-                        document.getElementById('pendingTeamName').innerText = teamData.teamName;
-                    } else { showSuccess(); }
-                } else { showCustomAlert("Error", "Registration not found."); }
-            } catch (e) { showCustomAlert("Error", "Connection failed."); }
+            if (!teamId) { alert("Session Expired. Redirecting..."); window.location.href='index.html'; return; }
+            const snap = await getDoc(doc(db, "registrations", teamId));
+            if (snap.exists()) {
+                teamData = snap.data();
+                document.getElementById('loadingState').classList.add('hidden');
+                if (teamData.registrationStatus === "Pending Payment") {
+                    document.getElementById('verificationSection').classList.remove('hidden');
+                    document.getElementById('pendingTeamName').innerText = teamData.teamName;
+                } else { showSuccess(); }
+            } else { alert("Registration not found."); window.location.href='index.html'; }
         }
 
+        // 🔥 FORGIVING VERIFICATION LOGIC
         window.verifyCode = async () => {
-            const code = document.getElementById('accessCodeInput').value.trim().toUpperCase();
-            if (!code) return alert("Enter Code");
-            if (!VALID_ACCESS_CODES.includes(code)) { showCustomAlert("Invalid", "Code does not exist."); return; }
-            const btn = document.getElementById('verifyBtn'); btn.disabled = true; btn.innerText = "Checking...";
+            const raw = document.getElementById('accessCodeInput').value.toUpperCase();
+            const clean = raw.replace(/[^A-Z0-9]/g, ''); 
+            const official = VALID_ACCESS_CODES.find(c => c.replace(/[^A-Z0-9]/g, '') === clean);
+
+            if (!official) return alert("Invalid Code. Try again.");
+
+            const btn = document.getElementById('verifyBtn'); btn.disabled=true; btn.innerText = "Checking...";
             try {
-                const usedCodeSnap = await getDoc(doc(db, "used_codes", code));
-                if (usedCodeSnap.exists() && usedCodeSnap.data().teamId !== teamId) {
-                    showCustomAlert("Expired", "Code already used."); btn.disabled = false; btn.innerText = "Verify Code"; return;
-                }
-                await updateDoc(doc(db, "registrations", teamId), { registrationStatus: "Complete", paymentStatus: "Verified", accessCodeUsed: code });
-                await setDoc(doc(db, "used_codes", code), { usedBy: teamData.teamName, usedAt: new Date().toISOString(), teamId: teamId });
+                const usedSnap = await getDoc(doc(db, "used_codes", official));
+                if (usedSnap.exists() && usedSnap.data().teamId !== teamId) { alert("This code has already been used!"); btn.disabled=false; btn.innerText="Verify Code"; return; }
+
+                await updateDoc(doc(db, "registrations", teamId), { registrationStatus: "Complete", paymentStatus: "Verified", accessCodeUsed: official });
+                await setDoc(doc(db, "used_codes", official), { usedBy: teamData.teamName, teamId: teamId, date: new Date().toISOString() });
+                
                 document.getElementById('verificationSection').classList.add('hidden'); showSuccess();
-            } catch (e) { console.error(e); showCustomAlert("Error", "Verification failed."); btn.disabled = false; btn.innerText = "Verify Code"; }
-        }
+            } catch(e) { console.error(e); alert("Network Error."); btn.disabled=false; }
+        };
 
         function showSuccess() {
             document.getElementById('successSection').classList.remove('hidden');
-            document.getElementById('rcptDate').innerText = new Date().toLocaleDateString();
-            document.getElementById('rcptRef').innerText = "EDU-" + teamId.substring(0,6).toUpperCase();
             document.getElementById('rcptTeam').innerText = teamData.teamName;
-            document.getElementById('rcptLevel').innerText = teamData.level;
+            document.getElementById('rcptRef').innerText = "REF-" + teamId.substring(0,6).toUpperCase();
         }
-        window.downloadReceipt = async () => { const element = document.getElementById('receipt'); const canvas = await html2canvas(element, { scale: 2 }); const pdf = new jsPDF(); pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, 190, 0); pdf.save(`Receipt_${teamData.teamName}.pdf`); }
-        window.goToRoster = () => { window.location.assign(`./team_roster.html?teamId=${teamId}`); }
-        const alertModal = document.getElementById('custom-alert-modal');
-        window.showCustomAlert = (t, m) => { document.getElementById('custom-alert-title').innerText = t; document.getElementById('custom-alert-message').innerText = m; alertModal.classList.remove('opacity-0', 'pointer-events-none'); }
-        window.closeCustomAlert = () => alertModal.classList.add('opacity-0', 'pointer-events-none');
+
+        window.downloadReceipt = async () => { const el = document.getElementById('receipt'); const canvas = await html2canvas(el); const pdf = new window.jspdf.jsPDF(); pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, 100, 0); pdf.save(`Receipt_${teamData.teamName}.pdf`); }
+        window.goToRoster = () => { window.location.href = `team_roster.html?teamId=${teamId}`; }
         init();
     </script>
 </body>
