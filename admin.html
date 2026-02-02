@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>EDU-LEAGUE | Admin Console</title>
     <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#6d28d9">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#6d28d9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-<script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js');
-        });
-    }
-</script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -153,28 +153,6 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="sport-card p-6 border-l-orange"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">MATCH FINDER</h3><div class="grid grid-cols-2 gap-3 mb-4"><select id="spot-div" class="input-sport" onchange="loadSpotlightCandidates()"><option value="">Division</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="spot-day" class="input-sport" onchange="loadSpotlightCandidates()"><option value="">Day</option><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option></select></div><div id="spot-candidates" class="space-y-2 max-h-[300px] overflow-y-auto p-1"></div></div><div class="sport-card p-6 border-l-blue"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2 flex justify-between"><span>FEATURED MATCHES (MAX 4)</span><button onclick="clearSpotlights()" class="text-xs text-red-500 hover:underline">CLEAR</button></h3><div id="active-spotlights" class="space-y-3"></div><button onclick="publishSpotlights()" class="w-full btn-sport mt-6">GO LIVE</button></div></div>
         </div>
 
-        <div id="stats" class="section hidden"><div class="sport-card p-8 max-w-4xl mx-auto border-l-green"><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b pb-8"><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">1. Team</label><select id="stat-team-select" class="input-sport" onchange="loadTeamPlayers()"><option value="">Select...</option></select></div><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">2. Player</label><select id="stat-player-select" class="input-sport" onchange="fetchPlayerCurrentStats()"><option value="">Select...</option></select></div></div><div id="stats-editor" class="hidden"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-slate-800 text-xl">PLAYER STATS</h3></div><div class="grid grid-cols-3 md:grid-cols-5 gap-3 mb-8"><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-green-600 uppercase mb-1">Goals</p><input type="number" id="p-goals" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Assists</p><input type="number" id="p-assists" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-yellow-600 uppercase mb-1">Yellow</p><input type="number" id="p-yellow" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-red-600 uppercase mb-1">Red</p><input type="number" id="p-red" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-orange-600 uppercase mb-1">Saves</p><input type="number" id="p-saves" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div></div><button onclick="savePlayerStats()" class="w-full btn-sport btn-accent">UPDATE STATS</button></div></div></div>
-        
-        <div id="news" class="section hidden"><div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="sport-card p-6 h-fit border-l-blue"><h3 class="font-bold text-slate-800 mb-4 border-b pb-2">COMPOSE NEWS</h3><div class="space-y-3"><input id="news-title" placeholder="HEADLINE" class="input-sport uppercase"><textarea id="news-body" rows="4" placeholder="Details..." class="input-sport"></textarea><div class="relative group cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-4 text-center hover:bg-slate-50 transition"><input type="file" id="news-file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('news-file-label').innerText=this.files[0].name"><i class="fa-solid fa-cloud-arrow-up text-xl text-slate-400 mb-1"></i><p class="text-xs font-bold text-slate-500 uppercase" id="news-file-label">Attach Media</p></div><button onclick="publishNews()" id="btn-pub-news" class="w-full btn-sport btn-accent">PUBLISH</button></div></div><div class="lg:col-span-2 sport-card p-6 h-[500px] flex flex-col border-l-orange"><div class="flex justify-between mb-4"><h3 class="font-bold text-slate-800">LIVE FEED</h3><button onclick="loadNews()" class="text-xs font-bold text-blue-600 uppercase">REFRESH</button></div><div id="news-feed" class="flex-1 overflow-y-auto space-y-2 pr-2"></div></div></div></div>
-
-        <div id="fanz" class="section hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div class="lg:col-span-4 sport-card p-6 border-l-blue h-fit">
-                    <h3 class="font-bold text-slate-800 mb-4">FAN POLL</h3>
-                    <div class="space-y-3"><input id="poll-q" placeholder="QUESTION" class="input-sport"><input id="poll-o1" placeholder="OPTION 1" class="input-sport"><input id="poll-o2" placeholder="OPTION 2" class="input-sport"><button onclick="createPoll()" class="w-full btn-sport btn-accent">LAUNCH</button></div><div id="active-polls" class="mt-6 space-y-2"></div>
-                </div>
-                <div class="lg:col-span-8 sport-card p-6 border-l-purple">
-                    <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-slate-800 text-xl"><i class="fa-solid fa-user-astronaut text-purple-600"></i> PLAYER OF THE WEEK (POTW)</h3><div class="flex gap-2"><select id="potw-matchday" class="input-sport w-32 py-1"><option>Matchday 1</option><option>Matchday 2</option><option>Matchday 3</option><option>Matchday 4</option><option>Matchday 5</option><option>Matchday 6</option><option>Matchday 7</option><option>Matchday 8</option><option>Matchday 9</option><option>Matchday 10</option></select><button onclick="togglePOTWVoting(false)" class="bg-red-500 text-white px-4 rounded text-xs font-bold hover:bg-red-600">STOP VOTE</button></div></div>
-                    <div id="potw-nominees-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                        <div class="bg-slate-50 p-3 rounded border border-slate-200"><p class="text-xs font-bold text-slate-400 mb-2">NOMINEE 1</p><select class="input-sport mb-2 text-xs" onchange="loadPOTWTeams(this, 1)"><option value="">Division...</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="potw-team-1" class="input-sport mb-2 text-xs" onchange="loadPOTWPlayers(this, 1)"><option>Team...</option></select><select id="potw-player-1" class="input-sport mb-2 text-xs font-bold text-purple-700"><option>Player...</option></select><textarea id="potw-stats-1" rows="3" class="input-sport text-xs" placeholder="Stats (comma separated)"></textarea></div>
-                        <div class="bg-slate-50 p-3 rounded border border-slate-200"><p class="text-xs font-bold text-slate-400 mb-2">NOMINEE 2</p><select class="input-sport mb-2 text-xs" onchange="loadPOTWTeams(this, 2)"><option value="">Division...</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="potw-team-2" class="input-sport mb-2 text-xs" onchange="loadPOTWPlayers(this, 2)"><option>Team...</option></select><select id="potw-player-2" class="input-sport mb-2 text-xs font-bold text-purple-700"><option>Player...</option></select><textarea id="potw-stats-2" rows="3" class="input-sport text-xs" placeholder="Stats (comma separated)"></textarea></div>
-                        <div class="bg-slate-50 p-3 rounded border border-slate-200"><p class="text-xs font-bold text-slate-400 mb-2">NOMINEE 3</p><select class="input-sport mb-2 text-xs" onchange="loadPOTWTeams(this, 3)"><option value="">Division...</option><option value="Finalist (400Lvl)">Finalist</option><option value="Penultimate (300Lvl)">Penultimate</option><option value="Sophomore (200Lvl)">Sophomore</option><option value="Female League">Female</option></select><select id="potw-team-3" class="input-sport mb-2 text-xs" onchange="loadPOTWPlayers(this, 3)"><option>Team...</option></select><select id="potw-player-3" class="input-sport mb-2 text-xs font-bold text-purple-700"><option>Player...</option></select><textarea id="potw-stats-3" rows="3" class="input-sport text-xs" placeholder="Stats (comma separated)"></textarea></div>
-                    </div>
-                    <button onclick="publishPOTW()" class="w-full btn-sport btn-accent">START VOTING</button>
-                </div>
-            </div>
-        </div>
-
         <div id="partners" class="section hidden">
             <h2 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-2"><i class="fa-solid fa-handshake text-yellow-500"></i> PARTNERS & SPONSORS</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -208,6 +186,8 @@
         <div id="edit-match-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-slate-900/90 backdrop-blur-sm hidden p-4"><div class="bg-white p-6 rounded-lg w-full max-w-sm shadow-2xl border-l-4 border-blue-600"><div class="flex justify-between items-center mb-4"><h3 class="text-xl font-black text-slate-800 font-[Rajdhani]">EDIT FIXTURE</h3><button onclick="closeEditModal()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button></div><input type="hidden" id="edit-match-id"><div class="bg-slate-100 p-3 rounded mb-4 text-center border border-slate-200"><p class="text-sm font-bold text-slate-800 uppercase font-[Rajdhani]" id="edit-match-teams">...</p></div><div class="space-y-3"><div><label class="text-[10px] font-bold text-slate-400 uppercase">Date</label><input type="date" id="edit-match-date" class="input-sport"></div><div><label class="text-[10px] font-bold text-slate-400 uppercase">Time</label><div class="grid grid-cols-2 gap-2 items-center"><input type="time" id="edit-match-time" class="input-sport"><label class="tbd-label"><input type="checkbox" id="edit-time-tbd" class="tbd-check" onchange="toggleTime(this, 'edit-match-time')"> TBD</label></div></div><div><label class="text-[10px] font-bold text-slate-400 uppercase">Venue</label><div class="grid grid-cols-2 gap-2 items-center"><input type="text" id="edit-match-venue" class="input-sport uppercase"><label class="tbd-label"><input type="checkbox" id="edit-venue-tbd" class="tbd-check" onchange="toggleVenue(this, 'edit-match-venue')"> TBD</label></div></div><button onclick="confirmEditMatch()" class="w-full btn-sport btn-accent mt-2">UPDATE MATCH</button></div></div></div>
 
         <div id="motm-modal" class="fixed inset-0 z-[160] flex items-center justify-center bg-slate-900/95 backdrop-blur-md hidden p-4"><div class="bg-white w-full max-w-md rounded-xl p-6 border-l-4 border-green-500 shadow-2xl"><div class="flex justify-between items-center mb-4"><h3 class="font-black text-xl text-slate-800">MAN OF THE MATCH</h3><button onclick="document.getElementById('motm-modal').classList.add('hidden')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-times text-xl"></i></button></div><input type="hidden" id="motm-match-id"><div class="mb-4"><p class="text-xs font-bold text-gray-400 uppercase mb-1">Select Player</p><select id="motm-player-select" class="input-sport w-full font-bold text-lg"><option>Loading Squads...</option></select></div><div class="grid grid-cols-2 gap-3 mb-4"><input id="motm-stat-1" placeholder="Stat 1 (e.g. 2 Goals)" class="input-sport"><input id="motm-stat-2" placeholder="Stat 2 (e.g. 1 Assist)" class="input-sport"><input id="motm-stat-3" placeholder="Stat 3 (e.g. 90% Pass)" class="input-sport"></div><button onclick="confirmMOTM()" class="w-full btn-sport btn-accent">SAVE MOTM</button></div></div>
+
+        <div id="stats" class="section hidden"><div class="sport-card p-8 max-w-4xl mx-auto border-l-green"><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b pb-8"><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">1. Team</label><select id="stat-team-select" class="input-sport" onchange="loadTeamPlayers()"><option value="">Select...</option></select></div><div><label class="text-xs font-bold text-slate-400 uppercase mb-2 block">2. Player</label><select id="stat-player-select" class="input-sport" onchange="fetchPlayerCurrentStats()"><option value="">Select...</option></select></div></div><div id="stats-editor" class="hidden"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-slate-800 text-xl">PLAYER STATS</h3></div><div class="grid grid-cols-3 md:grid-cols-5 gap-3 mb-8"><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-green-600 uppercase mb-1">Goals</p><input type="number" id="p-goals" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Assists</p><input type="number" id="p-assists" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-yellow-600 uppercase mb-1">Yellow</p><input type="number" id="p-yellow" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-red-600 uppercase mb-1">Red</p><input type="number" id="p-red" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div><div class="bg-slate-50 p-3 rounded text-center border border-slate-200"><p class="text-[10px] font-bold text-orange-600 uppercase mb-1">Saves</p><input type="number" id="p-saves" min="0" class="bg-transparent text-3xl font-black w-full text-center outline-none font-[Rajdhani]"></div></div><button onclick="savePlayerStats()" class="w-full btn-sport btn-accent">UPDATE STATS</button></div></div></div>
 
     </main>
 
@@ -520,23 +500,57 @@
         
         let curDivCode=''; 
         window.loadTableData=async(regLevel,shortCode)=>{ 
-            curDivCode=shortCode; // Keep original for logos
+            curDivCode=shortCode; 
             document.getElementById('table-logos').classList.remove('hidden'); 
             document.getElementById('div-logo-display').src=divisionLogos[shortCode]||mainLogoUrl; 
             const container=document.getElementById('table-container'); container.innerHTML='<span class="loader border-blue-600"></span>'; 
             
-            // 🔥 FIX: Use lowercase for table doc path
+            // Fix case sensitivity here
             const existing=(await getDoc(doc(db,"app_content",`league_table_${shortCode.toLowerCase()}`))).data()||{}; 
             const regSnap=await getDocs(query(collection(db,"registrations"),where("level","==",regLevel))); 
             
-            container.innerHTML=`<div class="grid grid-cols-12 gap-1 text-[10px] font-black text-slate-400 uppercase mb-2 px-1 tracking-wider"><div class="col-span-3">Team</div><div class="col-span-1 text-center">PL</div><div class="col-span-1 text-center">W</div><div class="col-span-1 text-center">D</div><div class="col-span-1 text-center">L</div><div class="col-span-1 text-center">GD</div><div class="col-span-2 text-center text-blue-600">PTS</div></div>`; const map={}; Object.keys(existing).forEach(k=>map[k]=existing[k]); regSnap.forEach(d=>{ const n=d.data().department; if(!map[n]) map[n]={mp:0,w:0,d:0,l:0,gd:0,pts:0}; }); const names=Object.keys(map); const logos=await Promise.all(names.map(n=>getTeamLogo(n,regLevel))); names.map((n,i)=>({name:n,logo:logos[i],...map[n]})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd).forEach(t=>{ container.innerHTML+=`<div class="grid grid-cols-12 gap-1 items-center mb-2 team-row bg-white p-2 rounded border border-slate-100 shadow-sm" data-name="${t.name}"><div class="col-span-3 flex items-center gap-1.5"><img src="${t.logo}" class="h-6 w-6 rounded-full object-cover border"><span class="font-bold text-xs truncate text-slate-800 font-[Rajdhani] uppercase">${getShortName(t.name)}</span></div><input type="number" class="col-span-1 tbl-input inp-mp" value="${t.mp||0}"><input type="number" class="col-span-1 tbl-input inp-w text-green-600" value="${t.w||0}"><input type="number" class="col-span-1 tbl-input inp-d" value="${t.d||0}"><input type="number" class="col-span-1 tbl-input inp-l text-red-500" value="${t.l||0}"><input type="number" class="col-span-1 tbl-input inp-gd" value="${t.gd||0}"><input type="number" class="col-span-2 tbl-input inp-pts bg-blue-50 text-blue-700 rounded font-black" value="${t.pts||0}"></div>`; }); document.getElementById('save-table-btn').classList.remove('hidden'); 
+            // 🔥 ADDED DELETE COLUMN HEADER
+            container.innerHTML=`<div class="grid grid-cols-12 gap-1 text-[10px] font-black text-slate-400 uppercase mb-2 px-1 tracking-wider">
+                <div class="col-span-3">Team</div>
+                <div class="col-span-1 text-center">PL</div>
+                <div class="col-span-1 text-center">W</div>
+                <div class="col-span-1 text-center">D</div>
+                <div class="col-span-1 text-center">L</div>
+                <div class="col-span-1 text-center">GD</div>
+                <div class="col-span-2 text-center text-blue-600">PTS</div>
+                <div class="col-span-2 text-center text-red-500">ACT</div>
+            </div>`; 
+            
+            const map={}; Object.keys(existing).forEach(k=>map[k]=existing[k]); regSnap.forEach(d=>{ const n=d.data().department; if(!map[n]) map[n]={mp:0,w:0,d:0,l:0,gd:0,pts:0}; }); const names=Object.keys(map); const logos=await Promise.all(names.map(n=>getTeamLogo(n,regLevel))); 
+            
+            names.map((n,i)=>({name:n,logo:logos[i],...map[n]})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd).forEach(t=>{ 
+                // 🔥 ADDED DELETE BUTTON IN ROW
+                container.innerHTML+=`<div class="grid grid-cols-12 gap-1 items-center mb-2 team-row bg-white p-2 rounded border border-slate-100 shadow-sm" data-name="${t.name}">
+                    <div class="col-span-3 flex items-center gap-1.5"><img src="${t.logo}" class="h-6 w-6 rounded-full object-cover border"><span class="font-bold text-xs truncate text-slate-800 font-[Rajdhani] uppercase">${getShortName(t.name)}</span></div>
+                    <input type="number" class="col-span-1 tbl-input inp-mp" value="${t.mp||0}">
+                    <input type="number" class="col-span-1 tbl-input inp-w text-green-600" value="${t.w||0}">
+                    <input type="number" class="col-span-1 tbl-input inp-d" value="${t.d||0}">
+                    <input type="number" class="col-span-1 tbl-input inp-l text-red-500" value="${t.l||0}">
+                    <input type="number" class="col-span-1 tbl-input inp-gd" value="${t.gd||0}">
+                    <input type="number" class="col-span-2 tbl-input inp-pts bg-blue-50 text-blue-700 rounded font-black" value="${t.pts||0}">
+                    <div class="col-span-2 text-center"><button onclick="deleteTeamFromTable('${t.name}')" class="text-red-500 hover:bg-red-50 p-2 rounded"><i class="fa-solid fa-trash"></i></button></div>
+                </div>`; 
+            }); 
+            document.getElementById('save-table-btn').classList.remove('hidden'); 
+        };
+        
+        // 🔥 NEW DELETE FUNCTION
+        window.deleteTeamFromTable = (name) => {
+            if(confirm("Remove " + name + " from this table?")) {
+                const row = document.querySelector(`.team-row[data-name="${name}"]`);
+                if(row) row.remove();
+                // User must click SAVE to persist deletion
+            }
         };
         
         window.saveTableUpdates=async()=>{ 
             const rows=document.querySelectorAll('.team-row'); let d={}; 
             rows.forEach(r=>d[r.dataset.name]={mp:parseInt(r.querySelector('.inp-mp').value)||0, w:parseInt(r.querySelector('.inp-w').value)||0, d:parseInt(r.querySelector('.inp-d').value)||0, l:parseInt(r.querySelector('.inp-l').value)||0, gd:parseInt(r.querySelector('.inp-gd').value)||0, pts:parseInt(r.querySelector('.inp-pts').value)||0}); 
-            
-            // 🔥 FIX: Write to lowercase doc path
             await setDoc(doc(db,"app_content",`league_table_${curDivCode.toLowerCase()}`),d); 
             showNotify("STANDINGS SAVED"); 
         };
