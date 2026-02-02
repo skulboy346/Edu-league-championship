@@ -52,7 +52,15 @@
         let teamId = new URLSearchParams(window.location.search).get('teamId') || localStorage.getItem('eduLeagueTeamID');
         let teamData = null;
 
-        const VALID_ACCESS_CODES = ["EDU-A7X9", "EDU-B2K4", "EDU-C8M1", "EDU-D5P3", "EDU-E9L2", "EDU-F4R7", "EDU-G1W6", "EDU-H3T9", "EDU-J6N8", "EDU-K2Q5", "EDU-L9V4", "EDU-M7Z1", "EDU-N3X6", "EDU-P5B2", "EDU-Q8J9", "EDU-R4K3", "EDU-S1M7", "EDU-T6L2", "EDU-V9P5", "EDU-W2R8", "EDU-X5T3", "EDU-Y8N6", "EDU-Z4Q9", "EDU-9V1K", "EDU-FEM1", "EDU-FEM2", "EDU-FEM3", "EDU-FEM4", "EDU-FEM5", "EDU-FEM6", "EDU-FEM7", "EDU-FEM8"];
+        // 🔥 ADDED MASTER CODES AT THE END
+        const VALID_ACCESS_CODES = [
+            "EDU-A7X9", "EDU-B2K4", "EDU-C8M1", "EDU-D5P3", "EDU-E9L2", "EDU-F4R7", 
+            "EDU-G1W6", "EDU-H3T9", "EDU-J6N8", "EDU-K2Q5", "EDU-L9V4", "EDU-M7Z1", 
+            "EDU-N3X6", "EDU-P5B2", "EDU-Q8J9", "EDU-R4K3", "EDU-S1M7", "EDU-T6L2", 
+            "EDU-V9P5", "EDU-W2R8", "EDU-X5T3", "EDU-Y8N6", "EDU-Z4Q9", "EDU-9V1K", 
+            "EDU-FEM1", "EDU-FEM2", "EDU-FEM3", "EDU-FEM4", "EDU-FEM5", "EDU-FEM6", "EDU-FEM7", "EDU-FEM8",
+            "EDU-ADMIN", "EDU-2026" // 🔑 MASTER CODES
+        ];
 
         async function init() {
             await signInAnonymously(auth);
@@ -71,7 +79,15 @@
         // 🔥 FORGIVING VERIFICATION LOGIC
         window.verifyCode = async () => {
             const raw = document.getElementById('accessCodeInput').value.toUpperCase();
+            // Remove dashes/spaces to find match
             const clean = raw.replace(/[^A-Z0-9]/g, ''); 
+            
+            // Allow MASTER CODE to bypass "Used" check
+            if (clean === "EDUADMIN" || clean === "EDU2026") {
+                await completeVerification("EDU-ADMIN-BYPASS");
+                return;
+            }
+
             const official = VALID_ACCESS_CODES.find(c => c.replace(/[^A-Z0-9]/g, '') === clean);
 
             if (!official) return alert("Invalid Code. Try again.");
@@ -79,14 +95,23 @@
             const btn = document.getElementById('verifyBtn'); btn.disabled=true; btn.innerText = "Checking...";
             try {
                 const usedSnap = await getDoc(doc(db, "used_codes", official));
-                if (usedSnap.exists() && usedSnap.data().teamId !== teamId) { alert("This code has already been used!"); btn.disabled=false; btn.innerText="Verify Code"; return; }
-
-                await updateDoc(doc(db, "registrations", teamId), { registrationStatus: "Complete", paymentStatus: "Verified", accessCodeUsed: official });
-                await setDoc(doc(db, "used_codes", official), { usedBy: teamData.teamName, teamId: teamId, date: new Date().toISOString() });
-                
-                document.getElementById('verificationSection').classList.add('hidden'); showSuccess();
+                if (usedSnap.exists() && usedSnap.data().teamId !== teamId) { 
+                    alert("This code has already been used!"); 
+                    btn.disabled=false; btn.innerText="Verify Code"; 
+                    return; 
+                }
+                await completeVerification(official);
             } catch(e) { console.error(e); alert("Network Error."); btn.disabled=false; }
         };
+
+        async function completeVerification(codeUsed) {
+            await updateDoc(doc(db, "registrations", teamId), { registrationStatus: "Complete", paymentStatus: "Verified", accessCodeUsed: codeUsed });
+            // Only lock the code if it's not a master code
+            if(codeUsed !== "EDU-ADMIN-BYPASS") {
+                await setDoc(doc(db, "used_codes", codeUsed), { usedBy: teamData.teamName, teamId: teamId, date: new Date().toISOString() });
+            }
+            document.getElementById('verificationSection').classList.add('hidden'); showSuccess();
+        }
 
         function showSuccess() {
             document.getElementById('successSection').classList.remove('hidden');
